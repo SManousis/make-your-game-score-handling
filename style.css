@@ -1,24 +1,44 @@
  #game-area {
-      width: 500px;
-      height: 600px;
-      background-color: #000;
-      position: relative;
-      overflow: hidden;
-    }
+   width: 1500px;
+   height: 600px;
+   background-color: #000;
+   position: relative;
+   overflow: hidden;
+ }
 
-    #spaceship {
-      width: 50px;
-      height: 50px;
-      background-color: #0f0;
-      position: absolute;
-      bottom: 10px;
-      left: 225px; /* Start in the middle */
-
-      
-    }
-    .laser {
-  width: 5px;
-  height: 20px;
-  background-color: red;
+ #mario-img{
+  width: 120px;
+  height: 120px;
   position: absolute;
-}
+  bottom: 10px;
+  left: 225px;
+ }
+
+ .circle {
+   width: 50px;
+   height: 50px;
+   border-radius: 100%;
+   background-color: rgba(244, 222, 25, 0.344);
+   position: absolute;
+   bottom: 10px;
+   left: 225px;
+   /* Start in the middle */
+ }
+
+ .rectangle {
+   width: 50px;
+   height: 50px;
+
+   background-color: rgba(84, 82, 63, 0.964);
+   position: absolute;
+   /* bottom: 10px;
+   left: 225px; */
+   /* Start in the middle */
+ }
+
+ .laser {
+   width: 5px;
+   height: 20px;
+   background-color: red;
+   position: absolute;
+ }
