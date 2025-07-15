@@ -273,20 +273,36 @@ walkables.push(platform5)
 
 let floatingTest = []
 
-let floater = {
+let floaterCircle = {
   body: [createCircle(900, 150, 50)],
-  updateFunc: floaterUpdate
+  updateFunc: floaterCircleUpdate
 }
 
-function floaterUpdate(){
-  if (IsBodyCollidingWithUnit(floater.body[0], mario)){
-    floater.body[0].div.style["background-color"] = "black";
+
+
+function floaterCircleUpdate(){
+  if (IsBodyCollidingWithUnit(floaterCircle.body[0], mario)){
+    floaterCircle.body[0].div.style["background-color"] = "black";
   }else{
-    floater.body[0].div.style["background-color"] = "white";
+    floaterCircle.body[0].div.style["background-color"] = "white";
   }
 }
 
-allEntities.push(floater)
+let floaterRect = {
+  body: [createRect(200, 200, 50, 50)],
+  updateFunc: floaterRectUpdate
+}
+
+function floaterRectUpdate(){
+  if (IsBodyCollidingWithUnit(floaterRect.body[0], mario)){
+    floaterRect.body[0].div.style["background-color"] = "black";
+  }else{
+    floaterRect.body[0].div.style["background-color"] = "white";
+  }
+}
+
+allEntities.push(floaterCircle)
+allEntities.push(floaterRect)
 
 //moves a general unit by a specific vector and w/e circles constist of it's body
 function moveUnit(unit, x, y) {
