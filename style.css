@@ -1,9 +1,15 @@
- #game-area {
+html, body{
+  overflow: hidden;
+}
+
+#game-area {
    width: 1500px;
    height: 600px;
    background-color: #000;
    position: relative;
-   overflow: hidden;
+   overflow:hidden;
+   margin-left: auto;
+   margin-right: auto;
  }
 
  #mario-img{
@@ -12,16 +18,14 @@
   position: absolute;
   bottom: 10px;
   left: 225px;
+  transform: translateX(-25px);
  }
 
  .circle {
-   width: 50px;
-   height: 50px;
    border-radius: 100%;
    background-color: rgba(244, 222, 25, 0.344);
    position: absolute;
-   bottom: 10px;
-   left: 225px;
+   transform: translate(-50%, 50%);
    /* Start in the middle */
  }
 
