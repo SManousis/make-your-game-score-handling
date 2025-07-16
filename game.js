@@ -139,6 +139,9 @@ let mario = {
   updateFunc: marioUpdate
 }
 
+
+
+
 function isMarioTouchingGround() {
   for (let walkable of walkables) {
     for (let walkableBody of walkable.body) {
@@ -169,13 +172,7 @@ function marioUpdate() {
     mario.velY = 0
   }
 
-  // console.log(grounded, resolveUp, mario.x, mario.y, mario.velY)
-  if (mario.y != 30) {
-    testCounter++
-  } else {
-    console.log(testCounter)
-    testCounter = 0
-  }
+
   //if mario on the ground and jump button pressed
   if (keysPressed.up && grounded) {
     mario.velY += mario.jump_power
@@ -236,9 +233,21 @@ function marioUpdate() {
   }
 }
 
+//adding our created entities to allEntities if they are not static
+allEntities.push(mario)
+
+
+
+
 const ground = {
   body: [createRect(-5000, -970, 10000, 1000)]
 }
+
+const platformTest = {
+  body: [createRect(100, 100, 100, 100)]
+}
+
+walkables.push(platformTest)
 
 const platform1 = {
   body: [createRect(200, 100, 150, 30)]
@@ -260,8 +269,7 @@ const platform5 = {
   body: [createRect(1150, 500, 150, 30)]
 }
 
-//adding our created entities to allEntities if they are not static
-allEntities.push(mario)
+
 
 //
 walkables.push(ground)
@@ -277,8 +285,6 @@ let floaterCircle = {
   body: [createCircle(900, 150, 50)],
   updateFunc: floaterCircleUpdate
 }
-
-
 
 function floaterCircleUpdate(){
   if (IsBodyCollidingWithUnit(floaterCircle.body[0], mario)){
@@ -400,6 +406,7 @@ function fireLaser() {
 
 let counter = 0
 let prev = 0
+
 // The main game loop
 function gameLoop() {
   update();

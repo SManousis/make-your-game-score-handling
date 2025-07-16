@@ -1,5 +1,6 @@
 html, body{
   overflow: hidden;
+  transform: scale(1);
 }
 
 #game-area {
@@ -19,6 +20,7 @@ html, body{
   bottom: 10px;
   left: 225px;
   transform: translateX(-25px);
+  z-index: 99000;
  }
 
  .circle {
