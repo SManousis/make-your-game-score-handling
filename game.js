@@ -77,8 +77,7 @@ function IsBodyCollidingWithBody(bodyA, bodyB) {
 }
 
 function isPointCollidingWithBody(pointX, pointY, body) {
-
-  if (!body.active) return 0;
+  if (!body.active) return { vertical: 0, horizontal: 0 };
 
   if (body.type === "circle") {
     const dx = pointX - body.x;
@@ -90,32 +89,41 @@ function isPointCollidingWithBody(pointX, pointY, body) {
       const distance = Math.sqrt(distSquared);
       const penetrationDepth = body.radius - distance;
 
-      // Calculate y-component of penetration
       if (distance > 0) {
+        const normalX = dx / distance;
         const normalY = dy / distance;
-        return penetrationDepth * normalY;
+        return {
+          vertical: penetrationDepth * normalY,
+          horizontal: penetrationDepth * normalX
+        };
       } else {
-        // Point is at circle center
-        return body.radius;
+        return { vertical: body.radius, horizontal: body.radius };
       }
     }
-    return 0;
+    return { vertical: 0, horizontal: 0 };
   }
 
   if (body.type === "rectangle") {
-
     if (
       pointX >= body.x &&
       pointX <= body.x + body.width &&
       pointY >= body.y &&
       pointY <= body.y + body.height
     ) {
-      return Math.abs(body.y + body.height - pointY);
+      const left = -(pointX - body.x);
+      const right = body.x + body.width - pointX;
+      const top = -(pointY - body.y);
+      const bottom = body.y + body.height - pointY;
+
+      return {
+        vertical: minMag(top, bottom),
+        horizontal: minMag(left, right)
+      };
     }
-    return 0;
+    return { vertical: 0, horizontal: 0 };
   }
 
-  return 0;
+  return { vertical: 0, horizontal: 0 };
 }
 
 //the character the player controls
@@ -136,7 +144,7 @@ let mario = {
   y: 100, //his current y position
   lookingDir: "left", //which direction mario is looking at
   lookingUp: false,
-  body: [createCircle(100, 100+20, 20), createCircle(100, 100+20+40, 20)], //his gameplay body represented in circles
+  body: [createCircle(100, 100 + 20, 20), createCircle(100, 100 + 20 + 40, 20)], //his gameplay body represented in circles
   drawFunc: marioVisuals, //his visual representation in the game
   updateFunc: marioUpdate
 }
@@ -147,18 +155,18 @@ let currentBody = document.getElementById("mario-body-forward")
 let currentLegs = document.getElementById("mario-legs0")
 function marioVisuals() {
 
-  if (mario.lookingUp){
+  if (mario.lookingUp) {
     currentBody.style.opacity = "0%"
     currentBody = document.getElementById("mario-body-up")
-  }else{
+  } else {
     currentBody.style.opacity = "0%"
     currentBody = document.getElementById("mario-body-forward")
   }
 
-  if (mario.velY != 0){
+  if (mario.velY != 0) {
     currentLegs.style.opacity = "0%"
     currentLegs = document.getElementById("mario-legs-jump")
-  }else{
+  } else {
     currentLegs.style.opacity = "0%"
     currentLegs = document.getElementById("mario-legs0")
   }
@@ -171,71 +179,87 @@ function marioVisuals() {
   currentLegs.style.setProperty('--mario-x', `${mario.x}px`);
   currentLegs.style.setProperty('--mario-y', `${-mario.y}px`);
 
-  if (mario.lookingDir == "right"){
+  if (mario.lookingDir == "right") {
     currentBody.style.setProperty('--mario-scale-x', `${-1}`);
     currentLegs.style.setProperty('--mario-scale-x', `${-1}`);
-  }else if (mario.lookingDir == "left"){
+  } else if (mario.lookingDir == "left") {
     currentBody.style.setProperty('--mario-scale-x', `${1}`);
     currentLegs.style.setProperty('--mario-scale-x', `${1}`);
   }
 }
 
+function largestMag(a, b) {
+  if (Math.abs(a) > Math.abs(b)) {
+    return a
+  }
+  return b
+}
+
+function minMag(a, b) {
+  if (Math.abs(a) < Math.abs(b)) {
+    return a
+  }
+  return b
+}
 
 function isMarioTouchingGround() {
+  let largest = 0
   for (let walkable of walkables) {
     for (let walkableBody of walkable.body) {
-      const result = isPointCollidingWithBody(mario.x, mario.y, walkableBody)
-
-      if (result > 0) {
-        return result
+      const result1 = isPointCollidingWithBody(mario.x - 20, mario.y, walkableBody).vertical
+      const result2 = isPointCollidingWithBody(mario.x + 20, mario.y, walkableBody).vertical
+      if (result1 != 0 || result2 != 0) {
+        largest = largestMag(largestMag(result1, result2), largestMag(largest, 0))
       }
     }
   }
-  return 0
+  return largest
+}
+
+function isMarioWalkingIntoGround() {
+  let largestV = 0
+  let largestH = 0
+  for (let walkable of walkables) {
+    for (let walkableBody of walkable.body) {
+
+      const result1 = isPointCollidingWithBody(mario.x - 21, mario.y, walkableBody)
+      const result2 = isPointCollidingWithBody(mario.x + 21, mario.y, walkableBody)
+
+
+      if (result1.vertical != 0 || result2.vertical != 0) {
+        largestV = largestMag(largestMag(result1.vertical, result2.vertical), largestV)
+        if (result1.horizontal != 0 || result2.horizontal != 0) {
+          largestH = largestMag(largestMag(result1.horizontal, result2.horizontal), largestH)
+        }
+      }
+    }
+  }
+  return { vertical: largestV, horizontal: largestH }
 }
 
 let testCounter = 0
 
 function marioUpdate() {
-  if (keysPressed.right){
+  if (keysPressed.right) {
     mario.lookingDir = "right"
-  }else if (keysPressed.left){
+  } else if (keysPressed.left) {
     mario.lookingDir = "left"
   }
 
-  if (keysPressed.up){
+  if (keysPressed.up) {
     mario.lookingUp = true
-  }else{
+  } else {
     mario.lookingUp = false
   }
 
 
-  //apply gravity to y velocity
-  mario.velY -= mario.gravity
-
-  // apply mario's gravity if he's in the air
-  moveUnit(mario, 0, mario.velY)
-
-  let resolveUp = isMarioTouchingGround()
-  let grounded = (resolveUp < 1.0 && resolveUp != 0)
-
-  if (resolveUp > 0 && mario.velY < 0) {
-    moveUnit(mario, 0, resolveUp)
-    mario.velY = 0
-  }
-
-
-  //if mario on the ground and jump button pressed
-  if (keysPressed.space && grounded) {
-    mario.velY += mario.jump_power
-  }
 
 
   // add x acceleration
   let impulse = mario.accel
-  if (!grounded) {
-    impulse = mario.accel / 1.5 //to make aerial x axis acceleration harder than grounded
-  }
+  // if (!grounded) {
+  //   impulse = mario.accel / 1.5 //to make aerial x axis acceleration harder than grounded
+  // }
   if (keysPressed.left) {
     mario.velX -= impulse
   }
@@ -254,9 +278,9 @@ function marioUpdate() {
   //add x drag when one ground
   if (!keysPressed.left && !keysPressed.right) {
     let impulse = mario.drag
-    if (!grounded) {
-      impulse = mario.drag / 5
-    }
+    // if (!grounded) {
+    //   impulse = mario.drag / 5
+    // }
     if (mario.velX > 0.2) {
       mario.velX -= impulse
       if (mario.velX < 0) {
@@ -276,6 +300,13 @@ function marioUpdate() {
   //move mario by x velocity
   moveUnit(mario, mario.velX, 0)
 
+  let resolve = isMarioWalkingIntoGround(mario.x, mario.y)
+
+  if (resolve.vertical != 0) {
+    moveUnit(mario, resolve.horizontal, 0)
+  }
+
+
   //don't allow mario to move past screen bounds
   if (mario.x < 0) {
     setUnit(mario, 0, mario.y)
@@ -283,6 +314,31 @@ function marioUpdate() {
   if (mario.x > gameArea.offsetWidth - 50) {
     setUnit(mario, gameArea.offsetWidth - 50, mario.y)
   }
+
+
+  //apply gravity to y velocity
+  mario.velY -= mario.gravity
+
+  // apply mario's gravity
+  moveUnit(mario, 0, mario.velY)
+
+  let resolveUp = isMarioTouchingGround()
+
+  let grounded = (resolveUp > 0)
+
+  if (resolveUp != 0) {
+    moveUnit(mario, 0, resolveUp)
+    mario.velY = 0
+  }
+
+
+  //if mario on the ground and jump button pressed
+  if (keysPressed.space && grounded) {
+    mario.velY += mario.jump_power
+  }
+
+
+
 }
 
 //adding our created entities to allEntities if they are not static
@@ -299,7 +355,11 @@ const platformTest = {
   body: [createRect(100, 100, 100, 100)]
 }
 
-walkables.push(platformTest)
+const platformTest2 = {
+  body: [createRect(500, 100, 200, 210)]
+}
+
+
 
 const platform1 = {
   body: [createRect(200, 100, 150, 30)]
@@ -330,6 +390,9 @@ walkables.push(platform2)
 walkables.push(platform3)
 walkables.push(platform4)
 walkables.push(platform5)
+walkables.push(platformTest)
+walkables.push(platformTest2)
+
 
 let floatingTest = []
 
