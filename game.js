@@ -134,12 +134,51 @@ let mario = {
   velY: 0, //his current velocity in y axis
   x: 100, //his current x position 
   y: 100, //his current y position
-  body: [createCircle(100, 100+25, 25), createCircle(100, 100 + 50 + 25, 25)], //his gameplay body represented in circles
-  visual: document.getElementById("mario-img"), //his visual representation in the game
+  lookingDir: "left", //which direction mario is looking at
+  lookingUp: false,
+  body: [createCircle(100, 100+20, 20), createCircle(100, 100+20+40, 20)], //his gameplay body represented in circles
+  drawFunc: marioVisuals, //his visual representation in the game
   updateFunc: marioUpdate
 }
 
 
+
+let currentBody = document.getElementById("mario-body-forward")
+let currentLegs = document.getElementById("mario-legs0")
+function marioVisuals() {
+
+  if (mario.lookingUp){
+    currentBody.style.opacity = "0%"
+    currentBody = document.getElementById("mario-body-up")
+  }else{
+    currentBody.style.opacity = "0%"
+    currentBody = document.getElementById("mario-body-forward")
+  }
+
+  if (mario.velY != 0){
+    currentLegs.style.opacity = "0%"
+    currentLegs = document.getElementById("mario-legs-jump")
+  }else{
+    currentLegs.style.opacity = "0%"
+    currentLegs = document.getElementById("mario-legs0")
+  }
+
+  currentBody.style.opacity = "100%"
+  currentBody.style.setProperty('--mario-x', `${mario.x}px`);
+  currentBody.style.setProperty('--mario-y', `${-mario.y}px`);
+
+  currentLegs.style.opacity = "100%"
+  currentLegs.style.setProperty('--mario-x', `${mario.x}px`);
+  currentLegs.style.setProperty('--mario-y', `${-mario.y}px`);
+
+  if (mario.lookingDir == "right"){
+    currentBody.style.setProperty('--mario-scale-x', `${-1}`);
+    currentLegs.style.setProperty('--mario-scale-x', `${-1}`);
+  }else if (mario.lookingDir == "left"){
+    currentBody.style.setProperty('--mario-scale-x', `${1}`);
+    currentLegs.style.setProperty('--mario-scale-x', `${1}`);
+  }
+}
 
 
 function isMarioTouchingGround() {
@@ -158,6 +197,19 @@ function isMarioTouchingGround() {
 let testCounter = 0
 
 function marioUpdate() {
+  if (keysPressed.right){
+    mario.lookingDir = "right"
+  }else if (keysPressed.left){
+    mario.lookingDir = "left"
+  }
+
+  if (keysPressed.up){
+    mario.lookingUp = true
+  }else{
+    mario.lookingUp = false
+  }
+
+
   //apply gravity to y velocity
   mario.velY -= mario.gravity
 
@@ -174,7 +226,7 @@ function marioUpdate() {
 
 
   //if mario on the ground and jump button pressed
-  if (keysPressed.up && grounded) {
+  if (keysPressed.space && grounded) {
     mario.velY += mario.jump_power
   }
 
@@ -286,10 +338,10 @@ let floaterCircle = {
   updateFunc: floaterCircleUpdate
 }
 
-function floaterCircleUpdate(){
-  if (IsBodyCollidingWithUnit(floaterCircle.body[0], mario)){
+function floaterCircleUpdate() {
+  if (IsBodyCollidingWithUnit(floaterCircle.body[0], mario)) {
     floaterCircle.body[0].div.style["background-color"] = "black";
-  }else{
+  } else {
     floaterCircle.body[0].div.style["background-color"] = "white";
   }
 }
@@ -299,10 +351,10 @@ let floaterRect = {
   updateFunc: floaterRectUpdate
 }
 
-function floaterRectUpdate(){
-  if (IsBodyCollidingWithUnit(floaterRect.body[0], mario)){
+function floaterRectUpdate() {
+  if (IsBodyCollidingWithUnit(floaterRect.body[0], mario)) {
     floaterRect.body[0].div.style["background-color"] = "black";
-  }else{
+  } else {
     floaterRect.body[0].div.style["background-color"] = "white";
   }
 }
@@ -338,7 +390,7 @@ const keysPressed = {
   right: false,
   up: false,
   down: false,
-  space: true,
+  space: false,
 };
 
 const laserSpeed = 8;
@@ -363,7 +415,7 @@ document.addEventListener('keydown', (event) => {
   }
 
   if (event.key === ' ' || event.code === 'Space') {
-    fireLaser();
+    keysPressed.space = true
   }
 });
 
@@ -382,6 +434,10 @@ document.addEventListener('keyup', (event) => {
 
   if (event.key === 'ArrowDown') {
     keysPressed.down = false;
+  }
+
+  if (event.key === ' ' || event.code === 'Space') {
+    keysPressed.space = false
   }
 
 });
@@ -453,9 +509,8 @@ function draw() {
       circle.div.style.bottom = circle.y + 'px';
     }
 
-    if (entity.visual != undefined){
-      entity.visual.style.left = entity.x - 35 + 'px';
-      entity.visual.style.bottom = entity.y + 'px';
+    if (entity.drawFunc != undefined) {
+      entity.drawFunc()
     }
   }
 }

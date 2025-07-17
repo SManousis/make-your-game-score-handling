@@ -1,6 +1,10 @@
 html, body{
   overflow: hidden;
-  transform: scale(1);
+}
+
+body{
+  margin-top: 5%;
+  transform: scale(1.7);
 }
 
 #game-area {
@@ -9,19 +13,30 @@ html, body{
    background-color: #000;
    position: relative;
    overflow:hidden;
+   margin-top: 100px;
    margin-left: auto;
    margin-right: auto;
  }
 
- #mario-img{
-  width: 120px;
-  height: 120px;
+
+
+
+:root {
+  --mario-x: 0px;
+  --mario-y: 0px;
+  --mario-scale-x: 1;
+}
+
+.mario-img {
+  width: 150px;
+  height: 150px;
   position: absolute;
-  bottom: 10px;
-  left: 225px;
-  transform: translateX(-25px);
+  bottom: 0px;
+  left: 0px;
+  transform: translate(calc(-52% + var(--mario-x)), calc(20% + var(--mario-y))) scaleX(var(--mario-scale-x));  will-change: transform;
+  opacity: 0%;  will-change: opacity;
   z-index: 99000;
- }
+}
 
  .circle {
    border-radius: 100%;
