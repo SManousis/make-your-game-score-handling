@@ -18,6 +18,8 @@ function cupidUpdate() {
     moveUnit(cupid, cupid.velX, 0)
     parallelmovecount++
     if (parallelmovecount === 50) {
-        cupid.velX *= -1
+        cupid.velY = -3
+        parallelmovecount = 0
+        moveUnit(cupid, 0, cupid.velY)
     }
 }
