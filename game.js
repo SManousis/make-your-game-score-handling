@@ -184,7 +184,6 @@ function marioVisuals() {
     currentLegs = document.getElementById("mario-legs-crouch")
   } else {
     currentLegs.style.opacity = "0%"
-    console.log(marioFeetFrames[parseInt(mario.walkCounter/10)%4], parseInt(mario.walkCounter/10)%3, mario.walkCounter/10)
     currentLegs = document.getElementById(marioFeetFrames[parseInt(mario.walkCounter/2)%marioFeetFrames.length])
   }
 
