@@ -311,8 +311,8 @@ function marioUpdate() {
   if (mario.x < 0) {
     setUnit(mario, 0, mario.y)
   }
-  if (mario.x > gameArea.offsetWidth - 50) {
-    setUnit(mario, gameArea.offsetWidth - 50, mario.y)
+  if (mario.x > gameArea.offsetWidth) {
+    setUnit(mario, gameArea.offsetWidth, mario.y)
   }
 
 
@@ -356,7 +356,7 @@ const platformTest = {
 }
 
 const platformTest2 = {
-  body: [createRect(500, 100, 200, 210)]
+  body: [createRect(700, 100, 200, 210)]
 }
 
 

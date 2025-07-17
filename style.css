@@ -3,8 +3,8 @@ html, body{
 }
 
 body{
-  margin-top: 5%;
-  transform: scale(1.7);
+  /* margin-top: 2%; */
+  transform: scale(1.2);
 }
 
 #game-area {
