@@ -43,13 +43,13 @@ body{
 }
 
 .cupid-img {
-  width: 30px;
-  height: 30px;
+  width: 70px;
+  height: 70px;
   position: absolute;
-  bottom: 0px;
-  left: 0px;
+  bottom: 500px;
+  left: 100px;
   transform: translate(calc(-52% + var(--cupid-x)), calc(20% + var(--cupid-y))) scaleX(var(--cupid-scale-x));  will-change: transform;
-  opacity: 0%;  will-change: opacity;
+  opacity: 100%;  will-change: opacity;
   z-index: 99000;
 }
 
