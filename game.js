@@ -144,6 +144,8 @@ let mario = {
   y: 100, //his current y position
   lookingDir: "left", //which direction mario is looking at
   lookingUp: false,
+  walkCounter: 0, //a counter that counts for how many frames mario has been walking towards a direction, for walk animation purposes
+  crouching: false,
   body: [createCircle(100, 100 + 20, 20), createCircle(100, 100 + 20 + 40, 20)], //his gameplay body represented in circles
   drawFunc: marioVisuals, //his visual representation in the game
   updateFunc: marioUpdate
@@ -153,22 +155,37 @@ let mario = {
 
 let currentBody = document.getElementById("mario-body-forward")
 let currentLegs = document.getElementById("mario-legs0")
+let marioFeetFrames = ["mario-legs0", "mario-legs1", "mario-legs2", "mario-legs3", "mario-legs3"]
 function marioVisuals() {
 
   if (mario.lookingUp) {
     currentBody.style.opacity = "0%"
-    currentBody = document.getElementById("mario-body-up")
+    if (mario.crouching){
+      currentBody = document.getElementById("mario-body-crouch-up")
+    }else{
+      currentBody = document.getElementById("mario-body-up")
+    }
+  } else if (mario.crouching) {
+    currentBody.style.opacity = "0%"
+    currentBody = document.getElementById("mario-body-crouch-forward")
   } else {
     currentBody.style.opacity = "0%"
     currentBody = document.getElementById("mario-body-forward")
   }
 
-  if (mario.velY != 0) {
+  if (mario.velY > 0.2) {
     currentLegs.style.opacity = "0%"
     currentLegs = document.getElementById("mario-legs-jump")
+  }else if (mario.velY < -0.2){
+    currentLegs.style.opacity = "0%"
+    currentLegs = document.getElementById("mario-legs-falling")
+  } else if (mario.crouching) {
+    currentLegs.style.opacity = "0%"
+    currentLegs = document.getElementById("mario-legs-crouch")
   } else {
     currentLegs.style.opacity = "0%"
-    currentLegs = document.getElementById("mario-legs0")
+    console.log(marioFeetFrames[parseInt(mario.walkCounter/10)%4], parseInt(mario.walkCounter/10)%3, mario.walkCounter/10)
+    currentLegs = document.getElementById(marioFeetFrames[parseInt(mario.walkCounter/2)%marioFeetFrames.length])
   }
 
   currentBody.style.opacity = "100%"
@@ -262,10 +279,15 @@ function marioUpdate() {
   // }
   if (keysPressed.left) {
     mario.velX -= impulse
+    
   }
+  
   if (keysPressed.right) {
     mario.velX += impulse
+    
   }
+
+  
 
   // apply max x speed
   if (mario.velX > mario.maxSpeed) {
@@ -338,6 +360,17 @@ function marioUpdate() {
   }
 
 
+  if (grounded && mario.velX != 0){
+    mario.walkCounter++
+  }else{
+    mario.walkCounter = 0
+  }
+
+  if (grounded && mario.velX == 0 && mario.velY == 0 && keysPressed.down){
+    mario.crouching = true
+  }else{
+    mario.crouching = false
+  }
 
 }
 
