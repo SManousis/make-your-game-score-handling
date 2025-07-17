@@ -583,7 +583,8 @@ function update() {
   for (let entity of allEntities) {
     entity.updateFunc()
   }
-
+  
+  
   // // Laser movement
   // for (let i = lasers.length - 1; i >= 0; i--) {
   //   const laser = lasers[i];
@@ -598,6 +599,7 @@ function update() {
 
 // Draw the game, only updating visual elements based on their objects
 function draw() {
+  
   for (let entity of allEntities) {
     //body debug visual update
     for (circle of entity.body) {
