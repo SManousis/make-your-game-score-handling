@@ -25,6 +25,10 @@ body{
   --mario-x: 0px;
   --mario-y: 0px;
   --mario-scale-x: 1;
+
+  --cupid-x: 0px;
+  --cupid-y: 0px;
+  --cupid-scale-x: 1;
 }
 
 .mario-img {
@@ -34,6 +38,17 @@ body{
   bottom: 0px;
   left: 0px;
   transform: translate(calc(-52% + var(--mario-x)), calc(20% + var(--mario-y))) scaleX(var(--mario-scale-x));  will-change: transform;
+  opacity: 0%;  will-change: opacity;
+  z-index: 99000;
+}
+
+cupid-img {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  transform: translate(calc(-52% + var(--cupid-x)), calc(20% + var(--cupid-y))) scaleX(var(--cupid-scale-x));  will-change: transform;
   opacity: 0%;  will-change: opacity;
   z-index: 99000;
 }
