@@ -42,7 +42,7 @@ body{
   z-index: 99000;
 }
 
-cupid-img {
+.cupid-img {
   width: 30px;
   height: 30px;
   position: absolute;
