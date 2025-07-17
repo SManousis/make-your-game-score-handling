@@ -21,37 +21,37 @@ body{
 
 
 
-:root {
-  --mario-x: 0px;
-  --mario-y: 0px;
-  --mario-scale-x: 1;
+  :root {
+    --mario-x: 0px;
+    --mario-y: 0px;
+    --mario-scale-x: 1;
 
-  --cupid-x: 0px;
-  --cupid-y: 0px;
-  --cupid-scale-x: 1;
-}
+    --cupid-x: 0px;
+    --cupid-y: 0px;
+    --cupid-scale-x: 1;
+  }
 
-.mario-img {
-  width: 150px;
-  height: 150px;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  transform: translate(calc(-52% + var(--mario-x)), calc(20% + var(--mario-y))) scaleX(var(--mario-scale-x));  will-change: transform;
-  opacity: 0%;  will-change: opacity;
-  z-index: 99000;
-}
+  .mario-img {
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    transform: translate(calc(-52% + var(--mario-x)), calc(20% + var(--mario-y))) scaleX(var(--mario-scale-x));  will-change: transform;
+    opacity: 0%;  will-change: opacity;
+    z-index: 99000;
+  }
 
-.cupid-img {
-  width: 70px;
-  height: 70px;
-  position: absolute;
-  bottom: 500px;
-  left: 100px;
-  transform: translate(calc(-52% + var(--cupid-x)), calc(20% + var(--cupid-y))) scaleX(var(--cupid-scale-x));  will-change: transform;
-  opacity: 100%;  will-change: opacity;
-  z-index: 99000;
-}
+  .cupid-img {
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    bottom: 500px;
+    left: 100px;
+    transform: translate(var(--cupid-x), var(--cupid-y)) scaleX(var(--cupid-scale-x));
+    opacity: 100%;  will-change: opacity;
+    z-index: 99000;
+  }
 
  .circle {
    border-radius: 100%;

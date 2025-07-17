@@ -1,7 +1,7 @@
 let cupid = {
     health: 100,
     damage: 10,
-    moveSpeed: 2,
+    moveSpeed: 50,
     x: 0,
     y: 0,
     bullet_count: 1,
@@ -32,8 +32,8 @@ function cupidUpdate() {
 }
 function cupidVisuals() {
     cupidBody.style.opacity = "100%"
-    cupidBody.style.setProperty('--cupid-x', `${cupid.x}px`);
-    cupidBody.style.setProperty('--cupid-y', `${-cupid.y}px`);
+    cupidBody.style.setProperty('--cupid-x', `${-cupid.x}px`);
+    cupidBody.style.setProperty('--cupid-y', `${cupid.y}px`);
 }
 
 allEntities.push(cupid)
