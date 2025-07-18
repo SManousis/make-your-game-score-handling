@@ -42,7 +42,7 @@ for (let row = 0; row < 4; row++) {
       let x = 150 + col * 140;
       let y = 300 - row * 80;
       let cx = -(300 - row * 80);
-      let cupid = enemies.createCupid(x, y, cx);
+      let cupid = enemies.createCupid(x, y-200, cx);
       allEntities.push(cupid);
   }
 }
@@ -221,9 +221,9 @@ function draw() {
 
     for (let entity of allEntities) {
         //body debug visual update
-        for (const circle of entity.body) {
-            circle.div.style.left = circle.x + 'px';
-            circle.div.style.bottom = circle.y + 'px';
+        for (const shape of entity.body) {
+            shape.div.style.left = shape.x + 'px';
+            shape.div.style.bottom = shape.y + 'px';
         }
 
         if (entity.drawFunc != undefined) {

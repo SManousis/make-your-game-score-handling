@@ -18,7 +18,8 @@ export function createCupid(x, y, cx) {
        state: "airborne",
        velX: 2,
        velY: 0,
-       body: [utils.createCircle(x+125,  150 - cx , 15), utils.createCircle(x+125, cx + 150+25, 20)],
+    //    body: [utils.createCircle(x+125,  150 - cx , 15), utils.createCircle(x+125, cx + 150+25, 20)],
+       body: [utils.createCircle(x,  y+20, 30)],
        updateFunc: function() { cupidUpdate(this) },   
        drawFunc: function() { cupidVisuals(this) },
        dom: cupidBody,
@@ -54,7 +55,7 @@ export function cupidUpdate(cupid) {
 export function cupidVisuals(cupid) {
     cupid.dom.style.opacity = "100%";
     cupid.dom.style.setProperty('--cupid-x', `${cupid.x}px`);
-    cupid.dom.style.setProperty('--cupid-y', `${cupid.y}px`);
+    cupid.dom.style.setProperty('--cupid-y', `${-cupid.y}px`);
 }
 
 
