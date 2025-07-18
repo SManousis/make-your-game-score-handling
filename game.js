@@ -11,6 +11,7 @@ let gameState = {
 
 let allEntities = []
 
+const scoreElement= document.getElementById('score')
 
 export const gameArea = document.getElementById('game-area');
 
@@ -20,6 +21,11 @@ allEntities.push(mario.mario)
 
 allEntities.push(floaters.floaterCircle)
 allEntities.push(floaters.floaterRect)
+
+function updateScore(points){
+    gameState.score+=points;
+    scoreElement.textContent=`Score: ${gameState.score}`;
+}
 
 //keeps track of which buttons are currently held down
 export const keysPressed = {
@@ -37,7 +43,9 @@ export const keysPressed = {
 document.addEventListener('keydown', (event) => {
     if (event.key === 'p') {
         if (gameState.currentState === 'running') {
-            gameState.currentState === 'paused';
+            
+            gameState.currentState = 'paused';
+             
         } else if (gameState.currentState === 'paused') {
             gameState.currentState = 'running';
         }
@@ -146,6 +154,8 @@ function draw() {
         }
     }
 }
+
+
 
 // Start the game
 gameLoop();
