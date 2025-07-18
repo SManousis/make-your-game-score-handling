@@ -37,7 +37,7 @@ body{
     color: white;
     font-size: 24px;
     font-family: Arial, sans-serif;
-    font-weight: bold;w
+    font-weight: bold;
     z-index: 10;
 }
 
@@ -68,12 +68,13 @@ body{
     width: 70px;
     height: 70px;
     position: absolute;
-    bottom: 500px;
     left: 100px;
-    transform: translate(var(--cupid-x), var(--cupid-y)) scaleX(var(--cupid-scale-x));
-    opacity: 100%;  will-change: opacity;
+    bottom: 500px;
+    transform: translate(var(--cupid-x, 0px), var(--cupid-y, 0px));
+    opacity: 100%;
     z-index: 99000;
   }
+  
 
  .circle {
    border-radius: 100%;

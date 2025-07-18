@@ -1,5 +1,6 @@
 import * as mario from './mario.js'
 import * as floaters from './floaters.js'
+import * as enemies from './enemies.js'
 //import * as walkables from './walkables.js'
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -33,8 +34,7 @@ export const gameArea = document.getElementById('game-area');
 
 //adding our created entities to allEntities if they are not static
 allEntities.push(mario.mario)
-
-
+allEntities.push(enemies.cupid)
 allEntities.push(floaters.floaterCircle)
 allEntities.push(floaters.floaterRect)
 
