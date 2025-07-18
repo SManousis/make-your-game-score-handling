@@ -1,5 +1,5 @@
 import * as utils from "./utils.js";
-export function createCupid(x, y) {
+export function createCupid(x, y, cx) {
     let cupidBody = document.createElement("img");
     cupidBody.className = "cupid-img";
     cupidBody.src = "assets/enemies/TrumpCupid.png";
@@ -12,12 +12,13 @@ export function createCupid(x, y) {
        moveSpeed: 0.5,
        x: x,           // use the parameters!
        y: y,
+       cx: cx,
        bullet_count: 1,
        aimDirection: "down",
        state: "airborne",
        velX: 2,
        velY: 0,
-       body: [utils.createCircle(x+125, y + 150, 15), utils.createCircle(x+125, y + 150+25, 20)],
+       body: [utils.createCircle(x+125,  150 - cx , 15), utils.createCircle(x+125, cx + 150+25, 20)],
        updateFunc: function() { cupidUpdate(this) },   
        drawFunc: function() { cupidVisuals(this) },
        dom: cupidBody,
