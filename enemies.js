@@ -5,10 +5,11 @@ export function createCupid(x, y) {
     cupidBody.src = "assets/enemies/TrumpCupid.png";
     document.getElementById("game-area").appendChild(cupidBody);
      // store reference in object
+    
     let cupid = {
        health: 100,
        damage: 10,
-       moveSpeed: 1,
+       moveSpeed: 0.5,
        x: x,           // use the parameters!
        y: y,
        bullet_count: 1,
@@ -16,7 +17,7 @@ export function createCupid(x, y) {
        state: "airborne",
        velX: 2,
        velY: 0,
-       body: [utils.createCircle(x, y + 25, 10), utils.createCircle(x, y + 50 + 25, 25)],
+       body: [utils.createCircle(x+125, y + 150, 15), utils.createCircle(x+125, y + 150+25, 20)],
        updateFunc: function() { cupidUpdate(this) },   
        drawFunc: function() { cupidVisuals(this) },
        dom: cupidBody,
@@ -26,7 +27,7 @@ export function createCupid(x, y) {
  }
 
 
-let  parallelmovecount = 0
+//let  parallelmovecount = 0
 
 export function cupidUpdate(cupid) {
     utils.moveUnit(cupid, cupid.velX, 0)

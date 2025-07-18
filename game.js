@@ -38,8 +38,8 @@ allEntities.push(mario.mario)
 allEntities.push(floaters.floaterCircle)
 allEntities.push(floaters.floaterRect)
 for (let row = 0; row < 4; row++) {
-  for (let col = 0; col < 5; col++) {
-      let x = 100 + col * 80;
+  for (let col = 0; col < 6; col++) {
+      let x = 150 + col * 140;
       let y = 300 - row * 80;
       let cupid = enemies.createCupid(x, y);
       allEntities.push(cupid);
