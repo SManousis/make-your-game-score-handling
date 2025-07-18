@@ -19,7 +19,8 @@ export function createCupid(x, y) {
        body: [utils.createCircle(x, y + 25, 10), utils.createCircle(x, y + 50 + 25, 25)],
        updateFunc: function() { cupidUpdate(this) },   
        drawFunc: function() { cupidVisuals(this) },
-       dom: cupidBody
+       dom: cupidBody,
+       parallelMoveCount: 0,
     }
     return cupid
  }
@@ -29,16 +30,18 @@ let  parallelmovecount = 0
 
 export function cupidUpdate(cupid) {
     utils.moveUnit(cupid, cupid.velX, 0)
-    parallelmovecount++
-    if (parallelmovecount === 600) {
-        cupid.velY = 3
-        parallelmovecount = 0
-        utils.moveUnit(cupid, 0, cupid.velY)
-    }
-    if (parallelmovecount % 50 === 0) {
+    cupid.parallelMoveCount++
+    if (cupid.parallelMoveCount === 25) {
         cupid.velX = -cupid.velX
         utils.moveUnit(cupid, cupid.velX, 0)
     }
+    if (cupid.parallelMoveCount === 50) {
+        cupid.velX = -cupid.velX
+        cupid.velY = 3
+        cupid.parallelMoveCount = 0
+        utils.moveUnit(cupid, 0, cupid.velY)
+    }
+    
 }
 
 
