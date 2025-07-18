@@ -18,6 +18,28 @@ body{
    margin-right: auto;
  }
 
+#score {
+    position: absolute; /* Position relative to the nearest positioned ancestor */
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-size: 24px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    /* This z-index ensures it's above the game content but below the menus */
+    z-index: 10; 
+}
+
+#lives {
+    position: absolute; /* Position relative to the nearest positioned ancestor */
+    top: 10px;
+    right: 10px;
+    color: white;
+    font-size: 24px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;w
+    z-index: 10;
+}
 
 
 
@@ -78,3 +100,48 @@ body{
    background-color: red;
    position: absolute;
  }
+
+ /* General styling for both menus */
+.menu-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.75);
+    padding: 30px 50px;
+    border-radius: 10px;
+    color: white;
+    text-align: center;
+    border: 2px solid white;
+    z-index: 100; /* Ensures menus are on top of the game */
+}
+
+/* Style for the menu title */
+.menu-container h2 {
+    margin-top: 0;
+    font-size: 2.5em;
+}
+
+/* Style for the menu buttons */
+.menu-container button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 1.2em;
+    background-color: #f8f8f8;
+    color: #333;
+    border: 2px solid #555;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.menu-container button:hover {
+    background-color: #ddd;
+    border-color: #111;
+}
+
+
+.hidden {
+    display: none;
+}

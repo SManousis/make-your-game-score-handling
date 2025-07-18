@@ -9,9 +9,11 @@
 </head>
 
 <body>
-  
+  <!--GAME AREA-->
   <div id="game-area">
     <div id="score">Score: 0</div>
+    <div id="lives">Lives: 5</div>
+
     <div id="mario-img-cont">
       
       <img class="mario-img" id="mario-legs0" src="assets/mario/legs0.png"></img>
@@ -35,6 +37,24 @@
     <div id="spaceship"></div>
     <div id="mario"></div>
   </div>
+
+  <!--MAIN MENU-->
+  <div id="main-menu" class="menu-container">
+<h2> El Mario vs Space Invaders</h2>
+<button id="play-button">Play</button>
+<button id="leaderboard-button">Leaderboard</button>
+<button id="main-mute-button"> Mute Sound </button>
+  </div>
+
+  <!--PAUSE MENU-->
+  <div id="pause-menu" class="menu-container hidden">
+  <h2>Paused</h2>
+  <button id="resume-button">Resume</button>
+  <button id="restart-button">Restart</button>
+  <button id="back-to-menu-button">Back to Menu</button>
+  <button id="pause-mute-button">Mute Sound</button>
+  </div>
+
   <script type="module" src="game.js"></script>
 </body>
 

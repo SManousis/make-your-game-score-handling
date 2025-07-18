@@ -4,14 +4,30 @@ import * as floaters from './floaters.js'
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
 
+const mainMenu = document.getElementById('main-menu');
+const pauseMenu = document.getElementById('pause-menu');
+const scoreElement = document.getElementById('score');
+const livesElement = document.getElementById('lives');
+
+const playButton = document.getElementById('play-button');
+const resumeButton = document.getElementById('resume-button');
+const restartButton = document.getElementById('restart-button');
+const backToMenuButton = document.getElementById('back-to-menu-button');
+const leaderboardButton = document.getElementById('leaderboard-button');
+const mainMuteButton = document.getElementById('main-mute-button');
+const pauseMuteButton = document.getElementById('pause-mute-button');
+
+
 let gameState = {
-    currentState: 'running', //'paused','gameover','running'
-    score: 0
+    currentState: 'mainMenu', //'mainMenu', 'paused','gameover','running'
+    score: 0,
+    lives: 5,
+    isMuted: false
 }
 
 let allEntities = []
 
-const scoreElement= document.getElementById('score')
+
 
 export const gameArea = document.getElementById('game-area');
 
@@ -22,9 +38,34 @@ allEntities.push(mario.mario)
 allEntities.push(floaters.floaterCircle)
 allEntities.push(floaters.floaterRect)
 
-function updateScore(points){
-    gameState.score+=points;
-    scoreElement.textContent=`Score: ${gameState.score}`;
+
+function updateMenuVisibility() {
+    //hide all menus by default
+    mainMenu.classList.add('hidden');
+    pauseMenu.classList.add('hidden');
+
+    if (gameState.currentState === 'mainMenu') {
+        mainMenu.classList.remove('hidden');
+    } else if (gameState.currentState === 'paused') {
+        pauseMenu.classList.remove('hidden')
+    }
+}
+
+function restartGame() {
+    //whatever is needed to reset Mario 
+    //whatever is needed to reset enemies
+
+    gameState.score = 0;
+    scoreElement.textContent = `Score: ${gameState.score}`;
+
+    gameState.currentState = 'running';
+    updateMenuVisibility();
+}
+
+
+function updateScore(points) {
+    gameState.score += points;
+    scoreElement.textContent = `Score: ${gameState.score}`;
 }
 
 //keeps track of which buttons are currently held down
@@ -37,18 +78,55 @@ export const keysPressed = {
     space: false,
 };
 
+//--- EVENT LISTENERS ----
 
+// Main menu buttons
+
+playButton.addEventListener('click', () => {
+    gameState.currentState = 'running';
+    updateMenuVisibility();
+});
+
+leaderboardButton.addEventListener('click', () => {
+    alert('Leaderboard coming soon!');
+});
+
+resumeButton.addEventListener('click', () => {
+    gameState.currentState = 'running';
+    updateMenuVisibility();
+});
+
+restartButton.addEventListener('click',()=>{
+    restartGame();
+});
+
+backToMenuButton.addEventListener('click',()=>{
+    gameState.currentState='mainMenu';
+    updateMenuVisibility();
+})
+
+function toggleMute(){
+    gameState.isMuted=!gameState.isMuted;
+    const muteText=gameState.isMuted?"Unmute Sound":"Mute Sound";
+    mainMuteButton.textContent=muteText;
+    pauseMuteButton.textContent=muteText;
+    //add actual muting logic
+}
+mainMuteButton.addEventListener('click',toggleMute);
+pauseMuteButton.addEventListener('click',toggleMute);
 
 // Listen for key presses
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'p') {
+    if (event.key.toLowerCase() === 'p' && (gameState.currentState === 'running' || gameState.currentState === 'paused'))  {
         if (gameState.currentState === 'running') {
-            
+
             gameState.currentState = 'paused';
-             
+
         } else if (gameState.currentState === 'paused') {
             gameState.currentState = 'running';
+          
         }
+          updateMenuVisibility();
     }
     if (event.key === 'ArrowLeft') {
         keysPressed.left = true;
@@ -102,9 +180,12 @@ let prev = 0
 function gameLoop() {
     console.log(gameState.currentState)
     if (gameState.currentState === 'running') {
-        update(); 
+        update();
     }
-    draw(); //this still needs to work on pause so the screen doesn't go blank
+    if (gameState.currentState === 'running' || gameState.currentState === 'paused') {
+        draw();
+    }
+
     counter++
     requestAnimationFrame(gameLoop);
 }
@@ -125,18 +206,6 @@ function update() {
     for (let entity of allEntities) {
         entity.updateFunc()
     }
-
-
-    // // Laser movement
-    // for (let i = lasers.length - 1; i >= 0; i--) {
-    //   const laser = lasers[i];
-    //   laser.position.y -= laserSpeed;
-
-    //   if (laser.position.y < 0) {
-    //     laser.element.remove();
-    //     lasers.splice(i, 1);
-    //   }
-    // }
 }
 
 // Draw the game, only updating visual elements based on their objects
@@ -156,6 +225,6 @@ function draw() {
 }
 
 
-
+updateMenuVisibility();
 // Start the game
 gameLoop();

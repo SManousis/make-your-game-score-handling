@@ -17,3 +17,16 @@ export function fireLaser() {
 
     lasers.push({ element: laser, position: laserPosition });
 }
+
+
+    // // Laser movement
+    // for (let i = lasers.length - 1; i >= 0; i--) {
+    //   const laser = lasers[i];
+    //   laser.position.y -= laserSpeed;
+
+    //   if (laser.position.y < 0) {
+    //     laser.element.remove();
+    //     lasers.splice(i, 1);
+    //   }
+    // }
+
