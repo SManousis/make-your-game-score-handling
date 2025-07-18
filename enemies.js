@@ -26,7 +26,7 @@ export function cupidUpdate() {
         parallelmovecount = 0
         utils.moveUnit(cupid, 0, cupid.velY)
     }
-    if (parallelmovecount % 20 === 0) {
+    if (parallelmovecount % 50 === 0) {
         cupid.velX = -cupid.velX
         utils.moveUnit(cupid, cupid.velX, 0)
     }
