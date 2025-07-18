@@ -61,7 +61,7 @@ body{
     left: 0px;
     transform: translate(calc(-52% + var(--mario-x)), calc(20% + var(--mario-y))) scaleX(var(--mario-scale-x));  will-change: transform;
     opacity: 0%;  will-change: opacity;
-    z-index: 99000;
+    z-index: 9;
   }
 
   .cupid-img {
@@ -72,7 +72,7 @@ body{
     bottom: 500px;
     transform: translate(var(--cupid-x, 0px), var(--cupid-y, 0px));
     opacity: 100%;
-    z-index: 99000;
+    z-index: 8;
   }
   
 
