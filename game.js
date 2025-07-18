@@ -34,10 +34,17 @@ export const gameArea = document.getElementById('game-area');
 
 //adding our created entities to allEntities if they are not static
 allEntities.push(mario.mario)
-allEntities.push(enemies.cupid)
+//allEntities.push(enemies.cupid)
 allEntities.push(floaters.floaterCircle)
 allEntities.push(floaters.floaterRect)
-
+for (let row = 0; row < 4; row++) {
+  for (let col = 0; col < 5; col++) {
+      let x = 100 + col * 80;
+      let y = 300 - row * 80;
+      let cupid = enemies.createCupid(x, y);
+      allEntities.push(cupid);
+  }
+}
 
 function updateMenuVisibility() {
     //hide all menus by default
@@ -201,10 +208,10 @@ setInterval(show, 1000)
 // Update the game state, only physics
 function update() {
     // mario movement
-
+    
     //running all entities' update function
     for (let entity of allEntities) {
-        entity.updateFunc()
+      if (entity.updateFunc) entity.updateFunc();
     }
 }
 
@@ -221,6 +228,7 @@ function draw() {
         if (entity.drawFunc != undefined) {
             entity.drawFunc()
         }
+        
     }
 }
 

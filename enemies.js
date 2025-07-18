@@ -1,24 +1,33 @@
 import * as utils from "./utils.js";
-export let cupid = {
-    health: 100,
-    damage: 10,
-    moveSpeed: 2,
-    x: 0,
-    y: 0,
-    bullet_count: 1,
-    aimDirection: "down",
-    state: "airborne",
-    velX: 2,
-    velY: 0,
-    body: [utils.createCircle(0, 600 + 25, 10), utils.createCircle(0, 600 + 50 + 25, 25)],
-    updateFunc: cupidUpdate,
-    drawFunc: cupidVisuals
-}
+export function createCupid(x, y) {
+    let cupidBody = document.createElement("img");
+    cupidBody.className = "cupid-img";
+    cupidBody.src = "assets/enemies/TrumpCupid.png";
+    document.getElementById("game-area").appendChild(cupidBody);
+     // store reference in object
+    let cupid = {
+       health: 100,
+       damage: 10,
+       moveSpeed: 1,
+       x: x,           // use the parameters!
+       y: y,
+       bullet_count: 1,
+       aimDirection: "down",
+       state: "airborne",
+       velX: 2,
+       velY: 0,
+       body: [utils.createCircle(x, y + 25, 10), utils.createCircle(x, y + 50 + 25, 25)],
+       updateFunc: function() { cupidUpdate(this) },   
+       drawFunc: function() { cupidVisuals(this) },
+       dom: cupidBody
+    }
+    return cupid
+ }
 
-let cupidBody = document.getElementById("cupid-body")
+
 let  parallelmovecount = 0
 
-export function cupidUpdate() {
+export function cupidUpdate(cupid) {
     utils.moveUnit(cupid, cupid.velX, 0)
     parallelmovecount++
     if (parallelmovecount === 600) {
@@ -31,11 +40,13 @@ export function cupidUpdate() {
         utils.moveUnit(cupid, cupid.velX, 0)
     }
 }
-export function cupidVisuals() {
-    cupidBody.style.opacity = "100%"
-    cupidBody.style.setProperty('--cupid-x', `${-cupid.x}px`);
-    cupidBody.style.setProperty('--cupid-y', `${cupid.y}px`);
-}
 
+
+
+export function cupidVisuals(cupid) {
+    cupid.dom.style.opacity = "100%";
+    cupid.dom.style.setProperty('--cupid-x', `${cupid.x}px`);
+    cupid.dom.style.setProperty('--cupid-y', `${cupid.y}px`);
+}
 
 
