@@ -31,11 +31,14 @@ let  parallelmovecount = 0
 export function cupidUpdate(cupid) {
     utils.moveUnit(cupid, cupid.velX, 0)
     cupid.parallelMoveCount++
-    if (cupid.parallelMoveCount === 25) {
+    if (cupid.parallelMoveCount % 3 === 0){ 
+        cupid.moveSpeed === 0 ? cupid.moveSpeed = 1 : cupid.moveSpeed = 0
+    }
+    if (cupid.parallelMoveCount === 50) {
         cupid.velX = -cupid.velX
         utils.moveUnit(cupid, cupid.velX, 0)
     }
-    if (cupid.parallelMoveCount === 50) {
+    if (cupid.parallelMoveCount === 100) {
         cupid.velX = -cupid.velX
         cupid.velY = 3
         cupid.parallelMoveCount = 0
