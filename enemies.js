@@ -2,7 +2,7 @@ import * as utils from "./utils.js";
 export let cupid = {
     health: 100,
     damage: 10,
-    moveSpeed: 50,
+    moveSpeed: 2,
     x: 0,
     y: 0,
     bullet_count: 1,
@@ -10,7 +10,7 @@ export let cupid = {
     state: "airborne",
     velX: 2,
     velY: 0,
-    body: [utils.createCircle(600, 150 + 25, 10), utils.createCircle(600, 0 + 50 + 25, 25)],
+    body: [utils.createCircle(0, 600 + 25, 10), utils.createCircle(0, 600 + 50 + 25, 25)],
     updateFunc: cupidUpdate,
     drawFunc: cupidVisuals
 }
