@@ -30,8 +30,6 @@ export function moveAndCollide(unit) {
     //apply gravity to y velocity
     unit.velY -= unit.gravity
 
-    draw()
-
     // apply unit's gravity
     utils.moveUnit(unit, 0, unit.velY)
 

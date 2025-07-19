@@ -233,7 +233,6 @@ function update() {
 
 // Draw the game, only updating visual elements based on their objects
 export function draw() {
-
     for (let entity of allEntities) {
         //body debug visual update
         for (const shape of entity.body) {

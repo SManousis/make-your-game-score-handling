@@ -21,7 +21,7 @@ export let mario = {
     aimDirection: "left", //left, right, up
     velX: 0, //his current velocity in x axis
     velY: 0, //his current velocity in y axis
-    x: 100, //his current x position 
+    x: 100, //his current x position
     y: 100, //his current y position
     lookingDir: "left", //which direction mario is looking at
     lookingUp: false,
@@ -159,15 +159,6 @@ export function marioUpdate() {
     }
 
 
-
-    // // apply max x speed
-    // if (mario.velX > mario.maxSpeed) {
-    //     mario.velX = mario.maxSpeed
-    // }
-    // if (mario.velX < -mario.maxSpeed) {
-    //     mario.velX = -mario.maxSpeed
-    // }
-
     //add x drag when one ground
     if (!keysPressed.left && !keysPressed.right) {
         let impulse = mario.drag
@@ -189,34 +180,6 @@ export function marioUpdate() {
         }
     }
 
-
-    // //move mario by x velocity
-    // utils.moveUnit(mario, mario.velX, 0)
-
-    // let resolve = isMarioWalkingIntoGround(mario.x, mario.y)
-
-    // if (resolve.vertical != 0) {
-    //     utils.moveUnit(mario, resolve.horizontal, 0)
-    // }
-
-
-   
-
-
-    // //apply gravity to y velocity
-    // mario.velY -= mario.gravity
-
-    // // apply mario's gravity
-    // utils.moveUnit(mario, 0, mario.velY)
-
-    // let resolveUp = isMarioTouchingGround()
-
-    // let grounded = (resolveUp > 0)
-
-    // if (resolveUp != 0) {
-    //     utils.moveUnit(mario, 0, resolveUp)
-    //     mario.velY = 0
-    // }
 
     let grounded = physics.moveAndCollide(mario)
 
