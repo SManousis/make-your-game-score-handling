@@ -57,7 +57,7 @@ setInterval(() => {
     setTimeout(() => {
       randomCupid.dom.src="assets/enemies/TrumpCupid.png"
     }, 300)
-  }, 2000) // cupids now fire every 2 seconds
+  }, 1800) // cupids now fire every 2 seconds
 
 function updateMenuVisibility() {
     //hide all menus by default
