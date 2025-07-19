@@ -11,9 +11,8 @@ export const platformTest = {
 }
 
 export const platformTest2 = {
-    body: [utils.createRect(700, 100, 200, 210)]
+    body: [utils.createRect(700, 100, 200, 210)],
 }
-
 
 
 export const platform1 = {

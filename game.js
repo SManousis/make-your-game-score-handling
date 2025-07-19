@@ -1,7 +1,7 @@
 import * as mario from './mario.js'
 import * as floaters from './floaters.js'
 import * as enemies from './enemies.js'
-//import * as walkables from './walkables.js'
+import * as walkables from './walkables.js'
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
 
@@ -28,8 +28,6 @@ let gameState = {
 
 let allEntities = []
 
-
-
 export const gameArea = document.getElementById('game-area');
 
 //adding our created entities to allEntities if they are not static
@@ -40,10 +38,10 @@ allEntities.push(floaters.floaterRect)
 
 
 let cupids = [];
-for (let row = 0; row < 4; row++) {
-  for (let col = 0; col < 6; col++) {
-    let x = 350 + col * 140;
-    let y = 500 - row * 80;
+for (let row = 0; row < 12; row++) {
+  for (let col = 0; col < 12; col++) {
+    let x = 200 + col * 140;
+    let y = 900 - row * 80;
     let cupid = enemies.createCupid(x, y);
     cupids.push(cupid);
     allEntities.push(cupid);
@@ -227,7 +225,7 @@ function update() {
     
     //running all entities' update function
     for (let entity of allEntities) {
-      if (entity.updateFunc) entity.updateFunc();
+      if (entity.updateFunc) entity.updateFunc(entity);
     }
 }
 

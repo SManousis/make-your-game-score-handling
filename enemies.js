@@ -1,4 +1,6 @@
 import * as utils from "./utils.js";
+import * as mario from './mario.js'
+
 export function createCupid(x, y) {
     let cupidBody = document.createElement("img");
     cupidBody.className = "cupid-img";
@@ -17,6 +19,9 @@ export function createCupid(x, y) {
        state: "airborne",
        velX: 2,
        velY: 0,
+       touched: false,
+       rand1: Math.random()*10,
+       rand2: Math.random()*10,
        body: [utils.createCircle(x,  y+20, 30)],
        updateFunc: function() { cupidUpdate(this) },   
        drawFunc: function() { cupidVisuals(this) },
@@ -45,6 +50,24 @@ export function cupidUpdate(cupid) {
         cupid.parallelMoveCount = 0
         utils.moveUnit(cupid, 0, cupid.velY)
     }
+
+
+    //if cupid touches mario, become touched
+    if (!cupid.touched && utils.IsBodyCollidingWithUnit(cupid.body[0], mario.mario)){
+        cupid.touched = true
+        cupid.velY = 0
+    }
+
+    if (cupid.touched){
+        //if cupid is touched, fly up, first slowly and then speed up
+        cupid.velY += 0.2
+        cupid.velY *= 1.05
+
+        utils.moveUnit(cupid, cupid.rand1-2.5, cupid.velY + cupid.rand2)
+    }
+
+    //always move a little bit closer to mario
+    utils.moveUnit(cupid, (mario.mario.x - cupid.x)/(500*cupid.rand1), (mario.mario.y - cupid.y)/(500*cupid.rand2))
     
 }
 
