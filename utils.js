@@ -78,52 +78,56 @@ export function isPointCollidingWithBody(pointX, pointY, body, velX, velY) {
         const distSquared = distX * distX + distY * distY;
         const radiusSquared = body.radius * body.radius;
 
-       
-
         if (distSquared <= radiusSquared) {
 
-             //===
-            let finalX = 0
-            let finalY = 0
+            // let finalX = pointX;
+            // let finalY = pointY;
 
-            const p1x = pointX - velX
-            const p1y = pointY - velY
-            
-            const p2x = pointX
-            const p2y = pointY
+            // const p1x = pointX - velX;
+            // const p1y = pointY - velY;
+            // const p2x = pointX;
+            // const p2y = pointY;
 
-            const cx = body.x
-            const cy = body.y
+            // const cx = body.x;
+            // const cy = body.y;
+            // const r = body.radius;
 
-            const a = (p1y - p2y) / (p1x - p2x)
-            const b = p1y - a * p1x
+            // const dx = p2x - p1x;
+            // const dy = p2y - p1y;
+            // const fx = p1x - cx;
+            // const fy = p1y - cy;
 
-            const r = body.radius
+            // const a = dx * dx + dy * dy;
+            // const b = 2 * (fx * dx + fy * dy);
+            // const c = fx * fx + fy * fy - r * r;
 
-            const delta = (-2 * cx + 2 * a * b - 2 * a * cy) ^ 2 - 4 * (1 + a * a) * (b * b - 2 * b * cy - r * r + cx * cx + cy * cy)
+            // const delta = b * b - 4 * a * c;
 
-            if (delta > 0) {
-                const x1 = ((2 * cx - 2 * a * b + 2 * a * cy) + Math.sqrt(delta)) / (2 * (1 + a * a))
-                const x2 = ((2 * cx - 2 * a * b + 2 * a * cy) - Math.sqrt(delta)) / (2 * (1 + a * a))
-                if (Math.abs(x1-p1x) < Math.abs(x2-p2x)){
-                    finalX = x1
-                }else{
-                    finalX = x2
-                }
-            
-                finalY = a * finalX + b
-            }
-            //==
-            console.log(finalX, finalY)
-            
-            return {horizontal: pointX - finalX, vertical: pointY - finalY}
+            // if (delta >= 0 && a !== 0) {
+            //     const sqrtD = Math.sqrt(delta);
+            //     const t1 = (-b - sqrtD) / (2 * a);
+            //     const t2 = (-b + sqrtD) / (2 * a);
+
+            //     let t = Number.POSITIVE_INFINITY;
+
+            //     if (t1 >= 0 && t1 <= 1) t = t1;
+            //     else if (t2 >= 0 && t2 <= 1) t = t2;
+
+            //     if (t !== Number.POSITIVE_INFINITY) {
+            //         finalX = p1x + dx * t;
+            //         finalY = p1y + dy * t;
+            //     }
+            // }
+
+            // return { horizontal: pointX - finalX, vertical: pointY - finalY };
+
 
             const distance = Math.sqrt(distSquared);
             const penetrationDepth = body.radius - distance;
 
             if (distance > 0) {
-                const normalX = dx / distance;
-                const normalY = dy / distance;
+                const normalX = distX / distance;
+                const normalY = distY / distance;
                 return {
                     vertical: penetrationDepth * normalY,
                     horizontal: penetrationDepth * normalX

@@ -1,7 +1,7 @@
 
 import * as utils from './utils.js'
 import {walkables} from './walkables.js'
-import {gameArea} from './game.js'
+import {gameArea, draw} from './game.js'
 
 
 //it will simulate the physics step of a unit, 
@@ -29,6 +29,8 @@ export function moveAndCollide(unit) {
 
     //apply gravity to y velocity
     unit.velY -= unit.gravity
+
+    draw()
 
     // apply unit's gravity
     utils.moveUnit(unit, 0, unit.velY)

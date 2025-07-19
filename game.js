@@ -196,6 +196,8 @@ document.addEventListener('keyup', (event) => {
 let counter = 0
 let prev = 0
 
+
+
 // The main game loop
 function gameLoop() {
     // console.log(gameState.currentState)
@@ -207,6 +209,7 @@ function gameLoop() {
     }
 
     counter++
+    
     requestAnimationFrame(gameLoop);
 }
 
@@ -229,7 +232,7 @@ function update() {
 }
 
 // Draw the game, only updating visual elements based on their objects
-function draw() {
+export function draw() {
 
     for (let entity of allEntities) {
         //body debug visual update
