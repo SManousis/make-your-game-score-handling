@@ -1,6 +1,7 @@
 import * as utils from './utils.js'
 import {walkables} from './walkables.js'
 import {keysPressed,gameArea} from './game.js'
+import * as physics from './physicsStep.js'
 
 export const marioDiv = document.getElementById('mario');
 
@@ -27,8 +28,10 @@ export let mario = {
     walkCounter: 0, //a counter that counts for how many frames mario has been walking towards a direction, for walk animation purposes
     crouching: false,
     body: [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20)], //his gameplay body represented in circles
+    physicsPointsOffsets: [{x: -20, y: 0}, {x: 20, y: 0}], //These points will be used
     drawFunc: marioVisuals, //his visual representation in the game
     updateFunc: marioUpdate
+    
 }
 
 
@@ -157,13 +160,13 @@ export function marioUpdate() {
 
 
 
-    // apply max x speed
-    if (mario.velX > mario.maxSpeed) {
-        mario.velX = mario.maxSpeed
-    }
-    if (mario.velX < -mario.maxSpeed) {
-        mario.velX = -mario.maxSpeed
-    }
+    // // apply max x speed
+    // if (mario.velX > mario.maxSpeed) {
+    //     mario.velX = mario.maxSpeed
+    // }
+    // if (mario.velX < -mario.maxSpeed) {
+    //     mario.velX = -mario.maxSpeed
+    // }
 
     //add x drag when one ground
     if (!keysPressed.left && !keysPressed.right) {
@@ -187,40 +190,44 @@ export function marioUpdate() {
     }
 
 
-    //move mario by x velocity
-    utils.moveUnit(mario, mario.velX, 0)
+    // //move mario by x velocity
+    // utils.moveUnit(mario, mario.velX, 0)
 
-    let resolve = isMarioWalkingIntoGround(mario.x, mario.y)
+    // let resolve = isMarioWalkingIntoGround(mario.x, mario.y)
 
-    if (resolve.vertical != 0) {
-        utils.moveUnit(mario, resolve.horizontal, 0)
-    }
+    // if (resolve.vertical != 0) {
+    //     utils.moveUnit(mario, resolve.horizontal, 0)
+    // }
 
 
-    //don't allow mario to move past screen bounds
+   
+
+
+    // //apply gravity to y velocity
+    // mario.velY -= mario.gravity
+
+    // // apply mario's gravity
+    // utils.moveUnit(mario, 0, mario.velY)
+
+    // let resolveUp = isMarioTouchingGround()
+
+    // let grounded = (resolveUp > 0)
+
+    // if (resolveUp != 0) {
+    //     utils.moveUnit(mario, 0, resolveUp)
+    //     mario.velY = 0
+    // }
+
+    let grounded = physics.moveAndCollide(mario)
+
+
+     //don't allow mario to move past screen bounds
     if (mario.x < 0) {
         utils.setUnit(mario, 0, mario.y)
     }
     if (mario.x > gameArea.offsetWidth) {
         utils.setUnit(mario, gameArea.offsetWidth, mario.y)
     }
-
-
-    //apply gravity to y velocity
-    mario.velY -= mario.gravity
-
-    // apply mario's gravity
-    utils.moveUnit(mario, 0, mario.velY)
-
-    let resolveUp = isMarioTouchingGround()
-
-    let grounded = (resolveUp > 0)
-
-    if (resolveUp != 0) {
-        utils.moveUnit(mario, 0, resolveUp)
-        mario.velY = 0
-    }
-
 
     //if mario on the ground and jump button pressed
     if (keysPressed.space && grounded) {

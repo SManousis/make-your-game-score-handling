@@ -69,16 +69,55 @@ export function IsBodyCollidingWithBody(bodyA, bodyB) {
     return dx * dx + dy * dy <= circle.radius * circle.radius;
 }
 
-export function isPointCollidingWithBody(pointX, pointY, body) {
+export function isPointCollidingWithBody(pointX, pointY, body, velX, velY) {
     if (!body.active) return { vertical: 0, horizontal: 0 };
 
     if (body.type === "circle") {
-        const dx = pointX - body.x;
-        const dy = pointY - body.y;
-        const distSquared = dx * dx + dy * dy;
+        const distX = pointX - body.x;
+        const distY = pointY - body.y;
+        const distSquared = distX * distX + distY * distY;
         const radiusSquared = body.radius * body.radius;
 
+       
+
         if (distSquared <= radiusSquared) {
+
+             //===
+            let finalX = 0
+            let finalY = 0
+
+            const p1x = pointX - velX
+            const p1y = pointY - velY
+            
+            const p2x = pointX
+            const p2y = pointY
+
+            const cx = body.x
+            const cy = body.y
+
+            const a = (p1y - p2y) / (p1x - p2x)
+            const b = p1y - a * p1x
+
+            const r = body.radius
+
+            const delta = (-2 * cx + 2 * a * b - 2 * a * cy) ^ 2 - 4 * (1 + a * a) * (b * b - 2 * b * cy - r * r + cx * cx + cy * cy)
+
+            if (delta > 0) {
+                const x1 = ((2 * cx - 2 * a * b + 2 * a * cy) + Math.sqrt(delta)) / (2 * (1 + a * a))
+                const x2 = ((2 * cx - 2 * a * b + 2 * a * cy) - Math.sqrt(delta)) / (2 * (1 + a * a))
+                if (Math.abs(x1-p1x) < Math.abs(x2-p2x)){
+                    finalX = x1
+                }else{
+                    finalX = x2
+                }
+            
+                finalY = a * finalX + b
+            }
+            //==
+            console.log(finalX, finalY)
+            
+            return {horizontal: pointX - finalX, vertical: pointY - finalY}
+
             const distance = Math.sqrt(distSquared);
             const penetrationDepth = body.radius - distance;
 
@@ -109,8 +148,8 @@ export function isPointCollidingWithBody(pointX, pointY, body) {
             const bottom = body.y + body.height - pointY;
 
             return {
-                vertical: minMag(top, bottom),
-                horizontal: minMag(left, right)
+                vertical: velY > 0 ? top : bottom,
+                horizontal: velX > 0 ? left : right
             };
         }
         return { vertical: 0, horizontal: 0 };
@@ -158,51 +197,3 @@ export function setUnit(unit, x, y) {
 }
 
 
-
-// //it will simulate the physics step of a unit, 
-// // assumes the unit has x, y, velX, velY, gravity. returns data about the state of the unit after the physics step 
-// TODO also needs to be made to work with just 1 or more points, instead of two and two that mario has. might require reworking
-// function moveAndCollide(unit) {
-
-//     // apply max x speed
-//     if (unit.velX > unit.maxSpeed) {
-//         unit.velX = unit.maxSpeed
-//     }
-//     if (unit.velX < -unit.maxSpeed) {
-//         unit.velX = -unit.maxSpeed
-//     }
-
-//     //move unit by x velocity
-//     utils.moveUnit(unit, unit.velX, 0)
-
-//     let resolve = isMarioWalkingIntoGround(unit.x, unit.y) //TODO turn from mario to unit, and use a variable that contains point for collision location, instead of unit's specific ones
-
-//     if (resolve.vertical != 0) {
-//         utils.moveUnit(unit, resolve.horizontal, 0)
-//     }
-
-//     //don't allow unit to move past screen bounds
-//     if (unit.x < 0) {
-//         utils.setUnit(unit, 0, unit.y)
-//     }
-//     if (unit.x > gameArea.offsetWidth) {
-//         utils.setUnit(unit, gameArea.offsetWidth, unit.y)
-//     }
-
-//     //apply gravity to y velocity
-//     unit.velY -= unit.gravity
-
-//     // apply unit's gravity
-//     utils.moveUnit(unit, 0, unit.velY)
-
-//     let resolveUp = isMarioTouchingGround()
-
-//     let grounded = (resolveUp > 0)
-
-//     if (resolveUp != 0) {
-//         utils.moveUnit(unit, 0, resolveUp)
-//         unit.velY = 0
-//     }
-
-//     return grounded
-// }

@@ -21,7 +21,7 @@ export const platform1 = {
 }
 
 export const platform2 = {
-    body: [utils.createRect(400, 220, 120, 30)]
+    body: [utils.createCircle(200, 200, 100)]
 }
 
 export const platform3 = {

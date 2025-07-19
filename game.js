@@ -186,7 +186,7 @@ let prev = 0
 
 // The main game loop
 function gameLoop() {
-    console.log(gameState.currentState)
+    // console.log(gameState.currentState)
     if (gameState.currentState === 'running') {
         update();
     }
