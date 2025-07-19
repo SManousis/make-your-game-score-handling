@@ -19,6 +19,8 @@ export function createCupid(x, y) {
        velX: 2,
        velY: 0,
        body: [utils.createCircle(x+25, 25 + y , 15), utils.createCircle(x+25, 50 +y, 20)],
+    //    body: [utils.createCircle(x+125,  150 - cx , 15), utils.createCircle(x+125, cx + 150+25, 20)],
+       body: [utils.createCircle(x,  y+20, 30)],
        updateFunc: function() { cupidUpdate(this) },   
        drawFunc: function() { cupidVisuals(this) },
        dom: cupidBody,
