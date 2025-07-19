@@ -37,15 +37,27 @@ allEntities.push(mario.mario)
 //allEntities.push(enemies.cupid)
 allEntities.push(floaters.floaterCircle)
 allEntities.push(floaters.floaterRect)
+
+
+let cupids = [];
 for (let row = 0; row < 4; row++) {
   for (let col = 0; col < 6; col++) {
-      let x = 150 + col * 140;
-      let y = 300 - row * 80;
-      let cx = -(300 - row * 80);
-      let cupid = enemies.createCupid(x, y, cx);
-      allEntities.push(cupid);
-  }
+    let x = 350 + col * 140;
+    let y = 500 - row * 80;
+    let cupid = enemies.createCupid(x, y);
+    cupids.push(cupid);
+    allEntities.push(cupid);
+    }
 }
+
+setInterval(() => {
+    let firingNumber = Math.floor(Math.random() * cupids.length)
+    let randomCupid = cupids[firingNumber]
+    randomCupid.dom.src="assets/enemies/TrumpCupidFired.png"
+    setTimeout(() => {
+      randomCupid.dom.src="assets/enemies/TrumpCupid.png"
+    }, 300)
+  }, 2000) // cupids now fire every 2 seconds
 
 function updateMenuVisibility() {
     //hide all menus by default
