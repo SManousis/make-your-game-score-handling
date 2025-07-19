@@ -39,10 +39,10 @@ allEntities.push(floaters.floaterCircle)
 allEntities.push(floaters.floaterRect)
 for (let row = 0; row < 4; row++) {
   for (let col = 0; col < 6; col++) {
-      let x = 250 + col * 140;
-      let y = 500 - row * 80;
-     
-      let cupid = enemies.createCupid(x, y);
+      let x = 150 + col * 140;
+      let y = 300 - row * 80;
+      let cx = -(300 - row * 80);
+      let cupid = enemies.createCupid(x, y, cx);
       allEntities.push(cupid);
   }
 }
@@ -221,9 +221,9 @@ function draw() {
 
     for (let entity of allEntities) {
         //body debug visual update
-        for (const circle of entity.body) {
-            circle.div.style.left = circle.x + 'px';
-            circle.div.style.bottom = circle.y + 'px';
+        for (const shape of entity.body) {
+            shape.div.style.left = shape.x + 'px';
+            shape.div.style.bottom = shape.y + 'px';
         }
 
         if (entity.drawFunc != undefined) {

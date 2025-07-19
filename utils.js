@@ -156,3 +156,53 @@ export function setUnit(unit, x, y) {
         bod.y += diffy;
     }
 }
+
+
+
+// //it will simulate the physics step of a unit, 
+// // assumes the unit has x, y, velX, velY, gravity. returns data about the state of the unit after the physics step 
+// TODO also needs to be made to work with just 1 or more points, instead of two and two that mario has. might require reworking
+// function moveAndCollide(unit) {
+
+//     // apply max x speed
+//     if (unit.velX > unit.maxSpeed) {
+//         unit.velX = unit.maxSpeed
+//     }
+//     if (unit.velX < -unit.maxSpeed) {
+//         unit.velX = -unit.maxSpeed
+//     }
+
+//     //move unit by x velocity
+//     utils.moveUnit(unit, unit.velX, 0)
+
+//     let resolve = isMarioWalkingIntoGround(unit.x, unit.y) //TODO turn from mario to unit, and use a variable that contains point for collision location, instead of unit's specific ones
+
+//     if (resolve.vertical != 0) {
+//         utils.moveUnit(unit, resolve.horizontal, 0)
+//     }
+
+//     //don't allow unit to move past screen bounds
+//     if (unit.x < 0) {
+//         utils.setUnit(unit, 0, unit.y)
+//     }
+//     if (unit.x > gameArea.offsetWidth) {
+//         utils.setUnit(unit, gameArea.offsetWidth, unit.y)
+//     }
+
+//     //apply gravity to y velocity
+//     unit.velY -= unit.gravity
+
+//     // apply unit's gravity
+//     utils.moveUnit(unit, 0, unit.velY)
+
+//     let resolveUp = isMarioTouchingGround()
+
+//     let grounded = (resolveUp > 0)
+
+//     if (resolveUp != 0) {
+//         utils.moveUnit(unit, 0, resolveUp)
+//         unit.velY = 0
+//     }
+
+//     return grounded
+// }

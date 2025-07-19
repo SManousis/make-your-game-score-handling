@@ -33,6 +33,8 @@ export let mario = {
 
 
 
+
+
 export let currentBody = document.getElementById("mario-body-forward")
 export let currentLegs = document.getElementById("mario-legs0")
 export let marioFeetFrames = ["mario-legs0", "mario-legs1", "mario-legs2", "mario-legs3", "mario-legs3"]
@@ -121,7 +123,6 @@ export function isMarioWalkingIntoGround() {
     return { vertical: largestV, horizontal: largestH }
 }
 
-export let testCounter = 0
 
 export function marioUpdate() {
     if (keysPressed.right) {
