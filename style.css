@@ -65,15 +65,14 @@ body{
   }
 
   .cupid-img {
+    position: absolute;
     width: 70px;
     height: 70px;
-    position: absolute;
-    left: 100px;
-    bottom: 500px;
-    transform: translate(var(--cupid-x, 0px), var(--cupid-y, 0px));
+    left: 0;
+    bottom: 0;
     opacity: 100%;
     z-index: 99000;
-  }
+}
   
 
  .circle {

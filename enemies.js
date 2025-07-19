@@ -1,5 +1,5 @@
 import * as utils from "./utils.js";
-export function createCupid(x, y, cx) {
+export function createCupid(x, y) {
     let cupidBody = document.createElement("img");
     cupidBody.className = "cupid-img";
     cupidBody.src = "assets/enemies/TrumpCupid.png";
@@ -12,13 +12,13 @@ export function createCupid(x, y, cx) {
        moveSpeed: 0.5,
        x: x,           // use the parameters!
        y: y,
-       cx: cx,
+       
        bullet_count: 1,
        aimDirection: "down",
        state: "airborne",
        velX: 2,
        velY: 0,
-       body: [utils.createCircle(x+125,  150 - cx , 15), utils.createCircle(x+125, cx + 150+25, 20)],
+       body: [utils.createCircle(x+25, 25 + y , 15), utils.createCircle(x+25, 50 +y, 20)],
        updateFunc: function() { cupidUpdate(this) },   
        drawFunc: function() { cupidVisuals(this) },
        dom: cupidBody,
@@ -42,7 +42,7 @@ export function cupidUpdate(cupid) {
     }
     if (cupid.parallelMoveCount === 100) {
         cupid.velX = -cupid.velX
-        cupid.velY = 3
+        cupid.velY = -3
         cupid.parallelMoveCount = 0
         utils.moveUnit(cupid, 0, cupid.velY)
     }
@@ -53,8 +53,8 @@ export function cupidUpdate(cupid) {
 
 export function cupidVisuals(cupid) {
     cupid.dom.style.opacity = "100%";
-    cupid.dom.style.setProperty('--cupid-x', `${cupid.x}px`);
-    cupid.dom.style.setProperty('--cupid-y', `${cupid.y}px`);
+    cupid.dom.style.left = cupid.x + 'px';
+    cupid.dom.style.bottom = cupid.y + 'px';
 }
 
 
