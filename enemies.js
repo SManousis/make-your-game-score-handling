@@ -11,15 +11,12 @@ export function createCupid(x, y) {
        damage: 10,
        moveSpeed: 0.5,
        x: x,           // use the parameters!
-       y: y,
-       
+       y: y,       
        bullet_count: 1,
        aimDirection: "down",
        state: "airborne",
        velX: 2,
        velY: 0,
-       body: [utils.createCircle(x+25, 25 + y , 15), utils.createCircle(x+25, 50 +y, 20)],
-    //    body: [utils.createCircle(x+125,  150 - cx , 15), utils.createCircle(x+125, cx + 150+25, 20)],
        body: [utils.createCircle(x,  y+20, 30)],
        updateFunc: function() { cupidUpdate(this) },   
        drawFunc: function() { cupidVisuals(this) },
@@ -56,7 +53,7 @@ export function cupidUpdate(cupid) {
 export function cupidVisuals(cupid) {
     cupid.dom.style.opacity = "100%";
     cupid.dom.style.setProperty('--cupid-x', `${cupid.x}px`);
-    cupid.dom.style.setProperty('--cupid-y', `${cupid.y}px`);
+    cupid.dom.style.setProperty('--cupid-y', `${-cupid.y}px`);
 }
 
 
