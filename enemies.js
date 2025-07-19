@@ -53,8 +53,8 @@ export function cupidUpdate(cupid) {
 
 export function cupidVisuals(cupid) {
     cupid.dom.style.opacity = "100%";
-    cupid.dom.style.left = cupid.x + 'px';
-    cupid.dom.style.bottom = cupid.y + 'px';
+    cupid.dom.style.setProperty('--cupid-x', `${cupid.x}px`);
+    cupid.dom.style.setProperty('--cupid-y', `${cupid.y}px`);
 }
 
 
