@@ -53,8 +53,8 @@ body{
     --cupid-scale-x: 1;
   }
   .bullet-img {
-    width: 50px;
-    height: 50px;
+    width: 5px;
+    height: 40px;
     position: absolute;
     bottom: 0px;
     left: 0px;
