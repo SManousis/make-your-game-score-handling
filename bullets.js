@@ -33,3 +33,9 @@ export function bulletUpdate(bullet) {
         bullet.dom.remove()
     }
 }
+
+export function bulletVisuals(bullet) {
+    bullet.dom.style.opacity = "100%";
+    bullet.dom.style.setProperty('--bullet-x', `${bullet.x}px`);
+    bullet.dom.style.setProperty('--bullet-y', `${-bullet.y}px`);
+}
