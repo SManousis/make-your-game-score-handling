@@ -1,7 +1,12 @@
 import * as utils from "./utils.js";
 import * as mario from './mario.js'
+import * as game from './game.js'
+import * as bullets from './bullets.js'
 
-export function createCupid(x, y) {
+let preloadedFiringImage = new Image();
+preloadedFiringImage.src = "assets/enemies/TrumpCupidFired.png";
+
+export function createCupid(x, y, index) {
     let cupidBody = document.createElement("img");
     cupidBody.className = "cupid-img";
     cupidBody.src = "assets/enemies/TrumpCupid.png";
@@ -9,6 +14,7 @@ export function createCupid(x, y) {
      // store reference in object
     
     let cupid = {
+        index: index,
        health: 100,
        damage: 10,
        moveSpeed: 0.5,
@@ -69,6 +75,16 @@ export function cupidUpdate(cupid) {
     //always move a little bit closer to mario
     utils.moveUnit(cupid, (mario.mario.x - cupid.x)/(500*cupid.rand1), (mario.mario.y - cupid.y)/(500*cupid.rand2))
     
+    //decide if cupid will fire
+    // if (cupid.index*100 == game.gameState.frameCounter%(game.cupids.length*100)){
+    if (parseInt(Math.random()*2000) == 0){
+        cupid.dom.src=preloadedFiringImage.src
+        let bullet = bullets.createBullet("right", "", cupid.x, cupid.y, 4)
+        game.allEntities.push(bullet);
+        setTimeout(() => {
+            cupid.dom.src="assets/enemies/TrumpCupid.png"
+        }, 300)   
+    }
 }
 
 

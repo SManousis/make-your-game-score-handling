@@ -18,17 +18,17 @@ const backToMenuButton = document.getElementById('back-to-menu-button');
 const leaderboardButton = document.getElementById('leaderboard-button');
 const mainMuteButton = document.getElementById('main-mute-button');
 const pauseMuteButton = document.getElementById('pause-mute-button');
-let preloadedFiringImage = new Image();
-preloadedFiringImage.src = "assets/enemies/TrumpCupidFired.png";
 
-let gameState = {
+
+export let gameState = {
     currentState: 'mainMenu', //'mainMenu', 'paused','gameover','running'
     score: 0,
     lives: 5,
-    isMuted: false
+    isMuted: false,
+    frameCounter: 0
 }
 
-let allEntities = []
+export let allEntities = []
 
 export const gameArea = document.getElementById('game-area');
 
@@ -39,27 +39,18 @@ allEntities.push(floaters.floaterCircle)
 allEntities.push(floaters.floaterRect)
 
 
-let cupids = [];
+export let cupids = [];
 for (let row = 0; row < 12; row++) {
   for (let col = 0; col < 12; col++) {
     let x = 200 + col * 140;
     let y = 900 - row * 80;
-    let cupid = enemies.createCupid(x, y);
+    let cupid = enemies.createCupid(x, y, cupids.length);
     cupids.push(cupid);
     allEntities.push(cupid);
     }
 }
 
-setInterval(() => {
-    let firingNumber = Math.floor(Math.random() * cupids.length)
-    let randomCupid = cupids[firingNumber]
-    randomCupid.dom.src=preloadedFiringImage.src
-    let bullet = bullets.createBullet(randomCupid.x, randomCupid.y)
-    allEntities.push(bullet);
-    setTimeout(() => {
-      randomCupid.dom.src="assets/enemies/TrumpCupid.png"
-    }, 300)
-  }, 1800) // cupids now fire every 2 seconds
+
 
 function updateMenuVisibility() {
     //hide all menus by default
@@ -231,6 +222,8 @@ function update() {
     for (let entity of allEntities) {
       if (entity.updateFunc) entity.updateFunc(entity);
     }
+
+    gameState.frameCounter++
 }
 
 // Draw the game, only updating visual elements based on their objects

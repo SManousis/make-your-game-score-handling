@@ -1,17 +1,46 @@
 import * as utils from "./utils.js"
 
-export function createBullet(x, y) {
+//dirTypes can be down, up, right, left, target
+//team = player, enemy
+export function createBullet(dirType, team, x, y, speed, targetX = 0, targetY = 0) {
     let bulletBody = document.createElement("img");
     bulletBody.className = "bullet-img";
     bulletBody.src = "assets/enemies/lazer.png";
     document.getElementById("game-area").appendChild(bulletBody);
 
+    switch (dirType){
+    case "down":
+        targetX = x
+        targetY = y-1
+        break
+    case "left":
+        targetX = x-1
+        targetY = y
+        break
+    case "right":
+        targetX = x+1
+        targetY = y
+        break
+    case "up":
+        targetX = x
+        targetY = y+1
+        break
+    }
+
+    const dx = targetX - x 
+    const dy = targetY - y 
+
+    const len = Math.sqrt(dx * dx + dy * dy)
+
+    const velX = (dx/len) * speed
+    const velY = (dy/len) * speed
+
     let bullet = {
         damage: 20,
         x: x,
         y: y,
-        velX: 0,
-        velY: -3,
+        velX: velX,
+        velY: velY,
         touched: false,
         disabled: false,
         body: [utils.createCircle(x, y, 10), utils.createRect(x, y+10, 10, 10)],
@@ -23,7 +52,7 @@ export function createBullet(x, y) {
 }
 
 export function bulletUpdate(bullet) {
-    utils.moveUnit(bullet, 0, bullet.velY)
+    utils.moveUnit(bullet, bullet.velX, bullet.velY)
     if (bullet.y < 0){
         bullet.disabled = true
         bullet.dom.remove()
