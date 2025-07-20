@@ -17,7 +17,8 @@ const backToMenuButton = document.getElementById('back-to-menu-button');
 const leaderboardButton = document.getElementById('leaderboard-button');
 const mainMuteButton = document.getElementById('main-mute-button');
 const pauseMuteButton = document.getElementById('pause-mute-button');
-
+let preloadedFiringImage = new Image();
+preloadedFiringImage.src = "assets/enemies/TrumpCupidFired.png";
 
 let gameState = {
     currentState: 'mainMenu', //'mainMenu', 'paused','gameover','running'
@@ -51,7 +52,7 @@ for (let row = 0; row < 12; row++) {
 setInterval(() => {
     let firingNumber = Math.floor(Math.random() * cupids.length)
     let randomCupid = cupids[firingNumber]
-    randomCupid.dom.src="assets/enemies/TrumpCupidFired.png"
+    randomCupid.dom.src=preloadedFiringImage.src
     setTimeout(() => {
       randomCupid.dom.src="assets/enemies/TrumpCupid.png"
     }, 300)
