@@ -2,6 +2,7 @@ import * as mario from './mario.js'
 import * as floaters from './floaters.js'
 import * as enemies from './enemies.js'
 import * as walkables from './walkables.js'
+import * as bullets from './bullets.js'
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
 
@@ -53,6 +54,8 @@ setInterval(() => {
     let firingNumber = Math.floor(Math.random() * cupids.length)
     let randomCupid = cupids[firingNumber]
     randomCupid.dom.src=preloadedFiringImage.src
+    let bullet = bullets.createBullet(randomCupid.x, randomCupid.y)
+    allEntities.push(bullet);
     setTimeout(() => {
       randomCupid.dom.src="assets/enemies/TrumpCupid.png"
     }, 300)

@@ -52,7 +52,16 @@ body{
     --cupid-y: 0px;
     --cupid-scale-x: 1;
   }
-
+  .bullet-img {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    transform: translate(calc(-52% + var(--bullet-x)), calc(20% + var(--bullet-y)));  will-change: transform;
+    opacity: 100%;
+    z-index: 10;
+  }
   .mario-img {
     width: 150px;
     height: 150px;

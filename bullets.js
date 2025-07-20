@@ -11,7 +11,7 @@ export function createBullet(x, y) {
         x: x,
         y: y,
         velX: 0,
-        velY: 3,
+        velY: -3,
         touched: false,
         disabled: false,
         body: [utils.createCircle(x, y, 10), utils.createRect(x, y+10, 10, 10)],
