@@ -7,10 +7,11 @@ import { moveAndCollide } from './physicsStep.js'
 export let turtles = [];
 let spawnCooldown = 0;
 const SPAWN_RATE = 180; //spawn a new turtle every 180 frames/3 secs
+const max_turtles=5;
 
 export function turtleSpawner() {
     spawnCooldown--;
-    if (spawnCooldown <= 0) {
+    if (spawnCooldown <= 0 && turtles.length<max_turtles){
         spawnTurtle();
         spawnCooldown = SPAWN_RATE;
     }
