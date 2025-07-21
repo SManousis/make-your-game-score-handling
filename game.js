@@ -4,6 +4,7 @@ import * as enemies from './enemies.js'
 import * as turtles from './turtles.js'
 import * as walkables from './walkables.js'
 import * as bullets from './bullets.js'
+import * as collusion from './collusion.js'
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
 
@@ -219,13 +220,14 @@ setInterval(show, 1000)
 // Update the game state, only physics
 function update() {
     // mario movement
-    
+    collusion.MarioCollusion();
     //running all entities' update function
     for (let entity of allEntities) {
       if (entity.updateFunc) entity.updateFunc(entity);
     }
 
     gameState.frameCounter++
+    
 }
 
 // Draw the game, only updating visual elements based on their objects

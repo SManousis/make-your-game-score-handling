@@ -30,8 +30,8 @@ export let mario = {
     body: [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20)], //his gameplay body represented in circles
     physicsPointsOffsets: [{x: -20, y: 0}, {x: 20, y: 0}], //These points will be used
     drawFunc: marioVisuals, //his visual representation in the game
-    updateFunc: marioUpdate
-    
+    updateFunc: marioUpdate,
+    team: "player"
 }
 
 

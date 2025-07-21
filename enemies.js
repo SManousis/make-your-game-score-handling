@@ -82,6 +82,7 @@ export function cupidUpdate(cupid) {
         cupid.dom.src=preloadedFiringImage.src
         let bullet = bullets.createBullet("down", "enemy", cupid.x, cupid.y, 4)
         game.allEntities.push(bullet);
+        bullets.allBullets.push(bullet);
         setTimeout(() => {
             cupid.dom.src="assets/enemies/TrumpCupid.png"
         }, 300)   

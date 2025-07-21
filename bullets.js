@@ -68,3 +68,5 @@ export function bulletVisuals(bullet) {
     bullet.dom.style.setProperty('--bullet-x', `${bullet.x}px`);
     bullet.dom.style.setProperty('--bullet-y', `${-bullet.y}px`);
 }
+
+export let allBullets = [];
