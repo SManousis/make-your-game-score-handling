@@ -85,12 +85,27 @@ body{
     z-index: 8;
   }
   
+  
+.turtle-img {
+    position: absolute;
+    width: 80px;
+    height: 50px;
+    z-index:7;
+    /* set by turtleVisuals */
+    left: var(--turtle-x);
+    bottom: var(--turtle-y);
+
+    /* Center the image on its x/y coordinates and flip it horizontally */
+    transform-origin: center;
+    transform: translateX(-50%) translateY(30%) scaleX(var(--turtle-scale-x, 1));
+}
 
  .circle {
    border-radius: 100%;
    background-color: rgba(244, 222, 25, 0.344);
    position: absolute;
    transform: translate(-50%, 50%);
+   z-index:1
    /* Start in the middle */
  }
 
