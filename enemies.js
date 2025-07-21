@@ -14,7 +14,7 @@ export function createCupid(x, y, index) {
      // store reference in object
     
     let cupid = {
-        index: index,
+       index: index,
        health: 100,
        damage: 10,
        moveSpeed: 0.5,
@@ -33,6 +33,7 @@ export function createCupid(x, y, index) {
        drawFunc: function() { cupidVisuals(this) },
        dom: cupidBody,
        parallelMoveCount: 0,
+       team: "enemy"
     }
     return cupid
  }
@@ -79,7 +80,7 @@ export function cupidUpdate(cupid) {
     // if (cupid.index*100 == game.gameState.frameCounter%(game.cupids.length*100)){
     if (parseInt(Math.random()*2000) == 0){
         cupid.dom.src=preloadedFiringImage.src
-        let bullet = bullets.createBullet("right", "", cupid.x, cupid.y, 4)
+        let bullet = bullets.createBullet("down", "enemy", cupid.x, cupid.y, 4)
         game.allEntities.push(bullet);
         setTimeout(() => {
             cupid.dom.src="assets/enemies/TrumpCupid.png"
