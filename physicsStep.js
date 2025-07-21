@@ -1,6 +1,7 @@
 
 import * as utils from './utils.js'
 import {walkables} from './walkables.js'
+
 import {gameArea, draw} from './game.js'
 
 
