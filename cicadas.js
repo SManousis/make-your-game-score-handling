@@ -5,9 +5,8 @@ import { moveAndCollide } from './physicsStep.js'
 
 //cicadas spawning
 export let cicadas = [];
+let DEAD_ZONE = 40;
 let spawnCooldown = 0;
-const SPAWN_RATE = 300; //spawn a new cicada every 300 frames (5 secs)
-const JUMP_RATE = 180; // jump every 180 fs (3 secs)
 const max_cicadas=2;
 
 export function spawner() {
@@ -60,7 +59,6 @@ function spawnCicada() {
 
 function cicadaUpdate(cicada) {
     if (cicada.state === 'walking') {
-        console.log("cicada jumpcooldown=",cicada.jumpCooldown)
         cicada.jumpCooldown--;
         if (cicada.jumpCooldown <= 0) {
             console.log("cicada jumping")
@@ -68,13 +66,18 @@ function cicadaUpdate(cicada) {
             cicada.jumpCooldown = getRandomInt();
         }
 
-        //follow Mario
-        if (mario.x > cicada.x) {
-            cicada.velX = cicada.maxspeed;
-            cicada.lookingDir = "right";
-        } else {
-            cicada.velX = -cicada.maxspeed;
-            cicada.lookingDir = "left";
+        
+
+        let dx = mario.x - cicada.x;
+
+        if (Math.abs(dx) > DEAD_ZONE) {
+            if (dx > 0) {
+                cicada.velX = cicada.maxspeed;
+                cicada.lookingDir = "right";
+            } else {
+                cicada.velX = -cicada.maxspeed;
+                cicada.lookingDir = "left";
+            }
         }
 
         //check for other cicadas in the way

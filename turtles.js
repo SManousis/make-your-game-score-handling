@@ -5,6 +5,7 @@ import { moveAndCollide } from './physicsStep.js'
 
 //turtle spawning
 export let turtles = [];
+export let DEAD_ZONE = 100;
 let spawnCooldown = 0;
 const SPAWN_RATE = 180; //spawn a new turtle every 180 frames/3 secs
 const max_turtles=5;
@@ -60,12 +61,17 @@ function spawnTurtle() {
 function turtleUpdate(turtle) {
     if (turtle.state === 'walking') {
         //follow Mario
-        if (mario.x > turtle.x) {
-            turtle.velX = turtle.maxspeed;
-            turtle.lookingDir = "right";
-        } else {
+        let dx = mario.x - turtle.x;
+        
+        if (Math.abs(dx) > DEAD_ZONE) {
+            if (dx > 0) {
+                turtle.velX = turtle.maxspeed;
+                turtle.lookingDir = "right";
+            }
+            else {
             turtle.velX = -turtle.maxspeed;
             turtle.lookingDir = "left";
+            }
         }
 
         //check for other turtles in the way
