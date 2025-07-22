@@ -17,7 +17,7 @@ const gameOverMenu = document.getElementById('game-over-menu');
 const playButton = document.getElementById('play-button');
 const resumeButton = document.getElementById('resume-button');
 const restartButton = document.getElementById('restart-button');
-const backToMenuButton = document.getElementById('back-to-menu-button');
+//const backToMenuButton = document.getElementById('back-to-menu-button');
 const leaderboardButton = document.getElementById('leaderboard-button');
 const mainMuteButton = document.getElementById('main-mute-button');
 const pauseMuteButton = document.getElementById('pause-mute-button');
@@ -119,10 +119,12 @@ restartButton.addEventListener('click',()=>{
     restartGame();
 });
 
-backToMenuButton.addEventListener('click',()=>{
-    gameState.currentState='mainMenu';
-    updateMenuVisibility();
-})
+document.querySelectorAll('#back-to-menu-button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      gameState.currentState = 'mainMenu';
+      updateMenuVisibility();
+    });
+  });
 
 function toggleMute(){
     gameState.isMuted=!gameState.isMuted;
