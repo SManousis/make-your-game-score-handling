@@ -64,7 +64,7 @@ function cicadaUpdate(cicada) {
 
         cicada.jumpCooldown--;
         if (cicada.jumpCooldown <= 0) {
-            console.log("cicada jumping")
+            // console.log("cicada jumping")
             cicada.velY= cicada.jump_power * (Math.random()+0.8);
             if (dx > 0){
                 cicada.velX = cicada.horizontal_jump_power * (Math.random()+0.8)
@@ -141,7 +141,7 @@ function cicadaUpdate(cicada) {
 
         //check if collision was Mario jumping on cicada
         if (mario.velY < 0 && mario.y < cicada.y + (cicada.height / 2)) {
-            console.log("cicada defeated")
+            // console.log("cicada defeated")
             cicada.state = "defeated"
             mario.velY = 12;
 
@@ -152,7 +152,7 @@ function cicadaUpdate(cicada) {
                 cicadas = cicadas.filter(t => t !== cicada);
             }, 300)
         } else {
-            console.log("Mario was hurt by a cicada")
+            // console.log("Mario was hurt by a cicada")
             //inflict damage on Mario
         }
     }

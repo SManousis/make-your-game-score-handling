@@ -6,6 +6,8 @@ import * as cicadas from './cicadas.js'
 import * as walkables from './walkables.js'
 import * as bullets from './bullets.js'
 import * as collusion from './collusion.js'
+import { createSwarm } from './stagecontroller.js'
+
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
 
@@ -43,16 +45,7 @@ allEntities.push(floaters.floaterCircle)
 allEntities.push(floaters.floaterRect)
 
 
-export let cupids = [];
-for (let row = 0; row < 6; row++) {
-  for (let col = 0; col < 12; col++) {
-    let x = 200 + col * 140;
-    let y = 900 - row * 80;
-    let cupid = enemies.createCupid(x, y, cupids.length);
-    cupids.push(cupid);
-    allEntities.push(cupid);
-    }
-}
+
 
 
 
@@ -70,6 +63,8 @@ export function updateMenuVisibility() {
         gameOverMenu.classList.remove('hidden');
     }
 }
+
+export let cupids = [];
 
 function restartGame() {
     for (let entity of allEntities) {
@@ -229,6 +224,7 @@ let prev = 0
 
 // The main game loop
 function gameLoop() {
+    
     // console.log("Drawing frame", counter);
     // console.log(gameState.currentState)
     if (gameState.currentState === 'running') {
@@ -284,5 +280,7 @@ export function draw() {
 
 
 updateMenuVisibility();
+
+createSwarm(30, enemies.createCupid, 5, 400)
 // Start the game
 gameLoop();

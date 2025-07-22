@@ -17,13 +17,13 @@ export function createCupid(x, y, index) {
        index: index,
        health: 100,
        damage: 10,
-       moveSpeed: 0.5,
+       moveSpeed: 0.1,
        x: x,           // use the parameters!
        y: y,       
        bullet_count: 1,
        aimDirection: "down",
        state: "airborne",
-       velX: 2,
+       velX: 1.2,
        velY: 0,
        touched: false,
        rand1: Math.random()*10,
@@ -35,47 +35,57 @@ export function createCupid(x, y, index) {
        parallelMoveCount: 0,
        team: "enemy"
     }
+    console.log("I was created at ", x, y)
+    game.cupids.push(cupid)
+    game.allEntities.push(cupid)
     return cupid
  }
 
 
+ 
+
 //let  parallelmovecount = 0
 
 export function cupidUpdate(cupid) {
-    utils.moveUnit(cupid, cupid.velX, 0)
+   
     cupid.parallelMoveCount++
-    if (cupid.parallelMoveCount % 3 === 0){ 
-        cupid.moveSpeed === 0 ? cupid.moveSpeed = 1 : cupid.moveSpeed = 0
-    }
-    if (cupid.parallelMoveCount === 50) {
+
+    //what does this do? (alex)
+    // if (cupid.parallelMoveCount % 3 === 0){ 
+    //     cupid.moveSpeed === 0 ? cupid.moveSpeed = 1 : cupid.moveSpeed = 0
+    // }
+
+    const distance = 100
+    if (cupid.parallelMoveCount === distance) {
         cupid.velX = -cupid.velX
-        utils.moveUnit(cupid, cupid.velX, 0)
+        
     }
-    if (cupid.parallelMoveCount === 100) {
+    if (cupid.parallelMoveCount === distance*2) {
         cupid.velX = -cupid.velX
         cupid.velY = -3
         cupid.parallelMoveCount = 0
-        utils.moveUnit(cupid, 0, cupid.velY)
+        cupid.velY = -3
     }
 
+    if (Math.abs(cupid.velY) > 0){
+        utils.moveUnit(cupid, 0, cupid.velY)
+        cupid.parallelMoveCount--
+    }else{
+        utils.moveUnit(cupid, cupid.velX, cupid.velY)
+    }
+    
+    
+    if (Math.abs(cupid.velY) > 1){
+        cupid.velY /= 1.05
+    }
 
-    //if cupid touches mario, become touched
-    if (!cupid.touched && utils.IsBodyCollidingWithUnit(cupid.body[0], mario.mario)){
-        cupid.touched = true
+    if (Math.abs(cupid.velY) < 1){
         cupid.velY = 0
     }
 
-    if (cupid.touched){
-        //if cupid is touched, fly up, first slowly and then speed up
-        cupid.velY += 0.2
-        cupid.velY *= 1.05
 
-        utils.moveUnit(cupid, cupid.rand1-2.5, cupid.velY + cupid.rand2)
-    }
 
-    //always move a little bit closer to mario
-    utils.moveUnit(cupid, (mario.mario.x - cupid.x)/(500*cupid.rand1), (mario.mario.y - cupid.y)/(500*cupid.rand2))
-    
+
     //decide if cupid will fire
     // if (cupid.index*100 == game.gameState.frameCounter%(game.cupids.length*100)){
     if (parseInt(Math.random()*2000) == 0){
