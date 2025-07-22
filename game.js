@@ -2,6 +2,7 @@ import * as mario from './mario.js'
 import * as floaters from './floaters.js'
 import * as enemies from './enemies.js'
 import * as turtles from './turtles.js'
+import * as cicadas from './cicadas.js'
 import * as walkables from './walkables.js'
 import * as bullets from './bullets.js'
 import * as collusion from './collusion.js'
@@ -198,6 +199,7 @@ function gameLoop() {
     // console.log(gameState.currentState)
     if (gameState.currentState === 'running') {
         turtles.turtleSpawner();
+        cicadas.spawner();
         update();
     }
     if (gameState.currentState === 'running' || gameState.currentState === 'paused') {

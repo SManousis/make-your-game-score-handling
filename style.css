@@ -100,6 +100,20 @@ body{
     transform: translateX(-50%) translateY(30%) scaleX(var(--turtle-scale-x, 1));
 }
 
+.cicada-img {
+    position: absolute;
+    width: 80px;
+    height: 50px;
+    z-index:7;
+    /* set by turtleVisuals */
+    left: var(--cicada-x);
+    bottom: var(--cicada-y);
+
+    /* Center the image on its x/y coordinates and flip it horizontally */
+    transform-origin: center;
+    transform: translateX(-50%) translateY(30%) scaleX(var(--cicada-scale-x, 1));
+}
+
  .circle {
    border-radius: 100%;
    background-color: rgba(244, 222, 25, 0.344);
