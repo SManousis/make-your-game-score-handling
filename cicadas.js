@@ -29,12 +29,13 @@ function spawnCicada() {
     const startY = 1000;
 
     const newCicada = {
-        maxspeed: 5,
+        maxspeed: 0.5,
         gravity: 0.5,
         state: 'walking', //walking, defeated
         velX: 0,
         velY: 0,
         jump_power: 20,
+        horizontal_jump_power: 10,
         jumpCooldown: 0,
         x: startX,
         y: startY,
@@ -58,27 +59,37 @@ function spawnCicada() {
 }
 
 function cicadaUpdate(cicada) {
-    if (cicada.state === 'walking') {
+    if (cicada.state === 'walking' || cicada.state == 'jumping') {
+        let dx = mario.x - cicada.x;
+
         cicada.jumpCooldown--;
         if (cicada.jumpCooldown <= 0) {
             console.log("cicada jumping")
-            cicada.velY= cicada.jump_power;
+            cicada.velY= cicada.jump_power * (Math.random()+0.8);
+            if (dx > 0){
+                cicada.velX = cicada.horizontal_jump_power * (Math.random()+0.8)
+            }else{
+                cicada.velX = -(cicada.horizontal_jump_power * (Math.random()+0.8))
+            }
             cicada.jumpCooldown = getRandomInt();
+            cicada.state = 'jumping'
         }
 
         
 
-        let dx = mario.x - cicada.x;
-
-        if (Math.abs(dx) > DEAD_ZONE) {
-            if (dx > 0) {
-                cicada.velX = cicada.maxspeed;
-                cicada.lookingDir = "right";
-            } else {
-                cicada.velX = -cicada.maxspeed;
-                cicada.lookingDir = "left";
+        
+        if (cicada.state == 'walking'){
+            if (Math.abs(dx) > DEAD_ZONE) {
+                if (dx > 0) {
+                    cicada.velX = cicada.maxspeed;
+                    cicada.lookingDir = "right";
+                } else {
+                    cicada.velX = -cicada.maxspeed;
+                    cicada.lookingDir = "left";
+                }
             }
         }
+
 
         //check for other cicadas in the way
         const detectionDistance=cicada.width*0.8
@@ -102,13 +113,21 @@ function cicadaUpdate(cicada) {
         }
 
 
-    } 
+    } if (cicada.state = "flying"){
+
+    }
     else {
         cicada.velX = 0; //stop moving if defeated
     }
 
 
-    moveAndCollide(cicada);
+    const grounded = moveAndCollide(cicada);
+
+    if (grounded){
+        cicada.state = 'walking'
+    }else{
+        cicada.state = 'jumping'
+    }
 
     let isColliding = false;
     for (const BodyPart of cicada.body) {
