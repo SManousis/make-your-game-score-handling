@@ -72,6 +72,28 @@ export function updateMenuVisibility() {
 }
 
 function restartGame() {
+    for (let entity of allEntities) {
+        if (entity.dom) entity.dom.remove();
+        if (entity.body) entity.body.forEach(body => body.div.remove());
+    }
+    mario.mario.health = 100;
+    mario.mario.x = 100;
+    mario.mario.y = 100;
+    allEntities = [];
+    cupids = [];
+    bullets.allBullets.length = 0;
+    allEntities.push(mario.mario)
+    allEntities.push(floaters.floaterCircle)
+    allEntities.push(floaters.floaterRect)
+    for (let row = 0; row < 12; row++) {
+        for (let col = 0; col < 12; col++) {
+          let x = 200 + col * 140;
+          let y = 900 - row * 80;
+          let cupid = enemies.createCupid(x, y, cupids.length);
+          cupids.push(cupid);
+          allEntities.push(cupid);
+          }
+      }
     //whatever is needed to reset Mario 
     //whatever is needed to reset enemies
 
@@ -124,6 +146,12 @@ document.querySelectorAll('#back-to-menu-button').forEach(btn => {
     btn.addEventListener('click', () => {
       gameState.currentState = 'mainMenu';
       updateMenuVisibility();
+    });
+  });
+
+  document.querySelectorAll('#restart-button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      restartGame();
     });
   });
 

@@ -11,6 +11,7 @@ export function MarioCollusion(){
         if (collusionCheck(mario.mario, bullet)){
             console.log("bullet touched mario")
             bullet.disabled = true
+            bullet.body.forEach(body => body.div.remove())
             bullet.dom.remove()
             mario.mario.health -= bullet.damage
             if (mario.mario.health <= 0){
