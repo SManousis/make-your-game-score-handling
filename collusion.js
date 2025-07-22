@@ -3,19 +3,22 @@ import * as enemies from './enemies.js'
 import * as turtles from './turtles.js'
 import * as bullets from './bullets.js'
 import * as utils from './utils.js'
+import * as game from './game.js'
 
 export function MarioCollusion(){
     for (const bullet of bullets.allBullets){
+        if (bullet.disabled) continue;
         if (collusionCheck(mario.mario, bullet)){
             console.log("bullet touched mario")
             bullet.disabled = true
             bullet.dom.remove()
             mario.mario.health -= bullet.damage
-            // if (mario.mario.health <= 0){
-            //     mario.mario.disabled = true
-            //     mario.mario.dom.remove()
-            //     gameState.currentState = 'gameover'
-            // }
+            if (mario.mario.health <= 0){
+                mario.mario.disabled = true
+                game.gameState.currentState = 'gameOver'
+                game.updateMenuVisibility();
+                console.log("mario died")
+            }
         }
     }
 }

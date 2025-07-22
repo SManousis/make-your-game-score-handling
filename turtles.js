@@ -36,19 +36,17 @@ function spawnTurtle() {
         velY: 0,
         x: startX,
         y: startY,
-        width: 80,
-        height: 50,
+        width: 120,
+        height: 120,
         lookingDir: spawnSide === 'left' ? 'right' : 'left',
         body: [
-            utils.createCircle(startX - 25, startY + 10, 10),
-            utils.createCircle(startX, startY + 10, 10),
-            utils.createCircle(startX + 25, startY + 10, 10)
+            utils.createRect(startX-(120/2),startY,120,45)
         ],
         drawFunc: function () { turtleVisuals(this) },
         updateFunc: function () { turtleUpdate(this) },
         physicsPointsOffsets: [
-            { x: -35, y: 0 }, // Left foot
-            { x: 35, y: 0 }  // Right foot
+            { x: (-120/2)+1, y: 0 }, // Left foot
+            { x: (120/2)+1, y: 0 }  // Right foot
         ],
         dom: turtleElement,
     };

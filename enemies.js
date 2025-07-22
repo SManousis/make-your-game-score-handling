@@ -80,7 +80,7 @@ export function cupidUpdate(cupid) {
     // if (cupid.index*100 == game.gameState.frameCounter%(game.cupids.length*100)){
     if (parseInt(Math.random()*2000) == 0){
         cupid.dom.src=preloadedFiringImage.src
-        let bullet = bullets.createBullet("down", "enemy", cupid.x, cupid.y, 4)
+        let bullet = bullets.createBullet("down", "enemy", cupid.x, cupid.y, 4, 8)
         game.allEntities.push(bullet);
         bullets.allBullets.push(bullet);
         setTimeout(() => {
