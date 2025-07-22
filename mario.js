@@ -31,7 +31,17 @@ export let mario = {
     physicsPointsOffsets: [{x: -20, y: 0}, {x: 20, y: 0}], //These points will be used
     drawFunc: marioVisuals, //his visual representation in the game
     updateFunc: marioUpdate,
-    team: "player"
+    team: "player",
+    reset() {
+        this.x = 100;         
+        this.y = 100;
+        this.health = 100;   
+        this.velY = 0;
+        this.disabled = false;
+        this.body.forEach(body => body.div.remove());
+        this.body = [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20)];
+        
+    }
 }
 
 

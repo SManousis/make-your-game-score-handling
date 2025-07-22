@@ -1,4 +1,5 @@
 import * as utils from "./utils.js"
+import * as mario from "./mario.js"
 
 //dirTypes can be down, up, right, left, target
 //team = player, enemy

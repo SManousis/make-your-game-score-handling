@@ -1,4 +1,4 @@
-import * as mario from './mario.js'
+import {mario} from './mario.js'
 import * as floaters from './floaters.js'
 import * as enemies from './enemies.js'
 import * as turtles from './turtles.js'
@@ -37,7 +37,7 @@ export let allEntities = []
 export const gameArea = document.getElementById('game-area');
 
 //adding our created entities to allEntities if they are not static
-allEntities.push(mario.mario)
+allEntities.push(mario)
 //allEntities.push(enemies.cupid)
 allEntities.push(floaters.floaterCircle)
 allEntities.push(floaters.floaterRect)
@@ -76,13 +76,11 @@ function restartGame() {
         if (entity.dom) entity.dom.remove();
         if (entity.body) entity.body.forEach(body => body.div.remove());
     }
-    mario.mario.health = 100;
-    mario.mario.x = 100;
-    mario.mario.y = 100;
+    mario.reset();
     allEntities = [];
     cupids = [];
     bullets.allBullets.length = 0;
-    allEntities.push(mario.mario)
+    allEntities.push(mario)
     allEntities.push(floaters.floaterCircle)
     allEntities.push(floaters.floaterRect)
     for (let row = 0; row < 12; row++) {
