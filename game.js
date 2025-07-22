@@ -44,7 +44,7 @@ allEntities.push(floaters.floaterRect)
 
 
 export let cupids = [];
-for (let row = 0; row < 12; row++) {
+for (let row = 0; row < 6; row++) {
   for (let col = 0; col < 12; col++) {
     let x = 200 + col * 140;
     let y = 900 - row * 80;
