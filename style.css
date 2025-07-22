@@ -102,10 +102,10 @@ body{
 
 .cicada-img {
     position: absolute;
-    width: 80px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     z-index:7;
-    /* set by turtleVisuals */
+    /* set by cicadaVisuals */
     left: var(--cicada-x);
     bottom: var(--cicada-y);
 
