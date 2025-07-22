@@ -6,16 +6,18 @@ import * as utils from './utils.js'
 
 export function MarioCollusion(){
     for (const bullet of bullets.allBullets){
+        if (bullet.disabled) continue;
         if (collusionCheck(mario.mario, bullet)){
             console.log("bullet touched mario")
             bullet.disabled = true
             bullet.dom.remove()
             mario.mario.health -= bullet.damage
-            // if (mario.mario.health <= 0){
-            //     mario.mario.disabled = true
-            //     mario.mario.dom.remove()
-            //     gameState.currentState = 'gameover'
-            // }
+            if (mario.mario.health <= 0){
+                mario.mario.disabled = true
+                //mario.mario.dom.remove()
+                //gameState.currentState = 'gameover'
+                console.log("mario died")
+            }
         }
     }
 }

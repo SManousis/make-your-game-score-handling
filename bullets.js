@@ -2,7 +2,7 @@ import * as utils from "./utils.js"
 
 //dirTypes can be down, up, right, left, target
 //team = player, enemy
-export function createBullet(dirType, team, x, y, speed, targetX = 0, targetY = 0) {
+export function createBullet(dirType, team, x, y,  speed, damage = 10, targetX = 0, targetY = 0) {
     let bulletBody = document.createElement("img");
     bulletBody.className = "bullet-img";
     bulletBody.src = "assets/enemies/lazer.png";
@@ -36,7 +36,7 @@ export function createBullet(dirType, team, x, y, speed, targetX = 0, targetY = 
     const velY = (dy/len) * speed
 
     let bullet = {
-        damage: 20,
+        damage: damage,
         x: x,
         y: y,
         velX: velX,
@@ -56,10 +56,16 @@ export function bulletUpdate(bullet) {
     if (bullet.y < 0){
         bullet.disabled = true
         bullet.dom.remove()
+        return;
     }
     if (bullet.touched){
         bullet.disabled = true
         bullet.dom.remove()
+        return;
+    }
+    if (bullet.disabled){
+        bullet.dom.remove()
+        return;
     }
 }
 
