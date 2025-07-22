@@ -37,10 +37,10 @@ function spawnTurtle() {
         x: startX,
         y: startY,
         width: 120,
-        height: 75,
+        height: 120,
         lookingDir: spawnSide === 'left' ? 'right' : 'left',
         body: [
-            utils.createRect(startX-(120/2),startY,120,35)
+            utils.createRect(startX-(120/2),startY,120,45)
         ],
         drawFunc: function () { turtleVisuals(this) },
         updateFunc: function () { turtleUpdate(this) },

@@ -89,7 +89,7 @@ body{
 .turtle-img {
     position: absolute;
     width: 120px;
-    height: 75px;
+    height: 120px;
     z-index:7;
     /* set by turtleVisuals */
     left: var(--turtle-x);
