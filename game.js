@@ -12,6 +12,7 @@ const mainMenu = document.getElementById('main-menu');
 const pauseMenu = document.getElementById('pause-menu');
 const scoreElement = document.getElementById('score');
 const livesElement = document.getElementById('lives');
+const gameOverMenu = document.getElementById('game-over-menu');
 
 const playButton = document.getElementById('play-button');
 const resumeButton = document.getElementById('resume-button');
@@ -20,7 +21,7 @@ const backToMenuButton = document.getElementById('back-to-menu-button');
 const leaderboardButton = document.getElementById('leaderboard-button');
 const mainMuteButton = document.getElementById('main-mute-button');
 const pauseMuteButton = document.getElementById('pause-mute-button');
-
+const gameOverMuteButton = document.getElementById('game-over-mute-button');
 
 export let gameState = {
     currentState: 'mainMenu', //'mainMenu', 'paused','gameover','running'
@@ -54,15 +55,18 @@ for (let row = 0; row < 12; row++) {
 
 
 
-function updateMenuVisibility() {
+export function updateMenuVisibility() {
     //hide all menus by default
     mainMenu.classList.add('hidden');
     pauseMenu.classList.add('hidden');
+    gameOverMenu.classList.add('hidden');
 
     if (gameState.currentState === 'mainMenu') {
         mainMenu.classList.remove('hidden');
     } else if (gameState.currentState === 'paused') {
         pauseMenu.classList.remove('hidden')
+    } else if (gameState.currentState === 'gameOver') {
+        gameOverMenu.classList.remove('hidden');
     }
 }
 
@@ -125,14 +129,15 @@ function toggleMute(){
     const muteText=gameState.isMuted?"Unmute Sound":"Mute Sound";
     mainMuteButton.textContent=muteText;
     pauseMuteButton.textContent=muteText;
+    gameOverMuteButton.textContent=muteText;
     //add actual muting logic
 }
 mainMuteButton.addEventListener('click',toggleMute);
 pauseMuteButton.addEventListener('click',toggleMute);
-
+gameOverMuteButton.addEventListener('click',toggleMute);
 // Listen for key presses
 document.addEventListener('keydown', (event) => {
-    if (event.key.toLowerCase() === 'p' && (gameState.currentState === 'running' || gameState.currentState === 'paused'))  {
+    if (event.key.toLowerCase() === 'p' && (gameState.currentState === 'running' || gameState.currentState === 'paused' ))  {
         if (gameState.currentState === 'running') {
 
             gameState.currentState = 'paused';
@@ -195,15 +200,15 @@ let prev = 0
 
 // The main game loop
 function gameLoop() {
+    // console.log("Drawing frame", counter);
     // console.log(gameState.currentState)
     if (gameState.currentState === 'running') {
         turtles.turtleSpawner();
         update();
     }
-    if (gameState.currentState === 'running' || gameState.currentState === 'paused') {
+    if (gameState.currentState === 'running' || gameState.currentState === 'paused' || gameState.currentState === 'gameOver') {
         draw();
     }
-
     counter++
     
     requestAnimationFrame(gameLoop);
@@ -244,6 +249,7 @@ export function draw() {
         }
         
     }
+    
 }
 
 
