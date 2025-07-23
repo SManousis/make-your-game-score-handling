@@ -1,12 +1,11 @@
 import {mario} from './mario.js'
-import * as floaters from './floaters.js'
 import * as enemies from './enemies.js'
 import * as turtles from './turtles.js'
 import * as cicadas from './cicadas.js'
 import * as walkables from './walkables.js'
 import * as bullets from './bullets.js'
 import * as collusion from './collusion.js'
-import { createSwarm } from './stagecontroller.js'
+import { spawnSwarm } from './stagecontroller.js'
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -40,9 +39,7 @@ export const gameArea = document.getElementById('game-area');
 
 //adding our created entities to allEntities if they are not static
 allEntities.push(mario)
-//allEntities.push(enemies.cupid)
-allEntities.push(floaters.floaterCircle)
-allEntities.push(floaters.floaterRect)
+
 
 
 
@@ -77,9 +74,7 @@ function restartGame() {
     cupids = [];
     bullets.allBullets.length = 0;
     allEntities.push(mario)
-    allEntities.push(floaters.floaterCircle)
-    allEntities.push(floaters.floaterRect)
-    createSwarm(30, enemies.createCupid, 5, 400)
+    spawnSwarm(30, enemies.createCupid, 5, 400)
     //whatever is needed to reset Mario 
     //whatever is needed to reset enemies
 
@@ -274,6 +269,6 @@ export function draw() {
 
 updateMenuVisibility();
 
-createSwarm(30, enemies.createCupid, 5, 400)
+spawnSwarm(30, enemies.createCupid, 5, 400)
 // Start the game
 gameLoop();

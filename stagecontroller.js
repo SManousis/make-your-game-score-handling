@@ -4,7 +4,7 @@ let stage1 = []
 
 
 
-export function createSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0) {
+export function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0) {
     const rows = count / maxInRow
     const leftOver = (rows - parseInt(rows)) * maxInRow
     const exactRows = parseInt(rows)
@@ -28,3 +28,6 @@ export function createSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0
     }
 }
 
+export function spawner(x, y, unit, interval){
+
+}

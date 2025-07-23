@@ -13,7 +13,7 @@ export let mario = {
     attack_damage: 10, //how damage marios bullets deal to enemies
     accel: 1, //how quickly accelerates in x axis
     maxSpeed: 10, //maximum running speed in x axis
-    jump_power: 15,
+    jump_power: 17,
     state: "standing", //crouch, standing, airborne, dead
     gravity: 0.8, //the speed that which he is pushed down while airborne
     drag: 1.2, //how much mario slows downs in x axis if he's not actively walking left or right
