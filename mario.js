@@ -30,11 +30,29 @@ export let mario = {
     lookingUp: false,
     walkCounter: 0, //a counter that counts for how many frames mario has been walking towards a direction, for walk animation purposes
     crouching: false,
+    isInvincible:false,
+    invincibilityTimer:0,
     body: [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20)], //his gameplay body represented in circles
     physicsPointsOffsets: [{ x: -20, y: 0 }, { x: 20, y: 0 }], //These points will be used
     drawFunc: marioVisuals, //his visual representation in the game
     updateFunc: marioUpdate,
     team: "player",
+    takeDamage:function(damage,sourceX){
+        if (this.isInvincible){
+            return;
+        }
+        this.health-=damage;
+        const KNOCKBACK_VERTICAL=13;
+        const KNOCKBACK_HORIZONTAL=20;
+        this.velY=KNOCKBACK_VERTICAL;
+        if (this.x < sourceX){
+            this.velX -= KNOCKBACK_HORIZONTAL;
+        }else{
+            this.velX += KNOCKBACK_HORIZONTAL;
+        }
+        this.isInvincible=true;
+        this.invincibilityTimer=40;
+    },
     reset() {
         this.x = 100;
         this.y = 100;
@@ -55,7 +73,14 @@ export let currentBody = document.getElementById("mario-body-forward")
 export let currentLegs = document.getElementById("mario-legs0")
 export let marioFeetFrames = ["mario-legs0", "mario-legs1", "mario-legs2", "mario-legs3", "mario-legs3"]
 export function marioVisuals() {
-
+if (mario.isInvincible && Math.floor(mario.invincibilityTimer/6)%2===0){
+    currentBody.style.display='none'
+    currentLegs.style.display='none'
+    return;
+}else{
+     currentBody.style.display='block'
+    currentLegs.style.display='block'
+}
     if (mario.lookingUp) {
         currentBody.style.opacity = "0%"
         if (mario.crouching) {
@@ -141,6 +166,12 @@ export function isMarioWalkingIntoGround() {
 
 
 export function marioUpdate() {
+    if (mario.isInvincible){
+        mario.invincibilityTimer--;
+        if (mario.invincibilityTimer<=0){
+            mario.isInvincible=false;
+        }
+    }
     if (mario.health<=0) {
         gameState.currentState = 'gameOver'
         updateMenuVisibility();
@@ -179,13 +210,15 @@ export function marioUpdate() {
     //   impulse = mario.accel / 1.5 //to make aerial x axis acceleration harder than grounded
     // }
     if (keysPressed.left) {
-        mario.velX -= impulse
-
+        if (mario.velX > -mario.maxSpeed){
+            mario.velX -= impulse
+        }
     }
 
-    if (keysPressed.right) {
-        mario.velX += impulse
-
+    if (keysPressed.right && !mario.is) {
+        if (mario.velX < mario.maxSpeed){
+            mario.velX += impulse
+        }
     }
 
 
@@ -209,6 +242,7 @@ export function marioUpdate() {
             mario.velX = 0
         }
     }
+    
 
 
     let grounded = physics.moveAndCollide(mario)

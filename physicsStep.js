@@ -9,13 +9,7 @@ import {gameArea, draw} from './game.js'
 // assumes the unit has x, y, velX, velY, gravity. returns data about the state of the unit after the physics step 
 // TODO also needs to be made to work with just 1 or more points, instead of two and two that mario has. might require reworking
 export function moveAndCollide(unit) {
-    // apply max x speed
-    if (unit.velX > unit.maxSpeed) {
-        unit.velX = unit.maxSpeed
-    }
-    if (unit.velX < -unit.maxSpeed) {
-        unit.velX = -unit.maxSpeed
-    }
+    
 
     //move unit by x velocity
     utils.moveUnit(unit, unit.velX, 0)
