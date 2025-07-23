@@ -1,6 +1,6 @@
 import {mario} from './mario.js'
-import * as floaters from './floaters.js'
-import * as enemies from './enemies.js'
+//import * as floaters from './floaters.js'
+import * as cupids from './cupids.js'
 import * as turtles from './turtles.js'
 import * as cicadas from './cicadas.js'
 import * as walkables from './walkables.js'
@@ -40,9 +40,9 @@ export const gameArea = document.getElementById('game-area');
 
 //adding our created entities to allEntities if they are not static
 allEntities.push(mario)
-//allEntities.push(enemies.cupid)
-allEntities.push(floaters.floaterCircle)
-allEntities.push(floaters.floaterRect)
+//allEntities.push(cupids.cupid)
+// allEntities.push(floaters.floaterCircle)
+// allEntities.push(floaters.floaterRect)
 
 
 
@@ -64,7 +64,7 @@ export function updateMenuVisibility() {
     }
 }
 
-export let cupids = [];
+
 
 function restartGame() {
     for (let entity of allEntities) {
@@ -74,12 +74,12 @@ function restartGame() {
     mario.reset();
     cupids.forEach(cupid => cupid.reset());
     allEntities = [];
-    cupids = [];
+    cupids.cupids = [];
     bullets.allBullets.length = 0;
     allEntities.push(mario)
-    allEntities.push(floaters.floaterCircle)
-    allEntities.push(floaters.floaterRect)
-    createSwarm(30, enemies.createCupid, 5, 400)
+    // allEntities.push(floaters.floaterCircle)
+    // allEntities.push(floaters.floaterRect)
+    createSwarm(30, cupids.createCupid, 5, 400)
     //whatever is needed to reset Mario 
     //whatever is needed to reset enemies
 
@@ -104,6 +104,8 @@ export const keysPressed = {
 
     down: false,
     space: false,
+
+    autofire:false,
 };
 
 //--- EVENT LISTENERS ----
@@ -164,6 +166,9 @@ document.addEventListener('keydown', (event) => {
           
         }
           updateMenuVisibility();
+    }
+    if (event.key.toLowerCase() === 'a') {
+        keysPressed.autofire = !keysPressed.autofire;
     }
     if (event.key === 'ArrowLeft') {
         keysPressed.left = true;
@@ -244,7 +249,11 @@ setInterval(show, 1000)
 // Update the game state, only physics
 function update() {
     // mario movement
-    collusion.isShot(mario);
+    allEntities.forEach(entity=>{
+        collusion.isShot(entity)
+})
+    //collusion.isShot(mario);
+    
     //running all entities' update function
     for (let entity of allEntities) {
       if (entity.updateFunc) entity.updateFunc(entity);
@@ -274,6 +283,10 @@ export function draw() {
 
 updateMenuVisibility();
 
-createSwarm(30, enemies.createCupid, 5, 400)
+createSwarm(30, cupids.createCupid, 5, 400)
 // Start the game
 gameLoop();
+
+export function removeFromAllEntities(entity){
+    allEntities = allEntities.filter(t => t !== entity);
+}

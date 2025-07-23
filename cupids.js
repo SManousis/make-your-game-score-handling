@@ -3,6 +3,8 @@ import * as mario from './mario.js'
 import * as game from './game.js'
 import * as bullets from './bullets.js'
 
+export let cupids = [];
+
 let preloadedFiringImage = new Image();
 preloadedFiringImage.src = "assets/enemies/TrumpCupidFired.png";
 
@@ -14,8 +16,9 @@ export function createCupid(x, y, index) {
      // store reference in object
     
     let cupid = {
+    name:"cupid",
        index: index,
-       health: 20,
+       health: 8,
        damage: 10,
        moveSpeed: 0.1,
        x: x,           // use the parameters!
@@ -47,7 +50,7 @@ export function createCupid(x, y, index) {
        }
     }
     console.log("I was created at ", x, y)
-    game.cupids.push(cupid)
+    cupids.push(cupid)
     game.allEntities.push(cupid)
     return cupid
  }
@@ -58,6 +61,13 @@ export function createCupid(x, y, index) {
 //let  parallelmovecount = 0
 
 export function cupidUpdate(cupid) {
+       if (cupid.health <= 0) {
+        if (cupid.dom) cupid.dom.remove();
+                        cupid.body.forEach(b => { if (b.div) b.div.remove(); })
+                        cupids = cupids.filter(t => t !== cupid);
+                        //game.removeFromAllEntities(cupid)
+                        
+    }
    
     cupid.parallelMoveCount++
 
@@ -98,12 +108,11 @@ export function cupidUpdate(cupid) {
 
 
     //decide if cupid will fire
-    // if (cupid.index*100 == game.gameState.frameCounter%(game.cupids.length*100)){
+    // if (cupid.index*100 == game.gameState.frameCounter%(cupids.length*100)){
     if (parseInt(Math.random()*2000) == 0){
         cupid.dom.src=preloadedFiringImage.src
         let bullet = bullets.createBullet("down", "enemy", cupid.x, cupid.y, 4, 8)
-        game.allEntities.push(bullet);
-        bullets.allBullets.push(bullet);
+       
         setTimeout(() => {
             cupid.dom.src="assets/enemies/TrumpCupid.png"
         }, 300)   

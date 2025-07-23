@@ -1,5 +1,5 @@
 import * as mario from './mario.js'
-import * as enemies from './enemies.js'
+import * as enemies from './cupids.js'
 import * as turtles from './turtles.js'
 import * as bullets from './bullets.js'
 import * as utils from './utils.js'
@@ -17,35 +17,31 @@ export function isShot(entity) {
             entity.health -= bullet.damage
             if (entity.health <= 0) {
                 entity.disabled = true
-                if (entity === mario.mario) {
-                    game.gameState.currentState = 'gameOver'
-                    game.updateMenuVisibility();
-                    console.log("mario died")
-                }
+                
             }
         }
     }
 }
 
 
-export function MarioCollusion() {
-    for (const bullet of bullets.allBullets) {
-        if (bullet.disabled) continue;
-        if (collusionCheck(mario.mario, bullet)) {
-            console.log("bullet touched mario")
-            bullet.disabled = true
-            bullet.body.forEach(body => body.div.remove())
-            bullet.dom.remove()
-            mario.mario.health -= bullet.damage
-            if (mario.mario.health <= 0) {
-                mario.mario.disabled = true
-                game.gameState.currentState = 'gameOver'
-                game.updateMenuVisibility();
-                console.log("mario died")
-            }
-        }
-    }
-}
+// export function MarioCollusion() {
+//     for (const bullet of bullets.allBullets) {
+//         if (bullet.disabled) continue;
+//         if (collusionCheck(mario.mario, bullet)) {
+//             console.log("bullet touched mario")
+//             bullet.disabled = true
+//             bullet.body.forEach(body => body.div.remove())
+//             bullet.dom.remove()
+//             mario.mario.health -= bullet.damage
+//             if (mario.mario.health <= 0) {
+//                 mario.mario.disabled = true
+//                 game.gameState.currentState = 'gameOver'
+//                 game.updateMenuVisibility();
+//                 console.log("mario died")
+//             }
+//         }
+//     }
+// }
 
 export function collusionCheck(entit1, entit2) {
     // Optionally skip if on the same team

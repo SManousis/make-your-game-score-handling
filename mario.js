@@ -1,11 +1,13 @@
 import * as utils from './utils.js'
-import {walkables} from './walkables.js'
-import {keysPressed,gameArea} from './game.js'
+import { walkables } from './walkables.js'
+import { keysPressed, gameArea } from './game.js'
 import * as physics from './physicsStep.js'
+import * as bullets from './bullets.js'
 
 export const marioDiv = document.getElementById('mario');
 
-
+const FIRE_RATE = 30;
+let fireCooldown = 0;
 
 //the character the player controls
 export let mario = {
@@ -29,19 +31,19 @@ export let mario = {
     walkCounter: 0, //a counter that counts for how many frames mario has been walking towards a direction, for walk animation purposes
     crouching: false,
     body: [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20)], //his gameplay body represented in circles
-    physicsPointsOffsets: [{x: -20, y: 0}, {x: 20, y: 0}], //These points will be used
+    physicsPointsOffsets: [{ x: -20, y: 0 }, { x: 20, y: 0 }], //These points will be used
     drawFunc: marioVisuals, //his visual representation in the game
     updateFunc: marioUpdate,
     team: "player",
     reset() {
-        this.x = 100;         
+        this.x = 100;
         this.y = 100;
-        this.health = 100;   
+        this.health = 100;
         this.velY = 0;
         this.disabled = false;
         this.body.forEach(body => body.div.remove());
         this.body = [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20)];
-        
+
     }
 }
 
@@ -139,20 +141,36 @@ export function isMarioWalkingIntoGround() {
 
 
 export function marioUpdate() {
+    if (mario.health<=0) {
+        game.gameState.currentState = 'gameOver'
+        game.updateMenuVisibility();
+        console.log("mario died")
+    }
+
     if (keysPressed.right) {
         mario.lookingDir = "right"
+        mario.aimDirection = "right"
     } else if (keysPressed.left) {
         mario.lookingDir = "left"
+        mario.aimDirection = "left"
     }
 
     if (keysPressed.up) {
         mario.lookingUp = true
+        mario.aimDirection = "up"
     } else {
         mario.lookingUp = false
     }
 
 
+    if (keysPressed.autofire) {
+        fireCooldown--;
+        if (fireCooldown <= 0) {
+            bullets.createBullet(mario.aimDirection, "player", mario.x, mario.y, 4, 8)
+            fireCooldown = FIRE_RATE;
+        }
 
+    }
 
     // add x acceleration
     let impulse = mario.accel
@@ -195,7 +213,7 @@ export function marioUpdate() {
     let grounded = physics.moveAndCollide(mario)
 
 
-     //don't allow mario to move past screen bounds
+    //don't allow mario to move past screen bounds
     if (mario.x < 0) {
         utils.setUnit(mario, 0, mario.y)
     }
