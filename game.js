@@ -1,4 +1,4 @@
-import {mario} from './mario.js'
+import {mario,marioShoot} from './mario.js'
 //import * as floaters from './floaters.js'
 import * as cupids from './cupids.js'
 import * as turtles from './turtles.js'
@@ -170,6 +170,11 @@ document.addEventListener('keydown', (event) => {
     if (event.key.toLowerCase() === 'a') {
         keysPressed.autofire = !keysPressed.autofire;
     }
+
+if (event.key.toLocaleLowerCase()==='f'){
+    marioShoot();
+}
+
     if (event.key === 'ArrowLeft') {
         keysPressed.left = true;
     }

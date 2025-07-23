@@ -160,13 +160,14 @@ export function marioUpdate() {
         mario.aimDirection = "up"
     } else {
         mario.lookingUp = false
+        mario.aimDirection = mario.lookingDir
     }
 
 
     if (keysPressed.autofire) {
         fireCooldown--;
         if (fireCooldown <= 0) {
-            bullets.createBullet(mario.aimDirection, "player", mario.x, mario.y, 4, 8)
+            marioShoot();
             fireCooldown = FIRE_RATE;
         }
 
@@ -239,4 +240,14 @@ export function marioUpdate() {
         mario.crouching = false
     }
 
+}
+
+export function marioShoot(){
+    if (mario.aimDirection==='left'){
+    bullets.createBullet(mario.aimDirection, "player", mario.x-40, mario.y+40, 4, 8)
+    }else if (mario.aimDirection==='right'){
+        bullets.createBullet(mario.aimDirection, "player", mario.x+40, mario.y+40, 4, 8)
+    }else if (mario.aimDirection==='up'){
+        bullets.createBullet(mario.aimDirection, "player", mario.x, mario.y+100, 4, 8)
+    }
 }
