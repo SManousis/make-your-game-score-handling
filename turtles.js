@@ -62,6 +62,15 @@ function spawnTurtle() {
 }
 
 function turtleUpdate(turtle) {
+    if (turtle.health <= 0) {
+   if (turtle.dom) turtle.dom.remove();
+                        turtle.body.forEach(b => { if (b.div) b.div.remove(); })
+                        turtles = turtles.filter(t => t !== turtle);
+                
+                        removeFromAllEntities(turtle)
+                        
+}            
+
     if (turtle.state === 'walking') {
         //follow Mario
         let dx = mario.x - turtle.x;

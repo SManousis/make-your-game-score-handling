@@ -62,6 +62,16 @@ function spawnCicada() {
 }
 
 function cicadaUpdate(cicada) {
+ if (cicada.health <= 0) {
+        if (cicada.dom) cicada.dom.remove();
+                        cicada.body.forEach(b => { if (b.div) b.div.remove(); })
+                        cicadas = cicadas.filter(t => t !== cicada);
+                
+                        removeFromAllEntities(cicada)
+                        
+                        
+    }
+
     if (cicada.state === 'walking' || cicada.state == 'jumping') {
         let dx = mario.x - cicada.x;
 
