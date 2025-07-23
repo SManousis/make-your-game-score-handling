@@ -69,9 +69,9 @@ function restartGame() {
         if (entity.body) entity.body.forEach(body => body.div.remove());
     }
     mario.reset();
-    cupids.forEach(cupid => cupid.reset());
+    cupids.reset();
     allEntities = [];
-    cupids.cupids = [];
+  
     bullets.allBullets.length = 0;
     allEntities.push(mario)
     spawnSwarm(30, cupids.createCupid, 5, 400)

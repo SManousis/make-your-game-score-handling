@@ -56,6 +56,11 @@ export function createCupid(x, y, index) {
  }
 
 
+ export function reset(){
+     cupids.forEach(cupid => cupid.reset());
+        
+        cupids.cupids = [];
+ }
  
 
 //let  parallelmovecount = 0
