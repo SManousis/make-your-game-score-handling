@@ -15,7 +15,7 @@ export function createCupid(x, y, index) {
     
     let cupid = {
        index: index,
-       health: 100,
+       health: 20,
        damage: 10,
        moveSpeed: 0.1,
        x: x,           // use the parameters!
@@ -33,7 +33,18 @@ export function createCupid(x, y, index) {
        drawFunc: function() { cupidVisuals(this) },
        dom: cupidBody,
        parallelMoveCount: 0,
-       team: "enemy"
+       team: "enemy",
+       reset(){
+        this.health = 20;
+        this.moveSpeed = 0.1;
+        this.velX = 1;
+        this.velY = 0;
+        this.x = x;
+        this.y = y;
+        // this.dom.remove();
+        // this.body.forEach(body => body.div.remove());
+        // this.body = [utils.createCircle(x,  y+20, 30)];
+       }
     }
     console.log("I was created at ", x, y)
     game.cupids.push(cupid)

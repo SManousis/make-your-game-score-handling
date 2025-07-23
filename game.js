@@ -72,21 +72,14 @@ function restartGame() {
         if (entity.body) entity.body.forEach(body => body.div.remove());
     }
     mario.reset();
+    cupids.forEach(cupid => cupid.reset());
     allEntities = [];
     cupids = [];
     bullets.allBullets.length = 0;
     allEntities.push(mario)
     allEntities.push(floaters.floaterCircle)
     allEntities.push(floaters.floaterRect)
-    for (let row = 0; row < 12; row++) {
-        for (let col = 0; col < 12; col++) {
-          let x = 200 + col * 140;
-          let y = 900 - row * 80;
-          let cupid = enemies.createCupid(x, y, cupids.length);
-          cupids.push(cupid);
-          allEntities.push(cupid);
-          }
-      }
+    createSwarm(30, enemies.createCupid, 5, 400)
     //whatever is needed to reset Mario 
     //whatever is needed to reset enemies
 
