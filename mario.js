@@ -9,6 +9,7 @@ export const marioDiv = document.getElementById('mario');
 
 //the character the player controls
 export let mario = {
+    name: "mario",
     health: 100, //how much health point he has, if it reaches 0 he dies!
     attack_damage: 10, //how damage marios bullets deal to enemies
     accel: 1, //how quickly accelerates in x axis

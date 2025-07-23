@@ -48,6 +48,7 @@ export function createBullet(dirType, team, x, y,  speed, damage = 10, targetX =
         updateFunc: function() { bulletUpdate(this) },
         drawFunc: function() { bulletVisuals(this) },
         dom: bulletBody,
+        team:team,
     }
     return bullet
 }

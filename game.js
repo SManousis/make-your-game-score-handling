@@ -251,7 +251,7 @@ setInterval(show, 1000)
 // Update the game state, only physics
 function update() {
     // mario movement
-    collusion.MarioCollusion();
+    collusion.isShot(mario);
     //running all entities' update function
     for (let entity of allEntities) {
       if (entity.updateFunc) entity.updateFunc(entity);

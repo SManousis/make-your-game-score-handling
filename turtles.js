@@ -30,6 +30,7 @@ function spawnTurtle() {
     const startY = 500;
 
     const newTurtle = {
+        name:"turtle",
         maxspeed: 1.5,
         gravity: 0.8,
         state: 'walking', //walking, defeated
