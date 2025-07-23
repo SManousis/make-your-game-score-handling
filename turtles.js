@@ -1,6 +1,6 @@
 import * as utils from './utils.js'
 import { mario } from './mario.js'
-import { gameArea, allEntities } from './game.js'
+import { gameArea, allEntities, removeFromAllEntities } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
 
 //turtle spawning
@@ -121,13 +121,13 @@ function turtleUpdate(turtle) {
             console.log("turtle disabled")
             turtle.state = "disabled"
             mario.velY = 12;
-
+            removeFromAllEntities(turtle)
             //make turtle disappear after a moment
             setTimeout(() => {
                 if (turtle.dom) turtle.dom.remove();
                 turtle.body.forEach(b => { if (b.div) b.div.remove(); })
                 turtles = turtles.filter(t => t !== turtle);
-                //allEntities = allEntities.filter(t => t !== turtle);
+                
             }, 300)
         } else {
             console.log("Mario was hurt by a turtle")

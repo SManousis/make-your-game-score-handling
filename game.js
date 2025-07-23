@@ -290,3 +290,4 @@ gameLoop();
 export function removeFromAllEntities(entity){
     allEntities = allEntities.filter(t => t !== entity);
 }
+

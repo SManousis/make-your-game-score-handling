@@ -1,6 +1,6 @@
 import * as utils from './utils.js'
 import { mario } from './mario.js'
-import { gameArea, allEntities } from './game.js'
+import { gameArea, allEntities, removeFromAllEntities } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
 
 //cicadas spawning
@@ -142,13 +142,13 @@ function cicadaUpdate(cicada) {
             // console.log("cicada disabled")
             cicada.state = "disabled"
             mario.velY = 12;
-
+            removeFromAllEntities(cicada)
             //make cicada disappear after a moment
             setTimeout(() => {
                 if (cicada.dom) cicada.dom.remove();
                 cicada.body.forEach(b => { if (b.div) b.div.remove(); })
-                cicadas = cicadas.filter(t => t !== cicada);
-                //allEntities = allEntities.filter(t => t !== cicada);
+                
+                allEntities = allEntities.filter(t => t !== cicada);
             }, 300)
         } else {
             // console.log("Mario was hurt by a cicada")

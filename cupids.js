@@ -65,7 +65,8 @@ export function cupidUpdate(cupid) {
         if (cupid.dom) cupid.dom.remove();
                         cupid.body.forEach(b => { if (b.div) b.div.remove(); })
                         cupids = cupids.filter(t => t !== cupid);
-                        //game.removeFromAllEntities(cupid)
+                
+                        game.removeFromAllEntities(cupid)
                         
     }
    

@@ -1,6 +1,6 @@
 import * as utils from "./utils.js"
 import * as mario from "./mario.js"
-import { allEntities } from './game.js'
+import { allEntities, removeFromAllEntities } from './game.js'
 
 //dirTypes can be down, up, right, left, target
 //team = player, enemy
@@ -62,15 +62,21 @@ export function bulletUpdate(bullet) {
     if (bullet.y < 0) {
         bullet.disabled = true
         bullet.dom.remove()
+        removeFromAllBullets(bullet)
+        removeFromAllEntities(bullet)
         return;
     }
     if (bullet.touched) {
         bullet.disabled = true
         bullet.dom.remove()
+        removeFromAllBullets(bullet)
+        removeFromAllEntities(bullet)
         return;
     }
     if (bullet.disabled) {
         bullet.dom.remove()
+        removeFromAllBullets(bullet)
+        removeFromAllEntities(bullet)
         return;
     }
 }
@@ -88,3 +94,7 @@ export function bulletVisuals(bullet) {
 }
 
 export let allBullets = [];
+
+export function removeFromAllBullets(entity){
+    allBullets = allBullets.filter(t => t !== entity);
+}
