@@ -29,9 +29,11 @@ function spawnCicada() {
     const startY = 1000;
 
     const newCicada = {
+        name:"cicada",
+        health:8,
         maxspeed: 0.5,
         gravity: 0.5,
-        state: 'walking', //walking, defeated
+        state: 'walking', //walking, disabled
         velX: 0,
         velY: 0,
         jump_power: 20,
@@ -52,6 +54,7 @@ function spawnCicada() {
             { x: 35, y: 0 }  // Right foot
         ],
         dom: cicadaElement,
+        team: "enemy",
     };
 
     cicadas.push(newCicada);
@@ -112,7 +115,7 @@ function cicadaUpdate(cicada) {
 
     }
     else {
-        cicada.velX = 0; //stop moving if defeated
+        cicada.velX = 0; //stop moving if disabled
     }
 
 
@@ -136,8 +139,8 @@ function cicadaUpdate(cicada) {
 
         //check if collision was Mario jumping on cicada
         if (mario.velY < 0 && mario.y < cicada.y + (cicada.height / 2)) {
-            // console.log("cicada defeated")
-            cicada.state = "defeated"
+            // console.log("cicada disabled")
+            cicada.state = "disabled"
             mario.velY = 12;
 
             //make cicada disappear after a moment
@@ -145,6 +148,7 @@ function cicadaUpdate(cicada) {
                 if (cicada.dom) cicada.dom.remove();
                 cicada.body.forEach(b => { if (b.div) b.div.remove(); })
                 cicadas = cicadas.filter(t => t !== cicada);
+                //allEntities = allEntities.filter(t => t !== cicada);
             }, 300)
         } else {
             // console.log("Mario was hurt by a cicada")
@@ -166,7 +170,7 @@ function cicadaVisuals(cicada) {
         cicada.dom.style.setProperty('--cicada-scale-x', `1`)
     }
 
-    if (cicada.state === "defeated") {
+    if (cicada.state === "disabled") {
         cicada.dom.style.height = '20px'
         cicada.dom.style.opacity = '0.7'
     }

@@ -30,9 +30,11 @@ function spawnTurtle() {
     const startY = 500;
 
     const newTurtle = {
+        name:"turtle",
+        health:8,
         maxspeed: 1.5,
         gravity: 0.8,
-        state: 'walking', //walking, defeated
+        state: 'walking', //walking, disabled
         velX: 0,
         velY: 0,
         x: startX,
@@ -50,6 +52,7 @@ function spawnTurtle() {
             { x: (120/2)+1, y: 0 }  // Right foot
         ],
         dom: turtleElement,
+        team: "enemy",
     };
 
     turtles.push(newTurtle);
@@ -97,7 +100,7 @@ function turtleUpdate(turtle) {
 
 
     } else {
-        turtle.velX = 0; //stop moving if defeated
+        turtle.velX = 0; //stop moving if disabled
     }
 
 
@@ -115,8 +118,8 @@ function turtleUpdate(turtle) {
 
         //check if collision was Mario jumping on turtle
         if (mario.velY < 0 && mario.y < turtle.y + (turtle.height / 2)) {
-            console.log("turtle defeated")
-            turtle.state = "defeated"
+            console.log("turtle disabled")
+            turtle.state = "disabled"
             mario.velY = 12;
 
             //make turtle disappear after a moment
@@ -124,6 +127,7 @@ function turtleUpdate(turtle) {
                 if (turtle.dom) turtle.dom.remove();
                 turtle.body.forEach(b => { if (b.div) b.div.remove(); })
                 turtles = turtles.filter(t => t !== turtle);
+                //allEntities = allEntities.filter(t => t !== turtle);
             }, 300)
         } else {
             console.log("Mario was hurt by a turtle")
@@ -146,7 +150,7 @@ function turtleVisuals(turtle) {
         turtle.dom.style.setProperty('--turtle-scale-x', `1`)
     }
 
-    if (turtle.state === "defeated") {
+    if (turtle.state === "disabled") {
         turtle.dom.style.height = '20px'
         turtle.dom.style.opacity = '0.7'
     }

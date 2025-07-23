@@ -1,5 +1,6 @@
-import {mario} from './mario.js'
-import * as enemies from './enemies.js'
+import {mario,marioShoot} from './mario.js'
+//import * as floaters from './floaters.js'
+import * as cupids from './cupids.js'
 import * as turtles from './turtles.js'
 import * as cicadas from './cicadas.js'
 import * as walkables from './walkables.js'
@@ -45,7 +46,6 @@ allEntities.push(mario)
 
 
 
-
 export function updateMenuVisibility() {
     //hide all menus by default
     mainMenu.classList.add('hidden');
@@ -61,7 +61,7 @@ export function updateMenuVisibility() {
     }
 }
 
-export let cupids = [];
+
 
 function restartGame() {
     for (let entity of allEntities) {
@@ -71,10 +71,10 @@ function restartGame() {
     mario.reset();
     cupids.forEach(cupid => cupid.reset());
     allEntities = [];
-    cupids = [];
+    cupids.cupids = [];
     bullets.allBullets.length = 0;
     allEntities.push(mario)
-    spawnSwarm(30, enemies.createCupid, 5, 400)
+    spawnSwarm(30, cupids.createCupid, 5, 400)
     //whatever is needed to reset Mario 
     //whatever is needed to reset enemies
 
@@ -99,6 +99,8 @@ export const keysPressed = {
 
     down: false,
     space: false,
+
+    autofire:false,
 };
 
 //--- EVENT LISTENERS ----
@@ -160,6 +162,14 @@ document.addEventListener('keydown', (event) => {
         }
           updateMenuVisibility();
     }
+    if (event.key.toLowerCase() === 'a') {
+        keysPressed.autofire = !keysPressed.autofire;
+    }
+
+if (event.key.toLocaleLowerCase()==='f'){
+    marioShoot();
+}
+
     if (event.key === 'ArrowLeft') {
         keysPressed.left = true;
     }
@@ -239,7 +249,11 @@ setInterval(show, 1000)
 // Update the game state, only physics
 function update() {
     // mario movement
-    collusion.MarioCollusion();
+    allEntities.forEach(entity=>{
+        collusion.isShot(entity)
+})
+    //collusion.isShot(mario);
+    
     //running all entities' update function
     for (let entity of allEntities) {
       if (entity.updateFunc) entity.updateFunc(entity);
@@ -269,6 +283,10 @@ export function draw() {
 
 updateMenuVisibility();
 
-spawnSwarm(30, enemies.createCupid, 5, 400)
+spawnSwarm(30, cupids.createCupid, 5, 400)
 // Start the game
 gameLoop();
+
+export function removeFromAllEntities(entity){
+    allEntities = allEntities.filter(t => t !== entity);
+}
