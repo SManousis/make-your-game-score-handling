@@ -1,6 +1,6 @@
 import * as utils from './utils.js'
 import { walkables } from './walkables.js'
-import { keysPressed, gameArea } from './game.js'
+import { keysPressed, gameArea, gameState, updateMenuVisibility } from './game.js'
 import * as physics from './physicsStep.js'
 import * as bullets from './bullets.js'
 
@@ -142,8 +142,8 @@ export function isMarioWalkingIntoGround() {
 
 export function marioUpdate() {
     if (mario.health<=0) {
-        game.gameState.currentState = 'gameOver'
-        game.updateMenuVisibility();
+        gameState.currentState = 'gameOver'
+        updateMenuVisibility();
         console.log("mario died")
     }
 
