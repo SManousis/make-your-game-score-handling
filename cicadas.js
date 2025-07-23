@@ -74,19 +74,14 @@ function cicadaUpdate(cicada) {
             cicada.jumpCooldown = getRandomInt();
             cicada.state = 'jumping'
         }
-
         
-
-        
-        if (cicada.state == 'walking'){
-            if (Math.abs(dx) > DEAD_ZONE) {
-                if (dx > 0) {
-                    cicada.velX = cicada.maxspeed;
-                    cicada.lookingDir = "right";
-                } else {
-                    cicada.velX = -cicada.maxspeed;
-                    cicada.lookingDir = "left";
-                }
+        if (Math.abs(dx) > DEAD_ZONE) {
+            if (dx > 0) {
+                cicada.velX = cicada.maxspeed;
+                cicada.lookingDir = "right";
+            } else {
+                cicada.velX = -cicada.maxspeed;
+                cicada.lookingDir = "left";
             }
         }
 
@@ -125,7 +120,7 @@ function cicadaUpdate(cicada) {
 
     if (grounded){
         cicada.state = 'walking'
-    }else{
+    } else {
         cicada.state = 'jumping'
     }
 
@@ -137,7 +132,7 @@ function cicadaUpdate(cicada) {
         }
     }
 
-    if (cicada.state === 'walking' && isColliding) {
+    if ((cicada.state === 'walking' || cicada.state === 'jumping') && isColliding) {
 
         //check if collision was Mario jumping on cicada
         if (mario.velY < 0 && mario.y < cicada.y + (cicada.height / 2)) {
