@@ -31,6 +31,7 @@ function spawnCicada() {
     const newCicada = {
         name:"cicada",
         health:8,
+        damage:10,
         maxspeed: 0.5,
         gravity: 0.5,
         state: 'walking', //walking, disabled
@@ -158,11 +159,12 @@ function cicadaUpdate(cicada) {
                 if (cicada.dom) cicada.dom.remove();
                 cicada.body.forEach(b => { if (b.div) b.div.remove(); })
                 
-                allEntities = allEntities.filter(t => t !== cicada);
+                removeFromAllEntities(cicada)
             }, 300)
         } else {
             // console.log("Mario was hurt by a cicada")
             //inflict damage on Mario
+            mario.takeDamage(cicada.damage, cicada.x)
         }
     }
 

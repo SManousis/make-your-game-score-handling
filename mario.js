@@ -1,6 +1,6 @@
 import * as utils from './utils.js'
 import { walkables } from './walkables.js'
-import { keysPressed, gameArea } from './game.js'
+import { keysPressed, gameArea,gameState,updateMenuVisibility } from './game.js'
 import * as physics from './physicsStep.js'
 import * as bullets from './bullets.js'
 
@@ -30,11 +30,29 @@ export let mario = {
     lookingUp: false,
     walkCounter: 0, //a counter that counts for how many frames mario has been walking towards a direction, for walk animation purposes
     crouching: false,
+    isInvincible:false,
+    invincibilityTimer:0,
     body: [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20)], //his gameplay body represented in circles
     physicsPointsOffsets: [{ x: -20, y: 0 }, { x: 20, y: 0 }], //These points will be used
     drawFunc: marioVisuals, //his visual representation in the game
     updateFunc: marioUpdate,
     team: "player",
+    takeDamage:function(damage,sourceX){
+        if (this.isInvincible){
+            return;
+        }
+        this.health-=damage;
+        const KNOCKBACK_VERTICAL=15;
+        const KNOCKBACK_HORIZONTAL=50;
+        this.velY=KNOCKBACK_VERTICAL;
+        if (this.x<sourceX){
+            this.velX=-KNOCKBACK_HORIZONTAL;
+        }else{
+            this.velX=KNOCKBACK_HORIZONTAL;
+        }
+        this.isInvincible=true;
+        this.invincibilityTimer=90;
+    },
     reset() {
         this.x = 100;
         this.y = 100;
@@ -55,7 +73,14 @@ export let currentBody = document.getElementById("mario-body-forward")
 export let currentLegs = document.getElementById("mario-legs0")
 export let marioFeetFrames = ["mario-legs0", "mario-legs1", "mario-legs2", "mario-legs3", "mario-legs3"]
 export function marioVisuals() {
-
+if (mario.isInvincible && Math.floor(mario.invincibilityTimer/6)%2===0){
+    currentBody.style.display='none'
+    currentLegs.style.display='none'
+    return;
+}else{
+     currentBody.style.display='block'
+    currentLegs.style.display='block'
+}
     if (mario.lookingUp) {
         currentBody.style.opacity = "0%"
         if (mario.crouching) {
@@ -141,9 +166,15 @@ export function isMarioWalkingIntoGround() {
 
 
 export function marioUpdate() {
+    if (mario.isInvincible){
+        mario.invincibilityTimer--;
+        if (mario.invincibilityTimer<=0){
+            mario.isInvincible=false;
+        }
+    }
     if (mario.health<=0) {
-        game.gameState.currentState = 'gameOver'
-        game.updateMenuVisibility();
+        gameState.currentState = 'gameOver'
+        updateMenuVisibility();
         console.log("mario died")
     }
 
@@ -183,14 +214,14 @@ export function marioUpdate() {
 
     }
 
-    if (keysPressed.right) {
+    if (keysPressed.right && !mario.is) {
         mario.velX += impulse
 
     }
 
 
     //add x drag when one ground
-    if (!keysPressed.left && !keysPressed.right) {
+    if (!keysPressed.left && !keysPressed.right && !mario.isInvincible) {
         let impulse = mario.drag
         // if (!grounded) {
         //   impulse = mario.drag / 5
