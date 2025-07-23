@@ -16,6 +16,7 @@ const pauseMenu = document.getElementById('pause-menu');
 const scoreElement = document.getElementById('score');
 const livesElement = document.getElementById('lives');
 const gameOverMenu = document.getElementById('game-over-menu');
+const timeCounterElement=document.getElementById('time-counter');
 
 const playButton = document.getElementById('play-button');
 const resumeButton = document.getElementById('resume-button');
@@ -26,13 +27,19 @@ const mainMuteButton = document.getElementById('main-mute-button');
 const pauseMuteButton = document.getElementById('pause-mute-button');
 const gameOverMuteButton = document.getElementById('game-over-mute-button');
 
+
+
+
 export let gameState = {
     currentState: 'mainMenu', //'mainMenu', 'paused','gameover','running'
     score: 0,
     lives: 5,
     isMuted: false,
-    frameCounter: 0
+    frameCounter: 0,
+    gameTime:0
 }
+
+let lastTime=0;
 
 export let allEntities = []
 
@@ -64,6 +71,7 @@ export function updateMenuVisibility() {
 
 
 function restartGame() {
+
     for (let entity of allEntities) {
         if (entity.dom) entity.dom.remove();
         if (entity.body) entity.body.forEach(body => body.div.remove());
@@ -78,6 +86,7 @@ function restartGame() {
     //whatever is needed to reset Mario 
     //whatever is needed to reset enemies
 
+    gameState.gameTime=0;
     gameState.score = 0;
     scoreElement.textContent = `Score: ${gameState.score}`;
 
@@ -221,11 +230,20 @@ let prev = 0
 
 
 // The main game loop
-function gameLoop() {
+function gameLoop(currentTime) {
+
+    if (lastTime===0){
+        lastTime=currentTime; //initialize on first frame
+    }
+    const deltaTime=currentTime-lastTime;
+    lastTime=currentTime;
+
     
     // console.log("Drawing frame", counter);
     // console.log(gameState.currentState)
     if (gameState.currentState === 'running') {
+        gameState.gameTime+=deltaTime;
+
         turtles.turtleSpawner();
         cicadas.spawner();
         update();
@@ -265,6 +283,14 @@ function update() {
 
 // Draw the game, only updating visual elements based on their objects
 export function draw() {
+const totalSeconds=Math.floor(gameState.gameTime/1000);
+const minutes=Math.floor(totalSeconds/60);
+const seconds=totalSeconds %60;
+const paddedSeconds=seconds.toString().padStart(2,'0');
+timeCounterElement.textContent=`Time: ${minutes}:${paddedSeconds}`;
+
+
+
     for (let entity of allEntities) {
         //body debug visual update
         for (const shape of entity.body) {
