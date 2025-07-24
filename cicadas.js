@@ -7,7 +7,7 @@ import { moveAndCollide } from './physicsStep.js'
 export let cicadas = [];
 let DEAD_ZONE = 40;
 let spawnCooldown = 0;
-const max_cicadas=2;
+const max_cicadas = 2;
 
 export function spawner() {
     spawnCooldown--;
@@ -29,9 +29,9 @@ function spawnCicada() {
     const startY = 1000;
 
     const newCicada = {
-        name:"cicada",
-        health:8,
-        damage:10,
+        name: "cicada",
+        health: 8,
+        damage: 10,
         maxspeed: 0.5,
         gravity: 0.5,
         state: 'walking', //walking, disabled
@@ -46,7 +46,7 @@ function spawnCicada() {
         height: 50,
         lookingDir: spawnSide === 'left' ? 'right' : 'left',
         body: [
-            utils.createRect(startX-(120/2),startY,120,45)
+            utils.createRect(startX - (120 / 2), startY, 120, 45)
         ],
         drawFunc: function () { cicadaVisuals(this) },
         updateFunc: function () { cicadaUpdate(this) },
@@ -63,14 +63,12 @@ function spawnCicada() {
 }
 
 function cicadaUpdate(cicada) {
- if (cicada.health <= 0) {
+    if (cicada.health <= 0) {
         if (cicada.dom) cicada.dom.remove();
-                        cicada.body.forEach(b => { if (b.div) b.div.remove(); })
-                        cicadas = cicadas.filter(t => t !== cicada);
-                
-                        removeFromAllEntities(cicada)
-                        
-                        
+        cicada.body.forEach(b => { if (b.div) b.div.remove(); })
+        cicadas = cicadas.filter(t => t !== cicada);
+
+        removeFromAllEntities(cicada)
     }
 
     if (cicada.state === 'walking' || cicada.state == 'jumping') {
@@ -79,16 +77,16 @@ function cicadaUpdate(cicada) {
         cicada.jumpCooldown--;
         if (cicada.jumpCooldown <= 0) {
             // console.log("cicada jumping")
-            cicada.velY= cicada.jump_power * (Math.random()+0.8);
-            if (dx > 0){
-                cicada.velX = cicada.horizontal_jump_power * (Math.random()+0.8)
-            }else{
-                cicada.velX = -(cicada.horizontal_jump_power * (Math.random()+0.8))
+            cicada.velY = cicada.jump_power * (Math.random() + 0.8);
+            if (dx > 0) {
+                cicada.velX = cicada.horizontal_jump_power * (Math.random() + 0.8)
+            } else {
+                cicada.velX = -(cicada.horizontal_jump_power * (Math.random() + 0.8))
             }
             cicada.jumpCooldown = getRandomInt();
             cicada.state = 'jumping'
         }
-        
+
         if (Math.abs(dx) > DEAD_ZONE) {
             if (dx > 0) {
                 cicada.velX = cicada.maxspeed;
@@ -101,28 +99,28 @@ function cicadaUpdate(cicada) {
 
 
         //check for other cicadas in the way
-        const detectionDistance=cicada.width*0.8
+        const detectionDistance = cicada.width * 0.8
 
-        for (const otherCicada of cicadas){
-            if (otherCicada===cicada)continue;
+        for (const otherCicada of cicadas) {
+            if (otherCicada === cicada) continue;
 
-            if (cicada.velX>0 && otherCicada.x>cicada.x){
-                const distance=otherCicada.x-cicada.x;
-                if (distance<detectionDistance){
-                    cicada.velX=otherCicada.velX; 
+            if (cicada.velX > 0 && otherCicada.x > cicada.x) {
+                const distance = otherCicada.x - cicada.x;
+                if (distance < detectionDistance) {
+                    cicada.velX = otherCicada.velX;
                     break;
                 }
-            } else if (cicada.velX<0 && otherCicada.x<cicada.x){
-                const distance=cicada.x-otherCicada.x;
-                if (distance<detectionDistance){
-                    cicada.velX=otherCicada.velX;
+            } else if (cicada.velX < 0 && otherCicada.x < cicada.x) {
+                const distance = cicada.x - otherCicada.x;
+                if (distance < detectionDistance) {
+                    cicada.velX = otherCicada.velX;
                     break
                 }
             }
         }
 
 
-    } if (cicada.state = "flying"){
+    } if (cicada.state = "flying") {
 
     }
     else {
@@ -132,7 +130,7 @@ function cicadaUpdate(cicada) {
 
     const grounded = moveAndCollide(cicada);
 
-    if (grounded){
+    if (grounded) {
         cicada.state = 'walking'
     } else {
         cicada.state = 'jumping'
@@ -158,7 +156,7 @@ function cicadaUpdate(cicada) {
             setTimeout(() => {
                 if (cicada.dom) cicada.dom.remove();
                 cicada.body.forEach(b => { if (b.div) b.div.remove(); })
-                
+
                 removeFromAllEntities(cicada)
             }, 300)
         } else {
@@ -189,5 +187,5 @@ function cicadaVisuals(cicada) {
 }
 
 function getRandomInt(min = 60, max = 360) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }

@@ -2,6 +2,11 @@
 // Spits random items
 import * as utils from './utils.js'
 import { gameArea, allEntities } from './game.js';
+import { shootSandwich } from './sandwich.js'
+
+const shootSandwichDebounce = utils.opDebounce(shootSandwich, 300, { leading: true })
+
+
 
 export function createVendingStatic() {
     console.log("create Vending")
@@ -14,15 +19,15 @@ export function createVendingStatic() {
 
     const newVending = {
         name: "vending",
-        health: +Infinity,
+        health: 1000,
         damage: 50,
         maxspeed: 1.5,
         gravity: 0.8,
         state: 'friendly', //friendly, badMother, disabled
         velX: 0,
         velY: 0,
-        x: 1500,
-        y: 900,
+        x: 1600,
+        y: 200,
         width: 200,
         height: 200,
         body: [
@@ -47,6 +52,12 @@ function vendingVisuals() {
 
 }
 
-function vendingUpdate() {
 
+function vendingUpdate(newVending) {
+    if (newVending.health < 1000) {
+        newVending.health = 1000;
+        shootSandwichDebounce('left', newVending.x, newVending.y) // TODO: Check Mario's position
+    }
 }
+
+

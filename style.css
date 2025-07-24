@@ -148,6 +148,14 @@ body{
     /* transform-origin: center; */
     /* transform: translateX(-50%) translateY(30%) scaleX(var(--cicada-scale-x, 1)); */
 }
+.sandwich-img {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    z-index:3;
+    left: var(--sandwich-x);
+    bottom: var(--sandwich-y);
+}
 
  .circle {
    border-radius: 100%;
