@@ -309,41 +309,29 @@ function getSpreadValues(count) {
 export function marioShoot() {
     const spreadValues = getSpreadValues(mario.bullet_count);
     console.log(spreadValues)
-
+    let y,x = 0;
+    
     if (mario.aimDirection === 'left') {
-        for (const offset of spreadValues) {
-            bullets.createBullet(
-                mario.aimDirection,
-                "player",
-                mario.x - 40,
-                mario.y + 40 + offset, // Apply spread on Y
-                14,
-                8
-            );
-        }
-
+        x =-40
+        y = 40
     } else if (mario.aimDirection === 'right') {
-        for (const offset of spreadValues) {
-            bullets.createBullet(
-                mario.aimDirection,
-                "player",
-                mario.x + 40,
-                mario.y + 40 + offset, // Apply spread on Y
-                14,
-                8
-            );
-        }
-
+        x = 40;
+        y = 40;
     } else if (mario.aimDirection === 'up') {
-        for (const offset of spreadValues) {
-            bullets.createBullet(
-                mario.aimDirection,
-                "player",
-                mario.x + offset, // Apply spread on X
-                mario.y + 100,
-                14,
-                8
-            );
-        }
+        x =0;
+        y = 100;
+    }
+    if (mario.crouching)  {
+        y = y - 22
+    }
+    for (const offset of spreadValues) {
+    bullets.createBullet(
+        mario.aimDirection,
+        "player",
+        mario.x + x + offset, // Apply spread on X
+        mario.y + y,
+        14,
+        8
+    );
     }
 }
