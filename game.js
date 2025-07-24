@@ -37,13 +37,13 @@ const gameOverMuteButton = document.getElementById('game-over-mute-button');
 
 export let gameState = {
     currentState: 'mainMenu', //'mainMenu', 'paused','gameover','running'
-    previousState:'',
+    previousState: '',
     score: 0,
     lives: 5,
     isMuted: false,
     frameCounter: 0,
     gameTime: 0,
-    level:1,
+    level: 1,
 }
 
 let lastTime = 0;
@@ -65,7 +65,7 @@ export function updateMenuVisibility() {
     mainMenu.classList.add('hidden');
     pauseMenu.classList.add('hidden');
     gameOverMenu.classList.add('hidden');
-     helpMenu.classList.add('hidden');
+    helpMenu.classList.add('hidden');
 
     if (gameState.currentState === 'mainMenu') {
         mainMenu.classList.remove('hidden');
@@ -73,9 +73,9 @@ export function updateMenuVisibility() {
         pauseMenu.classList.remove('hidden')
     } else if (gameState.currentState === 'gameOver') {
         gameOverMenu.classList.remove('hidden');
-     } else if (gameState.currentState === 'help') {
+    } else if (gameState.currentState === 'help') {
         helpMenu.classList.remove('hidden');
-}
+    }
 }
 
 
@@ -97,8 +97,8 @@ function restartGame() {
     //whatever is needed to reset enemies
 
     for (const key in keysPressed) {
-    keysPressed[key] = false;
-}
+        keysPressed[key] = false;
+    }
 
     gameState.gameTime = 0;
     gameState.score = 0;
@@ -301,17 +301,17 @@ setInterval(show, 1000)
 // Update the game state, only physics
 function update() {
     // mario movement
-    
+
     allEntities.forEach(entity => {
-        if (entity.type !== "healthItem" && entity.type !== "bullet"){
-        collusion.isShot(entity)
+        if (entity.type !== "healthItem" && entity.type !== "bullet") {
+            collusion.isShot(entity)
         }
         if (entity.name === "mario") {
             updateMarioHealthBar(entity.health, 100)
         }
     })
     collusion.healthItemPicked(mario) // checks if mario touched a health item//collusion.isShot(mario);
-    
+
     //running all entities' update function
     for (let entity of allEntities) {
         if (entity.updateFunc) entity.updateFunc(entity);
@@ -329,9 +329,9 @@ export function draw() {
     const seconds = totalSeconds % 60;
     const paddedSeconds = seconds.toString().padStart(2, '0');
     timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} debug:${bullets.allBullets.length}`;
-    MarioHealthBar.style.left = (mario.x -30) + "px"; // tune offset
+    MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
     MarioHealthBar.style.bottom = (mario.y + 90) + "px";
-    if (mario.crouching){
+    if (mario.crouching) {
         MarioHealthBar.style.bottom = (mario.y + 60) + "px";
     }
 
@@ -339,9 +339,9 @@ export function draw() {
     for (let entity of allEntities) {
         //body debug visual update
         for (const shape of entity.body) {
-            if (shape.active == false){
-                shape.div.style.opacity = "0%"
-            }else{
+            if (shape.active == false) {
+                shape.div.style.opacity = "20%"
+            } else {
                 shape.div.style.opacity = "100%"
             }
             shape.div.style.left = shape.x + 'px';
