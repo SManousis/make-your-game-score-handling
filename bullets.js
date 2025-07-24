@@ -63,6 +63,7 @@ export function createBullet(dirType, team, x, y, speed, damage = 10, targetX = 
         drawFunc: function () { bulletVisuals(this) },
         dom: bulletBody,
         team: team,
+        type: "bullet",
     }
     allEntities.push(bullet);
     allBullets.push(bullet);
