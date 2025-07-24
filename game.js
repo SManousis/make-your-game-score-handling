@@ -303,6 +303,7 @@ function update() {
     // mario movement
     allEntities.forEach(entity => {
         collusion.isShot(entity)
+        collusion.healthItemPicked(entity)
     })
     //collusion.isShot(mario);
 
