@@ -18,7 +18,7 @@ export function createHealthItem(x, y, healthAdd = 0){
         velY: -1,
         velX: 0,
         healthAdd: healthAdd,
-        body: [utils.createCircle(x, y+10, 12)],
+        body: [utils.createCircle(x, y+10, 15)],
         updateFunc: function() { healthItemUpdate(this) },
         drawFunc: function() { healthItemVisuals(this) },
         dom: healthItemBody,

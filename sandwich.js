@@ -6,7 +6,7 @@ import { moveAndCollide } from './physicsStep.js';
 export function shootSandwich(dir, vendX, vendY) {
     const sandwichElement = document.createElement('img');
     sandwichElement.className = 'sandwich-img';
-    sandwichElement.src = 'assets/items/healthCandy.png'
+    sandwichElement.src = 'assets/items/sandwich.png'
     gameArea.appendChild(sandwichElement);
 
     const sndState = Math.random() < 0.5 ? 'friend' : 'enemy';
@@ -37,6 +37,7 @@ export function shootSandwich(dir, vendX, vendY) {
         ],
         dom: sandwichElement,
         team: "enemy",
+        type: "sandwich"
     };
     allEntities.push(newSandwich);
 }

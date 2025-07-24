@@ -303,8 +303,9 @@ function update() {
     // mario movement
     
     allEntities.forEach(entity => {
+        if (entity.type !== "healthItem" && entity.type !== 'sandwich'){
         collusion.isShot(entity)
-        
+        }
     })
     collusion.healthItemPicked(mario) // checks if mario touched a health item//collusion.isShot(mario);
     
