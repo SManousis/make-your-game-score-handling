@@ -1,22 +1,30 @@
+import * as utils from "./utils.js";
+import * as game from "./game.js";
+
+export let healthItems = [];
+
+
 export function createHealthItem(x, y, healthAdd = 20){
     let healthItemBody = document.createElement("img");
     healthItemBody.className = "health-item-img";
-    healthItemBody.src = "assets/items/healthItem.png";
+    healthItemBody.src = "assets/items/healthCandy.png";
     document.getElementById("game-area").appendChild(healthItemBody);
 
     let healthItem = {
         x: x,
         y: y,
-        velY: 5,
+        velY: -5,
         healthAdd: healthAdd,
-        body: [utils.createCircle(x, y, 10)],
+        body: [utils.createCircle(x, y+10, 15)],
         updateFunc: function() { healthItemUpdate(this) },
         drawFunc: function() { healthItemVisuals(this) },
         dom: healthItemBody,
         team: "player",
     }
-    allEntities.push(healthItem);
-    return healthItem
+    console.log("Health item was created at ", x, y)
+    healthItems.push(healthItem)
+    game.allEntities.push(healthItem);
+        return healthItem
 }
 
 export function healthItemUpdate(healthItem) {
@@ -24,7 +32,8 @@ export function healthItemUpdate(healthItem) {
     setTimeout(() => {
         healthItem.dom.remove()
         healthItem.body.forEach(body => body.div.remove())
-        allEntities = allEntities.filter(t => t !== healthItem)
+        const idx = game.allEntities.indexOf(healthItem);
+        if (idx !== -1) game.allEntities.splice(idx, 1);
     }, 10000)
 }
 

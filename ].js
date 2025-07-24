@@ -2,6 +2,7 @@ import * as utils from "./utils.js";
 import * as mario from './mario.js'
 import * as game from './game.js'
 import * as bullets from './bullets.js'
+import * as healthItem from './healthItem.js'
 
 export let cupids = [];
 
@@ -122,6 +123,10 @@ export function cupidUpdate(cupid) {
         setTimeout(() => {
             cupid.dom.src="assets/enemies/TrumpCupid.png"
         }, 300)   
+    }
+
+    if (parseInt(Math.random()*6000) == 0){
+        let candy = healthItem.createHealthItem(cupid.x, cupid.y, 20)
     }
 }
 
