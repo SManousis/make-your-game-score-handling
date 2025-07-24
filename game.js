@@ -331,6 +331,9 @@ export function draw() {
     timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} debug:${bullets.allBullets.length}`;
     MarioHealthBar.style.left = (mario.x -30) + "px"; // tune offset
     MarioHealthBar.style.bottom = (mario.y + 90) + "px";
+    if (mario.crouching){
+        MarioHealthBar.style.bottom = (mario.y + 60) + "px";
+    }
 
 
     for (let entity of allEntities) {
