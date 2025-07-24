@@ -1,10 +1,11 @@
 import * as utils from "./utils.js";
 import * as game from "./game.js";
+import * as physics from "./physicsStep.js";
 
 export let healthItems = [];
 
 
-export function createHealthItem(x, y, healthAdd = 20){
+export function createHealthItem(x, y, healthAdd = 0){
     let healthItemBody = document.createElement("img");
     healthItemBody.className = "health-item-img";
     healthItemBody.src = "assets/items/healthCandy.png";
@@ -13,13 +14,16 @@ export function createHealthItem(x, y, healthAdd = 20){
     let healthItem = {
         x: x,
         y: y,
-        velY: -5,
+        gravity: 0.8,
+        velY: -1,
+        velX: 0,
         healthAdd: healthAdd,
         body: [utils.createCircle(x, y+10, 15)],
         updateFunc: function() { healthItemUpdate(this) },
         drawFunc: function() { healthItemVisuals(this) },
         dom: healthItemBody,
         team: "player",
+        physicsPointsOffsets: [{ x: 0, y: 0 }],
     }
     console.log("Health item was created at ", x, y)
     healthItems.push(healthItem)
@@ -28,7 +32,7 @@ export function createHealthItem(x, y, healthAdd = 20){
 }
 
 export function healthItemUpdate(healthItem) {
-    utils.moveUnit(healthItem, 0, healthItem.velY)
+    physics.moveAndCollide(healthItem, 0, 1)
     setTimeout(() => {
         healthItem.dom.remove()
         healthItem.body.forEach(body => body.div.remove())
