@@ -60,7 +60,7 @@ export let mario = {
         this.velY = 0;
         this.disabled = false;
         this.body.forEach(body => body.div.remove());
-        this.body = [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20)];
+        this.body = [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20), utils.createCircle(100-30, 100 + 20, 30), utils.createCircle(100+30, 100 + 20, 30)];
         this.bullet_count=1;
     }
 }
@@ -293,7 +293,7 @@ export function marioUpdate() {
         mario.crouching = false
         
     }
-
+  
 }
 
 // Helper function to generate symmetric spread values
@@ -370,4 +370,11 @@ export function marioShoot() {
 export function updateMarioHealthBar(current, max) {
     const healthBar = Math.max(0, current/max)*100
     document.getElementById('mario-healthBar').style.width = healthBar + '%'
+      if (mario.health <= 20) {
+    document.getElementById('mario-healthBar').style.background = '#f00'; 
+    } else if (mario.health <= 40) {
+    document.getElementById('mario-healthBar').style.background = '#ff0'; 
+    } else {
+    document.getElementById('mario-healthBar').style.background = '#0f0'; 
+    }
 }

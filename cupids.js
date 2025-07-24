@@ -113,8 +113,11 @@ export function cupidUpdate(cupid) {
     }
 
 
-
-
+    for (const BodyPart of cupid.body) {
+        if (utils.IsBodyCollidingWithUnit(BodyPart, mario.mario)) {
+            mario.mario.takeDamage(cupid.damage, cupid)
+        }
+    }
     //decide if cupid will fire
     // if (cupid.index*100 == game.gameState.frameCounter%(cupids.length*100)){
     if (parseInt(Math.random()*2000) == 0){
