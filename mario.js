@@ -85,12 +85,14 @@ export function marioVisuals() {
         currentBody.style.opacity = "0%"
         if (mario.crouching) {
             currentBody = document.getElementById("mario-body-crouch-up")
+            
         } else {
             currentBody = document.getElementById("mario-body-up")
         }
     } else if (mario.crouching) {
         currentBody.style.opacity = "0%"
         currentBody = document.getElementById("mario-body-crouch-forward")
+        
     } else {
         currentBody.style.opacity = "0%"
         currentBody = document.getElementById("mario-body-forward")
@@ -275,8 +277,10 @@ export function marioUpdate() {
 
     if (grounded && mario.velX == 0 && mario.velY == 0 && keysPressed.down) {
         mario.crouching = true
+        mario.body[1].div.style.display = "none";
     } else {
         mario.crouching = false
+        mario.body[1].div.style.display = "block";
     }
 
 }
