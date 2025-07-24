@@ -10,22 +10,34 @@ export function createBullet(dirType, team, x, y, speed, damage = 10, targetX = 
     bulletBody.src = "assets/enemies/lazer.png";
     document.getElementById("game-area").appendChild(bulletBody);
 
+
+    let bodyWidth = 10;
+    let bodyHeight = 55;
+    let [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];
+
     switch (dirType) {
         case "down":
             targetX = x
             targetY = y - 1
             break
-        case "left":
-            targetX = x - 1
-            targetY = y
-            break
-        case "right":
-            targetX = x + 1
-            targetY = y
-            break
         case "up":
             targetX = x
             targetY = y + 1
+            break
+        case "left":
+            [bodyWidth, bodyHeight] = [bodyHeight, bodyWidth]
+            bodyX = x - (bodyWidth / 2)
+            bodyY = y + (bodyHeight / 2)
+            targetX = x - 1
+            targetY = y
+            break
+            case "right":
+            [bodyWidth, bodyHeight] = [bodyHeight, bodyWidth]
+
+            bodyX = x - (bodyWidth / 2)
+            bodyY = y + (bodyHeight / 2)
+            targetX = x + 1
+            targetY = y
             break
     }
 
@@ -39,14 +51,14 @@ export function createBullet(dirType, team, x, y, speed, damage = 10, targetX = 
 
     let bullet = {
         damage: damage,
-        dir:dirType,
+        dir: dirType,
         x: x,
         y: y,
         velX: velX,
         velY: velY,
         touched: false,
         disabled: false,
-        body: [utils.createCircle(x, y, 10), utils.createRect(x, y + 10, 10, 10)],
+        body: [utils.createRect(bodyX, bodyY, bodyWidth, bodyHeight)],
         updateFunc: function () { bulletUpdate(this) },
         drawFunc: function () { bulletVisuals(this) },
         dom: bulletBody,
@@ -59,9 +71,9 @@ export function createBullet(dirType, team, x, y, speed, damage = 10, targetX = 
 
 export function bulletUpdate(bullet) {
     utils.moveUnit(bullet, bullet.velX, bullet.velY)
-  
+
     if (bullet.y < -300 || bullet.x < -300 || bullet.y > gameArea.offsetHeight + 300 || bullet.x > gameArea.offsetWidth + 300) {
-        
+
         bullet.disabled = true
         bullet.dom.remove()
         removeFromAllBullets(bullet)
@@ -97,6 +109,6 @@ export function bulletVisuals(bullet) {
 
 export let allBullets = [];
 
-export function removeFromAllBullets(entity){
+export function removeFromAllBullets(entity) {
     allBullets = allBullets.filter(t => t !== entity);
 }

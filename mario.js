@@ -61,7 +61,7 @@ export let mario = {
         this.disabled = false;
         this.body.forEach(body => body.div.remove());
         this.body = [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20)];
-
+        this.bullet_count=1;
     }
 }
 
@@ -318,20 +318,22 @@ export function marioShoot() {
         x = 40;
         y = 40;
     } else if (mario.aimDirection === 'up') {
-        x =0;
+        x = 0;
         y = 100;
     }
+
     if (mario.crouching)  {
         y = y - 22
     }
+
     for (const offset of spreadValues) {
-    bullets.createBullet(
-        mario.aimDirection,
-        "player",
-        mario.x + x + offset, // Apply spread on X
-        mario.y + y,
-        14,
-        8
-    );
+        bullets.createBullet(
+            mario.aimDirection,
+            "player",
+            mario.x + x + offset, // Apply spread on X
+            mario.y + y,
+            14,
+            8
+        );
     }
 }
