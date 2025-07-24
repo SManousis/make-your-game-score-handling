@@ -200,4 +200,27 @@ export function setUnit(unit, x, y) {
     }
 }
 
+export function opDebounce(fn, wait, options = {}) {
+    let timeout;
+    let lastCallTime;
+
+    return function(...args) {
+        const now = Date.now();
+        const callNow = options.leading && !timeout;
+
+        clearTimeout(timeout);
+
+        timeout = setTimeout(() => {
+            timeout = null;
+            if (!options.leading) {
+                fn.apply(this, args);
+            }
+        }, wait);
+
+        if (callNow) {
+            fn.apply(this, args);
+        }
+    };
+}
+
 
