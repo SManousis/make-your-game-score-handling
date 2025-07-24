@@ -7,6 +7,7 @@ import * as walkables from './walkables.js'
 import * as bullets from './bullets.js'
 import * as collusion from './collusion.js'
 import { spawnSwarm, stage1 } from './stagecontroller.js'
+import { createVendingStatic } from "./vending.js"
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -105,6 +106,7 @@ function restartGame() {
 
     gameState.currentState = 'running';
     updateMenuVisibility();
+    createVendingStatic()
     stage1();
 }
 
@@ -348,5 +350,5 @@ gameLoop();
 export function removeFromAllEntities(entity) {
     allEntities = allEntities.filter(t => t !== entity);
 }
-
+createVendingStatic()
 stage1()

@@ -1,6 +1,7 @@
 import { createCupid, cupids } from "./cupids.js"
 import { gameArea } from "./game.js"
 
+
 export async function stage1(){
     let wait = false
     spawnSwarm(5, createCupid, 5, 200)
