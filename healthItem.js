@@ -18,12 +18,13 @@ export function createHealthItem(x, y, healthAdd = 0){
         velY: -1,
         velX: 0,
         healthAdd: healthAdd,
-        body: [utils.createCircle(x, y+10, 15)],
+        body: [utils.createCircle(x, y+10, 12)],
         updateFunc: function() { healthItemUpdate(this) },
         drawFunc: function() { healthItemVisuals(this) },
         dom: healthItemBody,
         team: "player",
         physicsPointsOffsets: [{ x: 0, y: 0 }],
+        type: "healthItem",
     }
     console.log("Health item was created at ", x, y)
     healthItems.push(healthItem)

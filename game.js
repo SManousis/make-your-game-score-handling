@@ -301,12 +301,13 @@ setInterval(show, 1000)
 // Update the game state, only physics
 function update() {
     // mario movement
+    
     allEntities.forEach(entity => {
         collusion.isShot(entity)
-        collusion.healthItemPicked(entity)
+        
     })
-    //collusion.isShot(mario);
-
+    collusion.healthItemPicked(mario) // checks if mario touched a health item//collusion.isShot(mario);
+    
     //running all entities' update function
     for (let entity of allEntities) {
         if (entity.updateFunc) entity.updateFunc(entity);

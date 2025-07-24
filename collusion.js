@@ -27,7 +27,8 @@ export function isShot(entity) {
 export function healthItemPicked(entity) {
     for (const candy of healthItem.healthItems) {
         if (candy.disabled) continue;
-        if (!collusionCheck(entity, candy)) {
+        // console.log("Checking collision between:", entity, "and", candy);
+        if (collusionCheck(entity, candy)) {
             console.log(`healthItem touched ${entity.name} gained ${candy.healthAdd}`);
             candy.disabled = true
             candy.body.forEach(body => body.div.remove())
@@ -62,7 +63,7 @@ export function healthItemPicked(entity) {
 
 export function collusionCheck(entit1, entit2) {
     // Optionally skip if on the same team
-    if (entit1.team && entit2.team && entit1.team === entit2.team) return false;
+    if (entit1.team && entit2.team && entit1.team === entit2.team && entit2.type !== "healthItem") return false;
     // Loop through all bodies in both entities
     for (const body1 of entit1.body) {
         for (const body2 of entit2.body) {
