@@ -199,3 +199,17 @@ body{
 .hidden {
     display: none;
 }
+
+
+.controls-list {
+  list-style: none; /* Removes the default bullet points */
+  padding: 0;
+  text-align: left; /* Aligns the text to the left */
+  display: inline-block; /* Allows text-align to work */
+  margin-bottom: 20px;
+}
+
+.controls-list li {
+  margin-bottom: 10px; /* Adds some space between each line */
+  font-size: 20px;
+}

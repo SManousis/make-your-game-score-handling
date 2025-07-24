@@ -16,6 +16,10 @@ const pauseMenu = document.getElementById('pause-menu');
 const scoreElement = document.getElementById('score');
 const livesElement = document.getElementById('lives');
 const gameOverMenu = document.getElementById('game-over-menu');
+const helpMenu = document.getElementById('help-menu');
+const mainHelpButton = document.getElementById('main-help-button');
+const pauseHelpButton = document.getElementById('pause-help-button');
+const backFromHelpButton = document.getElementById('back-from-help-button');
 const timeCounterElement = document.getElementById('time-counter');
 
 const playButton = document.getElementById('play-button');
@@ -32,6 +36,7 @@ const gameOverMuteButton = document.getElementById('game-over-mute-button');
 
 export let gameState = {
     currentState: 'mainMenu', //'mainMenu', 'paused','gameover','running'
+    previousState:'',
     score: 0,
     lives: 5,
     isMuted: false,
@@ -58,6 +63,7 @@ export function updateMenuVisibility() {
     mainMenu.classList.add('hidden');
     pauseMenu.classList.add('hidden');
     gameOverMenu.classList.add('hidden');
+     helpMenu.classList.add('hidden');
 
     if (gameState.currentState === 'mainMenu') {
         mainMenu.classList.remove('hidden');
@@ -65,7 +71,9 @@ export function updateMenuVisibility() {
         pauseMenu.classList.remove('hidden')
     } else if (gameState.currentState === 'gameOver') {
         gameOverMenu.classList.remove('hidden');
-    }
+     } else if (gameState.currentState === 'help') {
+        helpMenu.classList.remove('hidden');
+}
 }
 
 
@@ -137,6 +145,15 @@ restartButton.addEventListener('click', () => {
     restartGame();
 });
 
+mainHelpButton.addEventListener('click', showHelpMenu);
+pauseHelpButton.addEventListener('click', showHelpMenu);
+
+backFromHelpButton.addEventListener('click', () => {
+    // Go back to the screen we were on before
+    gameState.currentState = gameState.previousState;
+    updateMenuVisibility();
+});
+
 document.querySelectorAll('#back-to-menu-button').forEach(btn => {
     btn.addEventListener('click', () => {
         gameState.currentState = 'mainMenu';
@@ -149,6 +166,12 @@ document.querySelectorAll('#restart-button').forEach(btn => {
         restartGame();
     });
 });
+
+function showHelpMenu() {
+    gameState.previousState = gameState.currentState; // IMPORTANT: Remember where we came from
+    gameState.currentState = 'help';
+    updateMenuVisibility();
+}
 
 function toggleMute() {
     gameState.isMuted = !gameState.isMuted;

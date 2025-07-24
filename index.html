@@ -40,6 +40,7 @@
 <h2> El Mario vs Space Invaders</h2>
 <button id="play-button">Play</button>
 <button id="leaderboard-button">Leaderboard</button>
+<button id="main-help-button">Help</button>
 <button id="main-mute-button"> Mute Sound </button>
   </div>
 
@@ -49,6 +50,7 @@
   <button id="resume-button">Resume</button>
   <button id="restart-button">Restart</button>
   <button id="back-to-menu-button">Back to Menu</button>
+  <button id="pause-help-button">Help</button>
   <button id="pause-mute-button">Mute Sound</button>
   </div>
 
@@ -59,6 +61,21 @@
     <button id="back-to-menu-button">Back to Menu</button>
     <button id="game-over-mute-button">Mute Sound</button>
   </div> 
+
+  
+<!-- HELP MENU -->
+<div id="help-menu" class="menu-container hidden">
+  <h2>Controls</h2>
+  <ul class="controls-list">
+    <li><strong>Arrow Keys</strong>: Move Left & Right</li>
+    <li><strong>Spacebar</strong>: Jump</li>
+    <li><strong>F</strong>: Fire a single shot</li>
+    <li><strong>A</strong>: Toggle Autofire</li>
+    <li><strong>U</strong>: Use Double Bullets (Power-up)</li>
+    <li><strong>P</strong>: Pause / Resume Game</li>
+  </ul>
+  <button id="back-from-help-button">Back</button>
+</div>
 
   <script type="module" src="game.js"></script>
 </body>
