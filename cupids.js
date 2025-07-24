@@ -38,6 +38,7 @@ export function createCupid(x, y, index) {
        dom: cupidBody,
        parallelMoveCount: 0,
        team: "enemy",
+       scoreValue: 10,
        reset(){
         this.health = 20;
         this.moveSpeed = 0.1;
@@ -73,7 +74,7 @@ export function cupidUpdate(cupid) {
                         cupids = cupids.filter(t => t !== cupid);
                 
                         game.removeFromAllEntities(cupid)
-                        
+                        game.updateScore(cupid.scoreValue);
     }
    
     cupid.parallelMoveCount++

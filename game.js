@@ -111,7 +111,7 @@ function restartGame() {
 }
 
 
-function updateScore(points) {
+export function updateScore(points) {
     gameState.score += points;
     scoreElement.textContent = `Score: ${gameState.score}`;
 }
