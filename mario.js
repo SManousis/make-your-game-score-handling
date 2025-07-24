@@ -32,7 +32,7 @@ export let mario = {
     crouching: false,
     isInvincible: false,
     invincibilityTimer: 0,
-    body: [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20)], //his gameplay body represented in circles
+    body: [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20), utils.createCircle(100-30, 100 + 20, 30), utils.createCircle(100+30, 100 + 20, 30)], //his gameplay body represented in circles
     physicsPointsOffsets: [{ x: -20, y: 0 }, { x: 20, y: 0 }], //These points will be used
     drawFunc: marioVisuals, //his visual representation in the game
     updateFunc: marioUpdate,
@@ -73,6 +73,17 @@ export let currentBody = document.getElementById("mario-body-forward")
 export let currentLegs = document.getElementById("mario-legs0")
 export let marioFeetFrames = ["mario-legs0", "mario-legs1", "mario-legs2", "mario-legs3", "mario-legs3"]
 export function marioVisuals() {
+    if (mario.crouching) {
+        mario.body[0].div.style.display = "none";
+        mario.body[1].div.style.display = "none";
+        mario.body[2].div.style.display = "block";
+        mario.body[3].div.style.display = "block";
+    } else {
+        mario.body[0].div.style.display = "block";
+        mario.body[1].div.style.display = "block";
+        mario.body[2].div.style.display = "none";
+        mario.body[3].div.style.display = "none";
+    }
     if (mario.isInvincible && Math.floor(mario.invincibilityTimer / 6) % 2 === 0) {
         currentBody.style.display = 'none'
         currentLegs.style.display = 'none'
@@ -277,10 +288,10 @@ export function marioUpdate() {
 
     if (grounded && mario.velX == 0 && mario.velY == 0 && keysPressed.down) {
         mario.crouching = true
-        mario.body[1].div.style.display = "none";
+        
     } else {
         mario.crouching = false
-        mario.body[1].div.style.display = "block";
+        
     }
 
 }
