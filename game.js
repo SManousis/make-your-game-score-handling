@@ -1,4 +1,4 @@
-import { mario, marioShoot } from './mario.js'
+import { mario, marioShoot, updateMarioHealthBar } from './mario.js'
 //import * as floaters from './floaters.js'
 import * as cupids from './cupids.js'
 import * as turtles from './turtles.js'
@@ -306,6 +306,9 @@ function update() {
         if (entity.type !== "healthItem"){
         collusion.isShot(entity)
         }
+        if (entity.name === "mario") {
+            updateMarioHealthBar(entity.health, 100)
+        }
     })
     collusion.healthItemPicked(mario) // checks if mario touched a health item//collusion.isShot(mario);
     
@@ -320,12 +323,14 @@ function update() {
 
 // Draw the game, only updating visual elements based on their objects
 export function draw() {
+    const MarioHealthBar = document.getElementById('mario-healthBar-container');
     const totalSeconds = Math.floor(gameState.gameTime / 1000);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     const paddedSeconds = seconds.toString().padStart(2, '0');
     timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} debug:${bullets.allBullets.length}`;
-
+    MarioHealthBar.style.left = (mario.x -30) + "px"; // tune offset
+    MarioHealthBar.style.bottom = (mario.y + 90) + "px";
 
 
     for (let entity of allEntities) {

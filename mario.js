@@ -351,3 +351,8 @@ export function marioShoot() {
         }
     }
 }
+
+export function updateMarioHealthBar(current, max) {
+    const healthBar = Math.max(0, current/max)*100
+    document.getElementById('mario-healthBar').style.width = healthBar + '%'
+}
