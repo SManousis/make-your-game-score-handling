@@ -60,7 +60,7 @@ export let mario = {
         this.velY = 0;
         this.disabled = false;
         this.body.forEach(body => body.div.remove());
-        this.body = [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20)];
+        this.body = [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20), utils.createCircle(100-30, 100 + 20, 30), utils.createCircle(100+30, 100 + 20, 30)];
         this.bullet_count=1;
     }
 }

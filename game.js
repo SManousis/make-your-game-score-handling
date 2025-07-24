@@ -8,6 +8,7 @@ import * as bullets from './bullets.js'
 import * as collusion from './collusion.js'
 import { spawnSwarm, stage1 } from './stagecontroller.js'
 import { createVendingStatic } from "./vending.js"
+import { healthItems } from './healthItem.js'
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -91,6 +92,7 @@ function restartGame() {
     allEntities = [];
 
     bullets.allBullets.length = 0;
+    healthItems.lenght = 0;
     allEntities.push(mario)
     spawnSwarm(30, cupids.createCupid, 5, 400)
     //whatever is needed to reset Mario 
@@ -106,7 +108,7 @@ function restartGame() {
 
     gameState.currentState = 'running';
     updateMenuVisibility();
-    createVendingStatic()
+    createVendingStatic();
     stage1();
 }
 
