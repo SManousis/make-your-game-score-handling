@@ -1,7 +1,7 @@
 export function createHealthItem(x, y, healthAdd = 20){
     let healthItemBody = document.createElement("img");
     healthItemBody.className = "health-item-img";
-    healthItemBody.src = "assets/items/healthItem.png";
+    healthItemBody.src = "assets/items/healthCandy.png";
     document.getElementById("game-area").appendChild(healthItemBody);
 
     let healthItem = {
