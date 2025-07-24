@@ -27,7 +27,7 @@ export function shootSandwich(dir, vendX, vendY) {
         width: 50,
         height: 50,
         body: [
-            utils.createCircle(vendX, vendY, 25)
+            utils.createCircle(vendX+25, vendY+25, 25)
         ],
         drawFunc: function () { sandwichVisuals(this) },
         updateFunc: function () { sandwichUpdate(this) },
@@ -36,8 +36,8 @@ export function shootSandwich(dir, vendX, vendY) {
             { x: (120 / 2) + 1, y: 0 }  // Right foot
         ],
         dom: sandwichElement,
-        team: "enemy",
-        type: "sandwich"
+        team: "player",
+        type: "healthItem"
     };
     allEntities.push(newSandwich);
 }

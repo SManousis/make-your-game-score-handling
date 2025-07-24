@@ -125,7 +125,7 @@ export function cupidUpdate(cupid) {
         }, 300)   
     }
 
-    if (parseInt(Math.random()*1000) == 0){
+    if (parseInt(Math.random()*6000) == 0){
         let candy = healthItem.createHealthItem(cupid.x, cupid.y - 60, 20)
     }
 }
