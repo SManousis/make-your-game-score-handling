@@ -61,7 +61,7 @@ export let mario = {
         this.disabled = false;
         this.body.forEach(body => body.div.remove());
         this.body = [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20)];
-
+        this.bullet_count=1;
     }
 }
 
@@ -309,29 +309,45 @@ function getSpreadValues(count) {
 export function marioShoot() {
     const spreadValues = getSpreadValues(mario.bullet_count);
     console.log(spreadValues)
-    let y,x = 0;
     
-    if (mario.aimDirection === 'left') {
-        x =-40
-        y = 40
-    } else if (mario.aimDirection === 'right') {
-        x = 40;
-        y = 40;
-    } else if (mario.aimDirection === 'up') {
-        x =0;
-        y = 100;
-    }
+    let yCorrection = 40;
     if (mario.crouching)  {
-        y = y - 22
+        yCorrection = yCorrection - 22
     }
-    for (const offset of spreadValues) {
-    bullets.createBullet(
-        mario.aimDirection,
-        "player",
-        mario.x + x + offset, // Apply spread on X
-        mario.y + y,
-        14,
-        8
-    );
+    if (mario.aimDirection === 'left') {
+        for (const offset of spreadValues) {
+            bullets.createBullet(
+                mario.aimDirection,
+                "player",
+                mario.x - 40,
+                mario.y + yCorrection + offset, // Apply spread on Y
+                14,
+                8
+            );
+        }
+
+    } else if (mario.aimDirection === 'right') {
+        for (const offset of spreadValues) {
+            bullets.createBullet(
+                mario.aimDirection,
+                "player",
+                mario.x + 40,
+                mario.y + yCorrection + offset, // Apply spread on Y
+                14,
+                8
+            );
+        }
+        
+    } else if (mario.aimDirection === 'up') {
+        for (const offset of spreadValues) {
+            bullets.createBullet(
+                mario.aimDirection,
+                "player",
+                mario.x + offset, // Apply spread on X
+                mario.y + 100,
+                14,
+                8
+            );
+        }
     }
 }

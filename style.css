@@ -137,6 +137,18 @@ body{
     transform: translateX(-50%) translateY(30%) scaleX(var(--cicada-scale-x, 1));
 }
 
+.vending-img {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    z-index:3;
+    right: 10px;
+    bottom: 20px;
+    /* Center the image on its x/y coordinates and flip it horizontally */
+    /* transform-origin: center; */
+    /* transform: translateX(-50%) translateY(30%) scaleX(var(--cicada-scale-x, 1)); */
+}
+
  .circle {
    border-radius: 100%;
    background-color: rgba(244, 222, 25, 0.344);
