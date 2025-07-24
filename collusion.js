@@ -4,6 +4,7 @@ import * as turtles from './turtles.js'
 import * as bullets from './bullets.js'
 import * as utils from './utils.js'
 import * as game from './game.js'
+import * as healthItem from './healthItem.js'
 
 
 export function isShot(entity) {
@@ -18,6 +19,22 @@ export function isShot(entity) {
             if (entity.health <= 0) {
                 entity.disabled = true
                 
+            }
+        }
+    }
+}
+
+export function healthItemPicked(entity) {
+    for (const candy of healthItem.healthItems) {
+        if (candy.disabled) continue;
+        if (!collusionCheck(entity, candy)) {
+            console.log(`healthItem touched ${entity.name} gained ${candy.healthAdd}`);
+            candy.disabled = true
+            candy.body.forEach(body => body.div.remove())
+            candy.dom.remove()
+            entity.health += candy.healthAdd
+            if (entity.health > 120) {
+                entity.health = 120
             }
         }
     }
