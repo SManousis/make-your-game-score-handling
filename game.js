@@ -41,7 +41,8 @@ export let gameState = {
     lives: 5,
     isMuted: false,
     frameCounter: 0,
-    gameTime: 0
+    gameTime: 0,
+    level:1,
 }
 
 let lastTime = 0;
@@ -104,6 +105,7 @@ function restartGame() {
 
     gameState.currentState = 'running';
     updateMenuVisibility();
+    stage1();
 }
 
 
