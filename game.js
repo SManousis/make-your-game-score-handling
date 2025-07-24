@@ -86,6 +86,10 @@ function restartGame() {
     //whatever is needed to reset Mario 
     //whatever is needed to reset enemies
 
+    for (const key in keysPressed) {
+    keysPressed[key] = false;
+}
+
     gameState.gameTime = 0;
     gameState.score = 0;
     scoreElement.textContent = `Score: ${gameState.score}`;
