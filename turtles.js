@@ -1,6 +1,6 @@
 import * as utils from './utils.js'
 import { mario } from './mario.js'
-import { gameArea, allEntities, removeFromAllEntities } from './game.js'
+import { gameArea, allEntities, removeFromAllEntities, updateScore } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
 
 //turtle spawning
@@ -54,6 +54,7 @@ function spawnTurtle() {
         ],
         dom: turtleElement,
         team: "enemy",
+        scoreValue: 10,
         type: "turtle",
     };
 
@@ -70,7 +71,7 @@ function turtleUpdate(turtle) {
         turtles = turtles.filter(t => t !== turtle);
 
         removeFromAllEntities(turtle)
-
+        game.updateScore(turtle.scoreValue);
     }
 
     if (turtle.state === 'walking') {
@@ -133,6 +134,7 @@ function turtleUpdate(turtle) {
             turtle.state = "disabled"
             mario.velY = 12;
             removeFromAllEntities(turtle)
+            updateScore(turtle.scoreValue);
             //make turtle disappear after a moment
             setTimeout(() => {
                 if (turtle.dom) turtle.dom.remove();

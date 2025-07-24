@@ -1,7 +1,8 @@
 import * as utils from './utils.js'
 import { mario } from './mario.js'
-import { gameArea, allEntities, removeFromAllEntities } from './game.js'
+import { gameArea, allEntities, removeFromAllEntities, updateScore } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
+import * as game from './game.js'
 
 //cicadas spawning
 export let cicadas = [];
@@ -56,6 +57,7 @@ function spawnCicada() {
         ],
         dom: cicadaElement,
         team: "enemy",
+        scoreValue: 15,
     };
 
     cicadas.push(newCicada);
@@ -69,6 +71,7 @@ function cicadaUpdate(cicada) {
         cicadas = cicadas.filter(t => t !== cicada);
 
         removeFromAllEntities(cicada)
+        updateScore(cicada.scoreValue);
     }
 
     if (cicada.state === 'walking' || cicada.state == 'jumping') {
