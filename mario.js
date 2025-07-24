@@ -30,28 +30,28 @@ export let mario = {
     lookingUp: false,
     walkCounter: 0, //a counter that counts for how many frames mario has been walking towards a direction, for walk animation purposes
     crouching: false,
-    isInvincible:false,
-    invincibilityTimer:0,
+    isInvincible: false,
+    invincibilityTimer: 0,
     body: [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20)], //his gameplay body represented in circles
     physicsPointsOffsets: [{ x: -20, y: 0 }, { x: 20, y: 0 }], //These points will be used
     drawFunc: marioVisuals, //his visual representation in the game
     updateFunc: marioUpdate,
     team: "player",
-    takeDamage:function(damage,sourceX){
-        if (this.isInvincible){
+    takeDamage: function (damage, sourceX) {
+        if (this.isInvincible) {
             return;
         }
-        this.health-=damage;
-        const KNOCKBACK_VERTICAL=13;
-        const KNOCKBACK_HORIZONTAL=20;
-        this.velY=KNOCKBACK_VERTICAL;
-        if (this.x < sourceX){
+        this.health -= damage;
+        const KNOCKBACK_VERTICAL = 13;
+        const KNOCKBACK_HORIZONTAL = 20;
+        this.velY = KNOCKBACK_VERTICAL;
+        if (this.x < sourceX) {
             this.velX -= KNOCKBACK_HORIZONTAL;
-        }else{
+        } else {
             this.velX += KNOCKBACK_HORIZONTAL;
         }
-        this.isInvincible=true;
-        this.invincibilityTimer=40;
+        this.isInvincible = true;
+        this.invincibilityTimer = 40;
     },
     reset() {
         this.x = 100;
@@ -73,14 +73,14 @@ export let currentBody = document.getElementById("mario-body-forward")
 export let currentLegs = document.getElementById("mario-legs0")
 export let marioFeetFrames = ["mario-legs0", "mario-legs1", "mario-legs2", "mario-legs3", "mario-legs3"]
 export function marioVisuals() {
-if (mario.isInvincible && Math.floor(mario.invincibilityTimer/6)%2===0){
-    currentBody.style.display='none'
-    currentLegs.style.display='none'
-    return;
-}else{
-     currentBody.style.display='block'
-    currentLegs.style.display='block'
-}
+    if (mario.isInvincible && Math.floor(mario.invincibilityTimer / 6) % 2 === 0) {
+        currentBody.style.display = 'none'
+        currentLegs.style.display = 'none'
+        return;
+    } else {
+        currentBody.style.display = 'block'
+        currentLegs.style.display = 'block'
+    }
     if (mario.lookingUp) {
         currentBody.style.opacity = "0%"
         if (mario.crouching) {
@@ -166,16 +166,21 @@ export function isMarioWalkingIntoGround() {
 
 
 export function marioUpdate() {
-    if (mario.isInvincible){
+    if (mario.isInvincible) {
         mario.invincibilityTimer--;
-        if (mario.invincibilityTimer<=0){
-            mario.isInvincible=false;
+        if (mario.invincibilityTimer <= 0) {
+            mario.isInvincible = false;
         }
     }
-    if (mario.health<=0) {
+    if (mario.health <= 0) {
         gameState.currentState = 'gameOver'
         updateMenuVisibility();
         console.log("mario died")
+    }
+
+    if (keysPressed.upgrade){
+        mario.bullet_count++
+        keysPressed.upgrade = false
     }
 
     if (keysPressed.right) {
@@ -210,13 +215,13 @@ export function marioUpdate() {
     //   impulse = mario.accel / 1.5 //to make aerial x axis acceleration harder than grounded
     // }
     if (keysPressed.left) {
-        if (mario.velX > -mario.maxSpeed){
+        if (mario.velX > -mario.maxSpeed) {
             mario.velX -= impulse
         }
     }
 
     if (keysPressed.right && !mario.is) {
-        if (mario.velX < mario.maxSpeed){
+        if (mario.velX < mario.maxSpeed) {
             mario.velX += impulse
         }
     }
@@ -242,7 +247,7 @@ export function marioUpdate() {
             mario.velX = 0
         }
     }
-    
+
 
 
     let grounded = physics.moveAndCollide(mario)
@@ -276,12 +281,69 @@ export function marioUpdate() {
 
 }
 
-export function marioShoot(){
-    if (mario.aimDirection==='left'){
-    bullets.createBullet(mario.aimDirection, "player", mario.x-40, mario.y+40, 14, 8)
-    }else if (mario.aimDirection==='right'){
-        bullets.createBullet(mario.aimDirection, "player", mario.x+40, mario.y+40, 14, 8)
-    }else if (mario.aimDirection==='up'){
-        bullets.createBullet(mario.aimDirection, "player", mario.x, mario.y+100, 14, 8)
+// Helper function to generate symmetric spread values
+function getSpreadValues(count) {
+    const result = [];
+    const odd = count % 2 == 1
+
+    const spread = 50 / (1+(count/100))
+
+    if (odd) {
+        count--
+        result.push(0)
+    }
+    for (let i = 1; i <= count / 2; i++) {
+        if (!odd && i == 1) {
+            result.push(i * spread/2)
+            result.push(-i * spread/2)
+        } else {
+            result.push(i * spread)
+            result.push(-i * spread)
+        }
+
+    }
+
+    return result;
+}
+
+export function marioShoot() {
+    const spreadValues = getSpreadValues(mario.bullet_count);
+    console.log(spreadValues)
+
+    if (mario.aimDirection === 'left') {
+        for (const offset of spreadValues) {
+            bullets.createBullet(
+                mario.aimDirection,
+                "player",
+                mario.x - 40,
+                mario.y + 40 + offset, // Apply spread on Y
+                14,
+                8
+            );
+        }
+
+    } else if (mario.aimDirection === 'right') {
+        for (const offset of spreadValues) {
+            bullets.createBullet(
+                mario.aimDirection,
+                "player",
+                mario.x + 40,
+                mario.y + 40 + offset, // Apply spread on Y
+                14,
+                8
+            );
+        }
+
+    } else if (mario.aimDirection === 'up') {
+        for (const offset of spreadValues) {
+            bullets.createBullet(
+                mario.aimDirection,
+                "player",
+                mario.x + offset, // Apply spread on X
+                mario.y + 100,
+                14,
+                8
+            );
+        }
     }
 }

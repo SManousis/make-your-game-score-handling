@@ -1,6 +1,6 @@
 import * as utils from "./utils.js"
 import * as mario from "./mario.js"
-import { allEntities, removeFromAllEntities } from './game.js'
+import { allEntities, gameArea, removeFromAllEntities } from './game.js'
 
 //dirTypes can be down, up, right, left, target
 //team = player, enemy
@@ -59,7 +59,9 @@ export function createBullet(dirType, team, x, y, speed, damage = 10, targetX = 
 
 export function bulletUpdate(bullet) {
     utils.moveUnit(bullet, bullet.velX, bullet.velY)
-    if (bullet.y < 0) {
+  
+    if (bullet.y < -300 || bullet.x < -300 || bullet.y > gameArea.offsetHeight + 300 || bullet.x > gameArea.offsetWidth + 300) {
+        
         bullet.disabled = true
         bullet.dom.remove()
         removeFromAllBullets(bullet)

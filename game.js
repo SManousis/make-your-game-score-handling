@@ -1,4 +1,4 @@
-import {mario,marioShoot} from './mario.js'
+import { mario, marioShoot } from './mario.js'
 //import * as floaters from './floaters.js'
 import * as cupids from './cupids.js'
 import * as turtles from './turtles.js'
@@ -6,7 +6,7 @@ import * as cicadas from './cicadas.js'
 import * as walkables from './walkables.js'
 import * as bullets from './bullets.js'
 import * as collusion from './collusion.js'
-import { spawnSwarm } from './stagecontroller.js'
+import { spawnSwarm, stage1 } from './stagecontroller.js'
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -16,7 +16,7 @@ const pauseMenu = document.getElementById('pause-menu');
 const scoreElement = document.getElementById('score');
 const livesElement = document.getElementById('lives');
 const gameOverMenu = document.getElementById('game-over-menu');
-const timeCounterElement=document.getElementById('time-counter');
+const timeCounterElement = document.getElementById('time-counter');
 
 const playButton = document.getElementById('play-button');
 const resumeButton = document.getElementById('resume-button');
@@ -36,10 +36,10 @@ export let gameState = {
     lives: 5,
     isMuted: false,
     frameCounter: 0,
-    gameTime:0
+    gameTime: 0
 }
 
-let lastTime=0;
+let lastTime = 0;
 
 export let allEntities = []
 
@@ -79,14 +79,14 @@ function restartGame() {
     mario.reset();
     cupids.reset();
     allEntities = [];
-  
+
     bullets.allBullets.length = 0;
     allEntities.push(mario)
     spawnSwarm(30, cupids.createCupid, 5, 400)
     //whatever is needed to reset Mario 
     //whatever is needed to reset enemies
 
-    gameState.gameTime=0;
+    gameState.gameTime = 0;
     gameState.score = 0;
     scoreElement.textContent = `Score: ${gameState.score}`;
 
@@ -105,11 +105,10 @@ export const keysPressed = {
     left: false,
     right: false,
     up: false,
-
     down: false,
     space: false,
-
-    autofire:false,
+    autofire: false,
+    upgrade: false,
 };
 
 //--- EVENT LISTENERS ----
@@ -130,54 +129,58 @@ resumeButton.addEventListener('click', () => {
     updateMenuVisibility();
 });
 
-restartButton.addEventListener('click',()=>{
+restartButton.addEventListener('click', () => {
     restartGame();
 });
 
 document.querySelectorAll('#back-to-menu-button').forEach(btn => {
     btn.addEventListener('click', () => {
-      gameState.currentState = 'mainMenu';
-      updateMenuVisibility();
+        gameState.currentState = 'mainMenu';
+        updateMenuVisibility();
     });
-  });
+});
 
-  document.querySelectorAll('#restart-button').forEach(btn => {
+document.querySelectorAll('#restart-button').forEach(btn => {
     btn.addEventListener('click', () => {
-      restartGame();
+        restartGame();
     });
-  });
+});
 
-function toggleMute(){
-    gameState.isMuted=!gameState.isMuted;
-    const muteText=gameState.isMuted?"Unmute Sound":"Mute Sound";
-    mainMuteButton.textContent=muteText;
-    pauseMuteButton.textContent=muteText;
-    gameOverMuteButton.textContent=muteText;
+function toggleMute() {
+    gameState.isMuted = !gameState.isMuted;
+    const muteText = gameState.isMuted ? "Unmute Sound" : "Mute Sound";
+    mainMuteButton.textContent = muteText;
+    pauseMuteButton.textContent = muteText;
+    gameOverMuteButton.textContent = muteText;
     //add actual muting logic
 }
-mainMuteButton.addEventListener('click',toggleMute);
-pauseMuteButton.addEventListener('click',toggleMute);
-gameOverMuteButton.addEventListener('click',toggleMute);
+mainMuteButton.addEventListener('click', toggleMute);
+pauseMuteButton.addEventListener('click', toggleMute);
+gameOverMuteButton.addEventListener('click', toggleMute);
 // Listen for key presses
 document.addEventListener('keydown', (event) => {
-    if (event.key.toLowerCase() === 'p' && (gameState.currentState === 'running' || gameState.currentState === 'paused' ))  {
+    if (event.key.toLowerCase() === 'p' && (gameState.currentState === 'running' || gameState.currentState === 'paused')) {
         if (gameState.currentState === 'running') {
 
             gameState.currentState = 'paused';
 
         } else if (gameState.currentState === 'paused') {
             gameState.currentState = 'running';
-          
+
         }
-          updateMenuVisibility();
+        updateMenuVisibility();
     }
     if (event.key.toLowerCase() === 'a') {
         keysPressed.autofire = !keysPressed.autofire;
     }
 
-if (event.key.toLocaleLowerCase()==='f'){
-    marioShoot();
-}
+    if (event.key.toLowerCase() === 'u') {
+        keysPressed.upgrade = !keysPressed.upgrade;
+    }
+
+    if (event.key.toLocaleLowerCase() === 'f') {
+        marioShoot();
+    }
 
     if (event.key === 'ArrowLeft') {
         keysPressed.left = true;
@@ -232,17 +235,17 @@ let prev = 0
 // The main game loop
 function gameLoop(currentTime) {
 
-    if (lastTime===0){
-        lastTime=currentTime; //initialize on first frame
+    if (lastTime === 0) {
+        lastTime = currentTime; //initialize on first frame
     }
-    const deltaTime=currentTime-lastTime;
-    lastTime=currentTime;
+    const deltaTime = currentTime - lastTime;
+    lastTime = currentTime;
 
-    
+
     // console.log("Drawing frame", counter);
     // console.log(gameState.currentState)
     if (gameState.currentState === 'running') {
-        gameState.gameTime+=deltaTime;
+        gameState.gameTime += deltaTime;
 
         turtles.turtleSpawner();
         cicadas.spawner();
@@ -252,7 +255,7 @@ function gameLoop(currentTime) {
         draw();
     }
     counter++
-    
+
     requestAnimationFrame(gameLoop);
 }
 
@@ -267,27 +270,27 @@ setInterval(show, 1000)
 // Update the game state, only physics
 function update() {
     // mario movement
-    allEntities.forEach(entity=>{
+    allEntities.forEach(entity => {
         collusion.isShot(entity)
-})
+    })
     //collusion.isShot(mario);
-    
+
     //running all entities' update function
     for (let entity of allEntities) {
-      if (entity.updateFunc) entity.updateFunc(entity);
+        if (entity.updateFunc) entity.updateFunc(entity);
     }
 
     gameState.frameCounter++
-    
+
 }
 
 // Draw the game, only updating visual elements based on their objects
 export function draw() {
-const totalSeconds=Math.floor(gameState.gameTime/1000);
-const minutes=Math.floor(totalSeconds/60);
-const seconds=totalSeconds %60;
-const paddedSeconds=seconds.toString().padStart(2,'0');
-timeCounterElement.textContent=`Time: ${minutes}:${paddedSeconds}`;
+    const totalSeconds = Math.floor(gameState.gameTime / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const paddedSeconds = seconds.toString().padStart(2, '0');
+    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} debug:${bullets.allBullets.length}`;
 
 
 
@@ -301,19 +304,20 @@ timeCounterElement.textContent=`Time: ${minutes}:${paddedSeconds}`;
         if (entity.drawFunc != undefined) {
             entity.drawFunc()
         }
-        
+
     }
-    
+
 }
 
 
 updateMenuVisibility();
 
-spawnSwarm(30, cupids.createCupid, 5, 400)
+// spawnSwarm(30, cupids.createCupid, 5, 400)
 // Start the game
 gameLoop();
 
-export function removeFromAllEntities(entity){
+export function removeFromAllEntities(entity) {
     allEntities = allEntities.filter(t => t !== entity);
 }
 
+stage1()

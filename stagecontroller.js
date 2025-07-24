@@ -1,7 +1,31 @@
+import { createCupid, cupids } from "./cupids.js"
 import { gameArea } from "./game.js"
 
-let stage1 = []
+export async function stage1(){
+    let wait = false
+    spawnSwarm(5, createCupid, 5, 200)
+    await waitForCondition(() => cupids.length == 0)
 
+    wait = true
+    setTimeout(() => {wait = false; spawnSwarm(10, createCupid, 5, 500)}, 1000)
+    await waitForCondition(() => cupids.length == 0 && !wait)
+
+    wait = true
+    setTimeout(() => {wait = false; spawnSwarm(20, createCupid, 10, 400)}, 1000)
+    await waitForCondition(() => cupids.length == 0 && !wait)
+
+    wait = true
+    setTimeout(() => {wait = false; spawnSwarm(40, createCupid, 20, 300)}, 1000)
+    await waitForCondition(() => cupids.length == 0 && !wait)
+
+    wait = true
+    setTimeout(() => {wait = false; spawnSwarm(80, createCupid, 25, 200)}, 3000)
+    await waitForCondition(() => cupids.length == 0 && !wait)
+
+    wait = true
+    setTimeout(() => {wait = false; spawnSwarm(160, createCupid, 35, 100)}, 4000)
+    await waitForCondition(() => cupids.length == 0 && !wait)
+}
 
 
 export function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0) {
@@ -29,5 +53,21 @@ export function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0)
 }
 
 export function spawner(x, y, unit, interval){
+    
+}
 
+
+
+
+
+// Helper to wait for a condition to become true
+function waitForCondition(conditionFn, checkInterval = 100) {
+    return new Promise((resolve) => {
+        const interval = setInterval(() => {
+            if (conditionFn()) {
+                clearInterval(interval);
+                resolve();
+            }
+        }, checkInterval);
+    });
 }
