@@ -223,4 +223,7 @@ export function opDebounce(fn, wait, options = {}) {
     };
 }
 
+export function getRandomInt(min = 60, max = 360) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 

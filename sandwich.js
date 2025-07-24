@@ -1,16 +1,22 @@
 import * as utils from './utils.js'
-import { gameArea, allEntities,removeFromAllEntities } from './game.js';
+import { gameArea, allEntities, removeFromAllEntities } from './game.js';
 import { mario } from './mario.js';
 import { moveAndCollide } from './physicsStep.js';
 
 export function shootSandwich(dir, vendX, vendY) {
+    const state = Math.random() < 0.5 ? 'friend' : 'enemy';
     const sandwichElement = document.createElement('img');
     sandwichElement.className = 'sandwich-img';
-    sandwichElement.src = 'assets/items/sandwich.png'
+    if (state === 'friend') {
+        sandwichElement.src = 'assets/items/sandwich.png'
+    } else {
+        sandwichElement.src = 'assets/items/rotten_sandwich.png'
+    }
     gameArea.appendChild(sandwichElement);
 
-    const sndState = Math.random() < 0.5 ? 'friend' : 'enemy';
-    const velXsign = dir === 'left' ? -1 : 1;
+    const randomSign = dir === 'left' ? -1 : 1;
+    const velX = utils.getRandomInt(5, 20)* randomSign
+    const velY = utils.getRandomInt(10, 25)
 
     const newSandwich = {
         name: "sandwich",
@@ -19,15 +25,15 @@ export function shootSandwich(dir, vendX, vendY) {
         damage: 50,
         maxspeed: 1.5,
         gravity: 0.8,
-        state: sndState, //friend, enemy, disabled
-        velX: 5 * velXsign,
-        velY: 10,
+        state: state, //friend, enemy, disabled
+        velX: velX,
+        velY: velY,
         x: vendX,
         y: vendY,
         width: 50,
         height: 50,
         body: [
-            utils.createCircle(vendX+25, vendY+25, 25)
+            utils.createCircle(vendX + 25, vendY + 25, 25)
         ],
         drawFunc: function () { sandwichVisuals(this) },
         updateFunc: function () { sandwichUpdate(this) },

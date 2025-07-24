@@ -13,7 +13,7 @@ export function spawner() {
     spawnCooldown--;
     if (spawnCooldown <= 0 && cicadas.length < max_cicadas) {
         spawnCicada();
-        spawnCooldown = getRandomInt();
+        spawnCooldown = utils.getRandomInt();
     }
 }
 
@@ -83,7 +83,7 @@ function cicadaUpdate(cicada) {
             } else {
                 cicada.velX = -(cicada.horizontal_jump_power * (Math.random() + 0.8))
             }
-            cicada.jumpCooldown = getRandomInt();
+            cicada.jumpCooldown = utils.getRandomInt();
             cicada.state = 'jumping'
         }
 
@@ -184,8 +184,4 @@ function cicadaVisuals(cicada) {
         cicada.dom.style.height = '20px'
         cicada.dom.style.opacity = '0.7'
     }
-}
-
-function getRandomInt(min = 60, max = 360) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
