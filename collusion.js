@@ -15,7 +15,9 @@ export function isShot(entity) {
             bullet.disabled = true
             bullet.body.forEach(body => body.div.remove())
             bullet.dom.remove()
+            if (entity.type !== "turtle"){
             entity.health -= bullet.damage
+            }
             if (entity.health <= 0) {
                 entity.disabled = true
                 

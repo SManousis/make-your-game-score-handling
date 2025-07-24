@@ -303,7 +303,7 @@ function update() {
     // mario movement
     
     allEntities.forEach(entity => {
-        if (entity.type !== "healthItem"){
+        if (entity.type !== "healthItem" && entity.type !== "bullet"){
         collusion.isShot(entity)
         }
         if (entity.name === "mario") {

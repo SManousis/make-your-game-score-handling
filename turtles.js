@@ -54,6 +54,7 @@ function spawnTurtle() {
         ],
         dom: turtleElement,
         team: "enemy",
+        type: "turtle",
     };
 
     turtles.push(newTurtle);
