@@ -339,6 +339,11 @@ export function draw() {
     for (let entity of allEntities) {
         //body debug visual update
         for (const shape of entity.body) {
+            if (shape.active == false){
+                shape.div.style.opacity = "0%"
+            }else{
+                shape.div.style.opacity = "100%"
+            }
             shape.div.style.left = shape.x + 'px';
             shape.div.style.bottom = shape.y + 'px';
         }

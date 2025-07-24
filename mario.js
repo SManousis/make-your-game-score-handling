@@ -74,15 +74,15 @@ export let currentLegs = document.getElementById("mario-legs0")
 export let marioFeetFrames = ["mario-legs0", "mario-legs1", "mario-legs2", "mario-legs3", "mario-legs3"]
 export function marioVisuals() {
     if (mario.crouching) {
-        mario.body[0].div.style.display = "none";
-        mario.body[1].div.style.display = "none";
-        mario.body[2].div.style.display = "block";
-        mario.body[3].div.style.display = "block";
+        mario.body[0].active = false;
+        mario.body[1].active = false;
+        mario.body[2].active = true;
+        mario.body[3].active = true;
     } else {
-        mario.body[0].div.style.display = "block";
-        mario.body[1].div.style.display = "block";
-        mario.body[2].div.style.display = "none";
-        mario.body[3].div.style.display = "none";
+        mario.body[0].active = true;
+        mario.body[1].active = true;
+        mario.body[2].active = false;
+        mario.body[3].active = false;
     }
     if (mario.isInvincible && Math.floor(mario.invincibilityTimer / 6) % 2 === 0) {
         currentBody.style.display = 'none'
