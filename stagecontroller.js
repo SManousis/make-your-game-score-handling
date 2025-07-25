@@ -1,35 +1,33 @@
+import { spawnCicada } from "./cicadas.js"
 import { createCupid, cupids } from "./cupids.js"
-import { gameArea } from "./game.js"
+import {  } from "./game.js"
 
+const gameArea = document.getElementById('game-area')
 
 export async function stage1(){
-    let wait = false
-    spawnSwarm(5, createCupid, 5, 200)
-    await waitForCondition(() => cupids.length == 0)
+     console.log("start")
+    await spawnSwarm(5, createCupid, 5, 200, cupids)
+     console.log("bet")
+    await sleep(1000)
+    console.log("wtf")
+    await spawnSwarm(10, createCupid, 5, 500, cupids)
+    await sleep(1000)
+  
+    await spawnSwarm(20, createCupid, 10, 400, cupids)
+    await sleep(1000)
 
-    wait = true
-    setTimeout(() => {wait = false; spawnSwarm(10, createCupid, 5, 500)}, 1000)
-    await waitForCondition(() => cupids.length == 0 && !wait)
+    await spawnSwarm(40, createCupid, 20, 300, cupids)
+    await sleep(1000)
 
-    wait = true
-    setTimeout(() => {wait = false; spawnSwarm(20, createCupid, 10, 400)}, 1000)
-    await waitForCondition(() => cupids.length == 0 && !wait)
+    await spawnSwarm(80, createCupid, 25, 200, cupids)
+    await sleep(1000)
 
-    wait = true
-    setTimeout(() => {wait = false; spawnSwarm(40, createCupid, 20, 300)}, 1000)
-    await waitForCondition(() => cupids.length == 0 && !wait)
-
-    wait = true
-    setTimeout(() => {wait = false; spawnSwarm(80, createCupid, 25, 200)}, 3000)
-    await waitForCondition(() => cupids.length == 0 && !wait)
-
-    wait = true
-    setTimeout(() => {wait = false; spawnSwarm(160, createCupid, 35, 100)}, 4000)
-    await waitForCondition(() => cupids.length == 0 && !wait)
+    await spawnSwarm(160, createCupid, 35, 100, cupids)
+    await sleep(1000)
 }
 
 
-export function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0) {
+async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, array) {
     const rows = count / maxInRow
     const leftOver = (rows - parseInt(rows)) * maxInRow
     const exactRows = parseInt(rows)
@@ -51,18 +49,51 @@ export function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0)
         spawnUnitFunc(startX + x * (endX - startX) / (leftOver-1), -downOffset + gameArea.offsetWidth - (exactRows * ySeparation), unitIndex)
         unitIndex++
     }
+
+    console.log(array.length)
+    await waitForCondition(() => {console.log("its: ",array.length);return array.length == 0})
 }
 
-export function spawner(x, y, unit, interval){
+
+const spawnPositions = {
+    left: {x: -50, y: 0},
+    topleft: {x: -50, y: 200},
+    right: {x:  gameArea.offsetWidth + 50, y: 0},
+    topright: {x:  gameArea.offsetWidth + 50, y: 200},
+}
+
+async function sleep(ms){
+    await new Promise(r => setTimeout(r, ms));
+}
+
+
+function startSpawner(position, x, y, spawnUnitFunc, milliSecondWait){
+    let interval = setInterval(() => {
+        if (spawnPositions.hasOwnProperty(position)){
+            spawnUnitFunc(spawnPositions[position].x, spawnPositions[position].y)
+        }else{
+            spawnUnitFunc(x, y)
+        }
+        
+        console.log('spawning')
+    }, milliSecondWait)
+
+    return interval
+}
+
+
+function stopSpawner(interval){
+    clearInterval(interval)
+}
+
+
+function spawnWave(func, array){
     
 }
 
 
-
-
-
 // Helper to wait for a condition to become true
-function waitForCondition(conditionFn, checkInterval = 100) {
+function waitForCondition(conditionFn, checkInterval = 200) {
     return new Promise((resolve) => {
         const interval = setInterval(() => {
             if (conditionFn()) {
@@ -72,3 +103,6 @@ function waitForCondition(conditionFn, checkInterval = 100) {
         }, checkInterval);
     });
 }
+
+
+

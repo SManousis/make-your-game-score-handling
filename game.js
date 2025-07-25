@@ -6,9 +6,10 @@ import * as cicadas from './cicadas.js'
 import * as walkables from './walkables.js'
 import * as bullets from './bullets.js'
 import * as collusion from './collusion.js'
-import { spawnSwarm, stage1 } from './stagecontroller.js'
+import { stage1 } from './stagecontroller.js'
 import { createVendingStatic } from "./vending.js"
 import { healthItems } from './healthItem.js'
+import * as utils from "./utils.js"
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -94,7 +95,7 @@ function restartGame() {
     bullets.allBullets.length = 0;
     healthItems.lenght = 0;
     allEntities.push(mario)
-    spawnSwarm(30, cupids.createCupid, 5, 400)
+    // spawnSwarm(30, cupids.createCupid, 5, 400)
     //whatever is needed to reset Mario 
     //whatever is needed to reset enemies
 
@@ -281,7 +282,7 @@ function gameLoop(currentTime) {
         gameState.gameTime += deltaTime;
 
         turtles.turtleSpawner();
-        cicadas.spawner();
+        // cicadas.spawner();
         update();
     }
     if (gameState.currentState === 'running' || gameState.currentState === 'paused' || gameState.currentState === 'gameOver') {
@@ -374,7 +375,7 @@ updateMenuVisibility();
 gameLoop();
 
 export function removeFromAllEntities(entity) {
-    allEntities = allEntities.filter(t => t !== entity);
+    utils.removeUnitFromArray(entity, allEntities)
 }
 createVendingStatic()
 stage1()

@@ -71,7 +71,7 @@ export function cupidUpdate(cupid) {
     if (cupid.health <= 0) {
         if (cupid.dom) cupid.dom.remove();
         cupid.body.forEach(b => { if (b.div) b.div.remove(); })
-        cupids = cupids.filter(t => t !== cupid);
+        utils.removeUnitFromArray(cupid, cupids)
 
         game.removeFromAllEntities(cupid)
         game.updateScore(cupid.scoreValue);

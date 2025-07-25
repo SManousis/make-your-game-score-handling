@@ -10,24 +10,24 @@ let DEAD_ZONE = 40;
 let spawnCooldown = 0;
 const max_cicadas = 2;
 
-export function spawner() {
-    spawnCooldown--;
-    if (spawnCooldown <= 0 && cicadas.length < max_cicadas) {
-        spawnCicada();
-        spawnCooldown = utils.getRandomInt();
-    }
-}
+// export function spawner() {
+//     spawnCooldown--;
+//     if (spawnCooldown <= 0 && cicadas.length < max_cicadas) {
+//         spawnCicada();
+//         spawnCooldown = utils.getRandomInt();
+//     }
+// }
 
-function spawnCicada() {
+export function spawnCicada(x, y) {
     const cicadaElement = document.createElement('img')
     cicadaElement.className = 'cicada-img';
     cicadaElement.src = 'assets/enemies/cicada.png';
     gameArea.appendChild(cicadaElement);
 
-    //choose randomly between left and right
-    const spawnSide = Math.random() < 0.5 ? 'left' : 'right';
-    const startX = spawnSide === 'left' ? -50 : gameArea.offsetWidth + 50;
-    const startY = 1000;
+    // //choose randomly between left and right
+    // const spawnSide = Math.random() < 0.5 ? 'left' : 'right';
+    // const startX = spawnSide === 'left' ? -50 : gameArea.offsetWidth + 50;
+    // const startY = 1000;
 
     const newCicada = {
         name: "cicada",
@@ -41,13 +41,13 @@ function spawnCicada() {
         jump_power: 20,
         horizontal_jump_power: 10,
         jumpCooldown: 0,
-        x: startX,
-        y: startY,
+        x: x,
+        y: y,
         width: 80,
         height: 50,
-        lookingDir: spawnSide === 'left' ? 'right' : 'left',
+        lookingDir: 'left',
         body: [
-            utils.createRect(startX - (120 / 2), startY, 120, 45)
+            utils.createRect(x - (120 / 2), y, 120, 45)
         ],
         drawFunc: function () { cicadaVisuals(this) },
         updateFunc: function () { cicadaUpdate(this) },
@@ -68,7 +68,7 @@ function cicadaUpdate(cicada) {
     if (cicada.health <= 0) {
         if (cicada.dom) cicada.dom.remove();
         cicada.body.forEach(b => { if (b.div) b.div.remove(); })
-        cicadas = cicadas.filter(t => t !== cicada);
+        utils.removeUnitFromArray(cicadas, cicadas)
 
         removeFromAllEntities(cicada)
         updateScore(cicada.scoreValue);

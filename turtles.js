@@ -69,7 +69,8 @@ function turtleUpdate(turtle) {
     if (turtle.health <= 0) {
         if (turtle.dom) turtle.dom.remove();
         turtle.body.forEach(b => { if (b.div) b.div.remove(); })
-        turtles = turtles.filter(t => t !== turtle);
+ 
+        utils.removeUnitFromArray(turtle, turtles)
 
         removeFromAllEntities(turtle)
         game.updateScore(turtle.scoreValue);
@@ -140,7 +141,8 @@ function turtleUpdate(turtle) {
             setTimeout(() => {
                 if (turtle.dom) turtle.dom.remove();
                 turtle.body.forEach(b => { if (b.div) b.div.remove(); })
-                turtles = turtles.filter(t => t !== turtle);
+                utils.removeUnitFromArray(turtle, turtles)
+
                 removeFromAllEntities(turtle)
             }, 300)
         } else {

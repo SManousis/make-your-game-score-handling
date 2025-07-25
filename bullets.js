@@ -111,6 +111,6 @@ export function bulletVisuals(bullet) {
 export let allBullets = [];
 
 export function removeFromAllBullets(bullet) {
-    allBullets = allBullets.filter(t => t !== bullet);
+    utils.removeUnitFromArray(bullet, allBullets)
     bullet.body.forEach(b => { if (b.div) b.div.remove(); })
 }
