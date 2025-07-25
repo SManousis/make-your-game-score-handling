@@ -3,6 +3,7 @@ import * as mario from './mario.js'
 import * as game from './game.js'
 import * as bullets from './bullets.js'
 import * as healthItem from './healthItem.js'
+import * as walkables from './walkables.js'
 
 export let cupids = [];
 
@@ -131,6 +132,62 @@ export function cupidUpdate(cupid) {
 
     if (parseInt(Math.random() * 6000) == 0) {
         let candy = healthItem.createHealthItem(cupid.x, cupid.y - 60, 20)
+    }
+
+    for (let walkable of walkables.walkables) {
+        for (let walkableBody of walkable.body) {
+            for (let cupidBody of cupid.body) {
+                if (utils.IsBodyCollidingWithBody(cupidBody, walkableBody) && !cupid.hasExploded) {
+                    cupid.velY = 0;
+                    cupid.velX = 0;
+                    cupid.hasExploded = true; // prevent future explosions
+    
+                    setTimeout(() => {
+                        const explosionCircle = utils.createCircle(cupid.x, cupid.y, 150);
+                        if (explosionCircle.div) explosionCircle.div.style.background = "rgba(255, 0, 0, 0.75)";
+                        const explosionDamage = 50;
+    
+                        for (let entity of game.allEntities) {
+                            if (entity === cupid) continue;
+                            if (entity.disabled) continue;
+    
+                            for (let body of entity.body) {
+                                if (utils.IsBodyCollidingWithBody(body, explosionCircle)) {
+                                    entity.health -= explosionDamage;
+    
+                                    // Mario-specific check
+                                    if (entity.name === "mario" && entity.health <= 0 && !entity.disabled) {
+                                        entity.disabled = true;
+                                        game.gameState.currentState = 'gameOver';
+                                        game.updateMenuVisibility();
+                                    }
+    
+                                    if (entity.health <= 0) {
+                                        entity.disabled = true;
+                                        if (entity.dom) entity.dom.remove();
+                                        entity.body.forEach(b => {
+                                            if (b.div) b.div.remove();
+                                            b.active = false;
+                                        });
+                                        const idx = game.allEntities.indexOf(entity);
+                                        if (idx !== -1) game.allEntities.splice(idx, 1);
+                                    }
+                                    break; // no need to keep checking other bodies of same entity
+                                }
+                            }
+                        }
+    
+                        if (explosionCircle.div) explosionCircle.div.remove();
+                        if (cupid.dom) cupid.dom.remove();
+                        cupid.body.forEach(b => { if (b.div) b.div.remove(); });
+                        const idx = game.allEntities.indexOf(cupid);
+                        if (idx !== -1) game.allEntities.splice(idx, 1);
+                        cupids = cupids.filter(t => t !== cupid);
+    
+                    }, 2000); // Shorten delay for explosion (e.g., 500 ms)
+                }
+            }
+        }
     }
 }
 
