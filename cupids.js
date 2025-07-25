@@ -40,6 +40,7 @@ export function createCupid(x, y, index) {
         parallelMoveCount: 0,
         team: "enemy",
         scoreValue: 10,
+        hasExploded: false,
         reset() {
             this.health = 20;
             this.moveSpeed = 0.1;
