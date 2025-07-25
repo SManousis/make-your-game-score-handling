@@ -1,70 +1,79 @@
-html, body{
+html,
+body {
   overflow: hidden;
 }
 
-body{
+body {
   margin-top: -9%;
   transform: scale(0.8);
 }
 
 #game-area {
-   width: 1800px;
-   height: 1000px;
-   background-color: #000;
-   position: relative;
-   overflow: hidden;
-   margin-top: 100px;
-   margin-left: auto;
-   margin-right: auto;
- }
+  width: 1800px;
+  height: 1000px;
+  background-color: #000;
+  position: relative;
+  overflow: hidden;
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 #score {
-    position: absolute; /* Position relative to the nearest positioned ancestor */
-    top: 10px;
-    left: 10px;
-    color: white;
-    font-size: 24px;
-    font-family: Arial, sans-serif;
-    font-weight: bold;
-    /* This z-index ensures it's above the game content but below the menus */
-    z-index: 10; 
+  position: absolute;
+  /* Position relative to the nearest positioned ancestor */
+  top: 10px;
+  left: 10px;
+  color: white;
+  font-size: 24px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  /* This z-index ensures it's above the game content but below the menus */
+  z-index: 10;
 }
 
 #lives {
-    position: absolute; /* Position relative to the nearest positioned ancestor */
-    top: 10px;
-    right: 10px;
-    color: white;
-    font-size: 24px;
-    font-family: Arial, sans-serif;
-    font-weight: bold;
-    z-index: 10;
+  position: absolute;
+  /* Position relative to the nearest positioned ancestor */
+  top: 10px;
+  right: 10px;
+  color: white;
+  font-size: 24px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  z-index: 10;
 }
 
 #time-counter {
-    position: absolute; /* Position relative to the game-area */
-    top: 10px;
-    left: 50%; /* Move the element's left edge to the center of the screen */
-    /* This transform pulls the element back by half of its own width, perfectly centering it */
-    transform: translateX(-50%); 
-    
-    color: white;
-    font-size: 24px;
-    font-family: Arial, sans-serif;
-    font-weight: bold;
-    z-index: 10;
+  position: absolute;
+  /* Position relative to the game-area */
+  top: 10px;
+  left: 50%;
+  /* Move the element's left edge to the center of the screen */
+  /* This transform pulls the element back by half of its own width, perfectly centering it */
+  transform: translateX(-50%);
+
+  color: white;
+  font-size: 24px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  z-index: 10;
 }
+
 #mario-healthBar-container {
   position: absolute;
   /*left: 120px;    Adjust based on Mario's position */
   /*top: 60px;     Adjust based on Mario's position */
-  width: 60px;  /* Width of the bar container */
+  width: 60px;
+  /* Width of the bar container */
   height: 10px;
-  background: #222; /* (optional) dark background behind health */
+  background: #222;
+  /* (optional) dark background behind health */
   border: 1px solid #333;
   border-radius: 6px;
-    z-index: 11;
+  z-index: 11;
 }
+
 #mario-healthBar {
   width: 100%;
   height: 100%;
@@ -75,188 +84,208 @@ body{
 }
 
 
-  :root {
-    --mario-x: 0px;
-    --mario-y: 0px;
-    --mario-scale-x: 1;
+:root {
+  --mario-x: 0px;
+  --mario-y: 0px;
+  --mario-scale-x: 1;
 
-    --cupid-x: 0px;
-    --cupid-y: 0px;
-    --cupid-scale-x: 1;
-  }
-  .bullet-img {
-    width: 5px;
-    height: 40px;
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    transform: translate(calc(-52% + var(--bullet-x)), calc(20% + var(--bullet-y))) rotate(var(--bullet-rotation, 0deg));
-    opacity: 100%;
-    z-index: 10;
-  }
-  .mario-img {
-    width: 150px;
-    height: 150px;
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    transform: translate(calc(-52% + var(--mario-x)), calc(20% + var(--mario-y))) scaleX(var(--mario-scale-x));  will-change: transform;
-    opacity: 0%;  will-change: opacity;
-    z-index: 9;
-  }
+  --cupid-x: 0px;
+  --cupid-y: 0px;
+  --cupid-scale-x: 1;
 
-  .cupid-img {
-    position: absolute;
-    width: 70px;
-    height: 70px;
-    position: absolute;
-    left: 0px;
-    bottom: 0px;
-    transform: translate(calc(-52% + var(--cupid-x)), calc(20% + var(--cupid-y)));  will-change: transform;
-    opacity: 100%;
-    z-index: 8;
-  }
- .health-item-img {
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    transform: translate(calc(-52% + var(--health-item-x)), calc(20% + var(--health-item-y)));
-    opacity: 100%;
-    z-index: 10;
-  } 
-  
-.turtle-img {
-    position: absolute;
-    width: 120px;
-    height: 120px;
-    z-index:7;
-    /* set by turtleVisuals */
-    left: var(--turtle-x);
-    bottom: var(--turtle-y);
+  --shape-x: 0px;
+  --shape-y: 0px;
 
-    /* Center the image on its x/y coordinates and flip it horizontally */
-    transform-origin: center;
-    transform: translateX(-50%) translateY(30%) scaleX(var(--turtle-scale-x, 1));
+  --x: 0px;
+  --y: 0px;
+
+}
+
+.bullet-img {
+  width: 5px;
+  height: 40px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  transform: translate(calc(-52% + var(--bullet-x)), calc(20% + var(--bullet-y))) rotate(var(--bullet-rotation, 0deg));
+  opacity: 100%;
+  z-index: 10;
+}
+
+.mario-img {
+  width: 150px;
+  height: 150px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  transform: translate(calc(-52% + var(--mario-x)), calc(20% + var(--mario-y))) scaleX(var(--mario-scale-x));
+  will-change: transform;
+  opacity: 0%;
+  will-change: opacity;
+  z-index: 9;
+}
+
+.cupid-img {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  transform: translate(calc(-52% + var(--cupid-x)), calc(20% + var(--cupid-y)));
+  will-change: transform;
+  opacity: 100%;
+  z-index: 8;
 }
 
 .cicada-img {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    z-index:7;
-    /* set by cicadaVisuals */
-    left: var(--cicada-x);
-    bottom: var(--cicada-y);
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  z-index: 7;
+  /* set by cicadaVisuals */
+  left: var(--cicada-x);
+  bottom: var(--cicada-y);
 
-    /* Center the image on its x/y coordinates and flip it horizontally */
-    transform-origin: center;
-    transform: translateX(-50%) translateY(30%) scaleX(var(--cicada-scale-x, 1));
+  /* Center the image on its x/y coordinates and flip it horizontally */
+  transform-origin: center;
+  transform: translateX(-50%) translateY(30%) scaleX(var(--cicada-scale-x, 1));
 }
+
+
+.health-item-img {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  transform: translate(calc(-52% + var(--health-item-x)), calc(20% + var(--health-item-y)));
+  opacity: 100%;
+  z-index: 10;
+}
+
+.turtle-img {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  z-index: 7;
+  /* set by turtleVisuals */
+  left: var(--turtle-x);
+  bottom: var(--turtle-y);
+
+  /* Center the image on its x/y coordinates and flip it horizontally */
+  transform-origin: center;
+  transform: translateX(-50%) translateY(30%) scaleX(var(--turtle-scale-x, 1));
+}
+
 
 .vending-img {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    z-index:3;
-    right: 10px;
-    bottom: 20px;
-    /* Center the image on its x/y coordinates and flip it horizontally */
-    /* transform-origin: center; */
-    /* transform: translateX(-50%) translateY(30%) scaleX(var(--cicada-scale-x, 1)); */
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  z-index: 3;
+  right: 10px;
+  bottom: 20px;
+  /* Center the image on its x/y coordinates and flip it horizontally */
+  /* transform-origin: center; */
+  /* transform: translateX(-50%) translateY(30%) scaleX(var(--cicada-scale-x, 1)); */
 }
+
 .sandwich-img {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    z-index:3;
-    left: var(--sandwich-x);
-    bottom: var(--sandwich-y);
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  z-index: 3;
+  left: var(--sandwich-x);
+  bottom: var(--sandwich-y);
 }
 
- .circle {
-   border-radius: 100%;
-   background-color: rgba(244, 222, 25, 0.344);
-   position: absolute;
-   transform: translate(-50%, 50%);
-   z-index:1
-   /* Start in the middle */
- }
+.circle {
+  border-radius: 100%;
+  background-color: rgba(244, 222, 25, 0.344);
+  position: absolute;
+  /* transform: translate(-50%, 50%); */
+  transform: translate(calc(-50% + var(--x)), calc(50% + var(--y)));
+  z-index: 1
+    /* Start in the middle */
+}
 
- .rectangle {
-   width: 50px;
-   height: 50px;
-
-   background-color: rgba(84, 82, 63, 0.964);
-   position: absolute;
-   /* bottom: 10px;
+.rectangle {
+  background-color: rgba(84, 82, 63, 0.964);
+  position: absolute;
+  transform: translate(var(--x), calc(0% + var(--y)));
+  /* bottom: 10px;
    left: 225px; */
-   /* Start in the middle */
- }
+  /* Start in the middle */
+}
 
- .laser {
-   width: 5px;
-   height: 20px;
-   background-color: red;
-   position: absolute;
- }
+.laser {
+  width: 5px;
+  height: 20px;
+  background-color: red;
+  position: absolute;
+}
 
- /* General styling for both menus */
+/* General styling for both menus */
 .menu-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.75);
-    padding: 30px 50px;
-    border-radius: 10px;
-    color: white;
-    text-align: center;
-    border: 2px solid white;
-    z-index: 100; /* Ensures menus are on top of the game */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.75);
+  padding: 30px 50px;
+  border-radius: 10px;
+  color: white;
+  text-align: center;
+  border: 2px solid white;
+  z-index: 100;
+  /* Ensures menus are on top of the game */
 }
 
 /* Style for the menu title */
 .menu-container h2 {
-    margin-top: 0;
-    font-size: 2.5em;
+  margin-top: 0;
+  font-size: 2.5em;
 }
 
 /* Style for the menu buttons */
 .menu-container button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    font-size: 1.2em;
-    background-color: #f8f8f8;
-    color: #333;
-    border: 2px solid #555;
-    border-radius: 5px;
-    cursor: pointer;
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 1.2em;
+  background-color: #f8f8f8;
+  color: #333;
+  border: 2px solid #555;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .menu-container button:hover {
-    background-color: #ddd;
-    border-color: #111;
+  background-color: #ddd;
+  border-color: #111;
 }
 
 
 .hidden {
-    display: none;
+  display: none;
 }
 
 
 .controls-list {
-  list-style: none; /* Removes the default bullet points */
+  list-style: none;
+  /* Removes the default bullet points */
   padding: 0;
-  text-align: left; /* Aligns the text to the left */
-  display: inline-block; /* Allows text-align to work */
+  text-align: left;
+  /* Aligns the text to the left */
+  display: inline-block;
+  /* Allows text-align to work */
   margin-bottom: 20px;
 }
 
 .controls-list li {
-  margin-bottom: 10px; /* Adds some space between each line */
+  margin-bottom: 10px;
+  /* Adds some space between each line */
   font-size: 20px;
 }

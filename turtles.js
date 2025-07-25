@@ -28,7 +28,7 @@ function spawnTurtle() {
     const spawnSide = Math.random() < 0.5 ? 'left' : 'right';
     const startX = spawnSide === 'left' ? -50 : gameArea.offsetWidth + 50;
     const startY = 500;
-
+    console.log(startX, startY)
     const newTurtle = {
         name: "turtle",
         health: 8,
@@ -57,6 +57,7 @@ function spawnTurtle() {
         scoreValue: 10,
         type: "turtle",
     };
+
 
     turtles.push(newTurtle);
     allEntities.push(newTurtle);

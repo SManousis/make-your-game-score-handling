@@ -110,6 +110,7 @@ export function bulletVisuals(bullet) {
 
 export let allBullets = [];
 
-export function removeFromAllBullets(entity) {
-    allBullets = allBullets.filter(t => t !== entity);
+export function removeFromAllBullets(bullet) {
+    allBullets = allBullets.filter(t => t !== bullet);
+    bullet.body.forEach(b => { if (b.div) b.div.remove(); })
 }

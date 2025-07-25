@@ -24,15 +24,15 @@ export let mario = {
     aimDirection: "left", //left, right, up
     velX: 0, //his current velocity in x axis
     velY: 0, //his current velocity in y axis
-    x: 100, //his current x position
-    y: 100, //his current y position
+    x: 0, //his current x position
+    y: 0, //his current y position
     lookingDir: "left", //which direction mario is looking at
     lookingUp: false,
     walkCounter: 0, //a counter that counts for how many frames mario has been walking towards a direction, for walk animation purposes
     crouching: false,
     isInvincible: false,
     invincibilityTimer: 0,
-    body: [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20), utils.createCircle(100-30, 100 + 20, 30), utils.createCircle(100+30, 100 + 20, 30)], //his gameplay body represented in circles
+    body: [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0-30, 0 + 20, 30), utils.createCircle(0+30, 0 + 20, 30)], //his gameplay body represented in circles
     physicsPointsOffsets: [{ x: -20, y: 0 }, { x: 20, y: 0 }], //These points will be used
     drawFunc: marioVisuals, //his visual representation in the game
     updateFunc: marioUpdate,
@@ -54,18 +54,18 @@ export let mario = {
         this.invincibilityTimer = 40;
     },
     reset() {
-        this.x = 100;
-        this.y = 100;
+        this.x = 0;
+        this.y = 0;
         this.health = 100;
         this.velY = 0;
         this.disabled = false;
         this.body.forEach(body => body.div.remove());
-        this.body = [utils.createCircle(100, 100 + 20, 20), utils.createCircle(100, 100 + 20 + 40, 20), utils.createCircle(100-30, 100 + 20, 30), utils.createCircle(100+30, 100 + 20, 30)];
+        this.body = [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0-30, 0 + 20, 30), utils.createCircle(0+30, 0 + 20, 30)];
         this.bullet_count=1;
     }
 }
 
-
+utils.setUnit(mario, 500, 500)
 
 
 
@@ -84,13 +84,13 @@ export function marioVisuals() {
         mario.body[2].active = false;
         mario.body[3].active = false;
     }
-    if (mario.isInvincible && Math.floor(mario.invincibilityTimer / 6) % 2 === 0) {
-        currentBody.style.display = 'none'
-        currentLegs.style.display = 'none'
+    if (mario.isInvincible && Math.floor(mario.invincibilityTimer / 4) % 2 === 0) {
+        currentBody.style.opacity = '0%'
+        currentLegs.style.opacity = '0%'
         return;
     } else {
-        currentBody.style.display = 'block'
-        currentLegs.style.display = 'block'
+        currentBody.style.opacity = '100%'
+        currentLegs.style.opacity = '100%'
     }
     if (mario.lookingUp) {
         currentBody.style.opacity = "0%"

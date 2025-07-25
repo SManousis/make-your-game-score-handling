@@ -51,7 +51,7 @@ export function shootSandwich(dir, vendX, vendY) {
 function sandwichUpdate(newSandwich) {
     newSandwich.lifeSpan -= 1;
     if (newSandwich.lifeSpan <= 0) {
-        mario.velY = 12;
+        
         removeSandwich(newSandwich);
         return;
     }
@@ -61,7 +61,10 @@ function sandwichUpdate(newSandwich) {
             if (newSandwich.state === 'friend') {
                 mario.health += newSandwich.damage
             } else {
-                mario.health -= newSandwich.damage
+                
+                mario.takeDamage(newSandwich.damage, newSandwich.x)
+               
+                
             }
             removeSandwich(newSandwich);
             return;

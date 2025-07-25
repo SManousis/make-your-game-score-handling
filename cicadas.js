@@ -171,6 +171,8 @@ function cicadaUpdate(cicada) {
 
 }
 
+
+
 function cicadaVisuals(cicada) {
     if (!cicada.dom) return;
 

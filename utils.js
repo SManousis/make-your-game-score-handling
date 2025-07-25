@@ -6,8 +6,10 @@ export function createCircle(centerX, centerY, radius) {
     div.classList.add("circle")
     div.style.width = radius * 2 + "px";
     div.style.height = radius * 2 + "px";
-    div.style.bottom = centerY + "px";
-    div.style.left = centerX + "px";
+    div.style.bottom = 0 + "px";
+    div.style.left = 0 + "px";
+    div.style.setProperty('--x', centerX)
+    div.style.setProperty('--y', -centerY)
     div.id = "debug-circle-" + id
     id++
     let debugDiv = document.getElementById("debug-visuals")
@@ -15,13 +17,24 @@ export function createCircle(centerX, centerY, radius) {
     return { type: "circle", "x": centerX, "y": centerY, "radius": radius, "active": true, "div": div }
 }
 
-export function createRect(x, y, width, height) {
+
+export function createRect(x, y, width, height, statis = false) {
     let div = document.createElement("div")
     div.classList.add("rectangle")
     div.style.width = width + "px";
     div.style.height = height + "px";
-    div.style.bottom = y + "px";
-    div.style.left = x + "px";
+
+    if (statis){
+        div.style.bottom = y + "px";
+        div.style.left = x + "px";
+    }else{
+        div.style.bottom = 0 + "px";
+        div.style.left = 0 + "px";
+    }
+
+    div.style.setProperty('--x', x)
+    div.style.setProperty('--y', -y)
+
     div.id = "debug-rectangle-" + id
     id++
     let debugDiv = document.getElementById("debug-visuals")

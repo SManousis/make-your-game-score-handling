@@ -339,6 +339,11 @@ export function draw() {
 
 
     for (let entity of allEntities) {
+
+        if (entity.drawFunc != undefined) {
+            entity.drawFunc()
+        }
+        
         //body debug visual update
         for (const shape of entity.body) {
             if (shape.active == false) {
@@ -346,13 +351,16 @@ export function draw() {
             } else {
                 shape.div.style.opacity = "100%"
             }
-            shape.div.style.left = shape.x + 'px';
-            shape.div.style.bottom = shape.y + 'px';
+            // shape.div.style.left = shape.x + 'px';
+            // shape.div.style.bottom = shape.y + 'px';
+            shape.div.style.setProperty('--x', `${shape.x}px`);
+            shape.div.style.setProperty('--y', `${-shape.y}px`);
+            shape.div.bottom = 0
+            shape.div.left = 0
+            
         }
 
-        if (entity.drawFunc != undefined) {
-            entity.drawFunc()
-        }
+        
 
     }
 

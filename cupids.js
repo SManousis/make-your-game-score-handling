@@ -14,69 +14,69 @@ export function createCupid(x, y, index) {
     cupidBody.className = "cupid-img";
     cupidBody.src = "assets/enemies/TrumpCupid.png";
     document.getElementById("game-area").appendChild(cupidBody);
-     // store reference in object
-    
+    // store reference in object
+
     let cupid = {
-    name:"cupid",
-       index: index,
-       health: 8,
-       damage: 10,
-       moveSpeed: 0.1,
-       x: x,           // use the parameters!
-       y: y,       
-       bullet_count: 1,
-       aimDirection: "down",
-       state: "airborne",
-       velX: 1.2,
-       velY: 0,
-       touched: false,
-       rand1: Math.random()*10,
-       rand2: Math.random()*10,
-       body: [utils.createCircle(x,  y+20, 30)],
-       updateFunc: function() { cupidUpdate(this) },   
-       drawFunc: function() { cupidVisuals(this) },
-       dom: cupidBody,
-       parallelMoveCount: 0,
-       team: "enemy",
-       scoreValue: 10,
-       reset(){
-        this.health = 20;
-        this.moveSpeed = 0.1;
-        this.velX = 1;
-        this.velY = 0;
-        this.x = x;
-        this.y = y;
-        // this.dom.remove();
-        // this.body.forEach(body => body.div.remove());
-        // this.body = [utils.createCircle(x,  y+20, 30)];
-       }
+        name: "cupid",
+        index: index,
+        health: 8,
+        damage: 10,
+        moveSpeed: 0.1,
+        x: x,           // use the parameters!
+        y: y,
+        bullet_count: 1,
+        aimDirection: "down",
+        state: "airborne",
+        velX: 1.2,
+        velY: 0,
+        touched: false,
+        rand1: Math.random() * 10,
+        rand2: Math.random() * 10,
+        body: [utils.createCircle(x, y + 20, 30)],
+        updateFunc: function () { cupidUpdate(this) },
+        drawFunc: function () { cupidVisuals(this) },
+        dom: cupidBody,
+        parallelMoveCount: 0,
+        team: "enemy",
+        scoreValue: 10,
+        reset() {
+            this.health = 20;
+            this.moveSpeed = 0.1;
+            this.velX = 1;
+            this.velY = 0;
+            this.x = x;
+            this.y = y;
+            // this.dom.remove();
+            // this.body.forEach(body => body.div.remove());
+            // this.body = [utils.createCircle(x,  y+20, 30)];
+        }
     }
     console.log("I was created at ", x, y)
     cupids.push(cupid)
     game.allEntities.push(cupid)
     return cupid
- }
+}
 
 
- export function reset(){
-     cupids.forEach(cupid => cupid.reset());
-        
-        cupids.cupids = [];
- }
- 
+export function reset() {
+    cupids.forEach(cupid => cupid.reset());
+
+    cupids.cupids = [];
+}
+
 
 //let  parallelmovecount = 0
 
 export function cupidUpdate(cupid) {
-       if (cupid.health <= 0) {
+    if (cupid.health <= 0) {
         if (cupid.dom) cupid.dom.remove();
-                        cupid.body.forEach(b => { if (b.div) b.div.remove(); })
-                        cupids = cupids.filter(t => t !== cupid);
-                
-                        game.removeFromAllEntities(cupid)
-                        game.updateScore(cupid.scoreValue);
+        cupid.body.forEach(b => { if (b.div) b.div.remove(); })
+        cupids = cupids.filter(t => t !== cupid);
+
+        game.removeFromAllEntities(cupid)
+        game.updateScore(cupid.scoreValue);
     }
-   
+
     cupid.parallelMoveCount++
 
     //what does this do? (alex)
@@ -87,28 +87,28 @@ export function cupidUpdate(cupid) {
     const distance = 100
     if (cupid.parallelMoveCount === distance) {
         cupid.velX = -cupid.velX
-        
+
     }
-    if (cupid.parallelMoveCount === distance*2) {
+    if (cupid.parallelMoveCount === distance * 2) {
         cupid.velX = -cupid.velX
         cupid.velY = -3
         cupid.parallelMoveCount = 0
         cupid.velY = -3
     }
 
-    if (Math.abs(cupid.velY) > 0){
+    if (Math.abs(cupid.velY) > 0) {
         utils.moveUnit(cupid, 0, cupid.velY)
         cupid.parallelMoveCount--
-    }else{
+    } else {
         utils.moveUnit(cupid, cupid.velX, cupid.velY)
     }
-    
-    
-    if (Math.abs(cupid.velY) > 1){
+
+
+    if (Math.abs(cupid.velY) > 1) {
         cupid.velY /= 1.05
     }
 
-    if (Math.abs(cupid.velY) < 1){
+    if (Math.abs(cupid.velY) < 1) {
         cupid.velY = 0
     }
 
@@ -120,16 +120,16 @@ export function cupidUpdate(cupid) {
     }
     //decide if cupid will fire
     // if (cupid.index*100 == game.gameState.frameCounter%(cupids.length*100)){
-    if (parseInt(Math.random()*2000) == 0){
-        cupid.dom.src=preloadedFiringImage.src
+    if (parseInt(Math.random() * 2000) == 0) {
+        cupid.dom.src = preloadedFiringImage.src
         let bullet = bullets.createBullet("down", "enemy", cupid.x, cupid.y, 4, 8)
-       
+
         setTimeout(() => {
-            cupid.dom.src="assets/enemies/TrumpCupid.png"
-        }, 300)   
+            cupid.dom.src = "assets/enemies/TrumpCupid.png"
+        }, 300)
     }
 
-    if (parseInt(Math.random()*6000) == 0){
+    if (parseInt(Math.random() * 6000) == 0) {
         let candy = healthItem.createHealthItem(cupid.x, cupid.y - 60, 20)
     }
 }
@@ -140,6 +140,7 @@ export function cupidVisuals(cupid) {
     cupid.dom.style.opacity = "100%";
     cupid.dom.style.setProperty('--cupid-x', `${cupid.x}px`);
     cupid.dom.style.setProperty('--cupid-y', `${-cupid.y}px`);
+
 }
 
 
