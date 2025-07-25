@@ -10,25 +10,12 @@ let spawnCooldown = 0;
 const SPAWN_RATE = 180; //spawn a new turtle every 180 frames/3 secs
 const max_turtles = 5;
 
-export function turtleSpawner() {
-    spawnCooldown--;
-    if (spawnCooldown <= 0 && turtles.length < max_turtles) {
-        spawnTurtle();
-        spawnCooldown = SPAWN_RATE;
-    }
-}
-
-function spawnTurtle() {
+export function spawnTurtle(x, y) {
     const turtleElement = document.createElement('img');
     turtleElement.className = 'turtle-img';
     turtleElement.src = 'assets/enemies/caretta.png'
     gameArea.appendChild(turtleElement);
 
-    //choose randomly between left and right
-    const spawnSide = Math.random() < 0.5 ? 'left' : 'right';
-    const startX = spawnSide === 'left' ? -50 : gameArea.offsetWidth + 50;
-    const startY = 500;
-    console.log(startX, startY)
     const newTurtle = {
         name: "turtle",
         health: 8,
@@ -38,13 +25,13 @@ function spawnTurtle() {
         state: 'walking', //walking, disabled
         velX: 0,
         velY: 0,
-        x: startX,
-        y: startY,
+        x: x,
+        y: y,
         width: 120,
         height: 120,
         lookingDir: spawnSide === 'left' ? 'right' : 'left',
         body: [
-            utils.createRect(startX - (120 / 2), startY, 120, 45)
+            utils.createRect(x - (120 / 2), y, 120, 45)
         ],
         drawFunc: function () { turtleVisuals(this) },
         updateFunc: function () { turtleUpdate(this) },
@@ -67,12 +54,11 @@ function spawnTurtle() {
 
 function turtleUpdate(turtle) {
     if (turtle.health <= 0) {
-        if (turtle.dom) turtle.dom.remove();
-        turtle.body.forEach(b => { if (b.div) b.div.remove(); })
- 
-        utils.removeUnitFromArray(turtle, turtles)
-
-        removeFromAllEntities(turtle)
+        // if (turtle.dom) turtle.dom.remove();
+        // turtle.body.forEach(b => { if (b.div) b.div.remove(); })
+        // utils.removeUnitFromArray(turtle, turtles)
+        // removeFromAllEntities(turtle)
+        utils.destroyUnit(turtle)
         game.updateScore(turtle.scoreValue);
     }
 
@@ -135,15 +121,17 @@ function turtleUpdate(turtle) {
             console.log("turtle disabled")
             turtle.state = "disabled"
             mario.velY = 12;
-            removeFromAllEntities(turtle)
+   
             updateScore(turtle.scoreValue);
+
             //make turtle disappear after a moment
             setTimeout(() => {
-                if (turtle.dom) turtle.dom.remove();
-                turtle.body.forEach(b => { if (b.div) b.div.remove(); })
-                utils.removeUnitFromArray(turtle, turtles)
+                // if (turtle.dom) turtle.dom.remove();
+                // turtle.body.forEach(b => { if (b.div) b.div.remove(); })
+                // utils.removeUnitFromArray(turtle, turtles)
+                // removeFromAllEntities(turtle)
+                utils.destroyUnit(turtle)
 
-                removeFromAllEntities(turtle)
             }, 300)
         } else {
             console.log("Mario was hurt by a turtle")

@@ -38,8 +38,8 @@ export function spawnCicada(x, y) {
         state: 'walking', //walking, disabled
         velX: 0,
         velY: 0,
-        jump_power: 20,
-        horizontal_jump_power: 10,
+        jump_power: 15,
+        horizontal_jump_power: 4,
         jumpCooldown: 0,
         x: x,
         y: y,
@@ -62,71 +62,69 @@ export function spawnCicada(x, y) {
 
     cicadas.push(newCicada);
     allEntities.push(newCicada);
+    game.groundedEnemies.push(newCicada)
 }
 
 function cicadaUpdate(cicada) {
+    //dead
     if (cicada.health <= 0) {
-        if (cicada.dom) cicada.dom.remove();
-        cicada.body.forEach(b => { if (b.div) b.div.remove(); })
-        utils.removeUnitFromArray(cicadas, cicadas)
-
-        removeFromAllEntities(cicada)
+        deleteCicada(cicada)
         updateScore(cicada.scoreValue);
     }
 
-    if (cicada.state === 'walking' || cicada.state == 'jumping') {
-        let dx = mario.x - cicada.x;
 
-        cicada.jumpCooldown--;
-        if (cicada.jumpCooldown <= 0) {
-            // console.log("cicada jumping")
-            cicada.velY = cicada.jump_power * (Math.random() + 0.8);
-            if (dx > 0) {
-                cicada.velX = cicada.horizontal_jump_power * (Math.random() + 0.8)
-            } else {
-                cicada.velX = -(cicada.horizontal_jump_power * (Math.random() + 0.8))
-            }
-            cicada.jumpCooldown = utils.getRandomInt();
-            cicada.state = 'jumping'
+    if (cicada.state === 'walking') {
+        let marioIsOnTheRight = mario.x - cicada.x >= 0;
+
+        
+        if (marioIsOnTheRight) {
+            cicada.velX = cicada.maxspeed;
+            cicada.lookingDir = "right";
+        } else {
+            cicada.velX = -cicada.maxspeed;
+            cicada.lookingDir = "left";
         }
 
-        if (Math.abs(dx) > DEAD_ZONE) {
-            if (dx > 0) {
-                cicada.velX = cicada.maxspeed;
-                cicada.lookingDir = "right";
-            } else {
-                cicada.velX = -cicada.maxspeed;
-                cicada.lookingDir = "left";
-            }
-        }
-
+        
 
         //check for other cicadas in the way
         const detectionDistance = cicada.width * 0.8
 
-        for (const otherCicada of cicadas) {
-            if (otherCicada === cicada) continue;
+        for (const groundedEnemy of game.groundedEnemies) {
+            if (groundedEnemy === cicada) continue;
 
-            if (cicada.velX > 0 && otherCicada.x > cicada.x) {
-                const distance = otherCicada.x - cicada.x;
+            if (cicada.velX > 0 && groundedEnemy.x > cicada.x) {
+                const distance = groundedEnemy.x - cicada.x;
                 if (distance < detectionDistance) {
-                    cicada.velX = otherCicada.velX;
+                    cicada.velX = 0;
                     break;
                 }
-            } else if (cicada.velX < 0 && otherCicada.x < cicada.x) {
-                const distance = cicada.x - otherCicada.x;
+            } else if (cicada.velX < 0 && groundedEnemy.x < cicada.x) {
+                const distance = cicada.x - groundedEnemy.x;
                 if (distance < detectionDistance) {
-                    cicada.velX = otherCicada.velX;
+                    cicada.velX = 0;
                     break
                 }
             }
         }
 
+        cicada.jumpCooldown--;
+        if (cicada.jumpCooldown <= 0) {
+            // console.log("cicada jumping")
+            cicada.velY = cicada.jump_power * (Math.random() + 0.6);
+            if (marioIsOnTheRight) {
+                cicada.velX = cicada.horizontal_jump_power * (Math.random() + 0.6)
+            } else {
+                cicada.velX = -(cicada.horizontal_jump_power * (Math.random() + 0.6))
+            }
+            cicada.jumpCooldown = utils.getRandomInt();
+            cicada.state = 'jumping'
+        }
 
-    } if (cicada.state = "flying") {
 
-    }
-    else {
+    } else if (cicada.state == 'jumping') {
+        
+    }else{
         cicada.velX = 0; //stop moving if disabled
     }
 
@@ -154,13 +152,10 @@ function cicadaUpdate(cicada) {
             // console.log("cicada disabled")
             cicada.state = "disabled"
             mario.velY = 12;
-            removeFromAllEntities(cicada)
+
             //make cicada disappear after a moment
             setTimeout(() => {
-                if (cicada.dom) cicada.dom.remove();
-                cicada.body.forEach(b => { if (b.div) b.div.remove(); })
-
-                removeFromAllEntities(cicada)
+                deleteCicada(cicada)
             }, 300)
         } else {
             // console.log("Mario was hurt by a cicada")
@@ -171,7 +166,12 @@ function cicadaUpdate(cicada) {
 
 }
 
-
+function deleteCicada(cicada) {
+    // if (cicada.dom) cicada.dom.remove();
+    // cicada.body.forEach(b => { if (b.div) b.div.remove(); })
+    
+    utils.destroyUnit(cicada)
+}
 
 function cicadaVisuals(cicada) {
     if (!cicada.dom) return;

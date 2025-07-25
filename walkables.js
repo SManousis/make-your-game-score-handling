@@ -18,11 +18,11 @@ export const right = {
 }
 
 export const topleft = {
-    body: [utils.createRect(0, 250, 200, 25, true)]
+    body: [utils.createRect(-1000, 250, 1200, 25, true)]
 }
 
 export const topright = {
-    body: [utils.createRect(document.getElementById("game-area").offsetWidth-200, 250, 200, 25, true)]
+    body: [utils.createRect(document.getElementById("game-area").offsetWidth-200, 250, 1200, 25, true)]
 }
 
 

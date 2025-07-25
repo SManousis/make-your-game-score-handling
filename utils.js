@@ -1,3 +1,4 @@
+import { allGroups } from "./game.js";
 
 export let id = 0
 //creates a circle collision body, it automatically created a debug div to help with visuals
@@ -236,8 +237,8 @@ export function opDebounce(fn, wait, options = {}) {
     };
 }
 
-export function getRandomInt(min = 60, max = 360) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+export function getRandomInt(min = 30, max = 250) {
+    return Math.floor((Math.random()+0.2) * (max - min + 1)) + min;
 }
 
 
@@ -249,4 +250,12 @@ export function removeUnitFromArray(unit, array) {
             break;
         }
     }
+}
+
+export function destroyUnit(unit){
+    for (let group of allGroups){
+        removeUnitFromArray(unit, group)
+    }
+    unit.body.forEach(b => { if (b.div) b.div.remove(); })
+    if (unit.dom) unit.dom.remove();
 }
