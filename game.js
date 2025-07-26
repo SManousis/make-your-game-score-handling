@@ -54,7 +54,7 @@ let lastTime = 0;
 export let allEntities = []
 export let groundedEnemies = []
 
-export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas, cupids, turtles, healthItems, walkables]
+export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables]
 
 export const gameArea = document.getElementById('game-area');
 
@@ -302,6 +302,7 @@ function gameLoop(currentTime) {
 function update() {
     // mario movement
     
+    // console.log(groundedEnemies)
 
     allEntities.forEach(entity => {
         if (entity.type !== "healthItem" && entity.type !== "bullet") {
@@ -331,7 +332,7 @@ export function draw() {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     const paddedSeconds = seconds.toString().padStart(2, '0'); 
-    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} debug: ${cicadas.cicadas.length}, ${document.getElementById('debug-visuals').childElementCount}, ${allEntities.length}`;
+    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} debug: ${cupids.cupids.length}, ${document.getElementById('debug-visuals').childElementCount}, ${allEntities.length}`;
     MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
     MarioHealthBar.style.bottom = (mario.y + 90) + "px";
     if (mario.crouching) {

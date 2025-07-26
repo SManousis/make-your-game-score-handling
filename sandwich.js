@@ -4,7 +4,10 @@ import { mario } from './mario.js';
 import { moveAndCollide } from './physicsStep.js';
 
 export function shootSandwich(dir, vendX, vendY) {
-    const state = Math.random() < 0.5 ? 'friend' : 'enemy';
+    if (Math.random() > 0.15){
+        return
+    }
+    const state = Math.random() < 0.7 ? 'friend' : 'enemy';
     const sandwichElement = document.createElement('img');
     sandwichElement.className = 'sandwich-img';
     if (state === 'friend') {

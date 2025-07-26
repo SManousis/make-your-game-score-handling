@@ -7,35 +7,37 @@ import { gameState } from "./game.js"
 const gameArea = document.getElementById('game-area')
 
 export async function stage1() {
-    const cica = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada), 70)
     await spawnSwarm(5, createCupid, 5, 200, cupids)
     await sleep(1000)
-
-
-    const cica1 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada), 30)
-    const cica2 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada), 30)
-    const cica3 = addEvent(() => startSpawner("left", 0, 0, spawnCicada), 30)
-    const cica4 = addEvent(() => startSpawner("right", 0, 0, spawnCicada), 30)
-   
-
-
+    const turt1 = addEvent(() => startSpawner("left", 0, 0, spawnTurtle), 500)
+    const turt2 = addEvent(() => startSpawner("right", 0, 0, spawnTurtle), 433)
     await spawnSwarm(10, createCupid, 5, 500, cupids)
     await sleep(1000)
-
-    removeEvent(cica1)
-    removeEvent(cica2)
-    removeEvent(cica3)
-    removeEvent(cica4)
-
+ 
+    const turt3 = addEvent(() => startSpawner("topleft", 0, 0, spawnTurtle), 422)
+    const turt4 = addEvent(() => startSpawner("topright", 0, 0, spawnTurtle), 366)
     await spawnSwarm(20, createCupid, 10, 400, cupids)
+    removeEvent(turt1)
+    removeEvent(turt2)
+    removeEvent(turt3)
+    removeEvent(turt4)
     await sleep(1000)
 
+    const c1 = addEvent(() => startSpawner("left", 0, 0, spawnCicada), 350)
+    const c2 = addEvent(() => startSpawner("right", 0, 0, spawnCicada), 433)
     await spawnSwarm(40, createCupid, 20, 300, cupids)
     await sleep(1000)
 
+    const c3 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada), 220)
+    const c4 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada), 333)
     await spawnSwarm(80, createCupid, 25, 200, cupids)
-    await sleep(1000)
+    await sleep(3000)
 
+    const c5 = addEvent(() => startSpawner("left", 0, 0, spawnCicada), 20)
+    const c6 = addEvent(() => startSpawner("right", 0, 0, spawnCicada), 20)
+    const c7 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada), 20)
+    const c8 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada), 20)
+    await sleep(1000)
     await spawnSwarm(160, createCupid, 35, 100, cupids)
     await sleep(1000)
 }
@@ -65,7 +67,7 @@ async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, 
     }
 
   
-    await waitForCondition(() => { return array.length == 0 })
+    await waitForCondition(() => {console.log(array); return array.length == 0 })
 }
 
 
@@ -85,7 +87,7 @@ function addEvent(fn, interval) {
     if (typeof fn !== 'function' || typeof interval !== 'number') {
         throw new Error('Invalid arguments: must pass a function and an interval.');
     }
-    console.log("starting!")
+ 
     const id = `event-${nextId++}`;
     const event = {
         fn,
@@ -110,11 +112,11 @@ export function stageControllerTicker() {
     
     for (let i = 0; i < eventQueue.length; i++) {
         const event = eventQueue[i];
-        console.log(eventQueue[i])
+      
         // Reset the current timer to max
         if (event.currentTimer <= 0) {
             event.currentTimer = event.maxTimer;
-            console.log("executing!")
+           
             event.fn(); // Execute the function
         }
         event.currentTimer--

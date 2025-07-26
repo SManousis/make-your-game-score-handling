@@ -11,7 +11,7 @@ export function isShot(entity) {
     for (const bullet of bullets.allBullets) {
         if (bullet.disabled) continue;
         if (collusionCheck(entity, bullet)) {
-            console.log(`bullet touched ${entity.name}`)
+            // console.log(`bullet touched ${entity.name}`)
             bullet.disabled = true
             bullet.body.forEach(body => body.div.remove())
             bullet.dom.remove()
@@ -31,7 +31,7 @@ export function healthItemPicked(entity) {
         if (candy.disabled) continue;
         // console.log("Checking collision between:", entity, "and", candy);
         if (collusionCheck(entity, candy)) {
-            console.log(`healthItem touched ${entity.name} gained ${candy.healthAdd}`);
+            // console.log(`healthItem touched ${entity.name} gained ${candy.healthAdd}`);
             candy.disabled = true
             candy.body.forEach(body => body.div.remove())
             candy.dom.remove()

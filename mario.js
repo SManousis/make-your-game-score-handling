@@ -192,7 +192,7 @@ export function marioUpdate() {
     }
 
     if (keysPressed.upgrade){
-        mario.bullet_count++
+        mario.bullet_count = 4
         keysPressed.upgrade = false
     }
 
@@ -323,7 +323,7 @@ function getSpreadValues(count) {
 
 export function marioShoot() {
     const spreadValues = getSpreadValues(mario.bullet_count);
-    console.log(spreadValues)
+    
     
     let yCorrection = 40;
     if (mario.crouching)  {

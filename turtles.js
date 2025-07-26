@@ -1,6 +1,6 @@
 import * as utils from './utils.js'
 import { mario } from './mario.js'
-import { gameArea, allEntities, removeFromAllEntities, updateScore } from './game.js'
+import { gameArea, allEntities, removeFromAllEntities, updateScore, groundedEnemies } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
 
 //turtle spawning
@@ -29,7 +29,7 @@ export function spawnTurtle(x, y) {
         y: y,
         width: 120,
         height: 120,
-        lookingDir: spawnSide === 'left' ? 'right' : 'left',
+        lookingDir: 'left',
         body: [
             utils.createRect(x - (120 / 2), y, 120, 45)
         ],
@@ -48,6 +48,7 @@ export function spawnTurtle(x, y) {
 
     turtles.push(newTurtle);
     allEntities.push(newTurtle);
+    groundedEnemies.push(newTurtle)
 
     //push to allentities
 }
@@ -66,37 +67,47 @@ function turtleUpdate(turtle) {
         //follow Mario
         let dx = mario.x - turtle.x;
 
-        if (Math.abs(dx) > DEAD_ZONE) {
-            if (dx > 0) {
-                turtle.velX = turtle.maxspeed;
-                turtle.lookingDir = "right";
-            }
-            else {
-                turtle.velX = -turtle.maxspeed;
-                turtle.lookingDir = "left";
-            }
+
+        if (dx > 0) {
+            turtle.velX = turtle.maxspeed;
+            turtle.lookingDir = "right";
         }
+        else {
+            turtle.velX = -turtle.maxspeed;
+            turtle.lookingDir = "left";
+        }
+
 
         //check for other turtles in the way
         const detectionDistance = turtle.width * 0.8
 
-        for (const otherTurtle of turtles) {
-            if (otherTurtle === turtle) continue;
+        for (const groundedEnemy of groundedEnemies) {
+            if (groundedEnemy === turtle || Math.abs(groundedEnemy.y - turtle.y) > 1) continue;
 
-            if (turtle.velX > 0 && otherTurtle.x > turtle.x) {
-                const distance = otherTurtle.x - turtle.x;
+            if (turtle.velX > 0 && groundedEnemy.x > turtle.x) {
+                const distance = groundedEnemy.x - turtle.x;
                 if (distance < detectionDistance) {
-                    turtle.velX = otherTurtle.velX;
+
+                    turtle.velX = 0;
+                    if (distance == 0) {
+                        turtle.velX = Math.random() * 100
+                    }
                     break;
                 }
-            } else if (turtle.velX < 0 && otherTurtle.x < turtle.x) {
-                const distance = turtle.x - otherTurtle.x;
+            } else if (turtle.velX < 0 && groundedEnemy.x < turtle.x) {
+                const distance = turtle.x - groundedEnemy.x;
                 if (distance < detectionDistance) {
-                    turtle.velX = otherTurtle.velX;
+
+                    turtle.velX = 0;
+                    if (distance == 0) {
+                        turtle.velX = Math.random() * 100
+                    }
                     break
                 }
             }
         }
+
+
 
 
     } else {
@@ -115,13 +126,14 @@ function turtleUpdate(turtle) {
     }
 
     if (turtle.state === 'walking' && isColliding) {
-
+        // console.log("mar.y", mario.y, "turt.y", (turtle.y + (turtle.height / 1.5)))
         //check if collision was Mario jumping on turtle
-        if (mario.velY < 0 && mario.y < turtle.y + (turtle.height / 2)) {
+        if (mario.y > (turtle.y + 20)) {
+
             console.log("turtle disabled")
             turtle.state = "disabled"
             mario.velY = 12;
-   
+
             updateScore(turtle.scoreValue);
 
             //make turtle disappear after a moment

@@ -27,11 +27,11 @@ export function createVendingStatic() {
         velX: 0,
         velY: 0,
         x: 1600,
-        y: 200,
+        y: 400,
         width: 200,
         height: 200,
         body: [
-            utils.createRect(1625, 10, 125, 200)
+            utils.createRect(1625, 265, 125, 160)
         ],
         drawFunc: function () { vendingVisuals(this) },
         updateFunc: function () { vendingUpdate(this) },

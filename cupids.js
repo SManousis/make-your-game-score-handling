@@ -1,6 +1,6 @@
 import * as utils from "./utils.js";
 import * as mario from './mario.js'
-import * as game from './game.js'
+import { allEntities, gameState, updateMenuVisibility, updateScore } from './game.js'
 import * as bullets from './bullets.js'
 import * as healthItem from './healthItem.js'
 import * as walkables from './walkables.js'
@@ -55,7 +55,7 @@ export function createCupid(x, y, index) {
     }
     console.log("I was created at ", x, y)
     cupids.push(cupid)
-    game.allEntities.push(cupid)
+    allEntities.push(cupid)
     return cupid
 }
 
@@ -71,12 +71,12 @@ export function reset() {
 
 export function cupidUpdate(cupid) {
     if (cupid.health <= 0) {
-        if (cupid.dom) cupid.dom.remove();
-        cupid.body.forEach(b => { if (b.div) b.div.remove(); })
-        utils.removeUnitFromArray(cupid, cupids)
-
-        game.removeFromAllEntities(cupid)
-        game.updateScore(cupid.scoreValue);
+        // if (cupid.dom) cupid.dom.remove();
+        // cupid.body.forEach(b => { if (b.div) b.div.remove(); })
+        // utils.removeUnitFromArray(cupid, cupids)
+        // game.removeFromAllEntities(cupid)
+        utils.destroyUnit(cupid)
+        updateScore(cupid.scoreValue);
     }
 
     cupid.parallelMoveCount++
@@ -148,7 +148,7 @@ export function cupidUpdate(cupid) {
                         if (explosionCircle.div) explosionCircle.div.style.background = "rgba(255, 0, 0, 0.75)";
                         const explosionDamage = 50;
     
-                        for (let entity of game.allEntities) {
+                        for (let entity of allEntities) {
                             if (entity === cupid) continue;
                             if (entity.disabled) continue;
     
@@ -157,10 +157,11 @@ export function cupidUpdate(cupid) {
                                     entity.health -= explosionDamage;
     
                                     // Mario-specific check
+                                    //TODO this check must not be done here, mario should take care of game over screen by looking at his own hp on his own, or another central location
                                     if (entity.name === "mario" && entity.health <= 0 && !entity.disabled) {
                                         entity.disabled = true;
-                                        game.gameState.currentState = 'gameOver';
-                                        game.updateMenuVisibility();
+                                        gameState.currentState = 'gameOver';
+                                        updateMenuVisibility();
                                     }
     
                                     if (entity.health <= 0) {
@@ -170,8 +171,8 @@ export function cupidUpdate(cupid) {
                                             if (b.div) b.div.remove();
                                             b.active = false;
                                         });
-                                        const idx = game.allEntities.indexOf(entity);
-                                        if (idx !== -1) game.allEntities.splice(idx, 1);
+                                        const idx = allEntities.indexOf(entity);
+                                        if (idx !== -1) allEntities.splice(idx, 1);
                                     }
                                     break; // no need to keep checking other bodies of same entity
                                 }
@@ -181,9 +182,9 @@ export function cupidUpdate(cupid) {
                         if (explosionCircle.div) explosionCircle.div.remove();
                         if (cupid.dom) cupid.dom.remove();
                         cupid.body.forEach(b => { if (b.div) b.div.remove(); });
-                        const idx = game.allEntities.indexOf(cupid);
-                        if (idx !== -1) game.allEntities.splice(idx, 1);
-                        cupids = cupids.filter(t => t !== cupid);
+                        const idx = allEntities.indexOf(cupid);
+                        if (idx !== -1) allEntities.splice(idx, 1);
+                        utils.removeUnitFromArray(cupid, cupids)
     
                     }, 2000); // Shorten delay for explosion (e.g., 500 ms)
                 }
