@@ -1,6 +1,7 @@
 import * as utils from "./utils.js"
 import * as mario from "./mario.js"
 import { allEntities, gameArea, removeFromAllEntities } from './game.js'
+import * as walkables from './walkables.js'
 
 //dirTypes can be down, up, right, left, target
 //team = player, enemy
@@ -73,14 +74,14 @@ export function createBullet(dirType, team, x, y, speed, damage = 10, targetX = 
 export function bulletUpdate(bullet) {
     utils.moveUnit(bullet, bullet.velX, bullet.velY)
 
-    if (bullet.y < -300 || bullet.x < -300 || bullet.y > gameArea.offsetHeight + 300 || bullet.x > gameArea.offsetWidth + 300) {
+    // if (bullet.y < -300 || bullet.x < -300 || bullet.y > gameArea.offsetHeight + 300 || bullet.x > gameArea.offsetWidth + 300) {
 
-        bullet.disabled = true
-        bullet.dom.remove()
-        removeFromAllBullets(bullet)
-        removeFromAllEntities(bullet)
-        return;
-    }
+    //     bullet.disabled = true
+    //     bullet.dom.remove()
+    //     removeFromAllBullets(bullet)
+    //     removeFromAllEntities(bullet)
+    //     return;
+    // }
     if (bullet.touched) {
         bullet.disabled = true
         bullet.dom.remove()
@@ -93,6 +94,20 @@ export function bulletUpdate(bullet) {
         removeFromAllBullets(bullet)
         removeFromAllEntities(bullet)
         return;
+    }
+    for (const walkable of walkables.walkables) {
+        for (const walkableBody of walkable.body) {
+            for (const body of bullet.body) {
+                if (utils.IsBodyCollidingWithBody(body, walkableBody)) {
+                    // console.log(`walkable touched ${entity.name}`)
+                    bullet.disabled = true
+                    bullet.dom.remove()
+                    removeFromAllBullets(bullet)
+                    removeFromAllEntities(bullet)
+                    return;
+                }
+            }
+        }
     }
 }
 

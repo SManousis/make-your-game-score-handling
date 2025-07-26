@@ -141,11 +141,16 @@ export function cupidUpdate(cupid) {
                 if (utils.IsBodyCollidingWithBody(cupidBody, walkableBody) && !cupid.hasExploded) {
                     cupid.velY = 0;
                     cupid.velX = 0;
-                    cupid.hasExploded = true; // prevent future explosions
+                    cupid.hasExploded = true; 
+                    console.log(cupid.x, cupid.y)// prevent future explosions
     
                     setTimeout(() => {
                         const explosionCircle = utils.createCircle(cupid.x, cupid.y, 150);
-                        if (explosionCircle.div) explosionCircle.div.style.background = "rgba(255, 0, 0, 0.75)";
+                        explosionCircle.div.style.left = cupid.x + "px";
+                        explosionCircle.div.style.bottom = cupid.y - 300 + "px";
+                        explosionCircle.div.style.transform = "translate(-50%, -50%)";
+                        explosionCircle.div.style.background = "rgba(255, 0, 0, 0.75)";
+                        // explosionCircle.div.style.zIndex = 200; 
                         const explosionDamage = 50;
     
                         for (let entity of allEntities) {
@@ -178,14 +183,19 @@ export function cupidUpdate(cupid) {
                                 }
                             }
                         }
-    
-                        if (explosionCircle.div) explosionCircle.div.remove();
-                        if (cupid.dom) cupid.dom.remove();
-                        cupid.body.forEach(b => { if (b.div) b.div.remove(); });
-                        const idx = allEntities.indexOf(cupid);
-                        if (idx !== -1) allEntities.splice(idx, 1);
-                        utils.removeUnitFromArray(cupid, cupids)
-    
+                        cupid.dom.src = "assets/items/explosion.png"
+                        cupid.dom.style.width = "300px";
+                        cupid.dom.style.height = "300px";
+                        setTimeout(() => {
+                            if (explosionCircle.div) explosionCircle.div.remove();
+                            if (cupid.dom) cupid.dom.remove();
+                            cupid.body.forEach(b => { if (b.div) b.div.remove(); });
+                            const idx = allEntities.indexOf(cupid);
+                            if (idx !== -1) allEntities.splice(idx, 1);
+                            utils.removeUnitFromArray(cupid, cupids)
+                        }, 1000)
+                        
+                        
                     }, 2000); // Shorten delay for explosion (e.g., 500 ms)
                 }
             }
