@@ -10,6 +10,7 @@ import { stage1, stageControllerTicker } from './stagecontroller.js'
 import { createVendingStatic } from "./vending.js"
 import { healthItems } from './healthItem.js'
 import * as utils from "./utils.js"
+import { ghosts } from './ghosts.js'
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -35,8 +36,6 @@ const pauseMuteButton = document.getElementById('pause-mute-button');
 const gameOverMuteButton = document.getElementById('game-over-mute-button');
 
 
-
-
 export let gameState = {
     currentState: 'mainMenu', //'mainMenu', 'paused','gameover','running'
     previousState: '',
@@ -54,7 +53,7 @@ let lastTime = 0;
 export let allEntities = []
 export let groundedEnemies = []
 
-export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables]
+export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts]
 
 export const gameArea = document.getElementById('game-area');
 

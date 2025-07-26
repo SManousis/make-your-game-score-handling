@@ -1,6 +1,6 @@
 import * as utils from "./utils.js"
 import * as mario from "./mario.js"
-import { allEntities, gameArea, removeFromAllEntities } from './game.js'
+import { allEntities, gameArea } from './game.js'
 import * as walkables from './walkables.js'
 
 //dirTypes can be down, up, right, left, target
@@ -74,25 +74,22 @@ export function createBullet(dirType, team, x, y, speed, damage = 10, targetX = 
 export function bulletUpdate(bullet) {
     utils.moveUnit(bullet, bullet.velX, bullet.velY)
 
-    // if (bullet.y < -300 || bullet.x < -300 || bullet.y > gameArea.offsetHeight + 300 || bullet.x > gameArea.offsetWidth + 300) {
+    if (bullet.y < -300 || bullet.x < -300 || bullet.y > gameArea.offsetHeight + 300 || bullet.x > gameArea.offsetWidth + 300) {
+        utils.destroyUnit(bullet)
+        return;
+    }
 
-    //     bullet.disabled = true
-    //     bullet.dom.remove()
-    //     removeFromAllBullets(bullet)
-    //     removeFromAllEntities(bullet)
-    //     return;
-    // }
     if (bullet.touched) {
         bullet.disabled = true
         bullet.dom.remove()
-        removeFromAllBullets(bullet)
-        removeFromAllEntities(bullet)
+        utils.destroyUnit(bullet)
+        
         return;
     }
     if (bullet.disabled) {
         bullet.dom.remove()
-        removeFromAllBullets(bullet)
-        removeFromAllEntities(bullet)
+        utils.destroyUnit(bullet)
+        utils.destroyUnit(bullet)
         return;
     }
     for (const walkable of walkables.walkables) {
@@ -102,8 +99,8 @@ export function bulletUpdate(bullet) {
                     // console.log(`walkable touched ${entity.name}`)
                     bullet.disabled = true
                     bullet.dom.remove()
-                    removeFromAllBullets(bullet)
-                    removeFromAllEntities(bullet)
+                    utils.destroyUnit(bullet)
+                    utils.destroyUnit(bullet)
                     return;
                 }
             }
@@ -125,7 +122,3 @@ export function bulletVisuals(bullet) {
 
 export let allBullets = [];
 
-export function removeFromAllBullets(bullet) {
-    utils.removeUnitFromArray(bullet, allBullets)
-    bullet.body.forEach(b => { if (b.div) b.div.remove(); })
-}

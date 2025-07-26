@@ -95,7 +95,7 @@ export function cupidUpdate(cupid) {
         cupid.velX = -cupid.velX
         cupid.velY = -3
         cupid.parallelMoveCount = 0
-        cupid.velY = -3
+  
     }
 
     if (Math.abs(cupid.velY) > 0) {

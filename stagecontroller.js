@@ -1,13 +1,14 @@
 import { spawnCicada } from "./cicadas.js"
 import { spawnTurtle } from "./turtles.js"
 import { createCupid, cupids } from "./cupids.js"
+import { createGhost, ghosts } from "./ghosts.js"
 import { gameState } from "./game.js"
 // import {  } from "./game.js"
 
 const gameArea = document.getElementById('game-area')
 
 export async function stage1() {
-    await spawnSwarm(5, createCupid, 5, 200, cupids)
+    await spawnSwarm(50, createGhost, 20, 200, ghosts)
     await sleep(1000)
     const turt1 = addEvent(() => startSpawner("left", 0, 0, spawnTurtle), 500)
     const turt2 = addEvent(() => startSpawner("right", 0, 0, spawnTurtle), 433)
@@ -65,12 +66,8 @@ async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, 
         spawnUnitFunc(startX + x * (endX - startX) / (leftOver - 1), -downOffset + gameArea.offsetWidth - (exactRows * ySeparation), unitIndex)
         unitIndex++
     }
-
-  
-    await waitForCondition(() => {console.log(array); return array.length == 0 })
+    await waitForCondition(() => {return array.length == 0 })
 }
-
-
 
 
 async function sleep(ms) {
@@ -78,16 +75,13 @@ async function sleep(ms) {
 }
 
 
-
 // Array to hold scheduled events
 const eventQueue = [];
 let nextId = 0;
-
 function addEvent(fn, interval) {
     if (typeof fn !== 'function' || typeof interval !== 'number') {
         throw new Error('Invalid arguments: must pass a function and an interval.');
     }
- 
     const id = `event-${nextId++}`;
     const event = {
         fn,
@@ -95,10 +89,10 @@ function addEvent(fn, interval) {
         currentTimer: interval,
         id
     };
-
     eventQueue.push(event);
     return id;
 }
+
 
 const spawnPositions = {
     left: { x: -50, y: 50 },
@@ -107,9 +101,9 @@ const spawnPositions = {
     topright: { x: gameArea.offsetWidth + 50, y: 350 },
 }
 
+
 //this is called once per frame at game's update function, it will be used to handle timers in stage Controller so that when the game is paused, the timers here pause too
 export function stageControllerTicker() {
-    
     for (let i = 0; i < eventQueue.length; i++) {
         const event = eventQueue[i];
       
@@ -138,28 +132,18 @@ function removeEvent(id) {
 
 
 
-
-
-function startSpawner(position, x, y, spawnUnitFunc) {
-   
+function startSpawner(position, x, y, spawnUnitFunc, count = 1) {
     if (spawnPositions.hasOwnProperty(position)) {
-        spawnUnitFunc(spawnPositions[position].x, spawnPositions[position].y)
-    } else {
-        spawnUnitFunc(x, y)
+        x = spawnPositions[position].x
+        y = spawnPositions[position].y
     }
 
-    
+    for (let i = 0; i < count; i++){
+        spawnUnitFunc(x, y)
+        sleep(60)
+    }
 }
 
-
-function stopSpawner(interval) {
-    clearInterval(interval)
-}
-
-
-function spawnWave(func, array) {
-
-}
 
 
 // Helper to wait for a condition to become true
