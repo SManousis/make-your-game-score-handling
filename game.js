@@ -5,7 +5,7 @@ import * as turtles from './turtles.js'
 import * as cicadas from './cicadas.js'
 import * as walkables from './walkables.js'
 import * as bullets from './bullets.js'
-import * as collusion from './collusion.js'
+import * as collision from './collision.js'
 import { stage1, stageControllerTicker } from './stagecontroller.js'
 import { createVendingStatic } from "./vending.js"
 import { healthItems } from './healthItem.js'
@@ -109,7 +109,9 @@ function restartGame() {
 
     gameState.gameTime = 0;
     gameState.score = 0;
+    gameState.lives=5;
     scoreElement.textContent = `Score: ${gameState.score}`;
+    livesElement.textContent = `Lives: ${gameState.score}`;
 
     gameState.currentState = 'running';
     updateMenuVisibility();
@@ -122,6 +124,7 @@ export function updateScore(points) {
     gameState.score += points;
     scoreElement.textContent = `Score: ${gameState.score}`;
 }
+
 
 //keeps track of which buttons are currently held down
 export const keysPressed = {
@@ -306,13 +309,13 @@ function update() {
 
     allEntities.forEach(entity => {
         if (entity.type !== "healthItem" && entity.type !== "bullet") {
-            collusion.isShot(entity)
+            collision.isShot(entity)
         }
         if (entity.name === "mario") {
             updateMarioHealthBar(entity.health, 100)
         }
     })
-    collusion.healthItemPicked(mario) // checks if mario touched a health item//collusion.isShot(mario);
+    collision.healthItemPicked(mario) // checks if mario touched a health item//collision.isShot(mario);
 
     //running all entities' update function
     for (let entity of allEntities) {
@@ -333,6 +336,7 @@ export function draw() {
     const seconds = totalSeconds % 60;
     const paddedSeconds = seconds.toString().padStart(2, '0'); 
     timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} debug: ${cupids.cupids.length}, ${document.getElementById('debug-visuals').childElementCount}, ${allEntities.length}`;
+    livesElement.textContent = `Lives: ${gameState.lives}`;
     MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
     MarioHealthBar.style.bottom = (mario.y + 90) + "px";
     if (mario.crouching) {

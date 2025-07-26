@@ -9,6 +9,7 @@ export const marioDiv = document.getElementById('mario');
 const FIRE_RATE = 30;
 let fireCooldown = 0;
 
+
 //the character the player controls
 export let mario = {
     name: "mario",
@@ -186,9 +187,13 @@ export function marioUpdate() {
         }
     }
     if (mario.health <= 0) {
+        gameState.lives-=1
+        mario.health=100
+        if (gameState.lives===0){
         gameState.currentState = 'gameOver'
         updateMenuVisibility();
         console.log("mario died")
+        }
     }
 
     if (keysPressed.upgrade){
