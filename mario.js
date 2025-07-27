@@ -232,13 +232,13 @@ export function marioUpdate() {
     // if (!grounded) {
     //   impulse = mario.accel / 1.5 //to make aerial x axis acceleration harder than grounded
     // }
-    if (keysPressed.left) {
+    if (keysPressed.left && !keysPressed.down) {
         if (mario.velX > -mario.maxSpeed) {
             mario.velX -= impulse
         }
     }
 
-    if (keysPressed.right && !mario.is) {
+    if (keysPressed.right && !mario.is && !keysPressed.down) {
         if (mario.velX < mario.maxSpeed) {
             mario.velX += impulse
         }
