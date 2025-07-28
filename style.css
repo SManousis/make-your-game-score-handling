@@ -143,7 +143,7 @@ body {
   height: 300px;
   left: 0px;
   bottom: 0px;
-  transform: translate(calc(-50% + var(--cupid-x)), calc(50% + var(--cupid-y)));
+  transform: translate(calc(52% + var(--cupid-x)), calc(20% + var(--cupid-y)));
   opacity: 100%;
   z-index: 8;
 }

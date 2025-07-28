@@ -169,10 +169,16 @@ export function cupidUpdate(cupid) {
      for (let walkable of walkables.walkables) {
         for (let walkableBody of walkable.body) {
             for (let cupidBody of cupid.body) {
+                const explosiveX = cupid.x
+                
+                const explosiveY = cupid.y
+                
                 if (utils.IsBodyCollidingWithBody(cupidBody, walkableBody) && !cupid.hasExploded) {
                     cupid.hasExploded = true;
                     // Replace cupid with explosion-cupid!
-                    createExplosionCupid(cupid.x, cupid.y);
+                    createExplosionCupid(explosiveX, explosiveY);
+
+                    console.log (explosiveX, explosiveY)
                     utils.destroyUnit(cupid); // Remove the original cupid
                     return;
                 }
@@ -194,6 +200,8 @@ export function cupidVisuals(cupid) {
 export function explosionCupidUpdate(entity) {
     entity.countdownDiv.style.left = (entity.x ) + 'px';
     entity.countdownDiv.style.bottom = (entity.y) + 'px';
+    entity.dom.style.left = (entity.x - 300) + 'px';
+    entity.dom.style.bottom = (entity.y - 50) + 'px';
 
     if (!entity.exploded) {
         if (!entity._lastTick) entity._lastTick = Date.now();
