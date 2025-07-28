@@ -192,8 +192,8 @@ export function cupidVisuals(cupid) {
 
 
 export function explosionCupidUpdate(entity) {
-    entity.countdownDiv.style.left = (entity.x - 20) + 'px';
-    entity.countdownDiv.style.bottom = (entity.y + 70) + 'px';
+    entity.countdownDiv.style.left = (entity.x ) + 'px';
+    entity.countdownDiv.style.bottom = (entity.y) + 'px';
 
     if (!entity.exploded) {
         if (!entity._lastTick) entity._lastTick = Date.now();
@@ -202,7 +202,7 @@ export function explosionCupidUpdate(entity) {
         if (now - entity._lastTick >= 1000) {
             entity.countdown--;
             entity._lastTick = now;
-            entity.countdownDiv.textContent = entity.countdown > 0 ? entity.countdown : '💥';
+            entity.countdownDiv.textContent = entity.countdown > 0 ? entity.countdown : '💥' ;
         }
 
         if (entity.countdown <= 0) {
@@ -221,10 +221,12 @@ export function explosionCupidUpdate(entity) {
                         }
 
                         if (e.health <= 0) {
+
                             e.disabled = true;
                             if (e.dom) e.dom.remove();
                             e.body.forEach(b => b.div?.remove());
                             allEntities.splice(allEntities.indexOf(e), 1);
+                            utils.destroyUnit(e);
                         }
                         break;
                     }
@@ -237,9 +239,13 @@ export function explosionCupidUpdate(entity) {
                 entity.countdownDiv?.remove();
                 entity.disabled = true;
                 allEntities.splice(allEntities.indexOf(entity), 1);
+                utils.destroyUnit(entity)
             }, 500);
+            
         }
+        
     }
+    
 }
 
 
