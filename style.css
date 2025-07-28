@@ -137,6 +137,24 @@ body {
   opacity: 100%;
   z-index: 8;
 }
+.explosion-cupid-img {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  left: 0px;
+  bottom: 0px;
+  transform: translate(calc(-50% + var(--cupid-x)), calc(50% + var(--cupid-y)));
+  opacity: 100%;
+  z-index: 8;
+}
+
+.cupid-countdown {
+  position: absolute;
+  color: red;
+  font-size: 30px;
+  font-weight: bold;
+  z-index: 20;
+}
 
 .ghost-img {
   position: absolute;

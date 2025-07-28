@@ -9,6 +9,37 @@ export let cupids = [];
 
 let preloadedFiringImage = new Image();
 preloadedFiringImage.src = "assets/enemies/TrumpCupidFired.png";
+export function createExplosionCupid(x, y, damage = 50, radius = 150, countdownTime = 3) {
+    const explosionCupidBody = document.createElement('img');
+    explosionCupidBody.className = "explosion-cupid-img";
+    explosionCupidBody.src = "assets/items/explosion.png";
+    document.getElementById('game-area').appendChild(explosionCupidBody);
+
+    const explosionCupid = {
+        name: "explosion-cupid",
+        damage: damage,
+        x: x,
+        y: y,
+        countdown: countdownTime,
+        radius: radius,
+        exploded: false,
+        body: [utils.createCircle(x, y, radius)],
+        dom: explosionCupidBody,
+        countdownDiv: null,
+        disabled: false,
+        updateFunc: explosionCupidUpdate,
+        drawFunc: explosionCupidVisuals,
+        team: "enemy",
+    };
+
+    explosionCupid.countdownDiv = document.createElement('div');
+    explosionCupid.countdownDiv.className = 'cupid-countdown';
+    explosionCupid.countdownDiv.textContent = countdownTime;
+    document.getElementById('game-area').appendChild(explosionCupid.countdownDiv);
+
+    allEntities.push(explosionCupid);
+    return explosionCupid;
+}
 
 export function createCupid(x, y, index) {
     let cupidBody = document.createElement("img");
@@ -135,68 +166,15 @@ export function cupidUpdate(cupid) {
         let candy = healthItem.createHealthItem(cupid.x, cupid.y - 60, 20)
     }
 
-    for (let walkable of walkables.walkables) {
+     for (let walkable of walkables.walkables) {
         for (let walkableBody of walkable.body) {
             for (let cupidBody of cupid.body) {
                 if (utils.IsBodyCollidingWithBody(cupidBody, walkableBody) && !cupid.hasExploded) {
-                    cupid.velY = 0;
-                    cupid.velX = 0;
-                    cupid.hasExploded = true; 
-                    console.log(cupid.x, cupid.y)// prevent future explosions
-    
-                    setTimeout(() => {
-                        const explosionCircle = utils.createCircle(cupid.x, cupid.y, 150);
-                        explosionCircle.div.style.left = cupid.x + "px";
-                        explosionCircle.div.style.bottom = cupid.y - 300 + "px";
-                        explosionCircle.div.style.transform = "translate(-50%, -50%)";
-                        explosionCircle.div.style.background = "rgba(255, 0, 0, 0.75)";
-                        // explosionCircle.div.style.zIndex = 200; 
-                        const explosionDamage = 50;
-    
-                        for (let entity of allEntities) {
-                            if (entity === cupid) continue;
-                            if (entity.disabled) continue;
-    
-                            for (let body of entity.body) {
-                                if (utils.IsBodyCollidingWithBody(body, explosionCircle)) {
-                                    entity.health -= explosionDamage;
-    
-                                    // Mario-specific check
-                                    //TODO this check must not be done here, mario should take care of game over screen by looking at his own hp on his own, or another central location
-                                    if (entity.name === "mario" && entity.health <= 0 && !entity.disabled) {
-                                        entity.disabled = true;
-                                        gameState.currentState = 'gameOver';
-                                        updateMenuVisibility();
-                                    }
-    
-                                    if (entity.health <= 0) {
-                                        entity.disabled = true;
-                                        if (entity.dom) entity.dom.remove();
-                                        entity.body.forEach(b => {
-                                            if (b.div) b.div.remove();
-                                            b.active = false;
-                                        });
-                                        const idx = allEntities.indexOf(entity);
-                                        if (idx !== -1) allEntities.splice(idx, 1);
-                                    }
-                                    break; // no need to keep checking other bodies of same entity
-                                }
-                            }
-                        }
-                        cupid.dom.src = "assets/items/explosion.png"
-                        cupid.dom.style.width = "300px";
-                        cupid.dom.style.height = "300px";
-                        setTimeout(() => {
-                            if (explosionCircle.div) explosionCircle.div.remove();
-                            if (cupid.dom) cupid.dom.remove();
-                            cupid.body.forEach(b => { if (b.div) b.div.remove(); });
-                            const idx = allEntities.indexOf(cupid);
-                            if (idx !== -1) allEntities.splice(idx, 1);
-                            utils.removeUnitFromArray(cupid, cupids)
-                        }, 1000)
-                        
-                        
-                    }, 2000); // Shorten delay for explosion (e.g., 500 ms)
+                    cupid.hasExploded = true;
+                    // Replace cupid with explosion-cupid!
+                    createExplosionCupid(cupid.x, cupid.y);
+                    utils.destroyUnit(cupid); // Remove the original cupid
+                    return;
                 }
             }
         }
@@ -213,3 +191,60 @@ export function cupidVisuals(cupid) {
 }
 
 
+export function explosionCupidUpdate(entity) {
+    entity.countdownDiv.style.left = (entity.x - 20) + 'px';
+    entity.countdownDiv.style.bottom = (entity.y + 70) + 'px';
+
+    if (!entity.exploded) {
+        if (!entity._lastTick) entity._lastTick = Date.now();
+        const now = Date.now();
+
+        if (now - entity._lastTick >= 1000) {
+            entity.countdown--;
+            entity._lastTick = now;
+            entity.countdownDiv.textContent = entity.countdown > 0 ? entity.countdown : '💥';
+        }
+
+        if (entity.countdown <= 0) {
+            entity.exploded = true;
+            for (let e of allEntities) {
+                if (e === entity || e.disabled) continue;
+
+                for (let body of e.body) {
+                    if (utils.IsBodyCollidingWithBody(body, entity.body[0])) {
+                        e.health -= entity.damage;
+
+                        if (e.name === "mario" && e.health <= 0 && !e.disabled) {
+                            e.disabled = true;
+                            gameState.currentState = 'gameOver';
+                            updateMenuVisibility();
+                        }
+
+                        if (e.health <= 0) {
+                            e.disabled = true;
+                            if (e.dom) e.dom.remove();
+                            e.body.forEach(b => b.div?.remove());
+                            allEntities.splice(allEntities.indexOf(e), 1);
+                        }
+                        break;
+                    }
+                }
+            }
+
+            setTimeout(() => {
+                entity.dom?.remove();
+                entity.body.forEach(b => b.div?.remove());
+                entity.countdownDiv?.remove();
+                entity.disabled = true;
+                allEntities.splice(allEntities.indexOf(entity), 1);
+            }, 500);
+        }
+    }
+}
+
+
+export function explosionCupidVisuals(entity) {
+    if (!entity || !entity.dom) return;
+    entity.dom.style.setProperty('--cupid-x', `${entity.x}px`);
+    entity.dom.style.setProperty('--cupid-y', `${-entity.y}px`);
+}
