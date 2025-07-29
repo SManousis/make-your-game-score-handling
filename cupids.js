@@ -4,6 +4,7 @@ import { allEntities, gameState, updateMenuVisibility, updateScore } from './gam
 import * as bullets from './bullets.js'
 import * as healthItem from './healthItem.js'
 import * as walkables from './walkables.js'
+import { createExplosion } from "./explosion.js";
 
 export let cupids = [];
 
@@ -31,6 +32,8 @@ export function createCupid(x, y, index) {
         state: "airborne",
         velX: 1.2,
         velY: 0,
+        kamikazeSpeed: 5,
+        kamikazeMode: false,
         touched: false,
         rand1: Math.random() * 10,
         rand2: Math.random() * 10,
@@ -136,8 +139,36 @@ export function cupidUpdate(cupid) {
         let candy = healthItem.createHealthItem(cupid.x, cupid.y - 60, 20)
     }
 
-    // TODO add kamikazi behavior
-  
+     for (let walkable of walkables.walkables) {
+        for (let walkableBody of walkable.body) {
+            for (let cupidBody of cupid.body) {
+                const explosiveX = cupid.x
+                
+                const explosiveY = cupid.y
+                
+                if (utils.IsBodyCollidingWithBody(cupidBody, walkableBody) && !cupid.hasExploded) {
+                    cupid.hasExploded = true;
+                    // Replace cupid with explosion-cupid!
+                    createExplosion(explosiveX, explosiveY);
+
+                    console.log (explosiveX, explosiveY)
+                    utils.destroyUnit(cupid); // Remove the original cupid
+                    return;
+                }
+            }
+        }
+    }
+    if (cupids.length == 2){
+        for (let cupid of cupids){
+            cupid.kamikazeMode = true
+        }
+    }
+    if (cupid.kamikazeMode){
+        utils.kamikaze(cupid, mario.mario);
+        utils.moveUnit(cupid, cupid.velX, cupid.velY);
+        console.log("kamikaze", cupid.velX, cupid.velY)
+        return;
+    }
 }
 
 

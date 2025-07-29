@@ -308,19 +308,26 @@ function update() {
     
     // console.log(groundedEnemies)
 
-    allEntities.forEach(entity => {
-        if (entity.type !== "healthItem" && entity.type !== "bullet") {
-            collision.isShot(entity)
-        }
-        if (entity.name === "mario") {
-            updateMarioHealthBar(entity.health, 100)
-        }
-    })
+
+
     collision.healthItemPicked(mario) // checks if mario touched a health item//collision.isShot(mario);
 
     //running all entities' update function
     for (let entity of allEntities) {
         if (entity.updateFunc) entity.updateFunc(entity);
+
+        if (entity.type !== "healthItem" && entity.type !== "bullet") {
+            collision.isShot(entity)
+        }
+
+        if (entity.name === "mario") {
+            updateMarioHealthBar(entity.health, 100)
+        }
+
+        if (entity.name == 'mario'){
+            
+        }
+    
     }
 
     gameState.frameCounter++

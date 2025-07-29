@@ -3,12 +3,14 @@ import { allEntities, aoeDamage } from "./game.js";
 import { moveAndCollide } from "./physicsStep.js";
 import * as utils from "./utils.js"
 
-export function createExplosion(x, y, damage = 50, radius = 150, flashDuration = 30) {
+export function createExplosion(x, y, team, damage = 50, radius = 150, flashDuration = 30) {
     const explosionBody = document.createElement('img');
     explosionBody.className = "explosion-img";
     explosionBody.src = "assets/items/explosion.png";
     // explosionBody.style.left = (explosion.x  ) + 'px';
     // explosionBody.style.bottom = (explosion.y - 5 ) + 'px';
+
+    
 
     document.getElementById('game-area').appendChild(explosionBody);
 
@@ -24,15 +26,10 @@ export function createExplosion(x, y, damage = 50, radius = 150, flashDuration =
         disabled: false,
         flashDuration: flashDuration, //how long the explosion flash will last
         
-        updateFunc: explosionUpdate,
-        drawFunc: explosionVisuals,
-        team: "enemy",
+        updateFunc: function () {explosionUpdate(this)},
+        drawFunc: function () {explosionVisuals(this)},
+        team: team,
     };
-
-    entity.dom.style.setProperty('--x', `${entity.x}px`);
-    entity.dom.style.setProperty('--y', `${-entity.y}px`);
-    entity.countdownDiv.style.setProperty('--x', `${entity.x}px`);
-    entity.countdownDiv.style.setProperty('--y', `${-entity.y}px`);
 
     aoeDamage.push(explosion)
     allEntities.push(explosion);
@@ -43,7 +40,7 @@ export function createExplosion(x, y, damage = 50, radius = 150, flashDuration =
 export function explosionUpdate(entity) {
     entity.flashDuration--
 
-    if (flashDuration == 0){
+    if (entity.flashDuration == 0){
         utils.destroyUnit(entity)
     }
 
@@ -60,6 +57,7 @@ export function explosionUpdate(entity) {
 
 
 export function explosionVisuals(entity) {
+    console.log(entity)
     if (!entity || !entity.dom) return;
     entity.dom.style.setProperty('--x', `${entity.x}px`);
     entity.dom.style.setProperty('--y', `${-entity.y}px`);
@@ -70,7 +68,7 @@ export function explosionVisuals(entity) {
 
 
 
-export function createBomb(x, y, damage = 50, radius = 150, countdownTime = 3, canFall = true){
+export function createBomb(x, y, team, damage = 50, radius = 150, countdownTime = 3, canFall = true){
     const bombBody = document.createElement('img');
     bombBody.className = "bomb-img";
     bombBody.src = "assets/items/bomb.png";
@@ -101,7 +99,7 @@ export function createBomb(x, y, damage = 50, radius = 150, countdownTime = 3, c
         canFall: canFall,
         updateFunc: function () {bombUpdate(this)},
         drawFunc: function () {bombVisuals(this)},
-        team: "enemy",
+        team: team,
         physicsPointsOffsets: [
             { x: 0, y: 0 }, // Left foot
        
@@ -122,7 +120,8 @@ export function bombUpdate(entity) {
     entity.countdownDiv.textContent = entity.countdown > 5 ? parseInt(1+entity.countdown/60) : '💥' ;
     
     if (entity.countdown <= 0) {
-        createExplosion(entity.x, entity.y, entity.damage. entity.radius)
+        console.log(entity)
+        createExplosion(entity.x, entity.y, entity.damage, entity.radius)
         entity.countdownDiv.remove()
         utils.destroyUnit(entity)
     }

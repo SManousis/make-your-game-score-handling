@@ -260,3 +260,14 @@ export function destroyUnit(unit){
     unit.body.forEach(b => { if (b.div) b.div.remove(); })
     if (unit.dom) unit.dom.remove();
 }
+
+
+export function kamikaze(unit, target){
+    const adjacent = unit.x - target.x
+    const opposite = unit.y - target.y
+    const angle = Math.atan2(opposite, adjacent)
+    unit.velX = - unit.kamikazeSpeed * Math.cos(angle)
+    unit.velY = -(unit.kamikazeSpeed * Math.sin(angle))
+    unit.moveSpeed = unit.kamikazeSpeed
+    unit.damage = 150
+}

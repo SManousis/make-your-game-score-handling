@@ -25,6 +25,21 @@ export function isShot(entity) {
     }
 }
 
+export function inAoe(entity) {
+    for (const aoe of game.aoeDamage){
+        if (!aoe.active){
+            continue
+        }
+        if (utils.IsBodyCollidingWithUnit(entity)){
+            if (entity.hasOwn('takeDamage')){
+                entity.takeDamage(aoe.damage, aoe.x)
+            }else{
+                entity.health -= aoe.damage
+            }
+        }
+    }
+}
+
 export function healthItemPicked(entity) {
     for (const candy of healthItem.healthItems) {
         if (candy.disabled) continue;
