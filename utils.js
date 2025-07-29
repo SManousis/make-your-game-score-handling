@@ -268,5 +268,5 @@ export function kamikaze(unit, target){
     unit.velX = - unit.kamikazeSpeed * Math.cos(angle)
     unit.velY = -(unit.kamikazeSpeed * Math.sin(angle))
     unit.moveSpeed = unit.kamikazeSpeed
-    unit.damage = 150
+    unit.damage = 90
 }
