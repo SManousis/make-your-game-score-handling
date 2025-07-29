@@ -61,6 +61,8 @@ export function createCupid(x, y, index) {
         state: "airborne",
         velX: 1.2,
         velY: 0,
+        kamikazeSpeed: 5,
+        kamikazeMode: false,
         touched: false,
         rand1: Math.random() * 10,
         rand2: Math.random() * 10,
@@ -184,6 +186,17 @@ export function cupidUpdate(cupid) {
                 }
             }
         }
+    }
+    if (cupids.length == 2){
+        for (let cupid of cupids){
+            cupid.kamikazeMode = true
+        }
+    }
+    if (cupid.kamikazeMode){
+        utils.kamikaze(cupid, mario.mario);
+        utils.moveUnit(cupid, cupid.velX, cupid.velY);
+        console.log("kamikaze", cupid.velX, cupid.velY)
+        return;
     }
 }
 
