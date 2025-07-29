@@ -9,37 +9,7 @@ export let cupids = [];
 
 let preloadedFiringImage = new Image();
 preloadedFiringImage.src = "assets/enemies/TrumpCupidFired.png";
-export function createExplosionCupid(x, y, damage = 50, radius = 150, countdownTime = 3) {
-    const explosionCupidBody = document.createElement('img');
-    explosionCupidBody.className = "explosion-cupid-img";
-    explosionCupidBody.src = "assets/enemies/TrumpCupid.png";
-    document.getElementById('game-area').appendChild(explosionCupidBody);
 
-    const explosionCupid = {
-        name: "explosion-cupid",
-        damage: damage,
-        x: x,
-        y: y,
-        countdown: countdownTime,
-        radius: radius,
-        exploded: false,
-        body: [utils.createCircle(x, y, radius)],
-        dom: explosionCupidBody,
-        countdownDiv: null,
-        disabled: false,
-        updateFunc: explosionCupidUpdate,
-        drawFunc: explosionCupidVisuals,
-        team: "enemy",
-    };
-
-    explosionCupid.countdownDiv = document.createElement('div');
-    explosionCupid.countdownDiv.className = 'cupid-countdown';
-    explosionCupid.countdownDiv.textContent = countdownTime;
-    document.getElementById('game-area').appendChild(explosionCupid.countdownDiv);
-
-    allEntities.push(explosionCupid);
-    return explosionCupid;
-}
 
 export function createCupid(x, y, index) {
     let cupidBody = document.createElement("img");
@@ -166,25 +136,8 @@ export function cupidUpdate(cupid) {
         let candy = healthItem.createHealthItem(cupid.x, cupid.y - 60, 20)
     }
 
-     for (let walkable of walkables.walkables) {
-        for (let walkableBody of walkable.body) {
-            for (let cupidBody of cupid.body) {
-                const explosiveX = cupid.x
-                
-                const explosiveY = cupid.y
-                
-                if (utils.IsBodyCollidingWithBody(cupidBody, walkableBody) && !cupid.hasExploded) {
-                    cupid.hasExploded = true;
-                    // Replace cupid with explosion-cupid!
-                    createExplosionCupid(explosiveX, explosiveY);
-
-                    console.log (explosiveX, explosiveY)
-                    utils.destroyUnit(cupid); // Remove the original cupid
-                    return;
-                }
-            }
-        }
-    }
+    // TODO add kamikazi behavior
+  
 }
 
 
@@ -196,74 +149,3 @@ export function cupidVisuals(cupid) {
 
 }
 
-
-export function explosionCupidUpdate(entity) {
-    entity.countdownDiv.style.left = (entity.x ) + 'px';
-    entity.countdownDiv.style.bottom = (entity.y + 50) + 'px';
-    entity.dom.style.left = (entity.x  ) + 'px';
-    entity.dom.style.bottom = (entity.y - 5 ) + 'px';
-
-    if (!entity.exploded) {
-        if (!entity._lastTick) entity._lastTick = Date.now();
-        const now = Date.now();
-
-        if (now - entity._lastTick >= 1000) {
-            entity.countdown--;
-            entity._lastTick = now;
-            entity.countdownDiv.textContent = entity.countdown > 0 ? entity.countdown : '💥' ;
-        }
-
-        if (entity.countdown <= 0) {
-            entity.dom.src = "assets/items/explosion.png";
-            entity.dom.style.width = "200px";
-            entity.dom.style.height = "300px";  
-            
-            //entity.dom.style.transform = 'none';
-            entity.exploded = true;            
-            for (let e of allEntities) {
-                if (e === entity || e.disabled) continue;
-
-                for (let body of e.body) {
-                    if (utils.IsBodyCollidingWithBody(body, entity.body[0])) {
-                        e.health -= entity.damage;
-
-                        if (e.name === "mario" && e.health <= 0 && !e.disabled) {
-                            e.disabled = true;
-                            gameState.currentState = 'gameOver';
-                            updateMenuVisibility();
-                        }
-
-                        if (e.health <= 0) {
-
-                            e.disabled = true;
-                            if (e.dom) e.dom.remove();
-                            e.body.forEach(b => b.div?.remove());
-                            allEntities.splice(allEntities.indexOf(e), 1);
-                            utils.destroyUnit(e);
-                        }
-                        break;
-                    }
-                }
-            }
-
-            setTimeout(() => {
-                entity.dom?.remove();
-                entity.body.forEach(b => b.div?.remove());
-                entity.countdownDiv?.remove();
-                entity.disabled = true;
-                allEntities.splice(allEntities.indexOf(entity), 1);
-                utils.destroyUnit(entity)
-            }, 500);
-            
-        }
-        
-    }
-    
-}
-
-
-export function explosionCupidVisuals(entity) {
-    if (!entity || !entity.dom) return;
-    entity.dom.style.setProperty('--cupid-x', `${entity.x}px`);
-    entity.dom.style.setProperty('--cupid-y', `${-entity.y}px`);
-}

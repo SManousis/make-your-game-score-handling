@@ -11,6 +11,7 @@ import { createVendingStatic } from "./vending.js"
 import { healthItems } from './healthItem.js'
 import * as utils from "./utils.js"
 import { ghosts } from './ghosts.js'
+import { createBomb } from './explosion.js'
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -52,8 +53,9 @@ let lastTime = 0;
 
 export let allEntities = []
 export let groundedEnemies = []
+export let aoeDamage = []
 
-export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts]
+export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts, aoeDamage]
 
 export const gameArea = document.getElementById('game-area');
 
@@ -383,3 +385,6 @@ export function removeFromAllEntities(entity) {
 }
 createVendingStatic()
 stage1()
+
+cupids.createCupid(500, 200, 0)
+createBomb(800, 500)

@@ -137,23 +137,38 @@ body {
   opacity: 100%;
   z-index: 8;
 }
-.explosion-cupid-img {
+
+.bomb-img {
   position: absolute;
   width: 70px;
   height: 70px;
   left: 0px;
   bottom: 0px;
-  transform: translate(calc(-52% + var(--cupid-x)), calc(20% + var(--cupid-y)));
+  transform: translate(calc(-52% + var(--x)), calc(20% + var(--y)));
   opacity: 100%;
   z-index: 100;
 }
 
-.cupid-countdown {
+.explosion-img {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  left: 0px;
+  bottom: 0px;
+  transform: translate(calc(-52% + var(--x)), calc(20% + var(--y)));
+  opacity: 100%;
+  z-index: 102;
+}
+
+.bomb-countdown {
+  bottom:0px;
+  left:0px;
   position: absolute;
   color: red;
   font-size: 30px;
   font-weight: bold;
-  z-index: 20;
+  z-index: 1001;
+  transform: translate(calc(-52% + var(--x)), calc(-120% + var(--y)));
 }
 
 .ghost-img {

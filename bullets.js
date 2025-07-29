@@ -81,17 +81,10 @@ export function bulletUpdate(bullet) {
 
     if (bullet.touched) {
         bullet.disabled = true
-        bullet.dom.remove()
-        utils.destroyUnit(bullet)
-        
-        return;
-    }
-    if (bullet.disabled) {
-        bullet.dom.remove()
-        utils.destroyUnit(bullet)
         utils.destroyUnit(bullet)
         return;
     }
+
     for (const walkable of walkables.walkables) {
         for (const walkableBody of walkable.body) {
             for (const body of bullet.body) {
@@ -99,7 +92,6 @@ export function bulletUpdate(bullet) {
                     // console.log(`walkable touched ${entity.name}`)
                     bullet.disabled = true
                     bullet.dom.remove()
-                    utils.destroyUnit(bullet)
                     utils.destroyUnit(bullet)
                     return;
                 }

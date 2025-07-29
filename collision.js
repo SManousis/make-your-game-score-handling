@@ -19,8 +19,7 @@ export function isShot(entity) {
             entity.health -= bullet.damage
             }
             if (entity.health <= 0) {
-                entity.disabled = true
-                
+                entity.disabled = true  
             }
         }
     }

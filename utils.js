@@ -12,6 +12,7 @@ export function createCircle(centerX, centerY, radius) {
     div.style.setProperty('--x', centerX)
     div.style.setProperty('--y', -centerY)
     div.id = "debug-circle-" + id
+  
     id++
     let debugDiv = document.getElementById("debug-visuals")
     debugDiv.append(div)
