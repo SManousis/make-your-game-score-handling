@@ -288,10 +288,9 @@ function gameLoop(currentTime) {
     // console.log(gameState.currentState)
     if (gameState.currentState === 'running') {
         gameState.gameTime += deltaTime;
-
-     
         update();
     }
+
     if (gameState.currentState === 'running' || gameState.currentState === 'paused' || gameState.currentState === 'gameOver') {
         draw();
     }
@@ -314,6 +313,11 @@ function update() {
 
     //running all entities' update function
     for (let entity of allEntities) {
+        if (aoeDamage.length > 0 && (entity.team == 'enemy' || entity.team == 'player') && Object.hasOwn(entity, 'health')){
+            
+            collision.inAoe(entity)
+        }
+
         if (entity.updateFunc) entity.updateFunc(entity);
 
         if (entity.type !== "healthItem" && entity.type !== "bullet") {
@@ -324,9 +328,7 @@ function update() {
             updateMarioHealthBar(entity.health, 100)
         }
 
-        if (entity.name == 'mario'){
-            
-        }
+        
     
     }
 
@@ -343,7 +345,7 @@ export function draw() {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     const paddedSeconds = seconds.toString().padStart(2, '0'); 
-    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} debug: ${cupids.cupids.length}, ${document.getElementById('debug-visuals').childElementCount}, ${allEntities.length}`;
+    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} debug: ${cupids.cupids.length}, ${document.getElementById('debug-visuals').childElementCount}, ${aoeDamage.length}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;
     MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
     MarioHealthBar.style.bottom = (mario.y + 90) + "px";

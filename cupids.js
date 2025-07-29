@@ -145,7 +145,7 @@ export function cupidUpdate(cupid) {
                 if (utils.IsBodyCollidingWithBody(cupidBody, walkableBody) && !cupid.hasExploded) {
                     cupid.hasExploded = true;
                     // Replace cupid with explosion-cupid!
-                    createExplosion(explosiveX, explosiveY);
+                    createExplosion(explosiveX, explosiveY, "enemy");
 
                     console.log (explosiveX, explosiveY)
                     utils.destroyUnit(cupid); // Remove the original cupid

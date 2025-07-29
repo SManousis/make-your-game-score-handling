@@ -25,16 +25,23 @@ export function isShot(entity) {
     }
 }
 
-export function inAoe(entity) {
+export function inAoe(unit) {
+
     for (const aoe of game.aoeDamage){
-        if (!aoe.active){
+        if (aoe.active == false || aoe.team == unit.team){
+            console.log("skipping: ",aoe.name, aoe.team == unit.team, aoe.active == false)
             continue
         }
-        if (utils.IsBodyCollidingWithUnit(entity)){
-            if (entity.hasOwn('takeDamage')){
-                entity.takeDamage(aoe.damage, aoe.x)
-            }else{
-                entity.health -= aoe.damage
+        for (let aoeBody of aoe.body){
+            console.log('checking body')
+            if (utils.IsBodyCollidingWithUnit(aoeBody, unit)){
+                console.log("CONNECTED: ",unit.name, unit.team, aoe.team)
+                if (Object.hasOwn(unit, 'takeDamage')){
+                    unit.takeDamage(aoe.damage, aoe.x)
+                }else{
+                    unit.health -= aoe.damage
+                }
+                break
             }
         }
     }

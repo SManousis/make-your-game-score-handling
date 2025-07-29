@@ -20,6 +20,7 @@ export function createExplosion(x, y, team, damage = 50, radius = 150, flashDura
         x: x,
         y: y,
         active: true,
+        aliveFrames: 0,
         radius: radius,
         body: [utils.createCircle(x, y, radius)],
         dom: explosionBody,
@@ -45,7 +46,7 @@ export function explosionUpdate(entity) {
     }
 
 
-    if (entity.active){
+    if (entity.active && entity.aliveFrames == 1){
      
         entity.active = false
         
@@ -53,11 +54,12 @@ export function explosionUpdate(entity) {
             bodyShape.active = false
         }
     }
+
+    entity.aliveFrames++
 }
 
 
 export function explosionVisuals(entity) {
-    console.log(entity)
     if (!entity || !entity.dom) return;
     entity.dom.style.setProperty('--x', `${entity.x}px`);
     entity.dom.style.setProperty('--y', `${-entity.y}px`);
@@ -120,8 +122,8 @@ export function bombUpdate(entity) {
     entity.countdownDiv.textContent = entity.countdown > 5 ? parseInt(1+entity.countdown/60) : '💥' ;
     
     if (entity.countdown <= 0) {
-        console.log(entity)
-        createExplosion(entity.x, entity.y, entity.damage, entity.radius)
+    
+        createExplosion(entity.x, entity.y, entity.team, entity.damage, entity.radius)
         entity.countdownDiv.remove()
         utils.destroyUnit(entity)
     }
@@ -129,13 +131,12 @@ export function bombUpdate(entity) {
     if (entity.canFall){
         
         const grounded = moveAndCollide(entity)
-        console.log(grounded)
+        
     }
 }
 
 
 export function bombVisuals(entity) {
-    console.log(entity)
     if (!entity || !entity.dom) return;
     entity.dom.style.setProperty('--x', `${entity.x}px`);
     entity.dom.style.setProperty('--y', `${-entity.y}px`);
