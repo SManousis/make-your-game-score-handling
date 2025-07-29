@@ -12,7 +12,7 @@ preloadedFiringImage.src = "assets/enemies/TrumpCupidFired.png";
 export function createExplosionCupid(x, y, damage = 50, radius = 150, countdownTime = 3) {
     const explosionCupidBody = document.createElement('img');
     explosionCupidBody.className = "explosion-cupid-img";
-    explosionCupidBody.src = "assets/items/explosion.png";
+    explosionCupidBody.src = "assets/enemies/TrumpCupid.png";
     document.getElementById('game-area').appendChild(explosionCupidBody);
 
     const explosionCupid = {
@@ -199,9 +199,9 @@ export function cupidVisuals(cupid) {
 
 export function explosionCupidUpdate(entity) {
     entity.countdownDiv.style.left = (entity.x ) + 'px';
-    entity.countdownDiv.style.bottom = (entity.y) + 'px';
-    entity.dom.style.left = (entity.x - 300) + 'px';
-    entity.dom.style.bottom = (entity.y - 50) + 'px';
+    entity.countdownDiv.style.bottom = (entity.y + 50) + 'px';
+    entity.dom.style.left = (entity.x  ) + 'px';
+    entity.dom.style.bottom = (entity.y - 5 ) + 'px';
 
     if (!entity.exploded) {
         if (!entity._lastTick) entity._lastTick = Date.now();
@@ -214,7 +214,12 @@ export function explosionCupidUpdate(entity) {
         }
 
         if (entity.countdown <= 0) {
-            entity.exploded = true;
+            entity.dom.src = "assets/items/explosion.png";
+            entity.dom.style.width = "200px";
+            entity.dom.style.height = "300px";  
+            
+            //entity.dom.style.transform = 'none';
+            entity.exploded = true;            
             for (let e of allEntities) {
                 if (e === entity || e.disabled) continue;
 
