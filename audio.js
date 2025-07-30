@@ -104,7 +104,10 @@ export default class AudioManager {
 
 
     async playMusicLoop(url, volume = 1.0, overlapDuration = 7.742) {
-        if (this.isPlaying === true) return;
+        if (this.isPlaying === true) {
+            clearTimeout(this.musicLoopTimer);
+            this.musicOffset = 0;
+        };
 
         const buffer = await this.getOrLoadMusicBuffer(url);
         if (!buffer) return;
@@ -184,8 +187,11 @@ export const audioManager = new AudioManager({
     vending_rising: "./assets/audio/vending_rising.mp3",
 }, 4);
 
-export async function audioSetUp(playMusic = true, playSounds = true) {
+export const track1 = {url: "./assets/audio/mario.mp3", overlapDuration: 7.742}
+
+// Must call this by a user event driven event on start-up
+export async function audioSetUp() {
     audioManager.resume();
-    if (playSounds) await audioManager.loadAll();
-    if (playMusic) await audioManager.getOrLoadMusicBuffer("./assets/audio/mario.mp3");
+    await audioManager.loadAll();
+    await audioManager.getOrLoadMusicBuffer("./assets/audio/mario.mp3");
 }
