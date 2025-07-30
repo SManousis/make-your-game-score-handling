@@ -11,6 +11,7 @@ import { createVendingStatic } from "./vending.js"
 import { healthItems } from './healthItem.js'
 import * as utils from "./utils.js"
 import { ghosts } from './ghosts.js'
+import { createBomb } from './explosion.js'
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -52,8 +53,9 @@ let lastTime = 0;
 
 export let allEntities = []
 export let groundedEnemies = []
+export let aoeDamage = []
 
-export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts]
+export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts, aoeDamage]
 
 export const gameArea = document.getElementById('game-area');
 
@@ -286,10 +288,9 @@ function gameLoop(currentTime) {
     // console.log(gameState.currentState)
     if (gameState.currentState === 'running') {
         gameState.gameTime += deltaTime;
-
-     
         update();
     }
+
     if (gameState.currentState === 'running' || gameState.currentState === 'paused' || gameState.currentState === 'gameOver') {
         draw();
     }
@@ -306,19 +307,29 @@ function update() {
     
     // console.log(groundedEnemies)
 
-    allEntities.forEach(entity => {
-        if (entity.type !== "healthItem" && entity.type !== "bullet") {
-            collision.isShot(entity)
-        }
-        if (entity.name === "mario") {
-            updateMarioHealthBar(entity.health, 100)
-        }
-    })
+
+
     collision.healthItemPicked(mario) // checks if mario touched a health item//collision.isShot(mario);
 
     //running all entities' update function
     for (let entity of allEntities) {
+        if (aoeDamage.length > 0 && (entity.team == 'enemy' || entity.team == 'player') && Object.hasOwn(entity, 'health')){
+            
+            collision.inAoe(entity)
+        }
+
         if (entity.updateFunc) entity.updateFunc(entity);
+
+        if (entity.type !== "healthItem" && entity.type !== "bullet") {
+            collision.isShot(entity)
+        }
+
+        if (entity.name === "mario") {
+            updateMarioHealthBar(entity.health, 100)
+        }
+
+        
+    
     }
 
     gameState.frameCounter++
@@ -334,7 +345,7 @@ export function draw() {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     const paddedSeconds = seconds.toString().padStart(2, '0'); 
-    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} debug: ${cupids.cupids.length}, ${document.getElementById('debug-visuals').childElementCount}, ${allEntities.length}`;
+    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} debug: ${cupids.cupids.length}, ${document.getElementById('debug-visuals').childElementCount}, ${aoeDamage.length}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;
     MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
     MarioHealthBar.style.bottom = (mario.y + 90) + "px";
@@ -383,3 +394,6 @@ export function removeFromAllEntities(entity) {
 }
 createVendingStatic()
 stage1()
+
+cupids.createCupid(500, 200, 0)
+createBomb(800, 500)

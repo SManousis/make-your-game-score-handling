@@ -12,6 +12,7 @@ export function createCircle(centerX, centerY, radius) {
     div.style.setProperty('--x', centerX)
     div.style.setProperty('--y', -centerY)
     div.id = "debug-circle-" + id
+  
     id++
     let debugDiv = document.getElementById("debug-visuals")
     debugDiv.append(div)
@@ -258,4 +259,15 @@ export function destroyUnit(unit){
     }
     unit.body.forEach(b => { if (b.div) b.div.remove(); })
     if (unit.dom) unit.dom.remove();
+}
+
+
+export function kamikaze(unit, target){
+    const adjacent = unit.x - target.x
+    const opposite = unit.y - target.y
+    const angle = Math.atan2(opposite, adjacent)
+    unit.velX = - unit.kamikazeSpeed * Math.cos(angle)
+    unit.velY = -(unit.kamikazeSpeed * Math.sin(angle))
+    unit.moveSpeed = unit.kamikazeSpeed
+    unit.damage = 90
 }

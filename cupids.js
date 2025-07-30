@@ -4,11 +4,13 @@ import { allEntities, gameState, updateMenuVisibility, updateScore } from './gam
 import * as bullets from './bullets.js'
 import * as healthItem from './healthItem.js'
 import * as walkables from './walkables.js'
+import { createExplosion } from "./explosion.js";
 
 export let cupids = [];
 
 let preloadedFiringImage = new Image();
 preloadedFiringImage.src = "assets/enemies/TrumpCupidFired.png";
+
 
 export function createCupid(x, y, index) {
     let cupidBody = document.createElement("img");
@@ -30,6 +32,8 @@ export function createCupid(x, y, index) {
         state: "airborne",
         velX: 1.2,
         velY: 0,
+        kamikazeSpeed: 5,
+        kamikazeMode: false,
         touched: false,
         rand1: Math.random() * 10,
         rand2: Math.random() * 10,
@@ -78,7 +82,7 @@ export function cupidUpdate(cupid) {
         utils.destroyUnit(cupid)
         updateScore(cupid.scoreValue);
     }
-
+    
     cupid.parallelMoveCount++
 
     //what does this do? (alex)
@@ -115,11 +119,7 @@ export function cupidUpdate(cupid) {
     }
 
 
-    for (const BodyPart of cupid.body) {
-        if (utils.IsBodyCollidingWithUnit(BodyPart, mario.mario)) {
-            mario.mario.takeDamage(cupid.damage, cupid)
-        }
-    }
+    
     //decide if cupid will fire
     // if (cupid.index*100 == game.gameState.frameCounter%(cupids.length*100)){
     if (parseInt(Math.random() * 2000) == 0) {
@@ -135,71 +135,47 @@ export function cupidUpdate(cupid) {
         let candy = healthItem.createHealthItem(cupid.x, cupid.y - 60, 20)
     }
 
-    for (let walkable of walkables.walkables) {
+     for (let walkable of walkables.walkables) {
         for (let walkableBody of walkable.body) {
             for (let cupidBody of cupid.body) {
+                const explosiveX = cupid.x
+                
+                const explosiveY = cupid.y
+                
                 if (utils.IsBodyCollidingWithBody(cupidBody, walkableBody) && !cupid.hasExploded) {
-                    cupid.velY = 0;
-                    cupid.velX = 0;
-                    cupid.hasExploded = true; 
-                    console.log(cupid.x, cupid.y)// prevent future explosions
-    
-                    setTimeout(() => {
-                        const explosionCircle = utils.createCircle(cupid.x, cupid.y, 150);
-                        explosionCircle.div.style.left = cupid.x + "px";
-                        explosionCircle.div.style.bottom = cupid.y - 300 + "px";
-                        explosionCircle.div.style.transform = "translate(-50%, -50%)";
-                        explosionCircle.div.style.background = "rgba(255, 0, 0, 0.75)";
-                        // explosionCircle.div.style.zIndex = 200; 
-                        const explosionDamage = 50;
-    
-                        for (let entity of allEntities) {
-                            if (entity === cupid) continue;
-                            if (entity.disabled) continue;
-    
-                            for (let body of entity.body) {
-                                if (utils.IsBodyCollidingWithBody(body, explosionCircle)) {
-                                    entity.health -= explosionDamage;
-    
-                                    // Mario-specific check
-                                    //TODO this check must not be done here, mario should take care of game over screen by looking at his own hp on his own, or another central location
-                                    if (entity.name === "mario" && entity.health <= 0 && !entity.disabled) {
-                                        entity.disabled = true;
-                                        gameState.currentState = 'gameOver';
-                                        updateMenuVisibility();
-                                    }
-    
-                                    if (entity.health <= 0) {
-                                        entity.disabled = true;
-                                        if (entity.dom) entity.dom.remove();
-                                        entity.body.forEach(b => {
-                                            if (b.div) b.div.remove();
-                                            b.active = false;
-                                        });
-                                        const idx = allEntities.indexOf(entity);
-                                        if (idx !== -1) allEntities.splice(idx, 1);
-                                    }
-                                    break; // no need to keep checking other bodies of same entity
-                                }
-                            }
-                        }
-                        cupid.dom.src = "assets/items/explosion.png"
-                        cupid.dom.style.width = "300px";
-                        cupid.dom.style.height = "300px";
-                        setTimeout(() => {
-                            if (explosionCircle.div) explosionCircle.div.remove();
-                            if (cupid.dom) cupid.dom.remove();
-                            cupid.body.forEach(b => { if (b.div) b.div.remove(); });
-                            const idx = allEntities.indexOf(cupid);
-                            if (idx !== -1) allEntities.splice(idx, 1);
-                            utils.removeUnitFromArray(cupid, cupids)
-                        }, 1000)
-                        
-                        
-                    }, 2000); // Shorten delay for explosion (e.g., 500 ms)
+                    cupid.hasExploded = true;
+                    // Replace cupid with explosion-cupid!
+                    createExplosion(explosiveX, explosiveY, "enemy");
+
+                    console.log (explosiveX, explosiveY)
+                    utils.destroyUnit(cupid); // Remove the original cupid
+                    return;
                 }
             }
         }
+    }
+    if (cupids[0].y <= 350){
+        for (let cupid of cupids){
+            cupid.kamikazeMode = true
+        }
+    }
+    if (cupid.kamikazeMode){
+        utils.kamikaze(cupid, mario.mario);
+        utils.moveUnit(cupid, cupid.velX, cupid.velY);
+        for (const BodyPart of cupid.body) {
+            if (utils.IsBodyCollidingWithUnit(BodyPart, mario.mario)) {
+                mario.mario.health -= cupid.damage
+                if (mario.mario.health <= 0){
+                    utils.destroyUnit(mario.mario)
+                    gameState.currentState = 'gameOver';
+                    updateMenuVisibility();
+                }
+                utils.destroyUnit(cupid)
+            }
+            
+        }
+        
+        return;
     }
 }
 
@@ -209,7 +185,5 @@ export function cupidVisuals(cupid) {
     cupid.dom.style.opacity = "100%";
     cupid.dom.style.setProperty('--cupid-x', `${cupid.x}px`);
     cupid.dom.style.setProperty('--cupid-y', `${-cupid.y}px`);
-
 }
-
 

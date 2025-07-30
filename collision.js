@@ -19,8 +19,29 @@ export function isShot(entity) {
             entity.health -= bullet.damage
             }
             if (entity.health <= 0) {
-                entity.disabled = true
-                
+                entity.disabled = true  
+            }
+        }
+    }
+}
+
+export function inAoe(unit) {
+
+    for (const aoe of game.aoeDamage){
+        if (aoe.active == false || aoe.team == unit.team){
+            console.log("skipping: ",aoe.name, aoe.team == unit.team, aoe.active == false)
+            continue
+        }
+        for (let aoeBody of aoe.body){
+            console.log('checking body')
+            if (utils.IsBodyCollidingWithUnit(aoeBody, unit)){
+                console.log("CONNECTED: ",unit.name, unit.team, aoe.team)
+                if (Object.hasOwn(unit, 'takeDamage')){
+                    unit.takeDamage(aoe.damage, aoe.x)
+                }else{
+                    unit.health -= aoe.damage
+                }
+                break
             }
         }
     }
