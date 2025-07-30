@@ -5,6 +5,7 @@ import * as bullets from './bullets.js'
 import * as healthItem from './healthItem.js'
 import * as walkables from './walkables.js'
 import { createExplosion } from "./explosion.js";
+import * as collision from './collision.js'
 
 export let cupids = [];
 
@@ -154,7 +155,7 @@ export function cupidUpdate(cupid) {
             }
         }
     }
-    if (cupids[0].y <= 350){
+    if (cupids.length > 0 && cupids[0].y <= 350){
         for (let cupid of cupids){
             cupid.kamikazeMode = true
         }
@@ -162,18 +163,7 @@ export function cupidUpdate(cupid) {
     if (cupid.kamikazeMode){
         utils.kamikaze(cupid, mario.mario);
         utils.moveUnit(cupid, cupid.velX, cupid.velY);
-        for (const BodyPart of cupid.body) {
-            if (utils.IsBodyCollidingWithUnit(BodyPart, mario.mario)) {
-                mario.mario.health -= cupid.damage
-                if (mario.mario.health <= 0){
-                    utils.destroyUnit(mario.mario)
-                    gameState.currentState = 'gameOver';
-                    updateMenuVisibility();
-                }
-                utils.destroyUnit(cupid)
-            }
-            
-        }
+        collision.inAoe(cupid)
         
         return;
     }
