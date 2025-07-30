@@ -5,6 +5,7 @@ import * as bullets from './bullets.js'
 import * as utils from './utils.js'
 import * as game from './game.js'
 import * as healthItem from './healthItem.js'
+import { audioManager } from './audio.js'
 
 
 export function isShot(entity) {
@@ -15,11 +16,11 @@ export function isShot(entity) {
             bullet.disabled = true
             bullet.body.forEach(body => body.div.remove())
             bullet.dom.remove()
-            if (entity.type !== "turtle"){
-            entity.health -= bullet.damage
+            if (entity.type !== "turtle") {
+                entity.health -= bullet.damage
             }
             if (entity.health <= 0) {
-                entity.disabled = true  
+                entity.disabled = true
             }
         }
     }
@@ -27,18 +28,18 @@ export function isShot(entity) {
 
 export function inAoe(unit) {
 
-    for (const aoe of game.aoeDamage){
-        if (aoe.active == false || aoe.team == unit.team){
-            console.log("skipping: ",aoe.name, aoe.team == unit.team, aoe.active == false)
+    for (const aoe of game.aoeDamage) {
+        if (aoe.active == false || aoe.team == unit.team) {
+            console.log("skipping: ", aoe.name, aoe.team == unit.team, aoe.active == false)
             continue
         }
-        for (let aoeBody of aoe.body){
+        for (let aoeBody of aoe.body) {
             console.log('checking body')
-            if (utils.IsBodyCollidingWithUnit(aoeBody, unit)){
-                console.log("CONNECTED: ",unit.name, unit.team, aoe.team)
-                if (Object.hasOwn(unit, 'takeDamage')){
+            if (utils.IsBodyCollidingWithUnit(aoeBody, unit)) {
+                console.log("CONNECTED: ", unit.name, unit.team, aoe.team)
+                if (Object.hasOwn(unit, 'takeDamage')) {
                     unit.takeDamage(aoe.damage, aoe.x)
-                }else{
+                } else {
                     unit.health -= aoe.damage
                 }
                 break
@@ -52,6 +53,13 @@ export function healthItemPicked(entity) {
         if (candy.disabled) continue;
         // console.log("Checking collision between:", entity, "and", candy);
         if (collisionCheck(entity, candy)) {
+            if (game.sounds) audioManager.playSample("health", {
+                gain: game.soundsVolume,
+                pan: 0,
+                throttleMs: 300,
+                pitchRandom: [0.95, 1.05],
+            });
+            
             // console.log(`healthItem touched ${entity.name} gained ${candy.healthAdd}`);
             candy.disabled = true
             candy.body.forEach(body => body.div.remove())

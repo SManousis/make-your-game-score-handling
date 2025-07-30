@@ -12,6 +12,7 @@ import { healthItems } from './healthItem.js'
 import * as utils from "./utils.js"
 import * as ghosts from './ghosts.js'
 import { createBomb } from './explosion.js'
+import { audioManager, track1, audioSetUp } from './audio.js'
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -33,6 +34,10 @@ const restartButton = document.getElementById('restart-button');
 //const backToMenuButton = document.getElementById('back-to-menu-button');
 const leaderboardButton = document.getElementById('leaderboard-button');
 const mainMuteButton = document.getElementById('main-mute-button');
+const playMusicButtonMain = document.getElementById('play-music-button-main');
+const playSoundsButtonMain = document.getElementById('play-sounds-button-main');
+const playMusicButtonPause = document.getElementById('play-music-button-pause');
+const playSoundsButtonPause = document.getElementById('play-sounds-button-pause');
 const pauseMuteButton = document.getElementById('pause-mute-button');
 const gameOverMuteButton = document.getElementById('game-over-mute-button');
 
@@ -49,6 +54,11 @@ export let gameState = {
 }
 
 let lastTime = 0;
+
+export let music = true;
+export let sounds = true;
+export let musicVolume = 1;
+export let soundsVolume = 1;
 
 
 export let allEntities = []
@@ -114,13 +124,14 @@ function restartGame() {
 
     gameState.gameTime = 0;
     gameState.score = 0;
-    gameState.lives=5;
+    gameState.lives = 5;
     scoreElement.textContent = `Score: ${gameState.score}`;
     livesElement.textContent = `Lives: ${gameState.score}`;
 
     gameState.currentState = 'running';
     updateMenuVisibility();
     createVendingStatic();
+    if (music) audioManager.playMusicLoop(track1.url, volume, track1.overlapDuration)
     stage1();
 }
 
@@ -145,8 +156,15 @@ export const keysPressed = {
 //--- EVENT LISTENERS ----
 
 // Main menu buttons
+let audioInitialized = false;
 
-playButton.addEventListener('click', () => {
+playButton.addEventListener('click', async () => {
+    if (!audioInitialized) {
+        await audioSetUp();
+        audioInitialized = true;
+    }
+    if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration);
+
     gameState.currentState = 'running';
     updateMenuVisibility();
 });
@@ -156,6 +174,7 @@ leaderboardButton.addEventListener('click', () => {
 });
 
 resumeButton.addEventListener('click', () => {
+    if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration);
     gameState.currentState = 'running';
     updateMenuVisibility();
 });
@@ -169,6 +188,7 @@ pauseHelpButton.addEventListener('click', showHelpMenu);
 
 backFromHelpButton.addEventListener('click', () => {
     // Go back to the screen we were on before
+    if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration);
     gameState.currentState = gameState.previousState;
     updateMenuVisibility();
 });
@@ -189,6 +209,7 @@ document.querySelectorAll('#restart-button').forEach(btn => {
 function showHelpMenu() {
     gameState.previousState = gameState.currentState; // IMPORTANT: Remember where we came from
     gameState.currentState = 'help';
+    audioManager.pauseMusic();
     updateMenuVisibility();
 }
 
@@ -203,15 +224,36 @@ function toggleMute() {
 mainMuteButton.addEventListener('click', toggleMute);
 pauseMuteButton.addEventListener('click', toggleMute);
 gameOverMuteButton.addEventListener('click', toggleMute);
+
+playMusicButtonMain.addEventListener('click', () => {
+    music = !music;
+});
+
+playSoundsButtonMain.addEventListener('click', () => {
+    sounds = !sounds;
+});
+
+playMusicButtonPause.addEventListener('click', () => {
+    music = !music;
+});
+
+playSoundsButtonPause.addEventListener('click', () => {
+    sounds = !sounds;
+});
+
+
+
 // Listen for key presses
 document.addEventListener('keydown', (event) => {
     if (event.key.toLowerCase() === 'p' && (gameState.currentState === 'running' || gameState.currentState === 'paused')) {
         if (gameState.currentState === 'running') {
 
             gameState.currentState = 'paused';
+            audioManager.pauseMusic();
 
         } else if (gameState.currentState === 'paused') {
             gameState.currentState = 'running';
+            audioManager.playMusicLoop("./assets/audio/mario.mp3")
 
         }
         updateMenuVisibility();
@@ -308,7 +350,7 @@ function gameLoop(currentTime) {
 // Update the game state, only physics
 function update() {
     // mario movement
-    
+
     // console.log(groundedEnemies)
 
 
@@ -317,8 +359,8 @@ function update() {
 
     //running all entities' update function
     for (let entity of allEntities) {
-        if (aoeDamage.length > 0 && (entity.team == 'enemy' || entity.team == 'player') && Object.hasOwn(entity, 'health')){
-            
+        if (aoeDamage.length > 0 && (entity.team == 'enemy' || entity.team == 'player') && Object.hasOwn(entity, 'health')) {
+
             collision.inAoe(entity)
         }
 
@@ -332,8 +374,8 @@ function update() {
             updateMarioHealthBar(entity.health, 100)
         }
 
-        
-    
+
+
     }
 
     gameState.frameCounter++
@@ -348,7 +390,7 @@ export function draw() {
     const totalSeconds = Math.floor(gameState.gameTime / 1000);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
-    const paddedSeconds = seconds.toString().padStart(2, '0'); 
+    const paddedSeconds = seconds.toString().padStart(2, '0');
     timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} debug: ${cupids.cupids.length}, ${document.getElementById('debug-visuals').childElementCount}, ${aoeDamage.length}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;
     MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
@@ -363,7 +405,7 @@ export function draw() {
         if (entity.drawFunc != undefined) {
             entity.drawFunc()
         }
-        
+
         //body debug visual update
         for (const shape of entity.body) {
             if (shape.active == false) {
@@ -377,10 +419,10 @@ export function draw() {
             shape.div.style.setProperty('--y', `${-shape.y}px`);
             shape.div.bottom = 0
             shape.div.left = 0
-            
+
         }
 
-        
+
 
     }
 
