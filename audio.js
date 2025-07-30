@@ -6,6 +6,7 @@ class AudioManager {
         this.pools = {};
         this.poolSize = poolSize;
         this.cooldowns = {}; // for throttling
+        this.musicBufferCache = {};
         this.bgMusic = null;
         this.musicLoopTimer = null;
         this.musicOffset = 0;
