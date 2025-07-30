@@ -10,7 +10,7 @@ import { stage1, stageControllerTicker } from './stagecontroller.js'
 import { createVendingStatic } from "./vending.js"
 import { healthItems } from './healthItem.js'
 import * as utils from "./utils.js"
-import { ghosts } from './ghosts.js'
+import * as ghosts from './ghosts.js'
 import { createBomb } from './explosion.js'
 import { audioManager, track1, audioSetUp } from './audio.js'
 
@@ -98,17 +98,21 @@ export function updateMenuVisibility() {
 
 
 function restartGame() {
-
+    console.log(allEntities);
     for (let entity of allEntities) {
         if (entity.dom) entity.dom.remove();
         if (entity.body) entity.body.forEach(body => body.div.remove());
     }
     mario.reset();
     cupids.reset();
-    allEntities = [];
-
+    ghosts.reset();
+    // turtles.reset();
+    // cicadas.reset();
+   //healthItems.reset();
+    allEntities.length = 0;
+    console.log(allEntities);
     bullets.allBullets.length = 0;
-    healthItems.lenght = 0;
+    healthItems.length = 0;
     allEntities.push(mario)
     // spawnSwarm(30, cupids.createCupid, 5, 400)
     //whatever is needed to reset Mario 
@@ -341,10 +345,17 @@ function gameLoop(currentTime) {
     requestAnimationFrame(gameLoop);
 }
 
-
-
+let updateCounter = 0
+let updateCounterTimestamp = Date.now()
+let fpsMeter = 0
 // Update the game state, only physics
 function update() {
+    updateCounter++
+    if (updateCounter == 30){
+        updateCounter = 0
+        fpsMeter = ((Date.now() - updateCounterTimestamp)/30)*60/16.666666
+        updateCounterTimestamp = Date.now()
+    }
     // mario movement
 
     // console.log(groundedEnemies)
@@ -387,7 +398,7 @@ export function draw() {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     const paddedSeconds = seconds.toString().padStart(2, '0');
-    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} debug: ${cupids.cupids.length}, ${document.getElementById('debug-visuals').childElementCount}, ${aoeDamage.length}`;
+    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} fps: ${parseInt(fpsMeter)} debug: ${cupids.cupids.length}, ${document.getElementById('debug-visuals').childElementCount}, ${aoeDamage.length}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;
     MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
     MarioHealthBar.style.bottom = (mario.y + 90) + "px";

@@ -66,9 +66,15 @@ export function createCupid(x, y, index) {
 
 
 export function reset() {
-    cupids.forEach(cupid => cupid.reset());
-
-    cupids.cupids = [];
+    // Remove ghosts from allEntities
+        for (const cupid of cupids) {
+            const idx = allEntities.indexOf(cupid);
+            if (idx !== -1) allEntities.splice(idx, 1);
+            if (cupid.dom) cupid.dom.remove();
+            if (cupid.body) cupid.body.forEach(b => b.div && b.div.remove());
+        }
+        // Empty the ghosts array
+        cupids.length = 0;
 }
 
 
@@ -119,10 +125,6 @@ export function cupidUpdate(cupid) {
         cupid.velY = 0
     }
 
-
-    
-    //decide if cupid will fire
-    // if (cupid.index*100 == game.gameState.frameCounter%(cupids.length*100)){
     if (parseInt(Math.random() * 2000) == 0) {
         cupid.dom.src = preloadedFiringImage.src
         let bullet = bullets.createBullet("down", "enemy", cupid.x, cupid.y, 4, 8)
@@ -160,6 +162,7 @@ export function cupidUpdate(cupid) {
             cupid.kamikazeMode = true
         }
     }
+
     if (cupid.kamikazeMode){
         utils.kamikaze(cupid, mario.mario);
         utils.moveUnit(cupid, cupid.velX, cupid.velY);
