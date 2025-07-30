@@ -38,6 +38,7 @@ export let mario = {
     drawFunc: marioVisuals, //his visual representation in the game
     updateFunc: marioUpdate,
     team: "player",
+    dom: marioDiv,
     takeDamage: function (damage, sourceX) {
         if (this.isInvincible) {
             return;
@@ -55,14 +56,30 @@ export let mario = {
         this.invincibilityTimer = 40;
     },
     reset() {
-        this.x = 0;
-        this.y = 0;
+        this.x = 500;
+        this.y = 500;
         this.health = 100;
+        this.velX = 0;
         this.velY = 0;
         this.disabled = false;
         this.body.forEach(body => body.div.remove());
         this.body = [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0-30, 0 + 20, 30), utils.createCircle(0+30, 0 + 20, 30)];
-        this.bullet_count=1;
+        this.bullet_count = 1;
+        this.dom.innerHTML = "";
+        const defaultBody = document.getElementById("mario-body-forward").cloneNode(true);
+        const defaultLegs = document.getElementById("mario-legs0").cloneNode(true);
+        this.dom.appendChild(defaultLegs);
+        this.dom.appendChild(defaultBody);
+        this.currentBody = defaultBody;
+        this.currentLegs = defaultLegs;
+
+        this.currentBody.style.opacity = "100%"
+        this.currentBody.style.setProperty('--mario-x', `${this.x}px`);
+        this.currentBody.style.setProperty('--mario-y', `${-this.y}px`);
+
+        this.currentLegs.style.opacity = "100%"
+        this.currentLegs.style.setProperty('--mario-x', `${this.x}px`);
+        this.currentLegs.style.setProperty('--mario-y', `${-this.y}px`);
     }
 }
 

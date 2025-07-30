@@ -10,7 +10,7 @@ import { stage1, stageControllerTicker } from './stagecontroller.js'
 import { createVendingStatic } from "./vending.js"
 import { healthItems } from './healthItem.js'
 import * as utils from "./utils.js"
-import { ghosts } from './ghosts.js'
+import * as ghosts from './ghosts.js'
 import { createBomb } from './explosion.js'
 import { audioManager, track1, audioSetUp } from './audio.js'
 
@@ -98,17 +98,21 @@ export function updateMenuVisibility() {
 
 
 function restartGame() {
-
+    console.log(allEntities);
     for (let entity of allEntities) {
         if (entity.dom) entity.dom.remove();
         if (entity.body) entity.body.forEach(body => body.div.remove());
     }
     mario.reset();
     cupids.reset();
-    allEntities = [];
-
+    ghosts.reset();
+    // turtles.reset();
+    // cicadas.reset();
+   //healthItems.reset();
+    allEntities.length = 0;
+    console.log(allEntities);
     bullets.allBullets.length = 0;
-    healthItems.lenght = 0;
+    healthItems.length = 0;
     allEntities.push(mario)
     // spawnSwarm(30, cupids.createCupid, 5, 400)
     //whatever is needed to reset Mario 
