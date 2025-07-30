@@ -1,4 +1,4 @@
-class AudioManager {
+export default class AudioManager {
     constructor(samplePaths, poolSize = 5) {
         this.context = new AudioContext();
         this.samplePaths = samplePaths;
@@ -120,6 +120,7 @@ class AudioManager {
             gainNode.gain.value = volume;
 
             const offSet = this.musicOffset || 0;
+            this.musicOffset = 0;
             const durationToPlay = buffer.duration - offSet;
 
             this.startTime = this.context.currentTime - offSet;
@@ -168,4 +169,23 @@ class AudioManager {
     }
 }
 
-export default AudioManager;
+export const audioManager = new AudioManager({
+    bubble: "./assets/audio/bubble.mp3",
+    catching_sandwich: "./assets/audio/catching_sandwich.mp3",
+    cicada_hit: "./assets/audio/cicada_hit.mp3",
+    cicada_swarm: "./assets/audio/cicada_swarm.mp3",
+    game_over: "./assets/audio/game_over.mp3",
+    health_short: "./assets/audio/health_short.mp3",
+    health: "./assets/audio/health.mp3",
+    lazer_short: "./assets/audio/lazer_short.mp3",
+    lazer: "./assets/audio/lazer.mp3",
+    tick: "./assets/audio/time_tick.mp3",
+    turtle_hit: "./assets/audio/turtle_hit.mp3",
+    vending_rising: "./assets/audio/vending_rising.mp3",
+}, 4);
+
+export async function audioSetUp(playMusic = true, playSounds = true) {
+    audioManager.resume();
+    if (playSounds) await audioManager.loadAll();
+    if (playMusic) await audioManager.getOrLoadMusicBuffer("./assets/audio/mario.mp3");
+}
