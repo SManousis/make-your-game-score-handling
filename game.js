@@ -341,10 +341,17 @@ function gameLoop(currentTime) {
     requestAnimationFrame(gameLoop);
 }
 
-
-
+let updateCounter = 0
+let updateCounterTimestamp = Date.now()
+let fpsMeter = 0
 // Update the game state, only physics
 function update() {
+    updateCounter++
+    if (updateCounter == 30){
+        updateCounter = 0
+        fpsMeter = ((Date.now() - updateCounterTimestamp)/30)*60/16.666666
+        updateCounterTimestamp = Date.now()
+    }
     // mario movement
 
     // console.log(groundedEnemies)
@@ -387,7 +394,7 @@ export function draw() {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     const paddedSeconds = seconds.toString().padStart(2, '0');
-    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} debug: ${cupids.cupids.length}, ${document.getElementById('debug-visuals').childElementCount}, ${aoeDamage.length}`;
+    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} fps: ${parseInt(fpsMeter)} debug: ${cupids.cupids.length}, ${document.getElementById('debug-visuals').childElementCount}, ${aoeDamage.length}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;
     MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
     MarioHealthBar.style.bottom = (mario.y + 90) + "px";
