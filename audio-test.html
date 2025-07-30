@@ -5,13 +5,15 @@
 </head>
 <body>
   <button id="startAudio">Start</button>
+  <button id="pause">Pause</button>
   <button id="stopAudio">Stop</button>
   <button id="bubble">Bubble</button>
   <button id="lazer">Lazer</button>
+  <button id="time">Time Countdown</button>
 
-  <script src="audio.js"></script>
+  <script type="module">
+    import AudioManager from './audio.js';
 
-  <script>
     const audioManager = new AudioManager({
       bubble: "./assets/audio/bubble.mp3",
       catching_sandwich: "./assets/audio/catching_sandwich.mp3",
@@ -27,51 +29,47 @@
       vending_rising: "./assets/audio/vending_rising.mp3",
     }, 4);
 
-    async function init() {
-      // Init on game
-      await audioManager.resume();  // Must be triggered by user gesture
+    document.getElementById("startAudio").addEventListener("click", async () => {
+      await audioManager.resume();
       await audioManager.loadAll();
+      audioManager.playMusicLoop("./assets/audio/mario.mp3");
+    }, { once: true });
 
-      // Now enable the UI
-      document.getElementById("startAudio").addEventListener("click", () => {
-        audioManager.playMusicLoop("./assets/audio/mario.mp3");
+    document.getElementById("pause").addEventListener("click", () => {
+      audioManager.pauseMusic();
+    });
 
-        for (let i = 0; i < 11; i++) {
-          setTimeout(() => {
-            audioManager.playSample("tick", {
-              gain: 1,
-              pan: 0,
-              throttleMs: 300
-            });
-          }, i*1000);
-        }
+    document.getElementById("stopAudio").addEventListener("click", () => {
+      audioManager.stopMusic();
+    });
+
+    document.getElementById("bubble").addEventListener("click", () => {
+      audioManager.playSample("bubble", {
+        gain: 0.6,
+        pan: 0,
+        pitchRandom: [0.95, 1.05]
       });
+    });
 
-      document.getElementById("bubble").addEventListener("click", () => {
-        audioManager.playSample("bubble", {
-          gain: 0.6,
-          pan: 0,
-          pitchRandom: [0.95, 1.05]
-        });
+    document.getElementById("lazer").addEventListener("click", () => {
+      audioManager.playSample("lazer", {
+        gain: 0.6,
+        pan: 0.1,
+        pitchRandom: [0.95, 1.05]
       });
+    });
 
-      document.getElementById("lazer").addEventListener("click", () => {
-        audioManager.playSample("lazer", {
-          gain: 0.6,
-          pan: 0.1,
-          pitchRandom: [0.95, 1.05]
-        });
-      });
-
-      document.getElementById("stopAudio").addEventListener("click", () => {
-        audioManager.stopMusic();
-      });
-    }
-
-    // Safari requires resume/load to be triggered by user gesture, so call init only after click
-    document.getElementById("startAudio").addEventListener("click", () => {
-      init();
-    }, { once: true }); // ensure it's only called once
+    document.getElementById("time").addEventListener("click", () => {
+      for (let i = 0; i < 11; i++) {
+        setTimeout(() => {
+          audioManager.playSample("tick", {
+            gain: 1,
+            pan: 0,
+            throttleMs: 300
+          });
+        }, i * 1000);
+      }
+    });
   </script>
 </body>
 </html>

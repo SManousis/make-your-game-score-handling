@@ -1,4 +1,4 @@
-class AudioManager {
+export default class AudioManager {
     constructor(samplePaths, poolSize = 5) {
         this.context = new AudioContext();
         this.samplePaths = samplePaths;
@@ -6,8 +6,12 @@ class AudioManager {
         this.pools = {};
         this.poolSize = poolSize;
         this.cooldowns = {}; // for throttling
+        this.musicBufferCache = {};
         this.bgMusic = null;
         this.musicLoopTimer = null;
+        this.musicOffset = 0;
+        this.startTime = null;
+        this.isPlaying = false;
     }
 
     async loadAll() {
@@ -83,25 +87,32 @@ class AudioManager {
         }
     }
 
-    async playMusicLoop(url, volume = 1.0, overlapDuration = 7.742) {
-        const res = await fetch(url);
-        const arrayBuffer = await res.arrayBuffer();
-        let buffer;
-        // const buffer = await this.context.decodeAudioData(arrayBuffer);
-        try {
-            buffer = await this.context.decodeAudioData(arrayBuffer);
-        } catch (e) {
-            console.error(`Failed to decode ${url}:`, e);
-        }
-        if (!buffer) {
-            console.error(`Decoded buffer is null for ${url}`);
-            return;
-        }
+    async getOrLoadMusicBuffer(url) {
+        if (this.musicBufferCache[url]) return this.musicBufferCache[url];
 
-        // this.stopMusic(); // clean up if something is already playing
+        try {
+            const res = await fetch(url);
+            const arrayBuffer = await res.arrayBuffer();
+            const buffer = await this.context.decodeAudioData(arrayBuffer);
+            this.musicBufferCache[url] = buffer;
+            return buffer;
+        } catch (e) {
+            console.error(`Failed to load or decode ${url}`, e);
+            return null;
+        }
+    }
+
+
+    async playMusicLoop(url, volume = 1.0, overlapDuration = 7.742) {
+        if (this.isPlaying === true) {
+            clearTimeout(this.musicLoopTimer);
+            this.musicOffset = 0;
+        };
+
+        const buffer = await this.getOrLoadMusicBuffer(url);
+        if (!buffer) return;
 
         const scheduleNext = () => {
-            const now = this.context.currentTime;
 
             // Create nodes
             const source = this.context.createBufferSource();
@@ -111,7 +122,14 @@ class AudioManager {
 
             gainNode.gain.value = volume;
 
-            source.start();
+            const offSet = this.musicOffset || 0;
+            this.musicOffset = 0;
+            const durationToPlay = buffer.duration - offSet;
+
+            this.startTime = this.context.currentTime - offSet;
+            source.start(0, offSet);
+
+            this.isPlaying = true;
 
             // Store for stopping
             this.bgMusic = { source, gainNode };
@@ -119,12 +137,21 @@ class AudioManager {
             // Schedule next instance
             this.musicLoopTimer = setTimeout(() => {
                 scheduleNext();
-            }, (buffer.duration - overlapDuration) * 1000); // ms
+            }, (durationToPlay - overlapDuration) * 1000); // ms
         };
 
         scheduleNext();
     }
 
+    pauseMusic() {
+        if (!this.isPlaying || !this.bgMusic?.source) return;
+
+        this.musicOffset = this.context.currentTime - this.startTime;
+
+        this.bgMusic.source.stop();
+        clearTimeout(this.musicLoopTimer);
+        this.isPlaying = false;
+    }
 
     stopMusic() {
         if (this.bgMusic?.source) {
@@ -132,11 +159,10 @@ class AudioManager {
             this.bgMusic.gainNode.gain.linearRampToValueAtTime(0, now + 1)
             this.bgMusic.source.stop();
         }
-        if (this.musicLoopTimer) {
-            clearTimeout(this.musicLoopTimer);
-            this.musicLoopTimer = null;
-        }
+        clearTimeout(this.musicLoopTimer);
         this.bgMusic = null;
+        this.isPlaying = false;
+        this.musicOffset = 0;
     }
 
     setMusicVolume(vol) {
@@ -144,4 +170,28 @@ class AudioManager {
             this.bgMusic.gainNode.gain.value = vol;
         }
     }
+}
+
+export const audioManager = new AudioManager({
+    bubble: "./assets/audio/bubble.mp3",
+    catching_sandwich: "./assets/audio/catching_sandwich.mp3",
+    cicada_hit: "./assets/audio/cicada_hit.mp3",
+    cicada_swarm: "./assets/audio/cicada_swarm.mp3",
+    game_over: "./assets/audio/game_over.mp3",
+    health_short: "./assets/audio/health_short.mp3",
+    health: "./assets/audio/health.mp3",
+    lazer_short: "./assets/audio/lazer_short.mp3",
+    lazer: "./assets/audio/lazer.mp3",
+    tick: "./assets/audio/time_tick.mp3",
+    turtle_hit: "./assets/audio/turtle_hit.mp3",
+    vending_rising: "./assets/audio/vending_rising.mp3",
+}, 4);
+
+export const track1 = {url: "./assets/audio/mario.mp3", overlapDuration: 7.742}
+
+// Must call this by a user event driven event on start-up
+export async function audioSetUp() {
+    audioManager.resume();
+    await audioManager.loadAll();
+    await audioManager.getOrLoadMusicBuffer("./assets/audio/mario.mp3");
 }
