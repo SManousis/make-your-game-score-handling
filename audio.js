@@ -133,7 +133,6 @@ export default class AudioManager {
 
             // Pre-schedule the next loop before this one ends
             const nextStartTime = startTime + loopDuration - overlap - this.latencyCompensation;
-            console.log(this.latencyCompensation);
             this.musicLoopTimer = setTimeout(() => {
                 scheduleLoop(nextStartTime);
             }, (loopDuration - overlap - 1) * 1000); // run the new scheduleLoop ahead of time
@@ -177,6 +176,14 @@ function isSafari() {
     const ua = navigator.userAgent;
     return /^((?!chrome|android).)*safari/i.test(ua);
 }
+
+export function xToPan(x, width = 1800) {
+  // Clamp x within 0 and width
+  const clampedX = Math.max(0, Math.min(x, width));
+  // Map to -1 (left) to 1 (right)
+  return (clampedX / width) * 2 - 1;
+}
+
 
 export const audioManager = new AudioManager({
     bubble: "./assets/audio/bubble.mp3",
