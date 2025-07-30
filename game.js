@@ -131,7 +131,7 @@ function restartGame() {
     gameState.currentState = 'running';
     updateMenuVisibility();
     createVendingStatic();
-    if (music) audioManager.playMusicLoop(track1.url, volume, track1.overlapDuration)
+    if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration)
     stage1();
 }
 
