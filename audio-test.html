@@ -32,7 +32,7 @@
     document.getElementById("startAudio").addEventListener("click", async () => {
       await audioManager.resume();
       await audioManager.loadAll();
-      audioManager.playMusicLoop("./assets/audio/mario.mp3");
+      audioManager.playMusicLoop("./assets/audio/loop_test.mp3");
     }, { once: true });
 
     document.getElementById("pause").addEventListener("click", () => {

@@ -42,7 +42,7 @@ export default class AudioManager {
 
         // Find a free slot in pool
         const pool = this.pools[name];
-        const slot = pool.find(s => !s.playing);
+        let slot = pool.find(s => !s.playing);
         if (!slot) {
             // Find the oldest playing slot (earliest started time)
             let oldest = pool.reduce((a, b) => (a.started < b.started ? a : b));
@@ -102,46 +102,83 @@ export default class AudioManager {
         }
     }
 
-
     async playMusicLoop(url, volume = 1.0, overlapDuration = 7.742) {
-        if (this.isPlaying === true) {
-            clearTimeout(this.musicLoopTimer);
-            this.musicOffset = 0;
-        };
+        if (this.isPlaying) {
+            this.stopMusic(); // optional: implement to stop previous playback
+        }
 
         const buffer = await this.getOrLoadMusicBuffer(url);
         if (!buffer) return;
 
-        const scheduleNext = () => {
+        const context = this.context;
+        const loopDuration = buffer.duration;
+        const overlap = overlapDuration;
 
-            // Create nodes
-            const source = this.context.createBufferSource();
-            const gainNode = this.context.createGain();
+        this.isPlaying = true;
+        this.musicOffset = 0;
+
+        const scheduleLoop = (startTime) => {
+            const source = context.createBufferSource();
+            const gainNode = context.createGain();
             source.buffer = buffer;
-            source.connect(gainNode).connect(this.context.destination);
-
             gainNode.gain.value = volume;
 
-            const offSet = this.musicOffset || 0;
-            this.musicOffset = 0;
-            const durationToPlay = buffer.duration - offSet;
+            source.connect(gainNode).connect(context.destination);
+            source.start(startTime, this.musicOffset);
 
-            this.startTime = this.context.currentTime - offSet;
-            source.start(0, offSet);
-
-            this.isPlaying = true;
-
-            // Store for stopping
+            // Store source so you can stop it later
             this.bgMusic = { source, gainNode };
 
-            // Schedule next instance
+            // Pre-schedule the next loop before this one ends
+            const nextStartTime = startTime + loopDuration - overlap;
             this.musicLoopTimer = setTimeout(() => {
-                scheduleNext();
-            }, (durationToPlay - overlapDuration) * 1000); // ms
+                scheduleLoop(nextStartTime);
+            }, (loopDuration - overlap*2) * 1000); // Only for JS-side bookkeeping
         };
 
-        scheduleNext();
+        const now = context.currentTime;
+        scheduleLoop(now);
     }
+
+    // async playMusicLoop(url, volume = 1.0, overlapDuration = 7.742) {
+    //     if (this.isPlaying === true) {
+    //         clearTimeout(this.musicLoopTimer);
+    //         this.musicOffset = 0;
+    //     };
+
+    //     const buffer = await this.getOrLoadMusicBuffer(url);
+    //     if (!buffer) return;
+
+    //     const scheduleNext = () => {
+
+    //         // Create nodes
+    //         const source = this.context.createBufferSource();
+    //         const gainNode = this.context.createGain();
+    //         source.buffer = buffer;
+    //         source.connect(gainNode).connect(this.context.destination);
+
+    //         gainNode.gain.value = volume;
+
+    //         const offSet = this.musicOffset || 0;
+    //         this.musicOffset = 0;
+    //         const durationToPlay = buffer.duration - offSet;
+
+    //         this.startTime = this.context.currentTime - offSet;
+    //         source.start(0, offSet);
+
+    //         this.isPlaying = true;
+
+    //         // Store for stopping
+    //         this.bgMusic = { source, gainNode };
+
+    //         // Schedule next instance
+    //         this.musicLoopTimer = setTimeout(() => {
+    //             scheduleNext();
+    //         }, (durationToPlay - overlapDuration) * 1000); // ms
+    //     };
+
+    //     scheduleNext();
+    // }
 
     pauseMusic() {
         if (!this.isPlaying || !this.bgMusic?.source) return;
@@ -187,7 +224,7 @@ export const audioManager = new AudioManager({
     vending_rising: "./assets/audio/vending_rising.mp3",
 }, 4);
 
-export const track1 = {url: "./assets/audio/mario.mp3", overlapDuration: 7.742}
+export const track1 = { url: "./assets/audio/mario.mp3", overlapDuration: 7.742 }
 
 // Must call this by a user event driven event on start-up
 export async function audioSetUp() {
