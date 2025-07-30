@@ -155,7 +155,7 @@ export function cupidUpdate(cupid) {
             }
         }
     }
-    if (cupids[0].y <= 350){
+    if (cupids.length > 0 && cupids[0].y <= 350){
         for (let cupid of cupids){
             cupid.kamikazeMode = true
         }
