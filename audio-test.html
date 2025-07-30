@@ -5,9 +5,11 @@
 </head>
 <body>
   <button id="startAudio">Start</button>
+  <button id="pause">Pause</button>
   <button id="stopAudio">Stop</button>
   <button id="bubble">Bubble</button>
   <button id="lazer">Lazer</button>
+  <button id="time">Time Countdown</button>
 
   <script src="audio.js"></script>
 
@@ -35,7 +37,9 @@
       // Now enable the UI
       document.getElementById("startAudio").addEventListener("click", () => {
         audioManager.playMusicLoop("./assets/audio/mario.mp3");
+      });
 
+      document.getElementById("time").addEventListener("click", () => {
         for (let i = 0; i < 11; i++) {
           setTimeout(() => {
             audioManager.playSample("tick", {
@@ -46,6 +50,10 @@
           }, i*1000);
         }
       });
+
+      document.getElementById("pause").addEventListener("click", () => {
+        audioManager.pauseMusic()
+      })
 
       document.getElementById("bubble").addEventListener("click", () => {
         audioManager.playSample("bubble", {

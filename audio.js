@@ -8,6 +8,9 @@ class AudioManager {
         this.cooldowns = {}; // for throttling
         this.bgMusic = null;
         this.musicLoopTimer = null;
+        this.musicOffset = 0;
+        this.startTime = null;
+        this.isPlaying = false;
     }
 
     async loadAll() {
@@ -83,25 +86,29 @@ class AudioManager {
         }
     }
 
-    async playMusicLoop(url, volume = 1.0, overlapDuration = 7.742) {
-        const res = await fetch(url);
-        const arrayBuffer = await res.arrayBuffer();
-        let buffer;
-        // const buffer = await this.context.decodeAudioData(arrayBuffer);
-        try {
-            buffer = await this.context.decodeAudioData(arrayBuffer);
-        } catch (e) {
-            console.error(`Failed to decode ${url}:`, e);
-        }
-        if (!buffer) {
-            console.error(`Decoded buffer is null for ${url}`);
-            return;
-        }
+    async getOrLoadMusicBuffer(url) {
+        if (this.musicBufferCache[url]) return this.musicBufferCache[url];
 
-        // this.stopMusic(); // clean up if something is already playing
+        try {
+            const res = await fetch(url);
+            const arrayBuffer = await res.arrayBuffer();
+            const buffer = await this.context.decodeAudioData(arrayBuffer);
+            this.musicBufferCache[url] = buffer;
+            return buffer;
+        } catch (e) {
+            console.error(`Failed to load or decode ${url}`, e);
+            return null;
+        }
+    }
+
+
+    async playMusicLoop(url, volume = 1.0, overlapDuration = 7.742) {
+        if (this.isPlaying === true) return;
+
+        const buffer = await this.getOrLoadMusicBuffer(url);
+        if (!buffer) return;
 
         const scheduleNext = () => {
-            const now = this.context.currentTime;
 
             // Create nodes
             const source = this.context.createBufferSource();
@@ -111,7 +118,13 @@ class AudioManager {
 
             gainNode.gain.value = volume;
 
-            source.start();
+            const offSet = this.musicOffset || 0;
+            const durationToPlay = buffer.duration - offSet;
+
+            this.startTime = this.context.currentTime - offSet;
+            source.start(0, offSet);
+
+            this.isPlaying = true;
 
             // Store for stopping
             this.bgMusic = { source, gainNode };
@@ -119,12 +132,21 @@ class AudioManager {
             // Schedule next instance
             this.musicLoopTimer = setTimeout(() => {
                 scheduleNext();
-            }, (buffer.duration - overlapDuration) * 1000); // ms
+            }, (durationToPlay - overlapDuration) * 1000); // ms
         };
 
         scheduleNext();
     }
 
+    pauseMusic() {
+        if (!this.isPlaying || !this.bgMusic?.source) return;
+
+        this.musicOffset = this.context.currentTime - this.startTime;
+
+        this.bgMusic.source.stop();
+        clearTimeout(this.musicLoopTimer);
+        this.isPlaying = false;
+    }
 
     stopMusic() {
         if (this.bgMusic?.source) {
@@ -132,11 +154,10 @@ class AudioManager {
             this.bgMusic.gainNode.gain.linearRampToValueAtTime(0, now + 1)
             this.bgMusic.source.stop();
         }
-        if (this.musicLoopTimer) {
-            clearTimeout(this.musicLoopTimer);
-            this.musicLoopTimer = null;
-        }
+        clearTimeout(this.musicLoopTimer);
         this.bgMusic = null;
+        this.isPlaying = false;
+        this.musicOffset = 0;
     }
 
     setMusicVolume(vol) {
@@ -145,3 +166,5 @@ class AudioManager {
         }
     }
 }
+
+export default AudioManager;
