@@ -154,11 +154,13 @@ export function cupidUpdate(cupid) {
             }
         }
     }
+
     if (cupids[0].y <= 350){
         for (let cupid of cupids){
             cupid.kamikazeMode = true
         }
     }
+
     if (cupid.kamikazeMode){
         utils.kamikaze(cupid, mario.mario);
         utils.moveUnit(cupid, cupid.velX, cupid.velY);
