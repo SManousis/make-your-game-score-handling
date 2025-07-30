@@ -12,6 +12,7 @@ export default class AudioManager {
         this.musicOffset = 0;
         this.startTime = null;
         this.isPlaying = false;
+        this.latencyCompensation = isSafari() ? 0 : 0.05;
     }
 
     async loadAll() {
@@ -102,9 +103,10 @@ export default class AudioManager {
         }
     }
 
+
     async playMusicLoop(url, volume = 1.0, overlapDuration = 7.742) {
         if (this.isPlaying) {
-            this.stopMusic(); // optional: implement to stop previous playback
+            this.stopMusic();
         }
 
         const buffer = await this.getOrLoadMusicBuffer(url);
@@ -130,55 +132,16 @@ export default class AudioManager {
             this.bgMusic = { source, gainNode };
 
             // Pre-schedule the next loop before this one ends
-            const nextStartTime = startTime + loopDuration - overlap;
+            const nextStartTime = startTime + loopDuration - overlap - this.latencyCompensation;
+            console.log(this.latencyCompensation);
             this.musicLoopTimer = setTimeout(() => {
                 scheduleLoop(nextStartTime);
-            }, (loopDuration - overlap*2) * 1000); // Only for JS-side bookkeeping
+            }, (loopDuration - overlap - 1) * 1000); // run the new scheduleLoop ahead of time
         };
 
         const now = context.currentTime;
         scheduleLoop(now);
     }
-
-    // async playMusicLoop(url, volume = 1.0, overlapDuration = 7.742) {
-    //     if (this.isPlaying === true) {
-    //         clearTimeout(this.musicLoopTimer);
-    //         this.musicOffset = 0;
-    //     };
-
-    //     const buffer = await this.getOrLoadMusicBuffer(url);
-    //     if (!buffer) return;
-
-    //     const scheduleNext = () => {
-
-    //         // Create nodes
-    //         const source = this.context.createBufferSource();
-    //         const gainNode = this.context.createGain();
-    //         source.buffer = buffer;
-    //         source.connect(gainNode).connect(this.context.destination);
-
-    //         gainNode.gain.value = volume;
-
-    //         const offSet = this.musicOffset || 0;
-    //         this.musicOffset = 0;
-    //         const durationToPlay = buffer.duration - offSet;
-
-    //         this.startTime = this.context.currentTime - offSet;
-    //         source.start(0, offSet);
-
-    //         this.isPlaying = true;
-
-    //         // Store for stopping
-    //         this.bgMusic = { source, gainNode };
-
-    //         // Schedule next instance
-    //         this.musicLoopTimer = setTimeout(() => {
-    //             scheduleNext();
-    //         }, (durationToPlay - overlapDuration) * 1000); // ms
-    //     };
-
-    //     scheduleNext();
-    // }
 
     pauseMusic() {
         if (!this.isPlaying || !this.bgMusic?.source) return;
@@ -207,6 +170,12 @@ export default class AudioManager {
             this.bgMusic.gainNode.gain.value = vol;
         }
     }
+}
+
+
+function isSafari() {
+    const ua = navigator.userAgent;
+    return /^((?!chrome|android).)*safari/i.test(ua);
 }
 
 export const audioManager = new AudioManager({
