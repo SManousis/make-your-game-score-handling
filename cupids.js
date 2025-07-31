@@ -46,17 +46,17 @@ export function createCupid(x, y, index) {
         team: "enemy",
         scoreValue: 10,
         hasExploded: false,
-        reset() {
-            this.health = 20;
-            this.moveSpeed = 0.1;
-            this.velX = 1;
-            this.velY = 0;
-            this.x = x;
-            this.y = y;
-            // this.dom.remove();
-            // this.body.forEach(body => body.div.remove());
-            // this.body = [utils.createCircle(x,  y+20, 30)];
-        }
+        // reset() {
+        //     this.health = 20;
+        //     this.moveSpeed = 0.1;
+        //     this.velX = 1;
+        //     this.velY = 0;
+        //     this.x = x;
+        //     this.y = y;
+        //     // this.dom.remove();
+        //     // this.body.forEach(body => body.div.remove());
+        //     // this.body = [utils.createCircle(x,  y+20, 30)];
+        // }
     }
     console.log("I was created at ", x, y)
     cupids.push(cupid)
@@ -65,17 +65,14 @@ export function createCupid(x, y, index) {
 }
 
 
-export function reset() {
-    // Remove ghosts from allEntities
-        for (const cupid of cupids) {
-            const idx = allEntities.indexOf(cupid);
-            if (idx !== -1) allEntities.splice(idx, 1);
-            if (cupid.dom) cupid.dom.remove();
-            if (cupid.body) cupid.body.forEach(b => b.div && b.div.remove());
-        }
-        // Empty the ghosts array
-        cupids.length = 0;
-}
+// export function reset() {
+//     // Remove ghosts from allEntities
+//         for (const cupid of cupids) {
+//             utils.destroyUnit(cupid)
+//         }
+//         // Empty the ghosts array
+//         cupids.length = 0;
+// }
 
 
 //let  parallelmovecount = 0

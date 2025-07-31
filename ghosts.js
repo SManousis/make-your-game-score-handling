@@ -38,18 +38,18 @@ export function createGhost(x, y, index) {
         team: "enemy",
         scoreValue: 10,
         hasExploded: false,
-        reset() {
-            this.health = 20;
-            this.moveSpeed = 0.1;
-            this.velX = 1;
-            this.velY = 0;
-            this.x = x;
-            this.y = y;
-            this.dom.remove();
-            this.body.forEach(body => body.div.remove());
-            this.body = [utils.createCircle(x, y + 20, 30)];
-            this.dom = ghostBody;
-        }
+        // reset() {
+        //     this.health = 20;
+        //     this.moveSpeed = 0.1;
+        //     this.velX = 1;
+        //     this.velY = 0;
+        //     this.x = x;
+        //     this.y = y;
+        //     this.dom.remove();
+        //     this.body.forEach(body => body.div.remove());
+        //     this.body = [utils.createCircle(x, y + 20, 30)];
+        //     this.dom = ghostBody;
+        // }
     }
     console.log("I was created at ", x, y)
     ghosts.push(ghost)
@@ -58,17 +58,14 @@ export function createGhost(x, y, index) {
 }
 
 
-export function reset() {
-    // Remove ghosts from allEntities
-    for (const ghost of ghosts) {
-        const idx = allEntities.indexOf(ghost);
-        if (idx !== -1) allEntities.splice(idx, 1);
-        if (ghost.dom) ghost.dom.remove();
-        if (ghost.body) ghost.body.forEach(b => b.div && b.div.remove());
-    }
-    // Empty the ghosts array
-    ghosts.length = 0;
-}
+// export function reset() {
+//     // Remove ghosts from allEntities
+//     for (const ghost of ghosts) {
+//         utils.destroyUnit(ghost)
+//     }
+//     // Empty the ghosts array
+//     ghosts.length = 0;
+// }
 
 //let  parallelmovecount = 0
 
