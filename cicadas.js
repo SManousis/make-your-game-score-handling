@@ -1,33 +1,18 @@
 import * as utils from './utils.js'
 import { mario } from './mario.js'
-import { gameArea, allEntities, removeFromAllEntities, updateScore } from './game.js'
+import { gameArea, allEntities, updateScore } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
 import * as game from './game.js'
+import * as audio from './audio.js'
 
 //cicadas spawning
 export let cicadas = [];
-let DEAD_ZONE = 40;
-let spawnCooldown = 0;
-const max_cicadas = 2;
-
-// export function spawner() {
-//     spawnCooldown--;
-//     if (spawnCooldown <= 0 && cicadas.length < max_cicadas) {
-//         spawnCicada();
-//         spawnCooldown = utils.getRandomInt();
-//     }
-// }
 
 export function spawnCicada(x, y) {
     const cicadaElement = document.createElement('img')
     cicadaElement.className = 'cicada-img';
     cicadaElement.src = 'assets/enemies/cicada.png';
     gameArea.appendChild(cicadaElement);
-
-    // //choose randomly between left and right
-    // const spawnSide = Math.random() < 0.5 ? 'left' : 'right';
-    // const startX = spawnSide === 'left' ? -50 : gameArea.offsetWidth + 50;
-    // const startY = 1000;
 
     const newCicada = {
         name: "cicada",
@@ -68,6 +53,12 @@ export function spawnCicada(x, y) {
 function cicadaUpdate(cicada) {
     //dead
     if (cicada.health <= 0) {
+        audio.audioManager.playSample("bubble", {
+            gain: game.soundsVolume,
+            pan: audio.xToPan(cicada.x),
+            throttleMs: 60,
+            pitchRandom: [0.98, 1.02]
+        });
         deleteCicada(cicada)
         updateScore(cicada.scoreValue);
     }
@@ -84,9 +75,7 @@ function cicadaUpdate(cicada) {
             cicada.velX = -cicada.maxspeed;
             cicada.lookingDir = "left";
         }
-
-
-
+        
         //check for other cicadas in the way
         const detectionDistance = cicada.width * 0.8
 
@@ -160,24 +149,23 @@ function cicadaUpdate(cicada) {
             // console.log("cicada disabled")
             cicada.state = "disabled"
             mario.velY = 22;
+            audio.audioManager.playSample("bubble", {
+                gain: game.soundsVolume,
+                pan: audio.xToPan(cicada.x),
+                throttleMs: 60,
+                pitchRandom: [0.98, 1.02]
+            });
 
-            //make cicada disappear after a moment
             setTimeout(() => {
                 deleteCicada(cicada)
             }, 300)
         } else {
-            // console.log("Mario was hurt by a cicada")
-            //inflict damage on Mario
-            mario.takeDamage(cicada.damage, cicada.x)
+            mario.takeDamage(cicada.damage, cicada.x, "cicada_hit")
         }
     }
-
 }
 
 function deleteCicada(cicada) {
-    // if (cicada.dom) cicada.dom.remove();
-    // cicada.body.forEach(b => { if (b.div) b.div.remove(); })
-
     utils.destroyUnit(cicada)
 }
 

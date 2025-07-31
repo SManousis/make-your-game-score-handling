@@ -1,7 +1,8 @@
 import * as utils from './utils.js'
 import { mario } from './mario.js'
-import { gameArea, allEntities, removeFromAllEntities, updateScore, groundedEnemies } from './game.js'
+import { gameArea, allEntities, removeFromAllEntities, updateScore, groundedEnemies, soundsVolume } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
+import * as audio from "./audio.js"
 
 //turtle spawning
 export let turtles = [];
@@ -144,6 +145,12 @@ function turtleUpdate(turtle) {
             mario.velY = 12;
 
             updateScore(turtle.scoreValue);
+            audio.audioManager.playSample("bubble", {
+                gain: soundsVolume,
+                pan: audio.xToPan(turtle.x),
+                throttleMs: 60,
+                pitchRandom: [0.98, 1.02]
+            })
 
             //make turtle disappear after a moment
             setTimeout(() => {
@@ -157,8 +164,7 @@ function turtleUpdate(turtle) {
         } else {
             console.log("Mario was hurt by a turtle")
             //inflict damage on Mario
-            mario.takeDamage(turtle.damage, turtle.x)
-
+            mario.takeDamage(turtle.damage, turtle, "turtle_hit")
         }
     }
 

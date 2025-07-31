@@ -1,4 +1,5 @@
-import { allGroups } from "./game.js";
+import { allGroups, soundsVolume } from "./game.js";
+import * as audio from "./audio.js"
 
 export let id = 0
 //creates a circle collision body, it automatically created a debug div to help with visuals
@@ -12,7 +13,7 @@ export function createCircle(centerX, centerY, radius) {
     div.style.setProperty('--x', centerX)
     div.style.setProperty('--y', -centerY)
     div.id = "debug-circle-" + id
-  
+
     id++
     let debugDiv = document.getElementById("debug-visuals")
     debugDiv.append(div)
@@ -26,10 +27,10 @@ export function createRect(x, y, width, height, statis = false) {
     div.style.width = width + "px";
     div.style.height = height + "px";
 
-    if (statis){
+    if (statis) {
         div.style.bottom = y + "px";
         div.style.left = x + "px";
-    }else{
+    } else {
         div.style.bottom = 0 + "px";
         div.style.left = 0 + "px";
     }
@@ -219,7 +220,7 @@ export function opDebounce(fn, wait, options = {}) {
     let timeout;
     let lastCallTime;
 
-    return function(...args) {
+    return function (...args) {
         const now = Date.now();
         const callNow = options.leading && !timeout;
 
@@ -239,7 +240,7 @@ export function opDebounce(fn, wait, options = {}) {
 }
 
 export function getRandomInt(min = 30, max = 250) {
-    return Math.floor((Math.random()+0.2) * (max - min + 1)) + min;
+    return Math.floor((Math.random() + 0.2) * (max - min + 1)) + min;
 }
 
 
@@ -253,8 +254,8 @@ export function removeUnitFromArray(unit, array) {
     }
 }
 
-export function destroyUnit(unit){
-    for (let group of allGroups){
+export function destroyUnit(unit) {
+    for (let group of allGroups) {
         removeUnitFromArray(unit, group)
     }
     unit.body.forEach(b => { if (b.div) b.div.remove(); })
@@ -262,7 +263,7 @@ export function destroyUnit(unit){
 }
 
 
-export function kamikaze(unit, target){
+export function kamikaze(unit, target) {
     const adjacent = unit.x - target.x
     const opposite = unit.y - target.y
     const angle = Math.atan2(opposite, adjacent)

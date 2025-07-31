@@ -58,14 +58,14 @@ let lastTime = 0;
 export let music = true;
 export let sounds = true;
 export let musicVolume = 1;
-export let soundsVolume = 1;
+export let soundsVolume = 0.8;
 
 
 export let allEntities = []
 export let groundedEnemies = []
 export let aoeDamage = []
 
-export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts, aoeDamage]
+export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts.ghosts, aoeDamage]
 
 export const gameArea = document.getElementById('game-area');
 
@@ -109,7 +109,7 @@ function restartGame() {
     // turtles.reset();
     // cicadas.reset();
    //healthItems.reset();
-  
+
     allEntities.length = 0;
     console.log(allEntities);
     bullets.allBullets.length = 0;
@@ -135,7 +135,6 @@ function restartGame() {
 
     gameState.currentState = 'running';
     updateMenuVisibility();
-    createVendingStatic();
     if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration)
     stage1();
 }
@@ -164,11 +163,11 @@ export const keysPressed = {
 let audioInitialized = false;
 
 playButton.addEventListener('click', async () => {
-    // if (!audioInitialized) {
-    //     await audioSetUp();
-    //     audioInitialized = true;
-    // }
-    // if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration);
+    if (!audioInitialized) {
+        await audioSetUp();
+        audioInitialized = true;
+    }
+    if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration);
 
     gameState.currentState = 'running';
     updateMenuVisibility();
@@ -326,16 +325,16 @@ let prev = 0
 
 
 // The main game loop
-let logciGameLoopTimeNow = Date.now()
+let logicGameLoopTimeNow = Date.now()
 function logicGameLoop() {
     if (gameState.currentState === 'running') {
         gameState.gameTime += 16.666666;
         update();
     }
-    const diff = Date.now() - logciGameLoopTimeNow
-    logciGameLoopTimeNow = Date.now()
-    counter++
+    logicGameLoop += 16.6666666
+    const diff = logicGameLoopTimeNow - Date.now() 
     
+    counter++
     setTimeout(logicGameLoop, parseInt(diff + 16.666666))
 }
 
@@ -406,6 +405,7 @@ export function draw() {
     }
 
 
+
     for (let entity of allEntities) {
 
         if (entity.drawFunc != undefined) {
@@ -439,14 +439,13 @@ updateMenuVisibility();
 
 
 // Start the game
-logciGameLoopTimeNow = Date.now()
+logicGameLoopTimeNow = Date.now()
 logicGameLoop();
 visualGameLoop();
 
 export function removeFromAllEntities(entity) {
     utils.removeUnitFromArray(entity, allEntities)
 }
-createVendingStatic()
 stage1()
 
 cupids.createCupid(500, 200, 0)

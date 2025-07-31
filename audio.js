@@ -15,41 +15,50 @@ export default class AudioManager {
         this.latencyCompensation = isSafari() ? 0 : 0.05;
     }
 
-    async loadAll() {
+    async loadSamples() {
         const entries = Object.entries(this.samplePaths);
         for (const [name, url] of entries) {
-            const res = await fetch(url);
-            const arrayBuffer = await res.arrayBuffer();
-            const buffer = await this.context.decodeAudioData(arrayBuffer);
-            this.sampleBuffers[name] = buffer;
+            try {
+                const res = await fetch(url);
+                if (!res.ok) {
+                    throw new Error(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
+                }
 
-            // Build pool of AudioBuffers
-            this.pools[name] = new Array(this.poolSize).fill().map(() => ({
-                playing: false,
-            }));
+                const arrayBuffer = await res.arrayBuffer();
+                const buffer = await this.context.decodeAudioData(arrayBuffer);
+                this.sampleBuffers[name] = buffer;
+
+                // Build pool of AudioBuffers
+                this.pools[name] = new Array(this.poolSize).fill().map(() => ({
+                    playing: false,
+                }));
+            } catch (err) {
+                console.error(`Error loading sample "${name}" from ${url}:`, err);
+                // Optionally: mark as failed, or continue without it
+                this.sampleBuffers[name] = null;
+                this.pools[name] = [];
+            }
         }
     }
+
 
     playSample(name, { gain = 1.0, pan = 0.0, throttleMs = 0, pitchRandom = null } = {}) {
         const buffer = this.sampleBuffers[name];
         if (!buffer) return;
 
-        // Throttle check
         const now = Date.now();
         if (throttleMs > 0 && this.cooldowns[name] && now - this.cooldowns[name] < throttleMs) {
             return;
         }
         this.cooldowns[name] = now;
 
-        // Find a free slot in pool
         const pool = this.pools[name];
         let slot = pool.find(s => !s.playing);
         if (!slot) {
-            // Find the oldest playing slot (earliest started time)
             let oldest = pool.reduce((a, b) => (a.started < b.started ? a : b));
             if (oldest.source) {
                 try {
-                    oldest.source.stop(); // stop it
+                    oldest.source.stop();
                 } catch (e) {
                     // silently ignore if already stopped
                 }
@@ -66,7 +75,6 @@ export default class AudioManager {
         gainNode.gain.value = gain;
         panNode.pan.value = pan;
 
-        // 🔁 Optional pitch randomization
         if (pitchRandom && pitchRandom.length === 2) {
             const [min, max] = pitchRandom;
             source.playbackRate.value = min + Math.random() * (max - min);
@@ -128,10 +136,8 @@ export default class AudioManager {
             source.connect(gainNode).connect(context.destination);
             source.start(startTime, this.musicOffset);
 
-            // Store source so you can stop it later
             this.bgMusic = { source, gainNode };
 
-            // Pre-schedule the next loop before this one ends
             const nextStartTime = startTime + loopDuration - overlap - this.latencyCompensation;
             this.musicLoopTimer = setTimeout(() => {
                 scheduleLoop(nextStartTime);
@@ -178,18 +184,15 @@ function isSafari() {
 }
 
 export function xToPan(x, width = 1800) {
-  // Clamp x within 0 and width
-  const clampedX = Math.max(0, Math.min(x, width));
-  // Map to -1 (left) to 1 (right)
-  return (clampedX / width) * 2 - 1;
+    const clampedX = Math.max(0, Math.min(x, width));
+    return (clampedX / width) * 2 - 1;
 }
-
 
 export const audioManager = new AudioManager({
     bubble: "./assets/audio/bubble.mp3",
     catching_sandwich: "./assets/audio/catching_sandwich.mp3",
     cicada_hit: "./assets/audio/cicada_hit.mp3",
-    cicada_swarm: "./assets/audio/cicada_swarm.mp3",
+    swarm: "./assets/audio/cicada_swarm.mp3",
     game_over: "./assets/audio/game_over.mp3",
     health_short: "./assets/audio/health_short.mp3",
     health: "./assets/audio/health.mp3",
@@ -205,6 +208,6 @@ export const track1 = { url: "./assets/audio/mario.mp3", overlapDuration: 7.742 
 // Must call this by a user event driven event on start-up
 export async function audioSetUp() {
     audioManager.resume();
-    await audioManager.loadAll();
+    await audioManager.loadSamples();
     await audioManager.getOrLoadMusicBuffer("./assets/audio/mario.mp3");
 }

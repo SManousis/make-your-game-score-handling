@@ -1,8 +1,9 @@
 import * as utils from './utils.js'
 import { walkables } from './walkables.js'
-import { keysPressed, gameArea, gameState, updateMenuVisibility } from './game.js'
+import { keysPressed, gameArea, gameState, updateMenuVisibility, soundsVolume } from './game.js'
 import * as physics from './physicsStep.js'
 import * as bullets from './bullets.js'
+import * as audio from "./audio.js"
 
 export const marioDiv = document.getElementById('mario');
 
@@ -13,7 +14,8 @@ let fireCooldown = 0;
 //the character the player controls
 export let mario = {
     name: "mario",
-    health: 100, //how much health point he has, if it reaches 0 he dies!
+    health: 100,
+    maxhealth: 120, //how much health point he has, if it reaches 0 he dies!
     attack_damage: 10, //how damage marios bullets deal to enemies
     accel: 1, //how quickly accelerates in x axis
     maxSpeed: 10, //maximum running speed in x axis
@@ -33,15 +35,23 @@ export let mario = {
     crouching: false,
     isInvincible: false,
     invincibilityTimer: 0,
-    body: [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0-30, 0 + 20, 30), utils.createCircle(0+30, 0 + 20, 30)], //his gameplay body represented in circles
+    body: [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0 - 30, 0 + 20, 30), utils.createCircle(0 + 30, 0 + 20, 30)], //his gameplay body represented in circles
     physicsPointsOffsets: [{ x: -20, y: 0 }, { x: 20, y: 0 }], //These points will be used
     drawFunc: marioVisuals, //his visual representation in the game
     updateFunc: marioUpdate,
     team: "player",
     dom: marioDiv,
-    takeDamage: function (damage, sourceX) {
+    takeDamage: function (damage, sourceX, sound) {
         if (this.isInvincible) {
             return;
+        }
+        if (sound) {
+            audio.audioManager.playSample(sound, {
+                gain: soundsVolume-0.2,
+                pan: audio.xToPan(this.x),
+                throttleMs: 60,
+                pitchRandom: [0.98, 1.02]
+            });
         }
         this.health -= damage;
         const KNOCKBACK_VERTICAL = 13;
@@ -55,32 +65,44 @@ export let mario = {
         this.isInvincible = true;
         this.invincibilityTimer = 40;
     },
-    reset() {
-        this.x = 500;
-        this.y = 500;
-        this.health = 100;
-        this.velX = 0;
-        this.velY = 0;
-        this.disabled = false;
-        this.body.forEach(body => body.div.remove());
-        this.body = [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0-30, 0 + 20, 30), utils.createCircle(0+30, 0 + 20, 30)];
-        this.bullet_count = 1;
-        this.dom.innerHTML = "";
-        const defaultBody = document.getElementById("mario-body-forward").cloneNode(true);
-        const defaultLegs = document.getElementById("mario-legs0").cloneNode(true);
-        this.dom.appendChild(defaultLegs);
-        this.dom.appendChild(defaultBody);
-        this.currentBody = defaultBody;
-        this.currentLegs = defaultLegs;
+    healthUpgrade: function (health, sound) {
+        this.health += health;
+        if (this.health > this.maxhealth) this.health = this.maxhealth;
+        if (sound) {
+            audio.audioManager.playSample(sound, {
+                gain: 0.8,
+                pan: audio.xToPan(this.x),
+                throttleMs: 60,
+                pitchRandom: [0.98, 1.02]
+            });
+        };
+    },
+    // reset() {
+    //     this.x = 500;
+    //     this.y = 500;
+    //     this.health = 100;
+    //     this.velX = 0;
+    //     this.velY = 0;
+    //     this.disabled = false;
+    //     this.body.forEach(body => body.div.remove());
+    //     this.body = [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0-30, 0 + 20, 30), utils.createCircle(0+30, 0 + 20, 30)];
+    //     this.bullet_count = 1;
+    //     this.dom.innerHTML = "";
+    //     const defaultBody = document.getElementById("mario-body-forward").cloneNode(true);
+    //     const defaultLegs = document.getElementById("mario-legs0").cloneNode(true);
+    //     this.dom.appendChild(defaultLegs);
+    //     this.dom.appendChild(defaultBody);
+    //     this.currentBody = defaultBody;
+    //     this.currentLegs = defaultLegs;
 
-        this.currentBody.style.opacity = "100%"
-        this.currentBody.style.setProperty('--mario-x', `${this.x}px`);
-        this.currentBody.style.setProperty('--mario-y', `${-this.y}px`);
+    //     this.currentBody.style.opacity = "100%"
+    //     this.currentBody.style.setProperty('--mario-x', `${this.x}px`);
+    //     this.currentBody.style.setProperty('--mario-y', `${-this.y}px`);
 
-        this.currentLegs.style.opacity = "100%"
-        this.currentLegs.style.setProperty('--mario-x', `${this.x}px`);
-        this.currentLegs.style.setProperty('--mario-y', `${-this.y}px`);
-    }
+    //     this.currentLegs.style.opacity = "100%"
+    //     this.currentLegs.style.setProperty('--mario-x', `${this.x}px`);
+    //     this.currentLegs.style.setProperty('--mario-y', `${-this.y}px`);
+    // }
 }
 
 utils.setUnit(mario, 500, 500)
@@ -114,14 +136,14 @@ export function marioVisuals() {
         currentBody.style.opacity = "0%"
         if (mario.crouching) {
             currentBody = document.getElementById("mario-body-crouch-up")
-            
+
         } else {
             currentBody = document.getElementById("mario-body-up")
         }
     } else if (mario.crouching) {
         currentBody.style.opacity = "0%"
         currentBody = document.getElementById("mario-body-crouch-forward")
-        
+
     } else {
         currentBody.style.opacity = "0%"
         currentBody = document.getElementById("mario-body-forward")
@@ -204,16 +226,18 @@ export function marioUpdate() {
         }
     }
     if (mario.health <= 0) {
-        gameState.lives-=1
-        mario.health=100
-        if (gameState.lives===0){
-        gameState.currentState = 'gameOver'
-        updateMenuVisibility();
-        console.log("mario died")
+        gameState.lives -= 1
+        mario.health = 100
+        if (gameState.lives === 0) {
+            gameState.currentState = 'gameOver'
+            audio.audioManager.stopMusic();
+            audio.audioManager.playSample("game_over");
+            updateMenuVisibility();
+            console.log("mario died")
         }
     }
 
-    if (keysPressed.upgrade){
+    if (keysPressed.upgrade) {
         mario.bullet_count = 4
         keysPressed.upgrade = false
     }
@@ -310,12 +334,12 @@ export function marioUpdate() {
 
     if (grounded && mario.velX == 0 && mario.velY == 0 && keysPressed.down) {
         mario.crouching = true
-        
+
     } else {
         mario.crouching = false
-        
+
     }
-  
+
 }
 
 // Helper function to generate symmetric spread values
@@ -323,7 +347,7 @@ function getSpreadValues(count) {
     const result = [];
     const odd = count % 2 == 1
 
-    const spread = 50 / (1+(count/100))
+    const spread = 50 / (1 + (count / 100))
 
     if (odd) {
         count--
@@ -331,8 +355,8 @@ function getSpreadValues(count) {
     }
     for (let i = 1; i <= count / 2; i++) {
         if (!odd && i == 1) {
-            result.push(i * spread/2)
-            result.push(-i * spread/2)
+            result.push(i * spread / 2)
+            result.push(-i * spread / 2)
         } else {
             result.push(i * spread)
             result.push(-i * spread)
@@ -345,10 +369,10 @@ function getSpreadValues(count) {
 
 export function marioShoot() {
     const spreadValues = getSpreadValues(mario.bullet_count);
-    
-    
+
+
     let yCorrection = 40;
-    if (mario.crouching)  {
+    if (mario.crouching) {
         yCorrection = yCorrection - 22
     }
     if (mario.aimDirection === 'left') {
@@ -374,7 +398,7 @@ export function marioShoot() {
                 8
             );
         }
-        
+
     } else if (mario.aimDirection === 'up') {
         for (const offset of spreadValues) {
             bullets.createBullet(
@@ -390,13 +414,13 @@ export function marioShoot() {
 }
 
 export function updateMarioHealthBar(current, max) {
-    const healthBar = Math.max(0, current/max)*100
+    const healthBar = Math.max(0, current / max) * 100
     document.getElementById('mario-healthBar').style.width = healthBar + '%'
-      if (mario.health <= 20) {
-    document.getElementById('mario-healthBar').style.background = '#f00'; 
+    if (mario.health <= 20) {
+        document.getElementById('mario-healthBar').style.background = '#f00';
     } else if (mario.health <= 40) {
-    document.getElementById('mario-healthBar').style.background = '#ff0'; 
+        document.getElementById('mario-healthBar').style.background = '#ff0';
     } else {
-    document.getElementById('mario-healthBar').style.background = '#0f0'; 
+        document.getElementById('mario-healthBar').style.background = '#0f0';
     }
 }
