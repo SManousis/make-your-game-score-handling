@@ -53,6 +53,15 @@ export function spawnTurtle(x, y) {
     //push to allentities
 }
 
+// export function reset() {
+//     // Remove turtles from allEntities
+//     for (const turtle of turtles) {
+//         utils.destroyUnit(turtle)
+//     }
+//     // Empty the turtles array
+//     turtles.length = 0;
+// }
+
 function turtleUpdate(turtle) {
     if (turtle.health <= 0) {
         // if (turtle.dom) turtle.dom.remove();
