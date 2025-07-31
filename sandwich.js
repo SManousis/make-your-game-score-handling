@@ -1,5 +1,5 @@
 import * as utils from './utils.js'
-import { gameArea, allEntities, removeFromAllEntities } from './game.js';
+import { gameArea, allEntities } from './game.js';
 import { mario } from './mario.js';
 import { moveAndCollide } from './physicsStep.js';
 
@@ -91,9 +91,6 @@ function sandwichVisuals(newSandwich) {
 
 function removeSandwich(newSandwich) {
     newSandwich.state = "disabled"
-    removeFromAllEntities(newSandwich)
-    if (newSandwich.dom) newSandwich.dom.remove();
-    newSandwich.body.forEach(b => { if (b.div) b.div.remove(); })
-    removeFromAllEntities(newSandwich)
+    utils.destroyUnit(newSandwich)
 }
 

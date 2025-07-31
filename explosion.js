@@ -3,7 +3,7 @@ import { allEntities, aoeDamage } from "./game.js";
 import { moveAndCollide } from "./physicsStep.js";
 import * as utils from "./utils.js"
 
-export function createExplosion(x, y, team, damage = 50, radius = 150, flashDuration = 30) {
+export function createExplosion(x, y, team, damage = 50, radius = 150, flashDuration = 2) {
     const explosionBody = document.createElement('img');
     explosionBody.className = "explosion-img";
     explosionBody.src = "assets/items/explosion.png";
@@ -46,7 +46,7 @@ export function explosionUpdate(entity) {
     }
 
 
-    if (entity.active && entity.aliveFrames == 1){
+    if (entity.active && entity.aliveFrames == 10){
      
         entity.active = false
         

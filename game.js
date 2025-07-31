@@ -11,7 +11,7 @@ import { createVendingStatic } from "./vending.js"
 import { healthItems } from './healthItem.js'
 import * as utils from "./utils.js"
 import * as ghosts from './ghosts.js'
-import { createBomb } from './explosion.js'
+import { createBomb, createExplosion } from './explosion.js'
 import { audioManager, track1, audioSetUp } from './audio.js'
 
 //import * as lasers from './lasers'
@@ -68,6 +68,8 @@ export let aoeDamage = []
 export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts.ghosts, aoeDamage]
 
 export const gameArea = document.getElementById('game-area');
+
+export const queueFree = []
 
 //adding our created entities to allEntities if they are not static
 allEntities.push(mario)
@@ -155,6 +157,7 @@ export const keysPressed = {
     space: false,
     autofire: false,
     upgrade: false,
+    bomb: false,
 };
 
 //--- EVENT LISTENERS ----
@@ -270,6 +273,15 @@ document.addEventListener('keydown', (event) => {
         keysPressed.upgrade = !keysPressed.upgrade;
     }
 
+    if (event.key.toLowerCase() === 'b') {
+        if (keysPressed.bomb == false){
+            keysPressed.bomb = true
+            createBomb(mario.x, mario.y, 'player', 500, 500, 2, true)
+        }
+    }
+
+    
+
     if (event.key.toLocaleLowerCase() === 'f') {
         marioShoot();
     }
@@ -285,6 +297,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowUp') {
         keysPressed.up = true;
     }
+    
 
     if (event.key === 'ArrowDown') {
         keysPressed.down = true;
@@ -312,9 +325,15 @@ document.addEventListener('keyup', (event) => {
         keysPressed.down = false;
     }
 
+   if (event.key.toLowerCase() === 'b') {
+        keysPressed.bomb = false;
+    }
+
     if (event.key === ' ' || event.code === 'Space') {
         keysPressed.space = false
     }
+
+    
 
 });
 
@@ -350,13 +369,13 @@ function visualGameLoop() {
 
 let updateCounter = 0
 let updateCounterTimestamp = Date.now()
-let fpsMeter = 0
+let updatefpsMeter = 0
 // Update the game state, only physics
 function update() {
     updateCounter++
     if (updateCounter == 30){
         updateCounter = 0
-        fpsMeter = ((Date.now() - updateCounterTimestamp)/30)*60/16.666666
+        updatefpsMeter = 1000/((Date.now() - updateCounterTimestamp)/30)
         updateCounterTimestamp = Date.now()
     }
 
@@ -386,18 +405,39 @@ function update() {
 
     gameState.frameCounter++
 
+    for (let unit of queueFree){
+        for (let group of allGroups) {
+        utils.removeUnitFromArray(unit, group)
+        }
+        unit.body.forEach(b => { if (b.div) b.div.remove(); })
+        if (unit.dom) unit.dom.remove();
+    }
+    queueFree.length = 0
+
     stageControllerTicker()
 
 }
 
+let drawCounter = 0
+let drawCounterTimestamp = Date.now()
+let drawfpsMeter = 0
+
 // Draw the game, only updating visual elements based on their objects
 export function draw() {
+    drawCounter++
+    if (drawCounter == 30){
+        drawCounter = 0
+        drawfpsMeter = 1000/((Date.now() - drawCounterTimestamp)/30)
+        drawCounterTimestamp = Date.now()
+    }
+
+
     const MarioHealthBar = document.getElementById('mario-healthBar-container');
     const totalSeconds = Math.floor(gameState.gameTime / 1000);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     const paddedSeconds = seconds.toString().padStart(2, '0');
-    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} fps: ${parseInt(fpsMeter)} debug: allEntities:${allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
+    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;
     MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
     MarioHealthBar.style.bottom = (mario.y + 90) + "px";
@@ -444,9 +484,7 @@ logicGameLoopTimeNow = Date.now()
 logicGameLoop();
 visualGameLoop();
 
-export function removeFromAllEntities(entity) {
-    utils.removeUnitFromArray(entity, allEntities)
-}
+
 stage1()
 
 cupids.createCupid(500, 200, 0)

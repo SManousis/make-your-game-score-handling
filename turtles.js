@@ -1,6 +1,6 @@
 import * as utils from './utils.js'
 import { mario } from './mario.js'
-import { gameArea, allEntities, removeFromAllEntities, updateScore, groundedEnemies, soundsVolume } from './game.js'
+import { gameArea, allEntities, updateScore, groundedEnemies, soundsVolume } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
 import * as audio from "./audio.js"
 

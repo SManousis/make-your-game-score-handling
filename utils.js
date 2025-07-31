@@ -1,4 +1,4 @@
-import { allGroups, soundsVolume } from "./game.js";
+import { allGroups, queueFree, soundsVolume } from "./game.js";
 import * as audio from "./audio.js"
 
 export let id = 0
@@ -255,11 +255,7 @@ export function removeUnitFromArray(unit, array) {
 }
 
 export function destroyUnit(unit) {
-    for (let group of allGroups) {
-        removeUnitFromArray(unit, group)
-    }
-    unit.body.forEach(b => { if (b.div) b.div.remove(); })
-    if (unit.dom) unit.dom.remove();
+    queueFree.push(unit)
 }
 
 
