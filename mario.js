@@ -1,6 +1,6 @@
 import * as utils from './utils.js'
 import { walkables } from './walkables.js'
-import { keysPressed, gameArea, gameState, updateMenuVisibility } from './game.js'
+import { keysPressed, gameArea, gameState, updateMenuVisibility, soundsVolume } from './game.js'
 import * as physics from './physicsStep.js'
 import * as bullets from './bullets.js'
 import * as audio from "./audio.js"
@@ -47,7 +47,7 @@ export let mario = {
         }
         if (sound) {
             audio.audioManager.playSample(sound, {
-                gain: 0.8,
+                gain: soundsVolume-0.2,
                 pan: audio.xToPan(this.x),
                 throttleMs: 60,
                 pitchRandom: [0.98, 1.02]

@@ -58,7 +58,7 @@ export function createCupid(x, y, index) {
         //     // this.body = [utils.createCircle(x,  y+20, 30)];
         // }
     }
-    console.log("I was created at ", x, y)
+    // console.log("I was created at ", x, y)
     cupids.push(cupid)
     allEntities.push(cupid)
     return cupid
@@ -86,7 +86,7 @@ export function cupidUpdate(cupid) {
         utils.destroyUnit(cupid)
         updateScore(cupid.scoreValue);
     }
-    
+
     cupid.parallelMoveCount++
 
     //what does this do? (alex)
@@ -103,7 +103,6 @@ export function cupidUpdate(cupid) {
         cupid.velX = -cupid.velX
         cupid.velY = -3
         cupid.parallelMoveCount = 0
-  
     }
 
     if (Math.abs(cupid.velY) > 0) {
@@ -135,36 +134,36 @@ export function cupidUpdate(cupid) {
         let candy = healthItem.createHealthItem(cupid.x, cupid.y - 60, 20)
     }
 
-     for (let walkable of walkables.walkables) {
+    for (let walkable of walkables.walkables) {
         for (let walkableBody of walkable.body) {
             for (let cupidBody of cupid.body) {
                 const explosiveX = cupid.x
-                
+
                 const explosiveY = cupid.y
-                
+
                 if (utils.IsBodyCollidingWithBody(cupidBody, walkableBody) && !cupid.hasExploded) {
                     cupid.hasExploded = true;
                     // Replace cupid with explosion-cupid!
                     createExplosion(explosiveX, explosiveY, "enemy");
 
-                    console.log (explosiveX, explosiveY)
+                    console.log(explosiveX, explosiveY)
                     utils.destroyUnit(cupid); // Remove the original cupid
                     return;
                 }
             }
         }
     }
-    if (cupids.length > 0 && cupids[0].y <= 350){
-        for (let cupid of cupids){
+    if (cupids.length > 0 && cupids[0].y <= 350) {
+        for (let cupid of cupids) {
             cupid.kamikazeMode = true
         }
     }
 
-    if (cupid.kamikazeMode){
+    if (cupid.kamikazeMode) {
         utils.kamikaze(cupid, mario.mario);
         utils.moveUnit(cupid, cupid.velX, cupid.velY);
         collision.inAoe(cupid)
-        
+
         return;
     }
 }

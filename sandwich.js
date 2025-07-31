@@ -2,7 +2,6 @@ import * as utils from './utils.js'
 import { gameArea, allEntities, removeFromAllEntities } from './game.js';
 import { mario } from './mario.js';
 import { moveAndCollide } from './physicsStep.js';
-import * as audio from "./audio.js"
 
 export function shootSandwich(dir, vendX, vendY) {
     if (Math.random() > 0.15) {

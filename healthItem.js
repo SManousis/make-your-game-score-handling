@@ -26,7 +26,7 @@ export function createHealthItem(x, y, healthAdd = 0) {
         physicsPointsOffsets: [{ x: 0, y: 0 }],
         type: "healthItem",
     }
-    console.log("Health item was created at ", x, y)
+    // console.log("Health item was created at ", x, y)
     healthItems.push(healthItem)
     game.allEntities.push(healthItem);
     return healthItem

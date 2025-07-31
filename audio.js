@@ -192,7 +192,7 @@ export const audioManager = new AudioManager({
     bubble: "./assets/audio/bubble.mp3",
     catching_sandwich: "./assets/audio/catching_sandwich.mp3",
     cicada_hit: "./assets/audio/cicada_hit.mp3",
-    cicada_swarm: "./assets/audio/cicada_swarm.mp3",
+    swarm: "./assets/audio/cicada_swarm.mp3",
     game_over: "./assets/audio/game_over.mp3",
     health_short: "./assets/audio/health_short.mp3",
     health: "./assets/audio/health.mp3",
