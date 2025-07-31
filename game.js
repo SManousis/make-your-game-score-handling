@@ -321,29 +321,27 @@ let prev = 0
 
 
 // The main game loop
-function gameLoop(currentTime) {
-
-    if (lastTime === 0) {
-        lastTime = currentTime; //initialize on first frame
-    }
-    const deltaTime = currentTime - lastTime;
-    lastTime = currentTime;
-
-
-    // console.log("Drawing frame", counter);
-    // console.log(gameState.currentState)
+let logciGameLoopTimeNow = Date.now()
+function logicGameLoop() {
     if (gameState.currentState === 'running') {
-        gameState.gameTime += deltaTime;
+        gameState.gameTime += 16.666666;
         update();
     }
+    const diff = Date.now() - logciGameLoopTimeNow
+    logciGameLoopTimeNow = Date.now()
+    counter++
+    
+    setTimeout(logicGameLoop, parseInt(diff + 16.666666))
+}
 
+// The main game loop
+function visualGameLoop() {
     if (gameState.currentState === 'running' || gameState.currentState === 'paused' || gameState.currentState === 'gameOver') {
         draw();
     }
-    counter++
-
-    requestAnimationFrame(gameLoop);
+    requestAnimationFrame(visualGameLoop);
 }
+
 
 let updateCounter = 0
 let updateCounterTimestamp = Date.now()
@@ -356,9 +354,6 @@ function update() {
         fpsMeter = ((Date.now() - updateCounterTimestamp)/30)*60/16.666666
         updateCounterTimestamp = Date.now()
     }
-    // mario movement
-
-    // console.log(groundedEnemies)
 
 
 
@@ -367,7 +362,6 @@ function update() {
     //running all entities' update function
     for (let entity of allEntities) {
         if (aoeDamage.length > 0 && (entity.team == 'enemy' || entity.team == 'player') && Object.hasOwn(entity, 'health')) {
-
             collision.inAoe(entity)
         }
 
@@ -438,9 +432,11 @@ export function draw() {
 
 updateMenuVisibility();
 
-// spawnSwarm(30, cupids.createCupid, 5, 400)
+
 // Start the game
-gameLoop();
+logciGameLoopTimeNow = Date.now()
+logicGameLoop();
+visualGameLoop();
 
 export function removeFromAllEntities(entity) {
     utils.removeUnitFromArray(entity, allEntities)
