@@ -65,8 +65,8 @@ export function healthItemPicked(entity) {
             candy.body.forEach(body => body.div.remove())
             candy.dom.remove()
             entity.health += candy.healthAdd
-            if (entity.health > 120) {
-                entity.health = 120
+            if (entity.maxhealth && entity.health > entity.maxhealth) {
+                entity.health = entity.maxhealth
             }
         }
     }

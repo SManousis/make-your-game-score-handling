@@ -13,7 +13,8 @@ let fireCooldown = 0;
 //the character the player controls
 export let mario = {
     name: "mario",
-    health: 100, //how much health point he has, if it reaches 0 he dies!
+    health: 100,
+    maxhealth: 120, //how much health point he has, if it reaches 0 he dies!
     attack_damage: 10, //how damage marios bullets deal to enemies
     accel: 1, //how quickly accelerates in x axis
     maxSpeed: 10, //maximum running speed in x axis
@@ -55,32 +56,32 @@ export let mario = {
         this.isInvincible = true;
         this.invincibilityTimer = 40;
     },
-    reset() {
-        this.x = 500;
-        this.y = 500;
-        this.health = 100;
-        this.velX = 0;
-        this.velY = 0;
-        this.disabled = false;
-        this.body.forEach(body => body.div.remove());
-        this.body = [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0-30, 0 + 20, 30), utils.createCircle(0+30, 0 + 20, 30)];
-        this.bullet_count = 1;
-        this.dom.innerHTML = "";
-        const defaultBody = document.getElementById("mario-body-forward").cloneNode(true);
-        const defaultLegs = document.getElementById("mario-legs0").cloneNode(true);
-        this.dom.appendChild(defaultLegs);
-        this.dom.appendChild(defaultBody);
-        this.currentBody = defaultBody;
-        this.currentLegs = defaultLegs;
+    // reset() {
+    //     this.x = 500;
+    //     this.y = 500;
+    //     this.health = 100;
+    //     this.velX = 0;
+    //     this.velY = 0;
+    //     this.disabled = false;
+    //     this.body.forEach(body => body.div.remove());
+    //     this.body = [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0-30, 0 + 20, 30), utils.createCircle(0+30, 0 + 20, 30)];
+    //     this.bullet_count = 1;
+    //     this.dom.innerHTML = "";
+    //     const defaultBody = document.getElementById("mario-body-forward").cloneNode(true);
+    //     const defaultLegs = document.getElementById("mario-legs0").cloneNode(true);
+    //     this.dom.appendChild(defaultLegs);
+    //     this.dom.appendChild(defaultBody);
+    //     this.currentBody = defaultBody;
+    //     this.currentLegs = defaultLegs;
 
-        this.currentBody.style.opacity = "100%"
-        this.currentBody.style.setProperty('--mario-x', `${this.x}px`);
-        this.currentBody.style.setProperty('--mario-y', `${-this.y}px`);
+    //     this.currentBody.style.opacity = "100%"
+    //     this.currentBody.style.setProperty('--mario-x', `${this.x}px`);
+    //     this.currentBody.style.setProperty('--mario-y', `${-this.y}px`);
 
-        this.currentLegs.style.opacity = "100%"
-        this.currentLegs.style.setProperty('--mario-x', `${this.x}px`);
-        this.currentLegs.style.setProperty('--mario-y', `${-this.y}px`);
-    }
+    //     this.currentLegs.style.opacity = "100%"
+    //     this.currentLegs.style.setProperty('--mario-x', `${this.x}px`);
+    //     this.currentLegs.style.setProperty('--mario-y', `${-this.y}px`);
+    // }
 }
 
 utils.setUnit(mario, 500, 500)
