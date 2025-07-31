@@ -103,17 +103,22 @@ function restartGame() {
         if (entity.dom) entity.dom.remove();
         if (entity.body) entity.body.forEach(body => body.div.remove());
     }
-    mario.reset();
-    cupids.reset();
-    ghosts.reset();
+    // mario.reset();
+    // cupids.reset();
+    // ghosts.reset();
     // turtles.reset();
     // cicadas.reset();
    //healthItems.reset();
+  
     allEntities.length = 0;
     console.log(allEntities);
     bullets.allBullets.length = 0;
     healthItems.length = 0;
+    
+    utils.setUnit(mario, 500, 500)
+    mario.health = 100;
     allEntities.push(mario)
+    stage1();
     // spawnSwarm(30, cupids.createCupid, 5, 400)
     //whatever is needed to reset Mario 
     //whatever is needed to reset enemies
@@ -131,7 +136,7 @@ function restartGame() {
     gameState.currentState = 'running';
     updateMenuVisibility();
     createVendingStatic();
-    if (music) audioManager.playMusicLoop(track1.url, volume, track1.overlapDuration)
+    if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration)
     stage1();
 }
 
@@ -159,11 +164,11 @@ export const keysPressed = {
 let audioInitialized = false;
 
 playButton.addEventListener('click', async () => {
-    if (!audioInitialized) {
-        await audioSetUp();
-        audioInitialized = true;
-    }
-    if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration);
+    // if (!audioInitialized) {
+    //     await audioSetUp();
+    //     audioInitialized = true;
+    // }
+    // if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration);
 
     gameState.currentState = 'running';
     updateMenuVisibility();
