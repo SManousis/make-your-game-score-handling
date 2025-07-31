@@ -10,9 +10,13 @@ const gameArea = document.getElementById('game-area')
 
 export async function stage1() {
     createVendingStatic()
+     console.log("1")
     await spawnSwarm(50, createGhost, 20, 200, ghosts)
+    console.log("2")
     await sleep(1000)
+     console.log("3")
     const turt1 = addEvent(() => startSpawner("left", 0, 0, spawnTurtle), 500)
+     console.log("4")
     const turt2 = addEvent(() => startSpawner("right", 0, 0, spawnTurtle), 433)
     await spawnSwarm(10, createCupid, 5, 500, cupids)
     await sleep(1000)

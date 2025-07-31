@@ -65,7 +65,7 @@ export let allEntities = []
 export let groundedEnemies = []
 export let aoeDamage = []
 
-export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts, aoeDamage]
+export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts.ghosts, aoeDamage]
 
 export const gameArea = document.getElementById('game-area');
 
@@ -405,7 +405,7 @@ export function draw() {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     const paddedSeconds = seconds.toString().padStart(2, '0');
-    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} fps: ${parseInt(fpsMeter)} debug: ${cupids.cupids.length}, ${document.getElementById('debug-visuals').childElementCount}, ${aoeDamage.length}`;
+    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} fps: ${parseInt(fpsMeter)} debug: ${ghosts.ghosts.length}, ${document.getElementById('debug-visuals').childElementCount}, ${aoeDamage.length}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;
     MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
     MarioHealthBar.style.bottom = (mario.y + 90) + "px";
