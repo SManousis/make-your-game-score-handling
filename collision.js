@@ -53,7 +53,12 @@ export function healthItemPicked(entity) {
         if (candy.disabled) continue;
         // console.log("Checking collision between:", entity, "and", candy);
         if (collisionCheck(entity, candy)) {
-            entity.healthUpgrade(candy.health, "health");
+            if (Object.hasOwn(entity, 'healthUpgrade')) {
+                entity.healthUpgrade(candy.health, "health");
+            } else {
+                entity.health += candy.health;
+                if (entity.health > entity.maxhealth) entity.health = entity.maxhealth;
+            }
 
             // console.log(`healthItem touched ${entity.name} gained ${candy.healthAdd}`);
             candy.disabled = true
