@@ -67,7 +67,7 @@ export let mario = {
     },
     healthUpgrade: function (health, sound) {
         this.health += health;
-        if (this.health > 120) this.health = 120;
+        if (this.health > this.maxhealth) this.health = this.maxhealth;
         if (sound) {
             audio.audioManager.playSample(sound, {
                 gain: 0.8,
@@ -77,23 +77,6 @@ export let mario = {
             });
         };
     },
-    reset() {
-        this.x = 500;
-        this.y = 500;
-        this.health = 100;
-        this.velX = 0;
-        this.velY = 0;
-        this.disabled = false;
-        this.body.forEach(body => body.div.remove());
-        this.body = [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0 - 30, 0 + 20, 30), utils.createCircle(0 + 30, 0 + 20, 30)];
-        this.bullet_count = 1;
-        this.dom.innerHTML = "";
-        const defaultBody = document.getElementById("mario-body-forward").cloneNode(true);
-        const defaultLegs = document.getElementById("mario-legs0").cloneNode(true);
-        this.dom.appendChild(defaultLegs);
-        this.dom.appendChild(defaultBody);
-        this.currentBody = defaultBody;
-        this.currentLegs = defaultLegs;
     // reset() {
     //     this.x = 500;
     //     this.y = 500;

@@ -163,11 +163,11 @@ export const keysPressed = {
 let audioInitialized = false;
 
 playButton.addEventListener('click', async () => {
-    // if (!audioInitialized) {
-    //     await audioSetUp();
-    //     audioInitialized = true;
-    // }
-    // if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration);
+    if (!audioInitialized) {
+        await audioSetUp();
+        audioInitialized = true;
+    }
+    if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration);
 
     gameState.currentState = 'running';
     updateMenuVisibility();
