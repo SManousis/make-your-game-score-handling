@@ -53,8 +53,8 @@ export function healthItemPicked(entity) {
         if (candy.disabled) continue;
         // console.log("Checking collision between:", entity, "and", candy);
         if (collisionCheck(entity, candy)) {
-            mario.mario.healthUpgrade(candy.health, "health")
-            
+            entity.healthUpgrade(candy.health, "health");
+
             // console.log(`healthItem touched ${entity.name} gained ${candy.healthAdd}`);
             candy.disabled = true
             candy.body.forEach(body => body.div.remove())

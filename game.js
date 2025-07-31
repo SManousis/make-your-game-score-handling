@@ -58,7 +58,7 @@ let lastTime = 0;
 export let music = true;
 export let sounds = true;
 export let musicVolume = 1;
-export let soundsVolume = 1;
+export let soundsVolume = 0.8;
 
 
 export let allEntities = []

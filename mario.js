@@ -230,8 +230,8 @@ export function marioUpdate() {
         mario.health = 100
         if (gameState.lives === 0) {
             gameState.currentState = 'gameOver'
-            audioManager.stopMusic();
-            audioManager.playSample("game_over");
+            audio.audioManager.stopMusic();
+            audio.audioManager.playSample("game_over");
             updateMenuVisibility();
             console.log("mario died")
         }

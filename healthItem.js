@@ -5,7 +5,7 @@ import * as physics from "./physicsStep.js";
 export let healthItems = [];
 
 
-export function createHealthItem(x, y, healthAdd = 0){
+export function createHealthItem(x, y, healthAdd = 0) {
     let healthItemBody = document.createElement("img");
     healthItemBody.className = "health-item-img";
     healthItemBody.src = "assets/items/healthCandy.png";
@@ -18,9 +18,9 @@ export function createHealthItem(x, y, healthAdd = 0){
         velY: -1,
         velX: 0,
         healthAdd: healthAdd,
-        body: [utils.createCircle(x, y+10, 15)],
-        updateFunc: function() { healthItemUpdate(this) },
-        drawFunc: function() { healthItemVisuals(this) },
+        body: [utils.createCircle(x, y + 10, 15)],
+        updateFunc: function () { healthItemUpdate(this) },
+        drawFunc: function () { healthItemVisuals(this) },
         dom: healthItemBody,
         team: "player",
         physicsPointsOffsets: [{ x: 0, y: 0 }],
@@ -29,7 +29,7 @@ export function createHealthItem(x, y, healthAdd = 0){
     console.log("Health item was created at ", x, y)
     healthItems.push(healthItem)
     game.allEntities.push(healthItem);
-        return healthItem
+    return healthItem
 }
 
 export function healthItemUpdate(healthItem) {
