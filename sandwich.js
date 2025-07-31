@@ -2,9 +2,10 @@ import * as utils from './utils.js'
 import { gameArea, allEntities, removeFromAllEntities } from './game.js';
 import { mario } from './mario.js';
 import { moveAndCollide } from './physicsStep.js';
+import * as audio from "./audio.js"
 
 export function shootSandwich(dir, vendX, vendY) {
-    if (Math.random() > 0.15){
+    if (Math.random() > 0.15) {
         return
     }
     const state = Math.random() < 0.7 ? 'friend' : 'enemy';
@@ -18,7 +19,7 @@ export function shootSandwich(dir, vendX, vendY) {
     gameArea.appendChild(sandwichElement);
 
     const randomSign = dir === 'left' ? -1 : 1;
-    const velX = utils.getRandomInt(5, 20)* randomSign
+    const velX = utils.getRandomInt(5, 20) * randomSign
     const velY = utils.getRandomInt(10, 25)
 
     const newSandwich = {
@@ -54,7 +55,7 @@ export function shootSandwich(dir, vendX, vendY) {
 function sandwichUpdate(newSandwich) {
     newSandwich.lifeSpan -= 1;
     if (newSandwich.lifeSpan <= 0) {
-        
+
         removeSandwich(newSandwich);
         return;
     }
@@ -62,12 +63,9 @@ function sandwichUpdate(newSandwich) {
     for (const BodyPart of newSandwich.body) {
         if (utils.IsBodyCollidingWithUnit(BodyPart, mario)) {
             if (newSandwich.state === 'friend') {
-                mario.health += newSandwich.damage
+                mario.healthUpgrade(newSandwich.damage, "catching_sandwich")
             } else {
-                
-                mario.takeDamage(newSandwich.damage, newSandwich.x)
-               
-                
+                mario.takeDamage(newSandwich.damage, newSandwich.x, "turtle_hit")
             }
             removeSandwich(newSandwich);
             return;

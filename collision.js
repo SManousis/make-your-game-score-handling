@@ -53,21 +53,12 @@ export function healthItemPicked(entity) {
         if (candy.disabled) continue;
         // console.log("Checking collision between:", entity, "and", candy);
         if (collisionCheck(entity, candy)) {
-            if (game.sounds) audioManager.playSample("health", {
-                gain: game.soundsVolume,
-                pan: 0,
-                throttleMs: 300,
-                pitchRandom: [0.95, 1.05],
-            });
+            mario.mario.healthUpgrade(candy.health, "health")
             
             // console.log(`healthItem touched ${entity.name} gained ${candy.healthAdd}`);
             candy.disabled = true
             candy.body.forEach(body => body.div.remove())
             candy.dom.remove()
-            entity.health += candy.healthAdd
-            if (entity.health > 120) {
-                entity.health = 120
-            }
         }
     }
 }

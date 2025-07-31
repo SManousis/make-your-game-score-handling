@@ -2,12 +2,14 @@ import { spawnCicada } from "./cicadas.js"
 import { spawnTurtle } from "./turtles.js"
 import { createCupid, cupids } from "./cupids.js"
 import { createGhost, ghosts } from "./ghosts.js"
+import { createVendingStatic } from "./vending.js"
 import { gameState } from "./game.js"
 // import {  } from "./game.js"
 
 const gameArea = document.getElementById('game-area')
 
 export async function stage1() {
+    createVendingStatic()
     await spawnSwarm(50, createGhost, 20, 200, ghosts)
     await sleep(1000)
     const turt1 = addEvent(() => startSpawner("left", 0, 0, spawnTurtle), 500)

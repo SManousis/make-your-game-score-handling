@@ -130,7 +130,6 @@ function restartGame() {
 
     gameState.currentState = 'running';
     updateMenuVisibility();
-    createVendingStatic();
     if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration)
     stage1();
 }
@@ -320,6 +319,8 @@ let prev = 0
 
 
 
+
+
 // The main game loop
 function gameLoop(currentTime) {
 
@@ -336,6 +337,7 @@ function gameLoop(currentTime) {
         gameState.gameTime += deltaTime;
         update();
     }
+
 
     if (gameState.currentState === 'running' || gameState.currentState === 'paused' || gameState.currentState === 'gameOver') {
         draw();
@@ -407,6 +409,7 @@ export function draw() {
     }
 
 
+
     for (let entity of allEntities) {
 
         if (entity.drawFunc != undefined) {
@@ -445,7 +448,6 @@ gameLoop();
 export function removeFromAllEntities(entity) {
     utils.removeUnitFromArray(entity, allEntities)
 }
-createVendingStatic()
 stage1()
 
 cupids.createCupid(500, 200, 0)

@@ -148,7 +148,7 @@ function turtleUpdate(turtle) {
         } else {
             console.log("Mario was hurt by a turtle")
             //inflict damage on Mario
-            mario.takeDamage(turtle.damage, turtle.x)
+            mario.takeDamage(turtle.damage, turtle, "turtle_hit" )
 
         }
     }
