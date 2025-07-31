@@ -57,8 +57,8 @@ let lastTime = 0;
 
 export let music = true;
 export let sounds = true;
-export let musicVolume = 1;
-export let soundsVolume = 0.8;
+export let musicVolume = 0.1;
+export let soundsVolume = 0.1;
 
 
 export let allEntities = []
@@ -331,11 +331,12 @@ function logicGameLoop() {
         gameState.gameTime += 16.666666;
         update();
     }
-    logicGameLoop += 16.6666666
-    const diff = logicGameLoopTimeNow - Date.now() 
+
+    const diff = Date.now() - logicGameLoopTimeNow //is positive number, means update is early so next update needs to happen later, if negative
+    logicGameLoopTimeNow = Date.now() + 16.666666 - diff
     
     counter++
-    setTimeout(logicGameLoop, parseInt(diff + 16.666666))
+    setTimeout(logicGameLoop, parseInt(16.666666 - diff))
 }
 
 // The main game loop
@@ -396,7 +397,7 @@ export function draw() {
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     const paddedSeconds = seconds.toString().padStart(2, '0');
-    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} fps: ${parseInt(fpsMeter)} debug: ${cupids.cupids.length}, ${document.getElementById('debug-visuals').childElementCount}, ${aoeDamage.length}`;
+    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} fps: ${parseInt(fpsMeter)} debug: allEntities:${allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;
     MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
     MarioHealthBar.style.bottom = (mario.y + 90) + "px";
