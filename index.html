@@ -43,11 +43,26 @@
     <button id="play-button">Play</button>
     <button id="leaderboard-button">Leaderboard</button>
     <button id="main-help-button">Help</button>
-    <button id="main-mute-button"> Mute Sound </button>
-    <button id="play-music-button-main"> Play Music </button>
+
+    <label class="switch-label">
+      <span>Music</span>
+      <label class="switch">
+        <input type="checkbox" id="music-toggle-main" checked>
+        <span class="slider"></span>
+      </label>
+    </label>
+
     <label for="music-slider-main">Music Volume</label>
     <input type="range" id="music-slider-main" min="0" max="1" step="0.01" value="0.2">
-    <button id="play-sounds-button-main"> Play Sounds </button>
+
+    <label class="switch-label">
+      <span>Sounds</span>
+      <label class="switch">
+        <input type="checkbox" id="sounds-toggle-main" checked>
+        <span class="slider"></span>
+      </label>
+    </label>
+
     <label for="sounds-slider-main">Sounds Volume</label>
     <input type="range" id="sounds-slider-main" min="0" max="1" step="0.01" value="0.1">
   </div>
@@ -59,11 +74,24 @@
     <button id="restart-button">Restart</button>
     <button id="back-to-menu-button">Back to Menu</button>
     <button id="pause-help-button">Help</button>
-    <button id="pause-mute-button">Mute Sound</button>
-    <button id="play-music-button-pause"> Play Music </button>
+    <label class="switch-label">
+      <span>Music</span>
+      <label class="switch">
+        <input type="checkbox" id="music-toggle-pause" checked>
+        <span class="slider"></span>
+      </label>
+    </label>
     <label for="music-slider-pause">Music Volume</label>
     <input type="range" id="music-slider-pause" min="0" max="1" step="0.01" value="0.2">
-    <button id="play-sounds-button-pause"> Play Sounds </button>
+
+    <label class="switch-label">
+      <span>Sounds</span>
+      <label class="switch">
+        <input type="checkbox" id="sounds-toggle-pause" checked>
+        <span class="slider"></span>
+      </label>
+    </label>
+    <!-- <button id="play-sounds-button-pause"> Play Sounds </button> -->
     <label for="sounds-slider-pause">Sounds Volume</label>
     <input type="range" id="sounds-slider-pause" min="0" max="1" step="0.01" value="0.1">
   </div>
@@ -73,7 +101,6 @@
     <h2>Game Over</h2>
     <button id="restart-button">Restart</button>
     <button id="back-to-menu-button">Back to Menu</button>
-    <button id="game-over-mute-button">Mute Sound</button>
   </div>
 
 

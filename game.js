@@ -33,13 +33,6 @@ const resumeButton = document.getElementById('resume-button');
 const restartButton = document.getElementById('restart-button');
 //const backToMenuButton = document.getElementById('back-to-menu-button');
 const leaderboardButton = document.getElementById('leaderboard-button');
-const mainMuteButton = document.getElementById('main-mute-button');
-const playMusicButtonMain = document.getElementById('play-music-button-main');
-const playSoundsButtonMain = document.getElementById('play-sounds-button-main');
-const playMusicButtonPause = document.getElementById('play-music-button-pause');
-const playSoundsButtonPause = document.getElementById('play-sounds-button-pause');
-const pauseMuteButton = document.getElementById('pause-mute-button');
-const gameOverMuteButton = document.getElementById('game-over-mute-button');
 
 
 export let gameState = {
@@ -195,7 +188,6 @@ pauseHelpButton.addEventListener('click', showHelpMenu);
 
 backFromHelpButton.addEventListener('click', () => {
     // Go back to the screen we were on before
-    if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration);
     gameState.currentState = gameState.previousState;
     updateMenuVisibility();
 });
@@ -252,32 +244,39 @@ function showHelpMenu() {
     updateMenuVisibility();
 }
 
-function toggleMute() {
-    gameState.isMuted = !gameState.isMuted;
-    const muteText = gameState.isMuted ? "Unmute Sound" : "Mute Sound";
-    mainMuteButton.textContent = muteText;
-    pauseMuteButton.textContent = muteText;
-    gameOverMuteButton.textContent = muteText;
-    //add actual muting logic
+const musicToggles = [
+    document.getElementById('music-toggle-main'),
+    document.getElementById('music-toggle-pause')
+];
+
+const soundsToggles = [
+    document.getElementById('sounds-toggle-main'),
+    document.getElementById('sounds-toggle-pause')
+];
+
+function syncToggles(changedToggle, group, setValue) {
+    const newValue = changedToggle.checked;
+    setValue(newValue);
+
+    group.forEach(toggle => {
+        if (toggle !== changedToggle) toggle.checked = newValue;
+    });
 }
-mainMuteButton.addEventListener('click', toggleMute);
-pauseMuteButton.addEventListener('click', toggleMute);
-gameOverMuteButton.addEventListener('click', toggleMute);
 
-playMusicButtonMain.addEventListener('click', () => {
-    music = !music;
+// Event listeners for Music
+musicToggles.forEach(toggle => {
+    toggle.addEventListener('input', () => {
+        syncToggles(toggle, musicToggles, val => music = val);
+        console.log('Music:', music);
+    });
 });
 
-playSoundsButtonMain.addEventListener('click', () => {
-    sounds = !sounds;
-});
-
-playMusicButtonPause.addEventListener('click', () => {
-    music = !music;
-});
-
-playSoundsButtonPause.addEventListener('click', () => {
-    sounds = !sounds;
+// Event listeners for Sounds
+soundsToggles.forEach(toggle => {
+    toggle.addEventListener('input', () => {
+        syncToggles(toggle, soundsToggles, val => sounds = val);
+        console.log('Sounds:', sounds);
+    });
 });
 
 
@@ -286,13 +285,12 @@ playSoundsButtonPause.addEventListener('click', () => {
 document.addEventListener('keydown', (event) => {
     if (event.key.toLowerCase() === 'p' && (gameState.currentState === 'running' || gameState.currentState === 'paused')) {
         if (gameState.currentState === 'running') {
-
             gameState.currentState = 'paused';
-            audioManager.pauseMusic();
+            if (music) audioManager.pauseMusic();
 
         } else if (gameState.currentState === 'paused') {
             gameState.currentState = 'running';
-            audioManager.playMusicLoop("./assets/audio/mario.mp3")
+            if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration)
 
         }
         updateMenuVisibility();

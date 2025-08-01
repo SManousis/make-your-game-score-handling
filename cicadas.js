@@ -53,12 +53,14 @@ export function spawnCicada(x, y) {
 function cicadaUpdate(cicada) {
     //dead
     if (cicada.health <= 0) {
-        audio.audioManager.playSample("bubble", {
-            gain: game.soundsVolume,
-            pan: audio.xToPan(cicada.x),
-            throttleMs: 60,
-            pitchRandom: [0.98, 1.02]
-        });
+        if (game.sounds) {
+            audio.audioManager.playSample("bubble", {
+                gain: game.soundsVolume,
+                pan: audio.xToPan(cicada.x),
+                throttleMs: 60,
+                pitchRandom: [0.98, 1.02]
+            });
+        }
         deleteCicada(cicada)
         updateScore(cicada.scoreValue);
     }
@@ -149,12 +151,14 @@ function cicadaUpdate(cicada) {
             // console.log("cicada disabled")
             cicada.state = "disabled"
             mario.velY = 22;
-            audio.audioManager.playSample("bubble", {
-                gain: game.soundsVolume,
-                pan: audio.xToPan(cicada.x),
-                throttleMs: 60,
-                pitchRandom: [0.98, 1.02]
-            });
+            if (game.sounds) {
+                audio.audioManager.playSample("bubble", {
+                    gain: game.soundsVolume,
+                    pan: audio.xToPan(cicada.x),
+                    throttleMs: 60,
+                    pitchRandom: [0.98, 1.02]
+                });
+            }
 
             setTimeout(() => {
                 deleteCicada(cicada)
