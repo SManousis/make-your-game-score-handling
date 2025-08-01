@@ -57,7 +57,7 @@ let lastTime = 0;
 
 export let music = true;
 export let sounds = true;
-export let musicVolume = 0.1;
+export let musicVolume = 0.2;
 export let soundsVolume = 0.1;
 
 
@@ -110,13 +110,13 @@ function restartGame() {
     // ghosts.reset();
     // turtles.reset();
     // cicadas.reset();
-   //healthItems.reset();
+    //healthItems.reset();
 
     allEntities.length = 0;
     console.log(allEntities);
     bullets.allBullets.length = 0;
     healthItems.length = 0;
-    
+
     utils.setUnit(mario, 500, 500)
     mario.health = 100;
     allEntities.push(mario)
@@ -213,6 +213,38 @@ document.querySelectorAll('#restart-button').forEach(btn => {
     });
 });
 
+const sliders = {
+    music: [
+        document.getElementById('music-slider-main'),
+        document.getElementById('music-slider-pause')
+    ],
+    sounds: [
+        document.getElementById('sounds-slider-main'),
+        document.getElementById('sounds-slider-pause')
+    ]
+};
+
+function syncSliders(changedSlider, type) {
+    const value = parseFloat(changedSlider.value);
+    if (type === 'music') {
+        musicVolume = value;
+    } else {
+        soundsVolume = value;
+    }
+    // Update the other slider to stay in sync
+    sliders[type].forEach(slider => {
+        if (slider !== changedSlider) slider.value = value;
+    });
+}
+
+sliders.music.forEach(slider => {
+    slider.addEventListener('input', () => syncSliders(slider, 'music'));
+});
+
+sliders.sounds.forEach(slider => {
+    slider.addEventListener('input', () => syncSliders(slider, 'sounds'));
+});
+
 function showHelpMenu() {
     gameState.previousState = gameState.currentState; // IMPORTANT: Remember where we came from
     gameState.currentState = 'help';
@@ -274,13 +306,13 @@ document.addEventListener('keydown', (event) => {
     }
 
     if (event.key.toLowerCase() === 'b') {
-        if (keysPressed.bomb == false){
+        if (keysPressed.bomb == false) {
             keysPressed.bomb = true
             createBomb(mario.x, mario.y, 'player', 500, 500, 2, true)
         }
     }
 
-    
+
 
     if (event.key.toLocaleLowerCase() === 'f') {
         marioShoot();
@@ -297,7 +329,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowUp') {
         keysPressed.up = true;
     }
-    
+
 
     if (event.key === 'ArrowDown') {
         keysPressed.down = true;
@@ -325,7 +357,7 @@ document.addEventListener('keyup', (event) => {
         keysPressed.down = false;
     }
 
-   if (event.key.toLowerCase() === 'b') {
+    if (event.key.toLowerCase() === 'b') {
         keysPressed.bomb = false;
     }
 
@@ -333,7 +365,7 @@ document.addEventListener('keyup', (event) => {
         keysPressed.space = false
     }
 
-    
+
 
 });
 
@@ -353,7 +385,7 @@ function logicGameLoop() {
 
     const diff = Date.now() - logicGameLoopTimeNow //is positive number, means update is early so next update needs to happen later, if negative
     logicGameLoopTimeNow = Date.now() + 16.666666 - diff
-    
+
     counter++
     setTimeout(logicGameLoop, parseInt(16.666666 - diff))
 }
@@ -373,9 +405,9 @@ let updatefpsMeter = 0
 // Update the game state, only physics
 function update() {
     updateCounter++
-    if (updateCounter == 30){
+    if (updateCounter == 30) {
         updateCounter = 0
-        updatefpsMeter = 1000/((Date.now() - updateCounterTimestamp)/30)
+        updatefpsMeter = 1000 / ((Date.now() - updateCounterTimestamp) / 30)
         updateCounterTimestamp = Date.now()
     }
 
@@ -405,9 +437,9 @@ function update() {
 
     gameState.frameCounter++
 
-    for (let unit of queueFree){
+    for (let unit of queueFree) {
         for (let group of allGroups) {
-        utils.removeUnitFromArray(unit, group)
+            utils.removeUnitFromArray(unit, group)
         }
         unit.body.forEach(b => { if (b.div) b.div.remove(); })
         if (unit.dom) unit.dom.remove();
@@ -425,9 +457,9 @@ let drawfpsMeter = 0
 // Draw the game, only updating visual elements based on their objects
 export function draw() {
     drawCounter++
-    if (drawCounter == 30){
+    if (drawCounter == 30) {
         drawCounter = 0
-        drawfpsMeter = 1000/((Date.now() - drawCounterTimestamp)/30)
+        drawfpsMeter = 1000 / ((Date.now() - drawCounterTimestamp) / 30)
         drawCounterTimestamp = Date.now()
     }
 

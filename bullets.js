@@ -1,6 +1,6 @@
 import * as utils from "./utils.js"
 import * as mario from "./mario.js"
-import { allEntities, gameArea } from './game.js'
+import { allEntities, gameArea, soundsVolume } from './game.js'
 import * as walkables from './walkables.js'
 import * as audio from "./audio.js"
 
@@ -33,7 +33,7 @@ export function createBullet(dirType, team, x, y, speed, damage = 10, targetX = 
             targetX = x - 1
             targetY = y
             break
-            case "right":
+        case "right":
             [bodyWidth, bodyHeight] = [bodyHeight, bodyWidth]
 
             bodyX = x - (bodyWidth / 2)
@@ -70,19 +70,17 @@ export function createBullet(dirType, team, x, y, speed, damage = 10, targetX = 
     allEntities.push(bullet);
     allBullets.push(bullet);
     if (team === "player") {
-        let pan = audio.xToPan(bullet.x)
         audio.audioManager.playSample("lazer", {
-            gain: 0.8, 
-            pan: pan, 
-            throttleMs: 60, 
+            gain: soundsVolume,
+            pan: audio.xToPan(bullet.x),
+            throttleMs: 60,
             pitchRandom: [0.98, 1.02]
         });
     } else {
-        let pan = audio.xToPan(bullet.x)
         audio.audioManager.playSample("lazer_short", {
-            gain: 1, 
-            pan: pan, 
-            throttleMs: 60, 
+            gain: soundsVolume,
+            pan: audio.xToPan(bullet.x),
+            throttleMs: 60,
             pitchRandom: [0.98, 1.02]
         });
 

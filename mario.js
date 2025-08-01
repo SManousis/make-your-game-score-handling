@@ -47,7 +47,7 @@ export let mario = {
         }
         if (sound) {
             audio.audioManager.playSample(sound, {
-                gain: soundsVolume-0.2,
+                gain: soundsVolume,
                 pan: audio.xToPan(this.x),
                 throttleMs: 60,
                 pitchRandom: [0.98, 1.02]
@@ -70,7 +70,7 @@ export let mario = {
         if (this.health > this.maxhealth) this.health = this.maxhealth;
         if (sound) {
             audio.audioManager.playSample(sound, {
-                gain: 0.8,
+                gain: soundsVolume,
                 pan: audio.xToPan(this.x),
                 throttleMs: 60,
                 pitchRandom: [0.98, 1.02]
@@ -231,7 +231,7 @@ export function marioUpdate() {
         if (gameState.lives === 0) {
             gameState.currentState = 'gameOver'
             audio.audioManager.stopMusic();
-            audio.audioManager.playSample("game_over");
+            audio.audioManager.playSample("game_over", { gain: soundsVolume });
             updateMenuVisibility();
             console.log("mario died")
         }

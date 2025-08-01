@@ -43,6 +43,7 @@ export default class AudioManager {
 
 
     playSample(name, { gain = 1.0, pan = 0.0, throttleMs = 0, pitchRandom = null } = {}) {
+        console.warn("play sample gain", gain)
         const buffer = this.sampleBuffers[name];
         if (!buffer) return;
 
