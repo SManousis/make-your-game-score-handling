@@ -11,7 +11,7 @@ export let cicadas = [];
 export function spawnCicada(x, y) {
     const cicadaElement = document.createElement('img')
     cicadaElement.className = 'cicada-img';
-    cicadaElement.src = 'assets/enemies/cicada.png';
+    cicadaElement.src = 'assets/enemies/cicada.svg';
     gameArea.appendChild(cicadaElement);
 
     const newCicada = {

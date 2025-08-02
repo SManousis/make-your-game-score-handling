@@ -14,7 +14,7 @@ const max_turtles = 5;
 export function spawnTurtle(x, y) {
     const turtleElement = document.createElement('img');
     turtleElement.className = 'turtle-img';
-    turtleElement.src = 'assets/enemies/caretta.png'
+    turtleElement.src = 'assets/enemies/caretta.svg'
     gameArea.appendChild(turtleElement);
 
     const newTurtle = {

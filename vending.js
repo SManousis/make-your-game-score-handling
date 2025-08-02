@@ -12,7 +12,7 @@ export function createVendingStatic() {
     console.log("create Vending")
     const vendingElement = document.createElement('img');
     vendingElement.className = 'vending-img';
-    vendingElement.src = 'assets/enemies/machine.png'
+    vendingElement.src = 'assets/enemies/machine.svg'
     gameArea.appendChild(vendingElement);
 
     //choose randomly between left and right

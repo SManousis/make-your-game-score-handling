@@ -10,7 +10,7 @@ export let ghosts = [];
 export function createGhost(x, y, index) {
     let ghostBody = document.createElement("img");
     ghostBody.className = "ghost-img";
-    ghostBody.src = "assets/enemies/ghost.png";
+    ghostBody.src = "assets/enemies/ghost.svg";
     document.getElementById("game-area").appendChild(ghostBody);
     // store reference in object
 
