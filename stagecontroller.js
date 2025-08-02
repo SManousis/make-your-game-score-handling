@@ -11,26 +11,26 @@ const gameArea = document.getElementById('game-area')
 export async function stage1(gameGen) {
     createVendingStatic();
 
-    await spawnSwarm(50, createGhost, 20, 200, ghosts, gameGen);
-    if (gameGen !== currentGameGen) return;
+    await spawnSwarm(50, createGhost, 20, 200, ghosts);
+    if (abortStage(gameGen)) return;
 
     await sleep(1000);
-    if (gameGen !== currentGameGen) return;
+    if (abortStage(gameGen)) return;
 
-    const turt1 = addEvent(() => startSpawner("left", 0, 0, spawnTurtle, 1, gameGen), 500);
-    const turt2 = addEvent(() => startSpawner("right", 0, 0, spawnTurtle, 1, gameGen), 433);
+    const turt1 = addEvent(() => startSpawner("left", 0, 0, spawnTurtle, 1), 500);
+    const turt2 = addEvent(() => startSpawner("right", 0, 0, spawnTurtle, 1), 433);
 
-    await spawnSwarm(10, createCupid, 5, 500, cupids, gameGen);
-    if (gameGen !== currentGameGen) return;
+    await spawnSwarm(10, createCupid, 5, 500, cupids);
+    if (abortStage(gameGen)) return;
 
     await sleep(1000);
-    if (gameGen !== currentGameGen) return;
+    if (abortStage(gameGen)) return;
 
-    const turt3 = addEvent(() => startSpawner("topleft", 0, 0, spawnTurtle, 1, gameGen), 422);
-    const turt4 = addEvent(() => startSpawner("topright", 0, 0, spawnTurtle, 1, gameGen), 366);
+    const turt3 = addEvent(() => startSpawner("topleft", 0, 0, spawnTurtle, 1), 422);
+    const turt4 = addEvent(() => startSpawner("topright", 0, 0, spawnTurtle, 1), 366);
 
-    await spawnSwarm(20, createCupid, 10, 400, cupids, gameGen);
-    if (gameGen !== currentGameGen) return;
+    await spawnSwarm(20, createCupid, 10, 400, cupids);
+    if (abortStage(gameGen)) return;
 
     removeEvent(turt1);
     removeEvent(turt2);
@@ -38,44 +38,49 @@ export async function stage1(gameGen) {
     removeEvent(turt4);
 
     await sleep(1000);
-    if (gameGen !== currentGameGen) return;
+    if (abortStage(gameGen)) return;
 
-    const c1 = addEvent(() => startSpawner("left", 0, 0, spawnCicada, 1, gameGen), 350);
-    const c2 = addEvent(() => startSpawner("right", 0, 0, spawnCicada, 1, gameGen), 433);
+    const c1 = addEvent(() => startSpawner("left", 0, 0, spawnCicada, 1), 350);
+    const c2 = addEvent(() => startSpawner("right", 0, 0, spawnCicada, 1), 433);
 
-    await spawnSwarm(40, createCupid, 20, 300, cupids, gameGen);
-    if (gameGen !== currentGameGen) return;
+    await spawnSwarm(40, createCupid, 20, 300, cupids);
+    if (abortStage(gameGen)) return;
 
     await sleep(1000);
-    if (gameGen !== currentGameGen) return;
+    if (abortStage(gameGen)) return;
 
-    const c3 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada, 1, gameGen), 220);
-    const c4 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada, 1, gameGen), 333);
+    const c3 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada, 1), 220);
+    const c4 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada, 1), 333);
 
-    await spawnSwarm(80, createCupid, 25, 200, cupids, gameGen);
-    if (gameGen !== currentGameGen) return;
+    await spawnSwarm(80, createCupid, 25, 200, cupids);
+    if (abortStage(gameGen)) return;
 
     await sleep(3000);
-    if (gameGen !== currentGameGen) return;
+    if (abortStage(gameGen)) return;
 
-    const c5 = addEvent(() => startSpawner("left", 0, 0, spawnCicada, 1, gameGen), 20);
-    const c6 = addEvent(() => startSpawner("right", 0, 0, spawnCicada, 1, gameGen), 20);
-    const c7 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada, 1, gameGen), 20);
-    const c8 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada, 1, gameGen), 20);
-
-    await sleep(1000);
-    if (gameGen !== currentGameGen) return;
-
-    await spawnSwarm(160, createCupid, 35, 100, cupids, gameGen);
-    if (gameGen !== currentGameGen) return;
+    const c5 = addEvent(() => startSpawner("left", 0, 0, spawnCicada, 1), 20);
+    const c6 = addEvent(() => startSpawner("right", 0, 0, spawnCicada, 1), 20);
+    const c7 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada, 1), 20);
+    const c8 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada, 1), 20);
 
     await sleep(1000);
-    if (gameGen !== currentGameGen) return;
+    if (abortStage(gameGen)) return;
+
+    await spawnSwarm(160, createCupid, 35, 100, cupids);
+    if (abortStage(gameGen)) return;
+
+    await sleep(1000);
+    if (abortStage(gameGen)) return;
 }
 
+function abortStage(gameGen){
+    if (gameGen !== currentGameGen){
+        removeAllEvents()
+        return true
+    }
+}
 
-
-async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, array, gameGen) {
+async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, array) {
     const rows = count / maxInRow
     const leftOver = (rows - parseInt(rows)) * maxInRow
     const exactRows = parseInt(rows)
@@ -88,18 +93,16 @@ async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, 
 
     for (let yi = 0; yi < exactRows; yi++) {
         for (let x = 0; x < maxInRow; x++) {
-            if (gameGen !== currentGameGen) return;
             spawnUnitFunc(startX + x * (endX - startX) / (maxInRow - 1), -downOffset + gameArea.offsetWidth - (yi * ySeparation), unitIndex)
             unitIndex++
         }
     }
 
     for (let x = 0; x < leftOver; x++) {
-        if (gameGen !== currentGameGen) return;
         spawnUnitFunc(startX + x * (endX - startX) / (leftOver - 1), -downOffset + gameArea.offsetWidth - (exactRows * ySeparation), unitIndex)
         unitIndex++
     }
-    await waitForCondition(() => array.length == 0 || gameGen !== currentGameGen);
+    await waitForCondition(() => array.length == 0);
 }
 
 
@@ -150,6 +153,9 @@ export function stageControllerTicker() {
     }
 }
 
+export function removeAllEvents(){
+    eventQueue.length = 0
+}
 
 export function removeEvent(id) {
     for (let i = 0; i < eventQueue.length; i++) {
@@ -165,14 +171,13 @@ export function removeEvent(id) {
 
 
 
-export function startSpawner(position, x, y, spawnUnitFunc, count = 1, gameGen) {
+export function startSpawner(position, x, y, spawnUnitFunc, count = 1) {
     if (spawnPositions.hasOwnProperty(position)) {
         x = spawnPositions[position].x
         y = spawnPositions[position].y
     }
 
     for (let i = 0; i < count; i++) {
-        if (gameGen !== currentGameGen) return;
         spawnUnitFunc(x, y);
         sleep(60);
     }
