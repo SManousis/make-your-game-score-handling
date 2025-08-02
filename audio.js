@@ -66,6 +66,8 @@ export class AudioManager {
             oldest.playing = false;
             slot = oldest;
         }
+        slot.started = this.context.currentTime;
+        console.warn(slot.started)
 
         const source = this.context.createBufferSource();
         const gainNode = this.context.createGain();
@@ -170,7 +172,7 @@ export class AudioManager {
         this.musicOffset = 0;
     }
 
-    setMusicVolume(vol) {
+    setMusicVolume(vol) { // TODO: Use this ??
         if (this.bgMusic?.gainNode) {
             this.bgMusic.gainNode.gain.value = vol;
         }
