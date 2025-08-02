@@ -72,11 +72,13 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
 
         case 'sphere':
             [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];
-            bodyWidth = 15;
-            bodyHeight = 15;
+            bodyWidth = 30;
+            bodyHeight = 30;
             bulletBody.src = "assets/projectiles/sphere.svg";
-            bulletBody.style.width = bodyWidth+'px';
-            bulletBody.style.height = bodyHeight+'px';
+            bulletBody.style.width = bodyWidth+10+'px';
+            bulletBody.style.height = bodyHeight+10+'px';
+            bulletBody.style.bottom = -30+'px';
+            bulletBody.style.left = 3+'px';
 
             if (dirType == "left" || dirType == 'right'){
                 [bodyWidth, bodyHeight] = [bodyHeight, bodyWidth]
