@@ -123,7 +123,7 @@ export function cupidUpdate(cupid) {
 
     if (parseInt(Math.random() * 2000) == 0) {
         cupid.dom.src = preloadedFiringImage.src
-        let bullet = bullets.createBullet("down", "enemy", cupid.x, cupid.y, 4, 8)
+        let bullet = bullets.createBullet("down", "enemy", 'heart', cupid.x, cupid.y, 4, 8)
 
         setTimeout(() => {
             cupid.dom.src = "assets/enemies/TrumpCupid.png"

@@ -102,7 +102,7 @@ export function ghostUpdate(ghost) {
     }
 
     if (parseInt(Math.random()*1000) == 0){
-        bullets.createBullet("down", "enemy", ghost.x, ghost.y, 3, 10)
+        bullets.createBullet("down", "enemy", 'pacman', ghost.x, ghost.y, 3, 10)
     }
 
 }

@@ -379,6 +379,7 @@ export function marioShoot() {
             bullets.createBullet(
                 mario.aimDirection,
                 "player",
+                'bullet',
                 mario.x - 40,
                 mario.y + yCorrection + offset, // Apply spread on Y
                 14,
@@ -391,6 +392,7 @@ export function marioShoot() {
             bullets.createBullet(
                 mario.aimDirection,
                 "player",
+                'bullet',
                 mario.x + 40,
                 mario.y + yCorrection + offset, // Apply spread on Y
                 14,
@@ -403,6 +405,7 @@ export function marioShoot() {
             bullets.createBullet(
                 mario.aimDirection,
                 "player",
+                'bullet',
                 mario.x + offset, // Apply spread on X
                 mario.y + 100,
                 14,

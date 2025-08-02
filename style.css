@@ -102,8 +102,6 @@ body {
 }
 
 .bullet-img {
-  width: 5px;
-  height: 40px;
   position: absolute;
   bottom: 0px;
   left: 0px;
