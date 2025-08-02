@@ -119,9 +119,14 @@ export function updateMenuVisibility() {
 export let currentGameGen = 0;
 
 function restartGame() {
-    currentGameGen++; // Increment at every restart
-
+    currentGameGen++; // In
+    // crement at every restart
+    
     for (let entity of allEntities) {
+        if (entity.countdownDiv ){
+            entity.countdownDiv.remove()
+            utils.destroyUnit(entity)
+        }
         if (entity.dom) entity.dom.remove();
         if (entity.body) entity.body.forEach(body => body.div.remove());
     }
@@ -160,7 +165,9 @@ function restartGame() {
         audio.manager.stopMusic();
     }
 
-    stage1(currentGameGen); // pass currentGameGen here
+    stage1(currentGameGen);
+    createBomb(800, 500),
+    createBomb(300, 500) // pass currentGameGen here
 }
 
 
@@ -558,5 +565,5 @@ visualGameLoop();
 
 stage1(currentGameGen)
 
-cupids.createCupid(500, 200, 0)
+//cupids.createCupid(500, 200, 0)
 createBomb(800, 500)
