@@ -1,4 +1,4 @@
-export default class AudioManager {
+export class AudioManager {
     constructor(samplePaths, poolSize = 5) {
         this.context = new AudioContext();
         this.samplePaths = samplePaths;
@@ -125,16 +125,16 @@ export default class AudioManager {
         const overlap = overlapDuration;
 
         this.isPlaying = true;
-        this.musicOffset = 0;
-
+        
         const scheduleLoop = (startTime) => {
             const source = context.createBufferSource();
             const gainNode = context.createGain();
             source.buffer = buffer;
             gainNode.gain.value = volume;
-
+            
             source.connect(gainNode).connect(context.destination);
             source.start(startTime, this.musicOffset);
+            this.musicOffset = 0;
 
             this.bgMusic = { source, gainNode };
 
@@ -186,28 +186,4 @@ function isSafari() {
 export function xToPan(x, width = 1800) {
     const clampedX = Math.max(0, Math.min(x, width));
     return (clampedX / width) * 2 - 1;
-}
-
-export const audioManager = new AudioManager({
-    bubble: "./assets/audio/bubble.mp3",
-    catching_sandwich: "./assets/audio/catching_sandwich.mp3",
-    cicada_hit: "./assets/audio/cicada_hit.mp3",
-    swarm: "./assets/audio/cicada_swarm.mp3",
-    game_over: "./assets/audio/game_over.mp3",
-    health_short: "./assets/audio/health_short.mp3",
-    health: "./assets/audio/health.mp3",
-    lazer_short: "./assets/audio/lazer_short.mp3",
-    lazer: "./assets/audio/lazer.mp3",
-    tick: "./assets/audio/time_tick.mp3",
-    turtle_hit: "./assets/audio/turtle_hit.mp3",
-    vending_rising: "./assets/audio/vending_rising.mp3",
-}, 4);
-
-export const track1 = { url: "./assets/audio/mario.mp3", overlapDuration: 7.742 }
-
-// Must call this by a user event driven event on start-up
-export async function audioSetUp() {
-    audioManager.resume();
-    await audioManager.loadSamples();
-    await audioManager.getOrLoadMusicBuffer("./assets/audio/mario.mp3");
 }

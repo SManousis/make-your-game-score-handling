@@ -12,7 +12,7 @@ import { healthItems } from './healthItem.js'
 import * as utils from "./utils.js"
 import * as ghosts from './ghosts.js'
 import { createBomb, createExplosion } from './explosion.js'
-import { audioManager, track1, audioSetUp } from './audio.js'
+import { AudioManager, xToPan } from './audio.js'
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -48,10 +48,36 @@ export let gameState = {
 
 let lastTime = 0;
 
-export let music = true;
-export let sounds = true;
-export let musicVolume = 0.2;
-export let soundsVolume = 0.1;
+export const audio = {
+    music: true,
+    sounds: true,
+    musicVolume: 0.2,
+    soundsVolume: 0.1,
+    manager: new AudioManager({
+        bubble: "./assets/audio/bubble.mp3",
+        catching_sandwich: "./assets/audio/catching_sandwich.mp3",
+        cicada_hit: "./assets/audio/cicada_hit.mp3",
+        swarm: "./assets/audio/cicada_swarm.mp3",
+        game_over: "./assets/audio/game_over.mp3",
+        health_short: "./assets/audio/health_short.mp3",
+        health: "./assets/audio/health.mp3",
+        lazer_short: "./assets/audio/lazer_short.mp3",
+        lazer: "./assets/audio/lazer.mp3",
+        tick: "./assets/audio/time_tick.mp3",
+        turtle_hit: "./assets/audio/turtle_hit.mp3",
+        vending_rising: "./assets/audio/vending_rising.mp3",
+    }, 4),
+    tracks: [
+        { url: "./assets/audio/mario.mp3", overlapDuration: 7.742 },
+    ],
+    initialized: false,
+    xToPan: xToPan,
+    setUp: async function () {
+        this.manager.resume();
+        await this.manager.loadSamples();
+        await this.manager.getOrLoadMusicBuffer(this.tracks[0].url);
+    }
+}
 
 
 export let allEntities = []
@@ -130,7 +156,13 @@ function restartGame() {
 
     gameState.currentState = 'running';
     updateMenuVisibility();
-    if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration)
+
+    if (audio.music) {
+        audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
+    } else {
+        audio.manager.stopMusic();
+    }
+
     stage1();
 }
 
@@ -156,14 +188,17 @@ export const keysPressed = {
 //--- EVENT LISTENERS ----
 
 // Main menu buttons
-let audioInitialized = false;
-
 playButton.addEventListener('click', async () => {
-    if (!audioInitialized) {
-        await audioSetUp();
-        audioInitialized = true;
+    if (!audio.initialized) {
+        await audio.setUp();
+        audio.initialized = true;
     }
-    if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration);
+
+    if (audio.music) {
+        audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
+    } else {
+        audio.manager.stopMusic();
+    }
 
     gameState.currentState = 'running';
     updateMenuVisibility();
@@ -174,7 +209,12 @@ leaderboardButton.addEventListener('click', () => {
 });
 
 resumeButton.addEventListener('click', () => {
-    if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration);
+    if (audio.music) {
+        audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
+    } else {
+        audio.manager.stopMusic();
+    }
+
     gameState.currentState = 'running';
     updateMenuVisibility();
 });
@@ -219,9 +259,9 @@ const sliders = {
 function syncSliders(changedSlider, type) {
     const value = parseFloat(changedSlider.value);
     if (type === 'music') {
-        musicVolume = value;
+        audio.musicVolume = value;
     } else {
-        soundsVolume = value;
+        audio.soundsVolume = value;
     }
     // Update the other slider to stay in sync
     sliders[type].forEach(slider => {
@@ -240,7 +280,7 @@ sliders.sounds.forEach(slider => {
 function showHelpMenu() {
     gameState.previousState = gameState.currentState; // IMPORTANT: Remember where we came from
     gameState.currentState = 'help';
-    audioManager.pauseMusic();
+    audio.manager.pauseMusic();
     updateMenuVisibility();
 }
 
@@ -266,16 +306,16 @@ function syncToggles(changedToggle, group, setValue) {
 // Event listeners for Music
 musicToggles.forEach(toggle => {
     toggle.addEventListener('input', () => {
-        syncToggles(toggle, musicToggles, val => music = val);
-        console.log('Music:', music);
+        syncToggles(toggle, musicToggles, val => audio.music = val);
+        console.log('Music:', audio.music);
     });
 });
 
 // Event listeners for Sounds
 soundsToggles.forEach(toggle => {
     toggle.addEventListener('input', () => {
-        syncToggles(toggle, soundsToggles, val => sounds = val);
-        console.log('Sounds:', sounds);
+        syncToggles(toggle, soundsToggles, val => audio.sounds = val);
+        console.log('Sounds:', audio.sounds);
     });
 });
 
@@ -286,12 +326,16 @@ document.addEventListener('keydown', (event) => {
     if (event.key.toLowerCase() === 'p' && (gameState.currentState === 'running' || gameState.currentState === 'paused')) {
         if (gameState.currentState === 'running') {
             gameState.currentState = 'paused';
-            if (music) audioManager.pauseMusic();
+            if (audio.music) audio.manager.pauseMusic();
 
         } else if (gameState.currentState === 'paused') {
             gameState.currentState = 'running';
-            if (music) audioManager.playMusicLoop(track1.url, musicVolume, track1.overlapDuration)
-
+            
+            if (audio.music) {
+                audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
+            } else {
+                audio.manager.stopMusic();
+            }
         }
         updateMenuVisibility();
     }

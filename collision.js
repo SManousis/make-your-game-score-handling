@@ -5,7 +5,6 @@ import * as bullets from './bullets.js'
 import * as utils from './utils.js'
 import * as game from './game.js'
 import * as healthItem from './healthItem.js'
-import { audioManager } from './audio.js'
 
 
 export function isShot(entity) {

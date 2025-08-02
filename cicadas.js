@@ -3,7 +3,7 @@ import { mario } from './mario.js'
 import { gameArea, allEntities, updateScore } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
 import * as game from './game.js'
-import * as audio from './audio.js'
+
 
 //cicadas spawning
 export let cicadas = [];
@@ -53,10 +53,10 @@ export function spawnCicada(x, y) {
 function cicadaUpdate(cicada) {
     //dead
     if (cicada.health <= 0) {
-        if (game.sounds) {
-            audio.audioManager.playSample("bubble", {
-                gain: game.soundsVolume,
-                pan: audio.xToPan(cicada.x),
+        if (game.audio.sounds) {
+            game.audio.manager.playSample("bubble", {
+                gain: game.audio.soundsVolume,
+                pan: game.audio.xToPan(cicada.x),
                 throttleMs: 60,
                 pitchRandom: [0.98, 1.02]
             });
@@ -151,10 +151,10 @@ function cicadaUpdate(cicada) {
             // console.log("cicada disabled")
             cicada.state = "disabled"
             mario.velY = 22;
-            if (game.sounds) {
-                audio.audioManager.playSample("bubble", {
-                    gain: game.soundsVolume,
-                    pan: audio.xToPan(cicada.x),
+            if (game.audio.sounds) {
+                game.audio.manager.playSample("bubble", {
+                    gain: game.audio.soundsVolume,
+                    pan: game.audio.xToPan(cicada.x),
                     throttleMs: 60,
                     pitchRandom: [0.98, 1.02]
                 });

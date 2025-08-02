@@ -3,9 +3,8 @@ import { spawnTurtle } from "./turtles.js"
 import { createCupid, cupids } from "./cupids.js"
 import { createGhost, ghosts } from "./ghosts.js"
 import { createVendingStatic } from "./vending.js"
-import { gameState, sounds, soundsVolume } from "./game.js"
-import { audioManager } from "./audio.js"
-// import {  } from "./game.js"
+import { gameState, audio } from "./game.js"
+
 
 const gameArea = document.getElementById('game-area')
 
@@ -13,7 +12,7 @@ export async function stage1() {
     createVendingStatic()
     console.log("1")
     await spawnSwarm(50, createGhost, 20, 200, ghosts)
-    if (sounds) audioManager.playSample("swarm", { gain: soundsVolume })
+    if (audio.sounds) audio.manager.playSample("swarm", { gain: audio.soundsVolume })
     console.log("2")
     await sleep(1000)
 
@@ -23,13 +22,13 @@ export async function stage1() {
     const turt2 = addEvent(() => startSpawner("right", 0, 0, spawnTurtle), 433)
 
     await spawnSwarm(10, createCupid, 5, 500, cupids)
-    if (sounds) audioManager.playSample("swarm", { gain: soundsVolume })
+    if (audio.sounds) audio.manager.playSample("swarm", { gain: audio.soundsVolume })
     await sleep(1000)
 
     const turt3 = addEvent(() => startSpawner("topleft", 0, 0, spawnTurtle), 422)
     const turt4 = addEvent(() => startSpawner("topright", 0, 0, spawnTurtle), 366)
     await spawnSwarm(20, createCupid, 10, 400, cupids)
-    if (sounds) audioManager.playSample("swarm", { gain: soundsVolume })
+    if (audio.sounds) audio.manager.playSample("swarm", { gain: audio.soundsVolume })
     removeEvent(turt1)
     removeEvent(turt2)
     removeEvent(turt3)
@@ -39,13 +38,13 @@ export async function stage1() {
     const c1 = addEvent(() => startSpawner("left", 0, 0, spawnCicada), 350)
     const c2 = addEvent(() => startSpawner("right", 0, 0, spawnCicada), 433)
     await spawnSwarm(40, createCupid, 20, 300, cupids)
-    if (sounds) audioManager.playSample("swarm", { gain: soundsVolume })
+    if (audio.sounds) audio.manager.playSample("swarm", { gain: audio.soundsVolume })
     await sleep(1000)
 
     const c3 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada), 220)
     const c4 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada), 333)
     await spawnSwarm(80, createCupid, 25, 200, cupids)
-    if (sounds) audioManager.playSample("swarm", { gain: soundsVolume })
+    if (audio.sounds) audio.manager.playSample("swarm", { gain: audio.soundsVolume })
     await sleep(3000)
 
     const c5 = addEvent(() => startSpawner("left", 0, 0, spawnCicada), 20)
@@ -55,7 +54,7 @@ export async function stage1() {
     await sleep(1000)
 
     await spawnSwarm(160, createCupid, 35, 100, cupids)
-    if (sounds) audioManager.playSample("swarm", { gain: soundsVolume })
+    if (audio.sounds) audio.manager.playSample("swarm", { gain: audio.soundsVolume })
     await sleep(1000)
 }
 

@@ -1,5 +1,5 @@
-import { allGroups, queueFree, soundsVolume } from "./game.js";
-import * as audio from "./audio.js"
+import { allGroups, queueFree } from "./game.js";
+// import * as audio from "./audio.js"
 
 export let id = 0
 //creates a circle collision body, it automatically created a debug div to help with visuals

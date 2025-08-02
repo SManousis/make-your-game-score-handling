@@ -1,9 +1,8 @@
 import * as utils from './utils.js'
 import { walkables } from './walkables.js'
-import { keysPressed, gameArea, gameState, updateMenuVisibility, sounds, soundsVolume } from './game.js'
+import { keysPressed, gameArea, gameState, updateMenuVisibility, audio } from './game.js'
 import * as physics from './physicsStep.js'
 import * as bullets from './bullets.js'
-import * as audio from "./audio.js"
 
 export const marioDiv = document.getElementById('mario');
 
@@ -45,9 +44,9 @@ export let mario = {
         if (this.isInvincible) {
             return;
         }
-        if (sounds) {
-            audio.audioManager.playSample(sound, {
-                gain: soundsVolume,
+        if (audio.sounds) {
+            audio.manager.playSample(sound, {
+                gain: audio.soundsVolume,
                 pan: audio.xToPan(this.x),
                 throttleMs: 60,
                 pitchRandom: [0.98, 1.02]
@@ -68,9 +67,9 @@ export let mario = {
     healthUpgrade: function (health, sound) {
         this.health += health;
         if (this.health > this.maxhealth) this.health = this.maxhealth;
-        if (sounds) {
-            audio.audioManager.playSample(sound, {
-                gain: soundsVolume,
+        if (audio.sounds) {
+            audio.manager.playSample(sound, {
+                gain: audio.soundsVolume,
                 pan: audio.xToPan(this.x),
                 throttleMs: 60,
                 pitchRandom: [0.98, 1.02]
@@ -230,8 +229,8 @@ export function marioUpdate() {
         mario.health = 100
         if (gameState.lives === 0) {
             gameState.currentState = 'gameOver'
-            audio.audioManager.stopMusic();
-            if (sounds) audio.audioManager.playSample("game_over", { gain: soundsVolume });
+            audio.manager.stopMusic();
+            if (audio.sounds) audio.manager.playSample("game_over", { gain: audio.soundsVolume });
             updateMenuVisibility();
             console.log("mario died")
         }

@@ -1,8 +1,8 @@
 import * as utils from './utils.js'
 import { mario } from './mario.js'
-import { gameArea, allEntities, updateScore, groundedEnemies, sounds, soundsVolume } from './game.js'
+import { gameArea, allEntities, updateScore, groundedEnemies, audio } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
-import * as audio from "./audio.js"
+// import * as audio from "./audio.js"
 
 //turtle spawning
 export let turtles = [];
@@ -145,8 +145,8 @@ function turtleUpdate(turtle) {
             mario.velY = 12;
 
             updateScore(turtle.scoreValue);
-            if (sounds) audio.audioManager.playSample("bubble", {
-                gain: soundsVolume,
+            if (audio.sounds) audio.manager.playSample("bubble", {
+                gain: audio.soundsVolume,
                 pan: audio.xToPan(turtle.x),
                 throttleMs: 60,
                 pitchRandom: [0.98, 1.02]
