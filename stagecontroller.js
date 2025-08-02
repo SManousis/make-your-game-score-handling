@@ -3,63 +3,79 @@ import { spawnTurtle } from "./turtles.js"
 import { createCupid, cupids } from "./cupids.js"
 import { createGhost, ghosts } from "./ghosts.js"
 import { createVendingStatic } from "./vending.js"
-import { gameState, audio } from "./game.js"
+import { gameState, audio, currentGameGen } from "./game.js"
 
 
 const gameArea = document.getElementById('game-area')
 
-export async function stage1() {
-    createVendingStatic()
-    console.log("1")
-    await spawnSwarm(50, createGhost, 20, 200, ghosts)
-    if (audio.sounds) audio.manager.playSample("swarm", { gain: audio.soundsVolume })
-    console.log("2")
-    await sleep(1000)
+export async function stage1(gameGen) {
+    createVendingStatic();
 
-    console.log("3")
-    const turt1 = addEvent(() => startSpawner("left", 0, 0, spawnTurtle), 500)
-    console.log("4")
-    const turt2 = addEvent(() => startSpawner("right", 0, 0, spawnTurtle), 433)
+    await spawnSwarm(50, createGhost, 20, 200, ghosts, gameGen);
+    if (gameGen !== currentGameGen) return;
 
-    await spawnSwarm(10, createCupid, 5, 500, cupids)
-    if (audio.sounds) audio.manager.playSample("swarm", { gain: audio.soundsVolume })
-    await sleep(1000)
+    await sleep(1000);
+    if (gameGen !== currentGameGen) return;
 
-    const turt3 = addEvent(() => startSpawner("topleft", 0, 0, spawnTurtle), 422)
-    const turt4 = addEvent(() => startSpawner("topright", 0, 0, spawnTurtle), 366)
-    await spawnSwarm(20, createCupid, 10, 400, cupids)
-    if (audio.sounds) audio.manager.playSample("swarm", { gain: audio.soundsVolume })
-    removeEvent(turt1)
-    removeEvent(turt2)
-    removeEvent(turt3)
-    removeEvent(turt4)
-    await sleep(1000)
+    const turt1 = addEvent(() => startSpawner("left", 0, 0, spawnTurtle, 1, gameGen), 500);
+    const turt2 = addEvent(() => startSpawner("right", 0, 0, spawnTurtle, 1, gameGen), 433);
 
-    const c1 = addEvent(() => startSpawner("left", 0, 0, spawnCicada), 350)
-    const c2 = addEvent(() => startSpawner("right", 0, 0, spawnCicada), 433)
-    await spawnSwarm(40, createCupid, 20, 300, cupids)
-    if (audio.sounds) audio.manager.playSample("swarm", { gain: audio.soundsVolume })
-    await sleep(1000)
+    await spawnSwarm(10, createCupid, 5, 500, cupids, gameGen);
+    if (gameGen !== currentGameGen) return;
 
-    const c3 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada), 220)
-    const c4 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada), 333)
-    await spawnSwarm(80, createCupid, 25, 200, cupids)
-    if (audio.sounds) audio.manager.playSample("swarm", { gain: audio.soundsVolume })
-    await sleep(3000)
+    await sleep(1000);
+    if (gameGen !== currentGameGen) return;
 
-    const c5 = addEvent(() => startSpawner("left", 0, 0, spawnCicada), 20)
-    const c6 = addEvent(() => startSpawner("right", 0, 0, spawnCicada), 20)
-    const c7 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada), 20)
-    const c8 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada), 20)
-    await sleep(1000)
+    const turt3 = addEvent(() => startSpawner("topleft", 0, 0, spawnTurtle, 1, gameGen), 422);
+    const turt4 = addEvent(() => startSpawner("topright", 0, 0, spawnTurtle, 1, gameGen), 366);
 
-    await spawnSwarm(160, createCupid, 35, 100, cupids)
-    if (audio.sounds) audio.manager.playSample("swarm", { gain: audio.soundsVolume })
-    await sleep(1000)
+    await spawnSwarm(20, createCupid, 10, 400, cupids, gameGen);
+    if (gameGen !== currentGameGen) return;
+
+    removeEvent(turt1);
+    removeEvent(turt2);
+    removeEvent(turt3);
+    removeEvent(turt4);
+
+    await sleep(1000);
+    if (gameGen !== currentGameGen) return;
+
+    const c1 = addEvent(() => startSpawner("left", 0, 0, spawnCicada, 1, gameGen), 350);
+    const c2 = addEvent(() => startSpawner("right", 0, 0, spawnCicada, 1, gameGen), 433);
+
+    await spawnSwarm(40, createCupid, 20, 300, cupids, gameGen);
+    if (gameGen !== currentGameGen) return;
+
+    await sleep(1000);
+    if (gameGen !== currentGameGen) return;
+
+    const c3 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada, 1, gameGen), 220);
+    const c4 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada, 1, gameGen), 333);
+
+    await spawnSwarm(80, createCupid, 25, 200, cupids, gameGen);
+    if (gameGen !== currentGameGen) return;
+
+    await sleep(3000);
+    if (gameGen !== currentGameGen) return;
+
+    const c5 = addEvent(() => startSpawner("left", 0, 0, spawnCicada, 1, gameGen), 20);
+    const c6 = addEvent(() => startSpawner("right", 0, 0, spawnCicada, 1, gameGen), 20);
+    const c7 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada, 1, gameGen), 20);
+    const c8 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada, 1, gameGen), 20);
+
+    await sleep(1000);
+    if (gameGen !== currentGameGen) return;
+
+    await spawnSwarm(160, createCupid, 35, 100, cupids, gameGen);
+    if (gameGen !== currentGameGen) return;
+
+    await sleep(1000);
+    if (gameGen !== currentGameGen) return;
 }
 
 
-async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, array) {
+
+async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, array, gameGen) {
     const rows = count / maxInRow
     const leftOver = (rows - parseInt(rows)) * maxInRow
     const exactRows = parseInt(rows)
@@ -72,16 +88,18 @@ async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, 
 
     for (let yi = 0; yi < exactRows; yi++) {
         for (let x = 0; x < maxInRow; x++) {
+            if (gameGen !== currentGameGen) return;
             spawnUnitFunc(startX + x * (endX - startX) / (maxInRow - 1), -downOffset + gameArea.offsetWidth - (yi * ySeparation), unitIndex)
             unitIndex++
         }
     }
 
     for (let x = 0; x < leftOver; x++) {
+        if (gameGen !== currentGameGen) return;
         spawnUnitFunc(startX + x * (endX - startX) / (leftOver - 1), -downOffset + gameArea.offsetWidth - (exactRows * ySeparation), unitIndex)
         unitIndex++
     }
-    await waitForCondition(() => { return array.length == 0 })
+    await waitForCondition(() => array.length == 0 || gameGen !== currentGameGen);
 }
 
 
@@ -91,9 +109,9 @@ async function sleep(ms) {
 
 
 // Array to hold scheduled events
-const eventQueue = [];
+export const eventQueue = [];
 let nextId = 0;
-function addEvent(fn, interval) {
+export function addEvent(fn, interval) {
     if (typeof fn !== 'function' || typeof interval !== 'number') {
         throw new Error('Invalid arguments: must pass a function and an interval.');
     }
@@ -133,7 +151,7 @@ export function stageControllerTicker() {
 }
 
 
-function removeEvent(id) {
+export function removeEvent(id) {
     for (let i = 0; i < eventQueue.length; i++) {
         if (eventQueue[i].id === id) {
             eventQueue.splice(i, 1);
@@ -147,15 +165,16 @@ function removeEvent(id) {
 
 
 
-function startSpawner(position, x, y, spawnUnitFunc, count = 1) {
+export function startSpawner(position, x, y, spawnUnitFunc, count = 1, gameGen) {
     if (spawnPositions.hasOwnProperty(position)) {
         x = spawnPositions[position].x
         y = spawnPositions[position].y
     }
 
     for (let i = 0; i < count; i++) {
-        spawnUnitFunc(x, y)
-        sleep(60)
+        if (gameGen !== currentGameGen) return;
+        spawnUnitFunc(x, y);
+        sleep(60);
     }
 }
 

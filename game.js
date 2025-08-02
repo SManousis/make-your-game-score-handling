@@ -6,7 +6,7 @@ import * as cicadas from './cicadas.js'
 import * as walkables from './walkables.js'
 import * as bullets from './bullets.js'
 import * as collision from './collision.js'
-import { stage1, stageControllerTicker } from './stagecontroller.js'
+import { stage1, stageControllerTicker, removeEvent, addEvent, eventQueue } from './stagecontroller.js'
 import { createVendingStatic } from "./vending.js"
 import { healthItems } from './healthItem.js'
 import * as utils from "./utils.js"
@@ -116,33 +116,30 @@ export function updateMenuVisibility() {
     }
 }
 
-
+export let currentGameGen = 0;
 
 function restartGame() {
-    console.log(allEntities);
+    currentGameGen++; // Increment at every restart
+
     for (let entity of allEntities) {
         if (entity.dom) entity.dom.remove();
         if (entity.body) entity.body.forEach(body => body.div.remove());
     }
-    // mario.reset();
-    // cupids.reset();
-    // ghosts.reset();
-    // turtles.reset();
-    // cicadas.reset();
-    //healthItems.reset();
 
     allEntities.length = 0;
-    console.log(allEntities);
+    groundedEnemies.length = 0;
+    ghosts.ghosts.length = 0;
+    cupids.cupids.length = 0;
+    cicadas.cicadas.length = 0;
+    turtles.turtles.length = 0;
     bullets.allBullets.length = 0;
     healthItems.length = 0;
 
-    utils.setUnit(mario, 500, 500)
+    eventQueue.length = 0;
+
+    utils.setUnit(mario, 500, 500);
     mario.health = 100;
-    allEntities.push(mario)
-    stage1();
-    // spawnSwarm(30, cupids.createCupid, 5, 400)
-    //whatever is needed to reset Mario 
-    //whatever is needed to reset enemies
+    allEntities.push(mario);
 
     for (const key in keysPressed) {
         keysPressed[key] = false;
@@ -152,7 +149,7 @@ function restartGame() {
     gameState.score = 0;
     gameState.lives = 5;
     scoreElement.textContent = `Score: ${gameState.score}`;
-    livesElement.textContent = `Lives: ${gameState.score}`;
+    livesElement.textContent = `Lives: ${gameState.lives}`;
 
     gameState.currentState = 'running';
     updateMenuVisibility();
@@ -163,7 +160,7 @@ function restartGame() {
         audio.manager.stopMusic();
     }
 
-    stage1();
+    stage1(currentGameGen); // pass currentGameGen here
 }
 
 
@@ -559,7 +556,7 @@ logicGameLoop();
 visualGameLoop();
 
 
-stage1()
+stage1(currentGameGen)
 
 cupids.createCupid(500, 200, 0)
 createBomb(800, 500)
