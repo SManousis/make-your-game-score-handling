@@ -10,13 +10,13 @@ import * as collision from './collision.js'
 export let cupids = [];
 
 let preloadedFiringImage = new Image();
-preloadedFiringImage.src = "assets/enemies/TrumpCupidFired.png";
+preloadedFiringImage.src = "assets/enemies/TrumpCupidFired.svg";
 
 
 export function createCupid(x, y, index) {
     let cupidBody = document.createElement("img");
     cupidBody.className = "cupid-img";
-    cupidBody.src = "assets/enemies/TrumpCupid.png";
+    cupidBody.src = "assets/enemies/TrumpCupid.svg";
     document.getElementById("game-area").appendChild(cupidBody);
     // store reference in object
 
@@ -126,7 +126,7 @@ export function cupidUpdate(cupid) {
         let bullet = bullets.createBullet("down", "enemy", 'heart', cupid.x, cupid.y, 4, 8)
 
         setTimeout(() => {
-            cupid.dom.src = "assets/enemies/TrumpCupid.png"
+            cupid.dom.src = "assets/enemies/TrumpCupid.svg"
         }, 300)
     }
 

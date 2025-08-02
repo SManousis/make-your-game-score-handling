@@ -23,7 +23,7 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
             bodyWidth = 10;
             bodyHeight = 55;
 
-            bulletBody.src = "assets/projectiles/lazer.png";
+            bulletBody.src = "assets/projectiles/lazer.svg";
             bulletBody.style.width = bodyWidth+'px';
             bulletBody.style.height = bodyHeight+'px';
 
@@ -39,7 +39,7 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
             bodyWidth = 20;
             bodyHeight = 40;
             
-            bulletBody.src = "assets/projectiles/pistol_bullet.png";
+            bulletBody.src = "assets/projectiles/pistol_bullet.svg";
             bulletBody.style.width = bodyWidth+'px';
             bulletBody.style.height = bodyHeight+'px';
             bulletBody.style.bottom = -3+'px';
@@ -57,7 +57,7 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
             bodyWidth = 15;
             bodyHeight = 70;
 
-            bulletBody.src = "assets/projectiles/heartArrow.png";
+            bulletBody.src = "assets/projectiles/heartArrow.svg";
             bulletBody.style.width = bodyWidth+10+'px';
             bulletBody.style.height = bodyHeight+20+'px';
             bulletBody.style.bottom = -5+'px';
@@ -74,7 +74,7 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
             [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];
             bodyWidth = 15;
             bodyHeight = 15;
-            bulletBody.src = "assets/projectiles/sphere.png";
+            bulletBody.src = "assets/projectiles/sphere.svg";
             bulletBody.style.width = bodyWidth+'px';
             bulletBody.style.height = bodyHeight+'px';
 
@@ -90,7 +90,7 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
             bodyWidth = 40;
             bodyHeight = 40;
 
-            bulletBody.src = "assets/projectiles/pacman-bullet.png";
+            bulletBody.src = "assets/projectiles/pacman-bullet.svg";
             bulletBody.style.width = 55+'px';
             bulletBody.style.height = 55+'px';
             bulletBody.style.bottom = -30+'px';
@@ -108,7 +108,7 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
             bodyWidth = 10;
             bodyHeight = 55;
 
-            bulletBody.src = "assets/projectiles/lazer.png";
+            bulletBody.src = "assets/projectiles/lazer.svg";
             bulletBody.style.width = bodyWidth+'px';
             bulletBody.style.height = bodyHeight+'px';
 

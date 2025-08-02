@@ -6,7 +6,7 @@ import * as utils from "./utils.js"
 export function createExplosion(x, y, team, damage = 50, radius = 150, flashDuration = 2) {
     const explosionBody = document.createElement('img');
     explosionBody.className = "explosion-img";
-    explosionBody.src = "assets/items/explosion.png";
+    explosionBody.src = "assets/items/explosion.svg";
     // explosionBody.style.left = (explosion.x  ) + 'px';
     // explosionBody.style.bottom = (explosion.y - 5 ) + 'px';
 
@@ -73,7 +73,7 @@ export function explosionVisuals(entity) {
 export function createBomb(x, y, team, damage = 50, radius = 150, countdownTime = 3, canFall = true){
     const bombBody = document.createElement('img');
     bombBody.className = "bomb-img";
-    bombBody.src = "assets/items/bomb.png";
+    bombBody.src = "assets/items/bomb.svg";
     document.getElementById('game-area').appendChild(bombBody);
 
     

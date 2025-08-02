@@ -11,9 +11,9 @@ export function shootSandwich(dir, vendX, vendY) {
     const sandwichElement = document.createElement('img');
     sandwichElement.className = 'sandwich-img';
     if (state === 'friend') {
-        sandwichElement.src = 'assets/items/sandwich.png'
+        sandwichElement.src = 'assets/items/sandwich.svg'
     } else {
-        sandwichElement.src = 'assets/items/rotten_sandwich.png'
+        sandwichElement.src = 'assets/items/rotten_sandwich.svg'
     }
     gameArea.appendChild(sandwichElement);
 
