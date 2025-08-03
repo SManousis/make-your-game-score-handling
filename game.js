@@ -410,6 +410,7 @@ document.addEventListener('keydown', (event) => {
         if (gameState.currentState === 'running') {
             gameState.currentState = 'paused';
             if (audio.music) audio.manager.pauseMusic();
+            if (audio.sounds) audio.manager.killSamples();
 
         } else if (gameState.currentState === 'paused') {
             gameState.currentState = 'running';

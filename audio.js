@@ -13,6 +13,7 @@ export class AudioManager {
         this.startTime = null;
         this.isPlaying = false;
         this.latencyCompensation = isSafari() ? 0 : 0.05;
+        this.locks = {};
     }
 
     async loadSamples() {
@@ -42,60 +43,85 @@ export class AudioManager {
     }
 
 
-    playSample(name, { gain = 1.0, pan = 0.0, throttleMs = 0, pitchRandom = null } = {}) {
-        const buffer = this.sampleBuffers[name];
-        if (!buffer) return;
+    async playSample(name, { gain = 1.0, pan = 0.0, throttleMs = 0, pitchRandom = null } = {}) {
+        if (!this.locks) this.locks = {}; // init lock storage
 
-        const now = Date.now();
-        if (throttleMs > 0 && this.cooldowns[name] && now - this.cooldowns[name] < throttleMs) {
-            return;
-        }
-        this.cooldowns[name] = now;
+        if (this.locks[name]) return; // Skip if already processing this sample
+        this.locks[name] = true;
 
-        const pool = this.pools[name];
-        let slot = pool.find(s => !s.playing);
-        if (!slot) {
-            let oldest = pool.reduce((a, b) => (a.started < b.started ? a : b));
-            if (oldest.source) {
-                try {
-                    oldest.source.stop();
-                } catch (e) {
-                    // silently ignore if already stopped
-                }
+        try {
+            const buffer = this.sampleBuffers[name];
+            if (!buffer) return;
+
+            const now = Date.now();
+            if (throttleMs > 0 && this.cooldowns[name] && now - this.cooldowns[name] < throttleMs) {
+                return;
             }
-            oldest.playing = false;
-            slot = oldest;
+            this.cooldowns[name] = now;
+
+            const pool = this.pools[name];
+            let slot = pool.find(s => !s.playing);
+            if (!slot) {
+                let oldest = pool.reduce((a, b) => (a.started < b.started ? a : b));
+                if (oldest.source) {
+                    try {
+                        oldest.source.stop();
+                    } catch (e) {
+                        // silently ignore if already stopped
+                    }
+                }
+                oldest.playing = false;
+                slot = oldest;
+            }
+            slot.started = this.context.currentTime;
+
+            const source = this.context.createBufferSource();
+            slot.source = source;
+            const gainNode = this.context.createGain();
+            const panNode = this.context.createStereoPanner();
+
+
+            source.buffer = buffer;
+            gainNode.gain.value = gain;
+            panNode.pan.value = pan;
+
+            if (pitchRandom && pitchRandom.length === 2) {
+                const [min, max] = pitchRandom;
+                source.playbackRate.value = min + Math.random() * (max - min);
+            }
+
+            source.connect(gainNode).connect(panNode).connect(this.context.destination);
+            source.start();
+
+            slot.playing = true;
+            slot.source = source; // Make sure source is tracked
+            source.onended = () => {
+                slot.playing = false;
+            };
+        } finally {
+            this.locks[name] = false;
         }
-        slot.started = this.context.currentTime;
-        
-        const source = this.context.createBufferSource();
-        slot.stop = this.context.source.stop()
-        const gainNode = this.context.createGain();
-        const panNode = this.context.createStereoPanner();
-
-        source.buffer = buffer;
-        gainNode.gain.value = gain;
-        panNode.pan.value = pan;
-
-        if (pitchRandom && pitchRandom.length === 2) {
-            const [min, max] = pitchRandom;
-            source.playbackRate.value = min + Math.random() * (max - min);
-        }
-
-        source.connect(gainNode).connect(panNode).connect(this.context.destination);
-        source.start();
-
-        slot.playing = true;
-        source.onended = () => {
-            slot.playing = false;
-        };
     }
 
-    async killSamples() {
-        array.forEach(slot => {
-            slot.stop()
-        });
+
+    killSamples() {
+        for (const name in this.pools) {
+            const slots = this.pools[name];
+
+            slots.forEach(slot => {
+                if (slot.playing && slot.source) {
+                    try {
+                        slot.source.stop();
+                    } catch (e) {
+                        // Handle if already stopped or error occurs
+                        console.warn(`Failed to stop ${name} slot`, e);
+                    }
+                    slot.playing = false; // Optionally mark it as stopped
+                }
+            });
+        }
     }
+
 
 
     async resume() {
@@ -133,13 +159,13 @@ export class AudioManager {
         const overlap = overlapDuration;
 
         this.isPlaying = true;
-        
+
         const scheduleLoop = (startTime) => {
             const source = context.createBufferSource();
             const gainNode = context.createGain();
             source.buffer = buffer;
             gainNode.gain.value = volume;
-            
+
             source.connect(gainNode).connect(context.destination);
             source.start(startTime, this.musicOffset);
             this.musicOffset = 0;
