@@ -444,3 +444,62 @@ input:checked + .slider:before {
   /* Adds some space between each line */
   font-size: 20px;
 }
+
+/* In style.css */
+
+#player-rank-info {
+  font-weight: bold;
+  color: #a6ffae; /* A nice green color */
+  min-height: 25px; /* Prevents layout shift when text appears */
+}
+
+#leaderboard-container {
+  margin-top: 20px;
+}
+
+#leaderboard-table {
+  width: 90%;
+  margin: 10px auto;
+  border-collapse: collapse;
+  color: white;
+}
+
+#leaderboard-table th, #leaderboard-table td {
+  border: 1px solid #555;
+  padding: 8px;
+  text-align: center;
+}
+
+#leaderboard-table th {
+  background-color: #333;
+}
+
+#pagination-controls {
+  margin-top: 15px;
+  color: white;
+   display: flex;             
+  justify-content: center; 
+  align-items: center;     
+}
+
+
+
+#game-over-menu #pagination-controls button,
+#leaderboard-menu #pagination-controls button {
+  font-size: 16px;
+  padding: 5px 10px;
+  margin: 0 10px;
+  min-width: 50px;
+}
+
+
+#game-over-menu #pagination-controls button:disabled,
+#leaderboard-menu #pagination-controls button:disabled {
+  background-color: #555;
+  color: #999;
+  cursor: not-allowed;
+}
+
+#back-from-leaderboard-button {
+  margin-top: 20px;
+}

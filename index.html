@@ -103,11 +103,34 @@
     <div class="game-over-stats">
       <p>Final Score: <span id="final-score">0</span></p>
       <p>Time Elapsed: <span id="final-time">0:00</span></p>
+      <p id="player-rank-info"></p>
     </div>
 
     <div class="submit-score-container">
       <input type="text" id="player-name-input" placeholder="Enter your name" maxlength="15">
       <button id="submit-score-button">Submit Score</button>
+    </div>
+
+    <div id="leaderboard-container" class="hidden">
+      <h3>Leaderboard</h3>
+      <table id="leaderboard-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Score</th>
+            <th>Time</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body">
+          <!-- Score rows will be dynamically inserted here by JavaScript -->
+        </tbody>
+      </table>
+      <div id="pagination-controls">
+        <button id="leaderboard-prev-button"><-</button>
+            <span id="pagination-info">Page 1 / 1</span>
+            <button id="leaderboard-next-button">-></button>
+      </div>
     </div>
 
     <button id="restart-button">Restart</button>
@@ -129,6 +152,12 @@
     </ul>
     <button id="back-from-help-button">Back</button>
   </div>
+
+  <!-- LEADERBOARD MENU (Standalone View) -->
+<div id="leaderboard-menu" class="menu-container hidden">
+  <!-- The leaderboard container and its contents will be moved here by JS -->
+  <button id="back-from-leaderboard-button">Back to Main Menu</button>
+</div>
 
   <script type="module" src="game.js"></script>
 </body>

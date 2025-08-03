@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"net/http"
 	"score-api/internal/scores"
+	"strconv"
 )
 
 func scoresHandler(w http.ResponseWriter, r *http.Request) {
 
 	// This sets the CORS headers for every response from this handler.
-	w.Header().Set("Access-Control-Allow-Origin", "http://localhost:8080")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
 	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 
@@ -33,7 +34,24 @@ func scoresHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleGetScores(w http.ResponseWriter, r *http.Request) {
-	//sends scores sorted and paginated
+	pageStr := r.URL.Query().Get("page")
+	if pageStr == "" {
+		pageStr = "1" //default to 1 if not specified
+	}
+
+	page, err := strconv.Atoi(pageStr)
+	if err != nil || page < 1 {
+		page = 1 //default to 1 if value is invalid
+	}
+
+	paginatedScores, err := scores.RetrieveScores(page)
+	if err != nil {
+		http.Error(w, "Failed to retrieve scores", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(paginatedScores)
 }
 
 func handleSubmitScore(w http.ResponseWriter, r *http.Request) {
@@ -50,13 +68,15 @@ func handleSubmitScore(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = scores.SaveScore(newScore)
+	playerStats, err := scores.SaveScore(newScore)
 	if err != nil {
 		fmt.Printf("Error saving score: %v\n", err)
 		http.Error(w, "Failed to save score", http.StatusInternalServerError)
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	fmt.Fprintf(w, "Score submitted successfully!")
+	json.NewEncoder(w).Encode(playerStats)
+
 }

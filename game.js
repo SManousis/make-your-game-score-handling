@@ -18,6 +18,7 @@ import { flowers } from './flowers.js'
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
 
+
 const mainMenu = document.getElementById('main-menu');
 const pauseMenu = document.getElementById('pause-menu');
 const scoreElement = document.getElementById('score');
@@ -39,6 +40,74 @@ const finalScoreElement = document.getElementById('final-score');
 const finalTimeElement = document.getElementById('final-time');
 const playerNameInput = document.getElementById('player-name-input');
 const submitScoreButton = document.getElementById('submit-score-button');
+const playerRankInfo = document.getElementById('player-rank-info');
+const leaderboardContainer = document.getElementById('leaderboard-container');
+const leaderboardBody = document.getElementById('leaderboard-body');
+const paginationInfo = document.getElementById('pagination-info');
+const prevButton = document.getElementById('leaderboard-prev-button');
+const nextButton = document.getElementById('leaderboard-next-button');
+
+const leaderboardMenu = document.getElementById('leaderboard-menu');
+const backFromLeaderboardButton = document.getElementById('back-from-leaderboard-button');
+
+const leaderboard = {
+    currentPage: 1,
+    totalPages: 1,
+    async fetchAndDisplay(page) {
+        //show loading message
+        leaderboardBody.innerHTML= '<tr><td colspan="4">Loading...</td></tr>';
+        leaderboardContainer.classList.remove('hidden');
+        try{
+            const response=await fetch(`http://localhost:8000/scores?page=${page}`);
+            if (!response.ok){
+                throw new Error(`HTTP error! status: ${response.status}`)
+            }
+            const data=await response.json();
+            //clear loading message
+            leaderboardBody.innerHTML='';
+
+            if(!data.scores||data.scores.length===0){
+                leaderboardBody.innerHTML='<tr><td colspan="4">No scores yet!</td></tr>';
+            }else{
+                 data.scores.forEach(score => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${score.rank}</td>
+                        <td>${score.name}</td>
+                        <td>${score.score}</td>
+                        <td>${score.time}</td>
+                    `;
+                    leaderboardBody.appendChild(row);
+                });
+            }
+              this.currentPage = data.currentPage;
+            this.totalPages = data.totalPages;
+
+              paginationInfo.textContent = `Page ${this.currentPage} / ${this.totalPages}`;
+            prevButton.disabled = (this.currentPage <= 1);
+            nextButton.disabled = (this.currentPage >= this.totalPages);
+
+        } catch (error) {
+            console.error('Failed to fetch leaderboard:', error);
+            leaderboardBody.innerHTML = '<tr><td colspan="4">Error loading scores.</td></tr>';
+        }
+    },
+       
+    addPaginationListeners() {
+        prevButton.addEventListener('click', () => {
+            if (this.currentPage > 1) {
+                this.fetchAndDisplay(this.currentPage - 1);
+            }
+        });
+        nextButton.addEventListener('click', () => {
+            if (this.currentPage < this.totalPages) {
+                this.fetchAndDisplay(this.currentPage + 1);
+            }
+        });
+    }
+};
+
+leaderboard.addPaginationListeners();
 
 export let gameState = {
     currentState: 'mainMenu', //'mainMenu', 'paused','gameover','running'
@@ -109,6 +178,7 @@ export function updateMenuVisibility() {
     pauseMenu.classList.add('hidden');
     gameOverMenu.classList.add('hidden');
     helpMenu.classList.add('hidden');
+    leaderboardMenu.classList.add('hidden');
 
     if (gameState.currentState === 'mainMenu') {
         mainMenu.classList.remove('hidden');
@@ -118,6 +188,8 @@ export function updateMenuVisibility() {
         gameOverMenu.classList.remove('hidden');
     } else if (gameState.currentState === 'help') {
         helpMenu.classList.remove('hidden');
+    }else if (gameState.currentState==='leaderboard'){
+        leaderboardMenu.classList.remove('hidden')
     }
 }
 
@@ -125,7 +197,7 @@ export let currentGameGen = 0;
 
 function restartGame() {
     currentGameGen++; // In
-    
+
     // suppressing destroy sounds for restart
     let soundsTemp = audio.sounds;
     audio.sounds = false;
@@ -179,6 +251,8 @@ function restartGame() {
     playerNameInput.value = '';
     submitScoreButton.disabled = false;
     submitScoreButton.textContent = 'Submit Score';
+        leaderboardContainer.classList.add('hidden'); 
+    playerRankInfo.textContent = '';
 
     stage1(currentGameGen);
     createBomb(800, 500),
@@ -244,7 +318,23 @@ playButton.addEventListener('click', async () => {
 });
 
 leaderboardButton.addEventListener('click', () => {
-    alert('Leaderboard coming soon!');
+    gameState.currentState='leaderboard';
+    updateMenuVisibility();
+
+     leaderboardMenu.insertBefore(leaderboardContainer, backFromLeaderboardButton);
+       leaderboard.fetchAndDisplay(1);
+});
+
+backFromLeaderboardButton.addEventListener('click', () => {
+    // move the leaderboard element back to the game over menu
+    //    so it's ready for the next time the player dies.
+    const restartBtn = gameOverMenu.querySelector('#restart-button');
+    gameOverMenu.insertBefore(leaderboardContainer, restartBtn);
+    leaderboardContainer.classList.add('hidden'); 
+
+    // 2. Change the game state back to the main menu.
+    gameState.currentState = 'mainMenu';
+    updateMenuVisibility();
 });
 
 resumeButton.addEventListener('click', () => {
@@ -285,12 +375,11 @@ submitScoreButton.addEventListener('click', async () => {
 
     const scoreData = {
         name: playerName,
-        score: gameState.score,
-        time_ms: gameState.time,
+        score: Math.floor(gameState.score),
+        time_ms: Math.floor(gameState.gameTime),
     };
-
+ console.log("Submitting this data:", scoreData);
     try {
-        //TODO use real url
         const response = await fetch('http://localhost:8000/scores', {
             method: 'POST',
             headers: {
@@ -300,19 +389,24 @@ submitScoreButton.addEventListener('click', async () => {
         });
 
         if (response.ok) {
-            // The score was submitted successfully
-            alert('Score submitted successfully!');
+            const result = await response.json();
+            const percentile = result.percentile.toFixed(1);
+            playerRankInfo.textContent = `Congrats ${playerName}, you are in the top ${percentile}%, on position ${result.rank}.`;
+
             submitScoreButton.textContent = 'Submitted!';
+            playerNameInput.disabled = true;
+            leaderboard.fetchAndDisplay(1);
         } else {
             // The server responded with an error
-            alert('Error submitting score. Please try again.');
+            const errorText=await response.text();
+            alert(`Error submitting score:\n\nServer responded with status ${response.status}.\nMessage: "${errorText}"`);
             submitScoreButton.disabled = false; // Re-enable the button
             submitScoreButton.textContent = 'Submit Score';
         }
     } catch (error) {
         // A network error occurred
         console.error('API Error:', error);
-        alert('Could not connect to the server. Please check your connection and try again.');
+        alert(`Failed to submit score. Could not connect to the server.\n\nError: ${error.message}`);
         submitScoreButton.disabled = false; // Re-enable the button
         submitScoreButton.textContent = 'Submit Score';
     }
