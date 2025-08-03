@@ -281,11 +281,12 @@ submitScoreButton.addEventListener('click', async () => {
     const scoreData = {
         name: playerName,
         score: gameState.score,
+        time_ms: gameState.time,
     };
 
     try {
         //TODO use real url
-        const response = await fetch('https://actual_endpoint/scores', {
+        const response = await fetch('http://localhost:8000/scores', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
