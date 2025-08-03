@@ -1,8 +1,7 @@
 import * as utils from './utils.js'
 import { mario } from './mario.js'
-import { gameArea, allEntities, updateScore, groundedEnemies, audio } from './game.js'
+import { gameArea, allEntities, updateScore, groundedEnemies } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
-// import * as audio from "./audio.js"
 
 //turtle spawning
 export let turtles = [];
@@ -44,6 +43,7 @@ export function spawnTurtle(x, y) {
         team: "enemy",
         scoreValue: 10,
         type: "turtle",
+        destroySound: "bubble",
     };
 
 
@@ -65,10 +65,6 @@ export function spawnTurtle(x, y) {
 
 function turtleUpdate(turtle) {
     if (turtle.health <= 0) {
-        // if (turtle.dom) turtle.dom.remove();
-        // turtle.body.forEach(b => { if (b.div) b.div.remove(); })
-        // utils.removeUnitFromArray(turtle, turtles)
-        // removeFromAllEntities(turtle)
         utils.destroyUnit(turtle)
         game.updateScore(turtle.scoreValue);
     }
@@ -143,24 +139,8 @@ function turtleUpdate(turtle) {
             console.log("turtle disabled")
             turtle.state = "disabled"
             mario.velY = 12;
-
             updateScore(turtle.scoreValue);
-            if (audio.sounds) audio.manager.playSample("bubble", {
-                gain: audio.soundsVolume,
-                pan: audio.xToPan(turtle.x),
-                throttleMs: 60,
-                pitchRandom: [0.98, 1.02]
-            })
-
-            //make turtle disappear after a moment
-            setTimeout(() => {
-                // if (turtle.dom) turtle.dom.remove();
-                // turtle.body.forEach(b => { if (b.div) b.div.remove(); })
-                // utils.removeUnitFromArray(turtle, turtles)
-                // removeFromAllEntities(turtle)
-                utils.destroyUnit(turtle)
-
-            }, 300)
+            utils.destroyUnit(turtle, 300)
         } else {
             console.log("Mario was hurt by a turtle")
             //inflict damage on Mario

@@ -43,6 +43,7 @@ export function spawnCicada(x, y) {
         dom: cicadaElement,
         team: "enemy",
         scoreValue: 15,
+        destroySound: "bubble",
     };
 
     cicadas.push(newCicada);
@@ -53,14 +54,6 @@ export function spawnCicada(x, y) {
 function cicadaUpdate(cicada) {
     //dead
     if (cicada.health <= 0) {
-        if (game.audio.sounds) {
-            game.audio.manager.playSample("bubble", {
-                gain: game.audio.soundsVolume,
-                pan: game.audio.xToPan(cicada.x),
-                throttleMs: 60,
-                pitchRandom: [0.98, 1.02]
-            });
-        }
         deleteCicada(cicada)
         updateScore(cicada.scoreValue);
     }
@@ -151,26 +144,15 @@ function cicadaUpdate(cicada) {
             // console.log("cicada disabled")
             cicada.state = "disabled"
             mario.velY = 22;
-            if (game.audio.sounds) {
-                game.audio.manager.playSample("bubble", {
-                    gain: game.audio.soundsVolume,
-                    pan: game.audio.xToPan(cicada.x),
-                    throttleMs: 60,
-                    pitchRandom: [0.98, 1.02]
-                });
-            }
-
-            setTimeout(() => {
-                deleteCicada(cicada)
-            }, 300)
+            deleteCicada(cicada, 300)
         } else {
             mario.takeDamage(cicada.damage, cicada.x, "cicada_hit")
         }
     }
 }
 
-function deleteCicada(cicada) {
-    utils.destroyUnit(cicada)
+function deleteCicada(cicada, timeout=0) {
+    utils.destroyUnit(cicada, timeout)
 }
 
 function cicadaVisuals(cicada) {

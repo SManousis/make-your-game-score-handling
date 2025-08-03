@@ -125,8 +125,12 @@ export let currentGameGen = 0;
 
 function restartGame() {
     currentGameGen++; // In
-    // crement at every restart
+    
+    // suppressing destroy sounds for restart
+    let soundsTemp = audio.sounds;
+    audio.sounds = false;
 
+    // crement at every restart
     for (let entity of allEntities) {
         if (entity.countdownDiv) {
             entity.countdownDiv.remove()
@@ -135,6 +139,7 @@ function restartGame() {
         if (entity.dom) entity.dom.remove();
         if (entity.body) entity.body.forEach(body => body.div.remove());
     }
+    audio.sounds = soundsTemp;
 
     allEntities.length = 0;
     groundedEnemies.length = 0;

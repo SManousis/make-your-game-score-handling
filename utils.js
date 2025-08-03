@@ -1,5 +1,5 @@
 import { allGroups, queueFree } from "./game.js";
-// import * as audio from "./audio.js"
+import { audio } from "./game.js";
 
 export let id = 0
 //creates a circle collision body, it automatically created a debug div to help with visuals
@@ -254,7 +254,25 @@ export function removeUnitFromArray(unit, array) {
     }
 }
 
-export function destroyUnit(unit) {
+export function destroyUnit(unit, timeout = 0) {
+    if (timeout !== 0) {
+        setTimeout(() => {
+            destroyUnitNow(unit);
+        }, timeout)
+    } else {
+        destroyUnitNow(unit);
+    }
+    if (Object.hasOwn(unit, "destroySound") && audio.sounds) {
+        audio.manager.playSample(unit.destroySound, {
+            gain: audio.soundsVolume,
+            pan: audio.xToPan(unit.x),
+            throttleMs: 60,
+            pitchRandom: [0.98, 1.02],
+        })
+    }
+}
+
+function destroyUnitNow(unit) {
     queueFree.push(unit)
 }
 
@@ -270,12 +288,12 @@ export function kamikaze(unit, target) {
 }
 
 
-export function formatTime(msTime){
-if (isNaN(msTime)||msTime<0){
-    return "0:00"
-}
+export function formatTime(msTime) {
+    if (isNaN(msTime) || msTime < 0) {
+        return "0:00"
+    }
 
-     const totalSeconds = Math.floor(msTime / 1000);
+    const totalSeconds = Math.floor(msTime / 1000);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     const paddedSeconds = seconds.toString().padStart(2, '0');
