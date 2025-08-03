@@ -67,9 +67,9 @@ export class AudioManager {
             slot = oldest;
         }
         slot.started = this.context.currentTime;
-        console.warn(slot.started)
-
+        
         const source = this.context.createBufferSource();
+        slot.stop = this.context.source.stop()
         const gainNode = this.context.createGain();
         const panNode = this.context.createStereoPanner();
 
@@ -89,6 +89,12 @@ export class AudioManager {
         source.onended = () => {
             slot.playing = false;
         };
+    }
+
+    async killSamples() {
+        array.forEach(slot => {
+            slot.stop()
+        });
     }
 
 
