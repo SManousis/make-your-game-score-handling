@@ -10,13 +10,13 @@ import * as collision from './collision.js'
 export let cupids = [];
 
 let preloadedFiringImage = new Image();
-preloadedFiringImage.src = "assets/enemies/TrumpCupidFired.png";
+preloadedFiringImage.src = "assets/enemies/TrumpCupidFired.svg";
 
 
-export function createCupid(x, y, index) {
+export function createCupid(x, y, index, row) {
     let cupidBody = document.createElement("img");
     cupidBody.className = "cupid-img";
-    cupidBody.src = "assets/enemies/TrumpCupid.png";
+    cupidBody.src = "assets/enemies/TrumpCupid.svg";
     document.getElementById("game-area").appendChild(cupidBody);
     // store reference in object
 
@@ -123,10 +123,10 @@ export function cupidUpdate(cupid) {
 
     if (parseInt(Math.random() * 2000) == 0) {
         cupid.dom.src = preloadedFiringImage.src
-        let bullet = bullets.createBullet("down", "enemy", cupid.x, cupid.y, 4, 8)
+        let bullet = bullets.createBullet("down", "enemy", 'heart', cupid.x, cupid.y, 4, 8)
 
         setTimeout(() => {
-            cupid.dom.src = "assets/enemies/TrumpCupid.png"
+            cupid.dom.src = "assets/enemies/TrumpCupid.svg"
         }, 300)
     }
 
@@ -162,8 +162,6 @@ export function cupidUpdate(cupid) {
     if (cupid.kamikazeMode) {
         utils.kamikaze(cupid, mario.mario);
         utils.moveUnit(cupid, cupid.velX, cupid.velY);
-        collision.inAoe(cupid)
-
         return;
     }
 }
@@ -172,7 +170,7 @@ export function cupidUpdate(cupid) {
 
 export function cupidVisuals(cupid) {
     cupid.dom.style.opacity = "100%";
-    cupid.dom.style.setProperty('--cupid-x', `${cupid.x}px`);
-    cupid.dom.style.setProperty('--cupid-y', `${-cupid.y}px`);
+    cupid.dom.style.setProperty('--x', `${cupid.x}px`);
+    cupid.dom.style.setProperty('--y', `${-cupid.y}px`);
 }
 

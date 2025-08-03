@@ -4,6 +4,7 @@ import { createCupid, cupids } from "./cupids.js"
 import { createGhost, ghosts } from "./ghosts.js"
 import { createVendingStatic } from "./vending.js"
 import { gameState, audio, currentGameGen } from "./game.js"
+import { createFlower, flowers } from "./flowers.js"
 
 
 const gameArea = document.getElementById('game-area')
@@ -11,7 +12,7 @@ const gameArea = document.getElementById('game-area')
 export async function stage1(gameGen) {
     createVendingStatic();
 
-    await spawnSwarm(50, createGhost, 20, 200, ghosts);
+    await spawnSwarm(45, createFlower, 10, 9, flowers, 120);
     if (abortStage(gameGen)) return;
 
     await sleep(1000);
@@ -80,11 +81,10 @@ function abortStage(gameGen){
     }
 }
 
-async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, array) {
+async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, array, ySeparation = 90) {
     const rows = count / maxInRow
     const leftOver = (rows - parseInt(rows)) * maxInRow
     const exactRows = parseInt(rows)
-    const ySeparation = 90
     let unitIndex = 0
 
     const startX = 100 + squeezValue
@@ -93,13 +93,13 @@ async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, 
 
     for (let yi = 0; yi < exactRows; yi++) {
         for (let x = 0; x < maxInRow; x++) {
-            spawnUnitFunc(startX + x * (endX - startX) / (maxInRow - 1), -downOffset + gameArea.offsetWidth - (yi * ySeparation), unitIndex)
+            spawnUnitFunc(startX + x * (endX - startX) / (maxInRow - 1), -downOffset + gameArea.offsetWidth - (yi * ySeparation), unitIndex, yi)
             unitIndex++
         }
     }
 
     for (let x = 0; x < leftOver; x++) {
-        spawnUnitFunc(startX + x * (endX - startX) / (leftOver - 1), -downOffset + gameArea.offsetWidth - (exactRows * ySeparation), unitIndex)
+        spawnUnitFunc(startX + x * (endX - startX) / (leftOver - 1), -downOffset + gameArea.offsetWidth - (exactRows * ySeparation), unitIndex, exactRows)
         unitIndex++
     }
     await waitForCondition(() => array.length == 0);

@@ -13,6 +13,7 @@ import * as utils from "./utils.js"
 import * as ghosts from './ghosts.js'
 import { createBomb, createExplosion } from './explosion.js'
 import { AudioManager, xToPan } from './audio.js'
+import { flowers } from './flowers.js'
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -34,6 +35,10 @@ const restartButton = document.getElementById('restart-button');
 //const backToMenuButton = document.getElementById('back-to-menu-button');
 const leaderboardButton = document.getElementById('leaderboard-button');
 
+const finalScoreElement = document.getElementById('final-score');
+const finalTimeElement = document.getElementById('final-time');
+const playerNameInput = document.getElementById('player-name-input');
+const submitScoreButton = document.getElementById('submit-score-button');
 
 export let gameState = {
     currentState: 'mainMenu', //'mainMenu', 'paused','gameover','running'
@@ -84,7 +89,7 @@ export let allEntities = []
 export let groundedEnemies = []
 export let aoeDamage = []
 
-export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts.ghosts, aoeDamage]
+export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts.ghosts, aoeDamage, flowers]
 
 export const gameArea = document.getElementById('game-area');
 
@@ -121,9 +126,9 @@ export let currentGameGen = 0;
 function restartGame() {
     currentGameGen++; // In
     // crement at every restart
-    
+
     for (let entity of allEntities) {
-        if (entity.countdownDiv ){
+        if (entity.countdownDiv) {
             entity.countdownDiv.remove()
             utils.destroyUnit(entity)
         }
@@ -165,15 +170,40 @@ function restartGame() {
         audio.manager.stopMusic();
     }
 
+    //reset game over screen
+    playerNameInput.value = '';
+    submitScoreButton.disabled = false;
+    submitScoreButton.textContent = 'Submit Score';
+
     stage1(currentGameGen);
     createBomb(800, 500),
-    createBomb(300, 500) // pass currentGameGen here
+        createBomb(300, 500) // pass currentGameGen here
+
+
 }
 
 
 export function updateScore(points) {
     gameState.score += points;
     scoreElement.textContent = `Score: ${gameState.score}`;
+}
+
+export function triggerGameOver() {
+    //check so that it's not called multiple times
+    if (gameState.currentState === 'gameOver') {
+        return;
+    }
+
+
+    gameState.currentState = 'gameOver';
+
+    finalScoreElement.textContent = gameState.score;
+    finalTimeElement.textContent = utils.formatTime(gameState.gameTime);
+
+    audio.manager.stopMusic();
+    if (audio.sounds) audio.manager.playSample("game_over", { gain: audio.soundsVolume });
+
+    updateMenuVisibility();
 }
 
 
@@ -236,6 +266,53 @@ backFromHelpButton.addEventListener('click', () => {
     updateMenuVisibility();
 });
 
+submitScoreButton.addEventListener('click', async () => {
+    const playerName = playerNameInput.value.trim();
+
+    if (!playerName) {
+        alert('Please enter your name')
+        return;
+    }
+
+    //disable the button to prevent multiple submissions
+    submitScoreButton.disabled = true;
+    submitScoreButton.textContent = 'Submitting...';
+
+    const scoreData = {
+        name: playerName,
+        score: gameState.score,
+    };
+
+    try {
+        //TODO use real url
+        const response = await fetch('https://actual_endpoint/scores', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(scoreData)
+        });
+
+        if (response.ok) {
+            // The score was submitted successfully
+            alert('Score submitted successfully!');
+            submitScoreButton.textContent = 'Submitted!';
+        } else {
+            // The server responded with an error
+            alert('Error submitting score. Please try again.');
+            submitScoreButton.disabled = false; // Re-enable the button
+            submitScoreButton.textContent = 'Submit Score';
+        }
+    } catch (error) {
+        // A network error occurred
+        console.error('API Error:', error);
+        alert('Could not connect to the server. Please check your connection and try again.');
+        submitScoreButton.disabled = false; // Re-enable the button
+        submitScoreButton.textContent = 'Submit Score';
+    }
+
+})
+
 document.querySelectorAll('#back-to-menu-button').forEach(btn => {
     btn.addEventListener('click', () => {
         gameState.currentState = 'mainMenu';
@@ -248,6 +325,8 @@ document.querySelectorAll('#restart-button').forEach(btn => {
         restartGame();
     });
 });
+
+
 
 const sliders = {
     music: [
@@ -334,7 +413,7 @@ document.addEventListener('keydown', (event) => {
 
         } else if (gameState.currentState === 'paused') {
             gameState.currentState = 'running';
-            
+
             if (audio.music) {
                 audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
             } else {
@@ -448,6 +527,8 @@ function visualGameLoop() {
 let updateCounter = 0
 let updateCounterTimestamp = Date.now()
 let updatefpsMeter = 0
+
+
 // Update the game state, only physics
 function update() {
     updateCounter++
@@ -456,7 +537,6 @@ function update() {
         updatefpsMeter = 1000 / ((Date.now() - updateCounterTimestamp) / 30)
         updateCounterTimestamp = Date.now()
     }
-
 
 
     collision.healthItemPicked(mario) // checks if mario touched a health item//collision.isShot(mario);
@@ -511,11 +591,8 @@ export function draw() {
 
 
     const MarioHealthBar = document.getElementById('mario-healthBar-container');
-    const totalSeconds = Math.floor(gameState.gameTime / 1000);
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    const paddedSeconds = seconds.toString().padStart(2, '0');
-    timeCounterElement.textContent = `Time: ${minutes}:${paddedSeconds} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
+
+    timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;
     MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
     MarioHealthBar.style.bottom = (mario.y + 90) + "px";

@@ -7,7 +7,7 @@ import * as walkables from './walkables.js'
 
 export let ghosts = [];
 
-export function createGhost(x, y, index) {
+export function createGhost(x, y, index, row) {
     let ghostBody = document.createElement("img");
     ghostBody.className = "ghost-img";
     ghostBody.src = "assets/enemies/ghost.svg";
@@ -24,7 +24,7 @@ export function createGhost(x, y, index) {
         y: y,
         bullet_count: 1,
         aimDirection: "down",
-        state: "left",
+        state: (row%2 == 0) ? "left" : "right",
         velX: 1.2,
         velY: 0,
         touched: false,
@@ -102,7 +102,7 @@ export function ghostUpdate(ghost) {
     }
 
     if (parseInt(Math.random()*1000) == 0){
-        bullets.createBullet("down", "enemy", ghost.x, ghost.y, 3, 10)
+        bullets.createBullet("down", "enemy", 'pacman', ghost.x, ghost.y, 3, 10)
     }
 
 }

@@ -5,16 +5,129 @@ import * as walkables from './walkables.js'
 
 //dirTypes can be down, up, right, left, target
 //team = player, enemy
-export function createBullet(dirType, team, x, y, speed, damage = 10, targetX = 0, targetY = 0) {
+
+
+
+export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10, targetX = 0, targetY = 0, ) {
     let bulletBody = document.createElement("img");
     bulletBody.className = "bullet-img";
-    bulletBody.src = "assets/enemies/lazer.png";
+    
+    let bodyWidth = 10;
+    let bodyHeight = 55;
+
+    let bulletPhysicsBody = 0
+    let [bodyX, bodyY] = [0, 0];
+    switch (bulletType){
+        case 'lazer':
+            [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];
+            bodyWidth = 10;
+            bodyHeight = 55;
+
+            bulletBody.src = "assets/projectiles/lazer.svg";
+            bulletBody.style.width = bodyWidth+'px';
+            bulletBody.style.height = bodyHeight+'px';
+
+            if (dirType == "left" || dirType == 'right'){
+                [bodyWidth, bodyHeight] = [bodyHeight, bodyWidth]
+            }
+            bulletPhysicsBody = utils.createRect(bodyX, bodyY, bodyWidth, bodyHeight)
+            
+            break;
+
+        case 'bullet':
+            [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];
+            bodyWidth = 20;
+            bodyHeight = 40;
+            
+            bulletBody.src = "assets/projectiles/pistol_bullet.svg";
+            bulletBody.style.width = bodyWidth+'px';
+            bulletBody.style.height = bodyHeight+'px';
+            bulletBody.style.bottom = -3+'px';
+            bulletBody.style.left = 5+'px';
+
+            if (dirType == "left" || dirType == 'right'){
+                [bodyWidth, bodyHeight] = [bodyHeight, bodyWidth]
+            }
+            bulletPhysicsBody = utils.createRect(bodyX, bodyY, bodyWidth, bodyHeight)
+            
+            break;
+
+        case 'heart':
+            [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];
+            bodyWidth = 15;
+            bodyHeight = 70;
+
+            bulletBody.src = "assets/projectiles/heartArrow.svg";
+            bulletBody.style.width = bodyWidth+10+'px';
+            bulletBody.style.height = bodyHeight+20+'px';
+            bulletBody.style.bottom = -5+'px';
+            bulletBody.style.left = 3+'px';
+
+            if (dirType == "left" || dirType == 'right'){
+                [bodyWidth, bodyHeight] = [bodyHeight, bodyWidth]
+            }
+            bulletPhysicsBody = utils.createRect(bodyX, bodyY, bodyWidth, bodyHeight)
+            
+            break;
+
+        case 'sphere':
+            [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];
+            bodyWidth = 30;
+            bodyHeight = 30;
+            bulletBody.src = "assets/projectiles/sphere.svg";
+            bulletBody.style.width = bodyWidth+10+'px';
+            bulletBody.style.height = bodyHeight+10+'px';
+            bulletBody.style.bottom = -30+'px';
+            bulletBody.style.left = 3+'px';
+
+            if (dirType == "left" || dirType == 'right'){
+                [bodyWidth, bodyHeight] = [bodyHeight, bodyWidth]
+            }
+            bulletPhysicsBody = utils.createCircle(bodyX, bodyY, (bodyWidth/2))            
+            
+            break;
+            
+        case 'pacman':
+            [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];    
+            bodyWidth = 40;
+            bodyHeight = 40;
+
+            bulletBody.src = "assets/projectiles/pacman-bullet.svg";
+            bulletBody.style.width = 55+'px';
+            bulletBody.style.height = 55+'px';
+            bulletBody.style.bottom = -30+'px';
+            bulletBody.style.left = -3+'px';
+
+            if (dirType == "left" || dirType == 'right'){
+                [bodyWidth, bodyHeight] = [bodyHeight, bodyWidth]
+            }
+            bulletPhysicsBody = utils.createCircle(bodyX, bodyY, (bodyWidth/2))            
+            
+            break;
+
+        default:
+            [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];
+            bodyWidth = 10;
+            bodyHeight = 55;
+
+            bulletBody.src = "assets/projectiles/lazer.svg";
+            bulletBody.style.width = bodyWidth+'px';
+            bulletBody.style.height = bodyHeight+'px';
+
+            if (dirType == "left" || dirType == 'right'){
+                [bodyWidth, bodyHeight] = [bodyHeight, bodyWidth]
+            }
+            bulletPhysicsBody = utils.createRect(bodyX, bodyY, bodyWidth, bodyHeight)
+            
+            break;
+    }
+
+    
     document.getElementById("game-area").appendChild(bulletBody);
 
 
-    let bodyWidth = 10;
-    let bodyHeight = 55;
-    let [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];
+    
+    [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];
 
     switch (dirType) {
         case "down":
@@ -59,7 +172,7 @@ export function createBullet(dirType, team, x, y, speed, damage = 10, targetX = 
         velY: velY,
         touched: false,
         disabled: false,
-        body: [utils.createRect(bodyX, bodyY, bodyWidth, bodyHeight)],
+        body: [bulletPhysicsBody],
         updateFunc: function () { bulletUpdate(this) },
         drawFunc: function () { bulletVisuals(this) },
         dom: bulletBody,

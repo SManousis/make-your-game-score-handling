@@ -102,8 +102,6 @@ body {
 }
 
 .bullet-img {
-  width: 5px;
-  height: 40px;
   position: absolute;
   bottom: 0px;
   left: 0px;
@@ -132,7 +130,20 @@ body {
   position: absolute;
   left: 0px;
   bottom: 0px;
-  transform: translate(calc(-52% + var(--cupid-x)), calc(20% + var(--cupid-y)));
+  transform: translate(calc(-52% + var(--x)), calc(20% + var(--y)));
+  will-change: transform;
+  opacity: 100%;
+  z-index: 8;
+}
+
+.flower-img {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  transform: translate(calc(-52% + var(--x)), calc(24% + var(--y)));
   will-change: transform;
   opacity: 100%;
   z-index: 8;
@@ -384,6 +395,36 @@ input:checked + .slider:before {
 
 .hidden {
   display: none;
+}
+
+
+.game-over-stats {
+  margin-bottom: 20px;
+  color: white;
+  font-size: 22px;
+}
+
+.game-over-stats p {
+  margin: 5px 0;
+}
+
+.submit-score-container {
+  margin-bottom: 25px;
+}
+
+#player-name-input {
+  padding: 10px;
+  font-size: 18px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  text-align: center;
+}
+
+#submit-score-button {
+  padding: 10px 15px;
+  font-size: 18px;
+  /* You can use the same style as your other buttons */
 }
 
 
