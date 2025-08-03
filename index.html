@@ -99,6 +99,17 @@
   <!--GAME OVER MENU-->
   <div id="game-over-menu" class="menu-container hidden">
     <h2>Game Over</h2>
+
+    <div class="game-over-stats">
+      <p>Final Score: <span id="final-score">0</span></p>
+      <p>Time Elapsed: <span id="final-time">0:00</span></p>
+    </div>
+
+    <div class="submit-score-container">
+      <input type="text" id="player-name-input" placeholder="Enter your name" maxlength="15">
+      <button id="submit-score-button">Submit Score</button>
+    </div>
+
     <button id="restart-button">Restart</button>
     <button id="back-to-menu-button">Back to Menu</button>
   </div>
@@ -113,6 +124,7 @@
       <li><strong>F</strong>: Fire a single shot</li>
       <li><strong>A</strong>: Toggle Autofire</li>
       <li><strong>U</strong>: Use Double Bullets (Power-up)</li>
+      <li><strong>B</strong>: Drop bomb</li>
       <li><strong>P</strong>: Pause / Resume Game</li>
     </ul>
     <button id="back-from-help-button">Back</button>

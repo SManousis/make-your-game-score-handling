@@ -1,6 +1,6 @@
 import * as utils from './utils.js'
 import { walkables } from './walkables.js'
-import { keysPressed, gameArea, gameState, updateMenuVisibility, audio } from './game.js'
+import { keysPressed, gameArea, gameState, updateMenuVisibility, audio,triggerGameOver } from './game.js'
 import * as physics from './physicsStep.js'
 import * as bullets from './bullets.js'
 
@@ -228,10 +228,8 @@ export function marioUpdate() {
         gameState.lives -= 1
         mario.health = 100
         if (gameState.lives === 0) {
-            gameState.currentState = 'gameOver'
-            audio.manager.stopMusic();
-            if (audio.sounds) audio.manager.playSample("game_over", { gain: audio.soundsVolume });
-            updateMenuVisibility();
+            triggerGameOver();
+            
             console.log("mario died")
         }
     }

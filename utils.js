@@ -268,3 +268,17 @@ export function kamikaze(unit, target) {
     unit.moveSpeed = unit.kamikazeSpeed
     unit.damage = 90
 }
+
+
+export function formatTime(msTime){
+if (isNaN(msTime)||msTime<0){
+    return "0:00"
+}
+
+     const totalSeconds = Math.floor(msTime / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    const paddedSeconds = seconds.toString().padStart(2, '0');
+
+    return `${minutes}:${paddedSeconds}`;
+}

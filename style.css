@@ -398,6 +398,36 @@ input:checked + .slider:before {
 }
 
 
+.game-over-stats {
+  margin-bottom: 20px;
+  color: white;
+  font-size: 22px;
+}
+
+.game-over-stats p {
+  margin: 5px 0;
+}
+
+.submit-score-container {
+  margin-bottom: 25px;
+}
+
+#player-name-input {
+  padding: 10px;
+  font-size: 18px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+  text-align: center;
+}
+
+#submit-score-button {
+  padding: 10px 15px;
+  font-size: 18px;
+  /* You can use the same style as your other buttons */
+}
+
+
 .controls-list {
   list-style: none;
   /* Removes the default bullet points */
