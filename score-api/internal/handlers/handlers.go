@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"snake/make-your-game/score-api/internal/scores"
+	"score-api/internal/scores"
 )
 
 func scoresHandler(w http.ResponseWriter, r *http.Request) {
@@ -21,13 +21,15 @@ func scoresHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if r.Method == http.MethodGet {
+	switch r.Method {
+	case http.MethodGet:
 		handleGetScores(w, r)
-	} else if r.Method == http.MethodPost {
+	case http.MethodPost:
 		handleSubmitScore(w, r)
-	} else {
+	default:
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 	}
+
 }
 
 func handleGetScores(w http.ResponseWriter, r *http.Request) {

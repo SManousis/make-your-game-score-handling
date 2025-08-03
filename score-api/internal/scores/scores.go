@@ -2,7 +2,6 @@ package scores
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"sync"
 )
@@ -22,7 +21,7 @@ func SaveScore(newScore Score) error {
 	defer fileMutex.Unlock()
 
 	var allScores []Score
-	fileData, err := ioutil.ReadFile(scoreFilePath)
+	fileData, err := os.ReadFile(scoreFilePath)
 	if err != nil && !os.IsNotExist(err) {
 		return err
 	}
@@ -40,7 +39,7 @@ func SaveScore(newScore Score) error {
 		return err
 	}
 
-	err = ioutil.WriteFile(scoreFilePath, updatedData, 0644)
+	err = os.WriteFile(scoreFilePath, updatedData, 0644)
 	if err != nil {
 		return err
 	}

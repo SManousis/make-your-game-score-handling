@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"snake/make-your-game/score-api/internal/handlers"
+	"score-api/internal/handlers"
 	"syscall"
 	"time"
 )
