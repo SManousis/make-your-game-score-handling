@@ -55,21 +55,21 @@ const leaderboard = {
     totalPages: 1,
     async fetchAndDisplay(page) {
         //show loading message
-        leaderboardBody.innerHTML= '<tr><td colspan="4">Loading...</td></tr>';
+        leaderboardBody.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
         leaderboardContainer.classList.remove('hidden');
-        try{
-            const response=await fetch(`http://localhost:8000/scores?page=${page}`);
-            if (!response.ok){
+        try {
+            const response = await fetch(`http://localhost:8000/scores?page=${page}`);
+            if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`)
             }
-            const data=await response.json();
+            const data = await response.json();
             //clear loading message
-            leaderboardBody.innerHTML='';
+            leaderboardBody.innerHTML = '';
 
-            if(!data.scores||data.scores.length===0){
-                leaderboardBody.innerHTML='<tr><td colspan="4">No scores yet!</td></tr>';
-            }else{
-                 data.scores.forEach(score => {
+            if (!data.scores || data.scores.length === 0) {
+                leaderboardBody.innerHTML = '<tr><td colspan="4">No scores yet!</td></tr>';
+            } else {
+                data.scores.forEach(score => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${score.rank}</td>
@@ -80,10 +80,10 @@ const leaderboard = {
                     leaderboardBody.appendChild(row);
                 });
             }
-              this.currentPage = data.currentPage;
+            this.currentPage = data.currentPage;
             this.totalPages = data.totalPages;
 
-              paginationInfo.textContent = `Page ${this.currentPage} / ${this.totalPages}`;
+            paginationInfo.textContent = `Page ${this.currentPage} / ${this.totalPages}`;
             prevButton.disabled = (this.currentPage <= 1);
             nextButton.disabled = (this.currentPage >= this.totalPages);
 
@@ -92,7 +92,7 @@ const leaderboard = {
             leaderboardBody.innerHTML = '<tr><td colspan="4">Error loading scores.</td></tr>';
         }
     },
-       
+
     addPaginationListeners() {
         prevButton.addEventListener('click', () => {
             if (this.currentPage > 1) {
@@ -188,7 +188,7 @@ export function updateMenuVisibility() {
         gameOverMenu.classList.remove('hidden');
     } else if (gameState.currentState === 'help') {
         helpMenu.classList.remove('hidden');
-    }else if (gameState.currentState==='leaderboard'){
+    } else if (gameState.currentState === 'leaderboard') {
         leaderboardMenu.classList.remove('hidden')
     }
 }
@@ -251,7 +251,7 @@ function restartGame() {
     playerNameInput.value = '';
     submitScoreButton.disabled = false;
     submitScoreButton.textContent = 'Submit Score';
-        leaderboardContainer.classList.add('hidden'); 
+    leaderboardContainer.classList.add('hidden');
     playerRankInfo.textContent = '';
 
     stage1(currentGameGen);
@@ -318,11 +318,11 @@ playButton.addEventListener('click', async () => {
 });
 
 leaderboardButton.addEventListener('click', () => {
-    gameState.currentState='leaderboard';
+    gameState.currentState = 'leaderboard';
     updateMenuVisibility();
 
-     leaderboardMenu.insertBefore(leaderboardContainer, backFromLeaderboardButton);
-       leaderboard.fetchAndDisplay(1);
+    leaderboardMenu.insertBefore(leaderboardContainer, backFromLeaderboardButton);
+    leaderboard.fetchAndDisplay(1);
 });
 
 backFromLeaderboardButton.addEventListener('click', () => {
@@ -330,7 +330,7 @@ backFromLeaderboardButton.addEventListener('click', () => {
     //    so it's ready for the next time the player dies.
     const restartBtn = gameOverMenu.querySelector('#restart-button');
     gameOverMenu.insertBefore(leaderboardContainer, restartBtn);
-    leaderboardContainer.classList.add('hidden'); 
+    leaderboardContainer.classList.add('hidden');
 
     // 2. Change the game state back to the main menu.
     gameState.currentState = 'mainMenu';
@@ -378,7 +378,7 @@ submitScoreButton.addEventListener('click', async () => {
         score: Math.floor(gameState.score),
         time_ms: Math.floor(gameState.gameTime),
     };
- console.log("Submitting this data:", scoreData);
+    console.log("Submitting this data:", scoreData);
     try {
         const response = await fetch('http://localhost:8000/scores', {
             method: 'POST',
@@ -398,7 +398,7 @@ submitScoreButton.addEventListener('click', async () => {
             leaderboard.fetchAndDisplay(1);
         } else {
             // The server responded with an error
-            const errorText=await response.text();
+            const errorText = await response.text();
             alert(`Error submitting score:\n\nServer responded with status ${response.status}.\nMessage: "${errorText}"`);
             submitScoreButton.disabled = false; // Re-enable the button
             submitScoreButton.textContent = 'Submit Score';
@@ -502,10 +502,21 @@ soundsToggles.forEach(toggle => {
     });
 });
 
+const fireState = {
+    isFiring: false,
+    initialDelay: 300,
+    repeatRate: 100,
+    delayTimer: null,
+    repeatTimer: null,
+};
 
 
 // Listen for key presses
 document.addEventListener('keydown', (event) => {
+    if (gameState.currentState !== 'running' && event.key.toLowerCase() !== 'p') {
+        return;
+    }
+
     if (event.key.toLowerCase() === 'p' && (gameState.currentState === 'running' || gameState.currentState === 'paused')) {
         if (gameState.currentState === 'running') {
             gameState.currentState = 'paused';
@@ -540,9 +551,24 @@ document.addEventListener('keydown', (event) => {
 
 
 
-    if (event.key.toLocaleLowerCase() === 'f') {
+    if (event.key.toLocaleLowerCase() === 'f' && !fireState.isFiring) {
+
+        fireState.isFiring = true;
+
+        //fire immediately on the initial key press.
         marioShoot();
+
+        //start a timer for the delay. After 100ms, it will start the continuous fire.
+        fireState.delayTimer = setTimeout(() => {
+            // check if the key is still being held down after the delay.
+            if (fireState.isFiring) {
+                // start the repeating timer for continuous fire.
+                fireState.repeatTimer = setInterval(marioShoot, fireState.repeatRate);
+            }
+        }, fireState.initialDelay);
     }
+
+
 
     if (event.key === 'ArrowLeft') {
         keysPressed.left = true;
@@ -567,6 +593,23 @@ document.addEventListener('keydown', (event) => {
 });
 
 document.addEventListener('keyup', (event) => {
+    if (gameState.currentState !== 'running') {
+        return;
+    }
+
+    if (event.key.toLocaleLowerCase() === 'f') {
+        // 1. Mark that we have stopped firing.
+        fireState.isFiring = false;
+
+        // 2. IMPORTANT: Clear any running timers to stop the firing sequence.
+        clearTimeout(fireState.delayTimer);
+        clearInterval(fireState.repeatTimer);
+    }
+
+    if (event.key === 'ArrowLeft') {
+        keysPressed.left = false;
+    }
+
     if (event.key === 'ArrowLeft') {
         keysPressed.left = false;
     }
