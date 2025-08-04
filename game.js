@@ -221,6 +221,7 @@ function restartGame() {
     turtles.turtles.length = 0;
     bullets.allBullets.length = 0;
     healthItems.length = 0;
+    flowers.length = 0;
 
     eventQueue.length = 0;
 
