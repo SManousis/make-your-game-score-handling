@@ -5,6 +5,7 @@ import { createGhost, ghosts } from "./ghosts.js"
 import { createVendingStatic } from "./vending.js"
 import { gameState, audio, currentGameGen } from "./game.js"
 import { createFlower, flowers } from "./flowers.js"
+import { tetros, createTetro } from "./tetros.js"
 
 
 const gameArea = document.getElementById('game-area')
@@ -12,7 +13,7 @@ const gameArea = document.getElementById('game-area')
 export async function stage1(gameGen) {
     createVendingStatic();
 
-    await spawnSwarm(45, createFlower, 10, 9, flowers, 120);
+    await spawnSwarm(30, createTetro, 5, 200, tetros, 400, 2300);
     if (abortStage(gameGen)) return;
 
     await sleep(1000);
@@ -81,7 +82,7 @@ function abortStage(gameGen){
     }
 }
 
-async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, array, ySeparation = 90) {
+async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, array, ySeparation = 90, yoffset = 0) {
     const rows = count / maxInRow
     const leftOver = (rows - parseInt(rows)) * maxInRow
     const exactRows = parseInt(rows)
@@ -89,7 +90,7 @@ async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, 
 
     const startX = 100 + squeezValue
     const endX = gameArea.offsetWidth - 200 - squeezValue
-    const downOffset = 900
+    const downOffset = 900 - yoffset
 
     for (let yi = 0; yi < exactRows; yi++) {
         for (let x = 0; x < maxInRow; x++) {

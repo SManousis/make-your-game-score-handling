@@ -14,6 +14,7 @@ import * as ghosts from './ghosts.js'
 import { createBomb, createExplosion } from './explosion.js'
 import { AudioManager, xToPan } from './audio.js'
 import { flowers } from './flowers.js'
+import { tetros } from './tetros.js'
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -158,7 +159,7 @@ export let allEntities = []
 export let groundedEnemies = []
 export let aoeDamage = []
 
-export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts.ghosts, aoeDamage, flowers]
+export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts.ghosts, aoeDamage, flowers, tetros]
 
 export const gameArea = document.getElementById('game-area');
 
