@@ -50,12 +50,12 @@ export function inAoe(unit) {
 export function healthItemPicked(entity) {
     for (const candy of healthItem.healthItems) {
         if (candy.disabled) continue;
-        // console.log("Checking collision between:", entity, "and", candy);
+         console.log("Checking collision between:", entity, "and", candy);
         if (collisionCheck(entity, candy)) {
             if (Object.hasOwn(entity, 'healthUpgrade')) {
-                entity.healthUpgrade(candy.health, "health");
+                entity.healthUpgrade(candy.healthAdd, "health");
             } else {
-                entity.health += candy.health;
+                entity.health += candy.healthAdd;
                 if (entity.health > entity.maxhealth) entity.health = entity.maxhealth;
             }
 
