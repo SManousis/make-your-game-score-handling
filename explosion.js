@@ -122,7 +122,7 @@ export function bombUpdate(entity) {
     entity.countdown--;
     entity.countdownDiv.textContent = entity.countdown > 5 ? parseInt(1+entity.countdown/60) : '💥' ;
     // TODO: Implement tick sound
-    if (entity.countdown < 4 && audio.sounds) {
+    if (audio.sounds && entity.countdown > 5) {
         audio.manager.playSample("tick", {
             gain: audio.soundsVolume,
             throttleMs: 1000,

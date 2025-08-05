@@ -285,7 +285,10 @@ export function triggerGameOver() {
     finalTimeElement.textContent = utils.formatTime(gameState.gameTime);
 
     audio.manager.stopMusic();
-    if (audio.sounds) audio.manager.playSample("game_over", { gain: audio.soundsVolume });
+    if (audio.sounds) {
+        audio.manager.killSamples();
+        audio.manager.playSample("game_over", { gain: audio.soundsVolume });
+    }
 
     updateMenuVisibility();
 }
