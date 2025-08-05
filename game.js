@@ -55,7 +55,7 @@ const nextButton = document.getElementById('leaderboard-next-button');
 
 const leaderboardMenu = document.getElementById('leaderboard-menu');
 const backFromLeaderboardButton = document.getElementById('back-from-leaderboard-button');
-
+let endGame = false;
 const leaderboard = {
     currentPage: 1,
     totalPages: 1,
@@ -287,7 +287,7 @@ export function triggerGameOver() {
 
 
     gameState.currentState = 'gameOver';
-
+    endGame = true;
     finalScoreElement.textContent = gameState.score;
     finalTimeElement.textContent = utils.formatTime(gameState.gameTime);
 
@@ -327,9 +327,13 @@ playButton.addEventListener('click', async () => {
     } else {
         audio.manager.stopMusic();
     }
-
-    gameState.currentState = 'running';
-    updateMenuVisibility();
+    if (endGame){
+        restartGame()
+        endGame = false;
+    } else {
+        gameState.currentState = 'running';
+        updateMenuVisibility();
+    }
 });
 
 leaderboardButton.addEventListener('click', () => {
@@ -430,8 +434,12 @@ submitScoreButton.addEventListener('click', async () => {
 
 document.querySelectorAll('#back-to-menu-button').forEach(btn => {
     btn.addEventListener('click', () => {
-        gameState.currentState = 'mainMenu';
-        updateMenuVisibility();
+        const result = confirm("All progress will be lost are you sure");
+        if (result){
+            endGame = true;
+            gameState.currentState = 'mainMenu';
+            updateMenuVisibility();
+        }
     });
 });
 
