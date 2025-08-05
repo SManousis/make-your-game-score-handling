@@ -66,7 +66,7 @@ export function spawnTurtle(x, y) {
 function turtleUpdate(turtle) {
     if (turtle.health <= 0) {
         utils.destroyUnit(turtle)
-        game.updateScore(turtle.scoreValue);
+        updateScore(turtle.scoreValue);
     }
 
     if (turtle.state === 'walking') {
