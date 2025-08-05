@@ -15,11 +15,14 @@ import { createBomb, createExplosion } from './explosion.js'
 import { AudioManager, xToPan } from './audio.js'
 import { flowers } from './flowers.js'
 import { tetros } from './tetros.js'
-
+import { Tiles } from './Tiles.js'
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
-
-
+const backImage = new Image();
+backImage.src = "./assets/backgrounds/background.png";
+const TILE_SIZE = 32;
+const tiles = new Tiles();
+const tileMap = []
 const mainMenu = document.getElementById('main-menu');
 const pauseMenu = document.getElementById('pause-menu');
 const scoreElement = document.getElementById('score');
@@ -226,6 +229,7 @@ function restartGame() {
     bullets.allBullets.length = 0;
     healthItems.length = 0;
     flowers.length = 0;
+    tetros.length = 0;
 
     eventQueue.length = 0;
 

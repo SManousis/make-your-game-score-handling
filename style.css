@@ -9,9 +9,12 @@ body {
 }
 
 #game-area {
-  width: 1800px;
-  height: 1000px;
-  background-color: #000;
+  width: 1792px;
+  height: 1024px;
+  background-image: url("./assets/items/backgroundMario.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   position: relative;
   overflow: hidden;
   margin-top: 100px;
