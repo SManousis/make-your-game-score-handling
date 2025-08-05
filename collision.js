@@ -21,6 +21,13 @@ export function isShot(entity) {
             if (entity.health <= 0) {
                 entity.disabled = true
             }
+            if (entity === mario.mario && game.audio.sounds) {
+                game.audio.manager.playSample("mario_bullet_hit", {
+                    gain: game.audio.soundsVolume,
+                    pan: game.audio.xToPan(mario.mario.x, game.gameArea.offsetWidth),
+                    throttleMs: 60,
+                })
+            }
         }
     }
 }
@@ -50,7 +57,7 @@ export function inAoe(unit) {
 export function healthItemPicked(entity) {
     for (const candy of healthItem.healthItems) {
         if (candy.disabled) continue;
-         console.log("Checking collision between:", entity, "and", candy);
+        console.log("Checking collision between:", entity, "and", candy);
         if (collisionCheck(entity, candy)) {
             if (Object.hasOwn(entity, 'healthUpgrade')) {
                 entity.healthUpgrade(candy.healthAdd, "health");

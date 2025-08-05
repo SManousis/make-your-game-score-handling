@@ -46,7 +46,7 @@ export function createCupid(x, y, index, row) {
         team: "enemy",
         scoreValue: 10,
         hasExploded: false,
-        destroySound: "destroy_fly_2",
+        destroySound: "destroy_fly",
         // reset() {
         //     this.health = 20;
         //     this.moveSpeed = 0.1;
