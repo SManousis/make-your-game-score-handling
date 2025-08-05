@@ -1,4 +1,4 @@
-import { allGroups, queueFree } from "./game.js";
+import { allGroups, gameArea, queueFree } from "./game.js";
 import { audio } from "./game.js";
 
 export let id = 0
@@ -265,7 +265,7 @@ export function destroyUnit(unit, timeout = 0) {
     if (Object.hasOwn(unit, "destroySound") && audio.sounds) {
         audio.manager.playSample(unit.destroySound, {
             gain: audio.soundsVolume,
-            pan: audio.xToPan(unit.x),
+            pan: audio.xToPan(unit.x, gameArea.offsetWidth),
             throttleMs: 60,
             pitchRandom: [0.98, 1.02],
         })

@@ -49,7 +49,7 @@ export function createFlower(x, y, index, row) {
         team: "enemy",
         scoreValue: 10,
         hasExploded: false,
-        destroySound: "destroy_fly_2",
+        destroySound: "destroy_fly",
     }
     // console.log("I was created at ", x, y)
     flowers.push(flower)

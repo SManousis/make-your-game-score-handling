@@ -47,7 +47,7 @@ export let mario = {
         if (audio.sounds) {
             audio.manager.playSample(sound, {
                 gain: audio.soundsVolume,
-                pan: audio.xToPan(this.x),
+                pan: audio.xToPan(this.x, gameArea.offsetWidth),
                 throttleMs: 60,
                 pitchRandom: [0.98, 1.02]
             });
@@ -70,7 +70,7 @@ export let mario = {
         if (audio.sounds) {
             audio.manager.playSample(sound, {
                 gain: audio.soundsVolume,
-                pan: audio.xToPan(this.x),
+                pan: audio.xToPan(this.x, gameArea.offsetWidth),
                 throttleMs: 60,
                 pitchRandom: [0.98, 1.02]
             });
