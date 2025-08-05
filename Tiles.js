@@ -1,21 +1,17 @@
 export class Tiles{
     constructor(){
-        this.tilesData[
-            {name: empty, color: "#000000", walkable: false},
-            {name:ground, color: "rgba(84, 82, 63, 0.964)", walkable: true} 
-        ]
+        this.tileData = [
+            { name: "empty",  color: "#000000", walkable: false },
+            { name: "floor",  color: "rgba(84, 82, 63, 0.964)",    walkable: true  },
+            { name: "wall",   color: "#222",    walkable: false }
+          ];
     }
 
     getTile(tileID) {
-        return this.tilesData[tileID]
+        return this.tileData[tileID]
     }
 
     isWalkable(tileID) {
-        return this.tilesData[tileID].walkable
-    }
-
-    drawTile(ctx, tileID, x, y, tileSize){
-        ctx.fillStyle = this.tilesData[tileID].image
-        ctx.fillRect(x, y, tileSize, tileSize)
+        return this.tileData[tileID].walkable
     }
 }

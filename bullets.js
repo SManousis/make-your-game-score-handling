@@ -104,6 +104,23 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
             bulletPhysicsBody = utils.createCircle(bodyX, bodyY, (bodyWidth/2))            
             
             break;
+case 'poo':
+            [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];    
+            bodyWidth = 30;
+            bodyHeight = 30;
+
+            bulletBody.src = "assets/projectiles/poo.svg";
+            bulletBody.style.width = 55+'px';
+            bulletBody.style.height = 55+'px';
+            bulletBody.style.bottom = -30+'px';
+            bulletBody.style.left = -3+'px';
+
+            if (dirType == "left" || dirType == 'right'){
+                [bodyWidth, bodyHeight] = [bodyHeight, bodyWidth]
+            }
+            bulletPhysicsBody = utils.createCircle(bodyX, bodyY, (bodyWidth/2))            
+            
+            break;
 
         default:
             [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];

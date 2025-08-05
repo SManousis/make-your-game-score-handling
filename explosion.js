@@ -144,6 +144,7 @@ export function bombUpdate(entity) {
 
 
 export function bombVisuals(entity) {
+     entity.dom.style.opacity = "100%";
     if (!entity || !entity.dom) return;
     entity.dom.style.setProperty('--x', `${entity.x}px`);
     entity.dom.style.setProperty('--y', `${-entity.y}px`);

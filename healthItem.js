@@ -5,10 +5,10 @@ import * as physics from "./physicsStep.js";
 export let healthItems = [];
 
 
-export function createHealthItem(x, y, healthAdd = 0) {
+export function createHealthItem(x, y, healthAdd = 0,type="healthCandy") {
     let healthItemBody = document.createElement("img");
     healthItemBody.className = "health-item-img";
-    healthItemBody.src = "assets/items/healthCandy.svg";
+    healthItemBody.src = `assets/items/${type}.svg`;
     document.getElementById("game-area").appendChild(healthItemBody);
 
     let healthItem = {

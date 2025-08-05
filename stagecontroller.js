@@ -3,15 +3,22 @@ import { spawnTurtle } from "./turtles.js"
 import { createCupid, cupids } from "./cupids.js"
 import { createGhost, ghosts } from "./ghosts.js"
 import { createVendingStatic } from "./vending.js"
-import { gameState, audio, currentGameGen } from "./game.js"
+import { allEntities,gameState, audio, currentGameGen } from "./game.js"
 import { createFlower, flowers } from "./flowers.js"
 import { tetros, createTetro } from "./tetros.js"
+import { unicorns, createUnicorn } from "./unicorn.js"
 
 
 const gameArea = document.getElementById('game-area')
 
 export async function stage1(gameGen) {
     createVendingStatic();
+
+
+     const unicorn = createUnicorn(-100, gameArea.offsetHeight / 2);
+    unicorn.velX = 4;
+    await waitForCondition(() => !allEntities.includes(unicorn));
+    if (abortStage(gameGen)) return;
 
     await spawnSwarm(30, createTetro, 5, 200, tetros, 400, 2300);
     if (abortStage(gameGen)) return;
@@ -75,8 +82,8 @@ export async function stage1(gameGen) {
     if (abortStage(gameGen)) return;
 }
 
-function abortStage(gameGen){
-    if (gameGen !== currentGameGen){
+function abortStage(gameGen) {
+    if (gameGen !== currentGameGen) {
         removeAllEvents()
         return true
     }
@@ -154,7 +161,7 @@ export function stageControllerTicker() {
     }
 }
 
-export function removeAllEvents(){
+export function removeAllEvents() {
     eventQueue.length = 0
 }
 

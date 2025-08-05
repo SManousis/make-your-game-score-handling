@@ -300,3 +300,18 @@ export function formatTime(msTime) {
 
     return `${minutes}:${paddedSeconds}`;
 }
+
+export function createTilesDiv(x,y, tileSize){
+    let div = document.createElement('div');
+    div.classList.add ('tile');
+    div.style.width = tileSize + 'px';
+    div.style.height = tileSize + 'px';
+    div.style.top = y*tileSize + 'px';
+    div.style.left = x*tileSize + 'px';
+    div.style.position = 'absolute';
+    div.style.background = tile.color
+    div.setAttribute('data-tile', tile.name);
+    div.dataset.walkable = tile.walkable
+    document.getElementById('game-area').appendChild(div)
+    return div
+}
