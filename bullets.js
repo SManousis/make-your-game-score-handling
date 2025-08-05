@@ -104,6 +104,23 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
             bulletPhysicsBody = utils.createCircle(bodyX, bodyY, (bodyWidth/2))            
             
             break;
+case 'poo':
+            [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];    
+            bodyWidth = 30;
+            bodyHeight = 30;
+
+            bulletBody.src = "assets/projectiles/poo.svg";
+            bulletBody.style.width = 55+'px';
+            bulletBody.style.height = 55+'px';
+            bulletBody.style.bottom = -30+'px';
+            bulletBody.style.left = -3+'px';
+
+            if (dirType == "left" || dirType == 'right'){
+                [bodyWidth, bodyHeight] = [bodyHeight, bodyWidth]
+            }
+            bulletPhysicsBody = utils.createCircle(bodyX, bodyY, (bodyWidth/2))            
+            
+            break;
 
         default:
             [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];
@@ -186,14 +203,14 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
         if (team === "player") {
             audio.manager.playSample("lazer", {
                 gain: audio.soundsVolume,
-                pan: audio.xToPan(bullet.x),
+                pan: audio.xToPan(bullet.x, gameArea.offsetWidth),
                 throttleMs: 60,
                 pitchRandom: [0.98, 1.02]
             });
         } else {
             audio.manager.playSample("lazer_short", {
                 gain: audio.soundsVolume,
-                pan: audio.xToPan(bullet.x),
+                pan: audio.xToPan(bullet.x, gameArea.offsetWidth),
                 throttleMs: 60,
                 pitchRandom: [0.98, 1.02]
             });

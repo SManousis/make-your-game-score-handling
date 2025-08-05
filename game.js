@@ -16,6 +16,8 @@ import { AudioManager, xToPan } from './audio.js'
 import { flowers } from './flowers.js'
 import { tetros } from './tetros.js'
 import { Tiles } from './Tiles.js'
+import {unicorns} from './unicorn.js'
+
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
 const backImage = new Image();
@@ -165,7 +167,7 @@ export let allEntities = []
 export let groundedEnemies = []
 export let aoeDamage = []
 
-export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts.ghosts, aoeDamage, flowers, tetros]
+export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts.ghosts, unicorns,aoeDamage, flowers, tetros]
 
 export const gameArea = document.getElementById('game-area');
 
@@ -223,6 +225,7 @@ function restartGame() {
     allEntities.length = 0;
     groundedEnemies.length = 0;
     ghosts.ghosts.length = 0;
+    unicorns.length=0;
     cupids.cupids.length = 0;
     cicadas.cicadas.length = 0;
     turtles.turtles.length = 0;
@@ -289,7 +292,10 @@ export function triggerGameOver() {
     finalTimeElement.textContent = utils.formatTime(gameState.gameTime);
 
     audio.manager.stopMusic();
-    if (audio.sounds) audio.manager.playSample("game_over", { gain: audio.soundsVolume });
+    if (audio.sounds) {
+        audio.manager.killSamples();
+        audio.manager.playSample("game_over", { gain: audio.soundsVolume });
+    }
 
     updateMenuVisibility();
 }
