@@ -1,5 +1,5 @@
 
-import { allEntities, aoeDamage } from "./game.js";
+import { allEntities, aoeDamage, audio } from "./game.js";
 import { moveAndCollide } from "./physicsStep.js";
 import * as utils from "./utils.js"
 
@@ -102,6 +102,7 @@ export function createBomb(x, y, team, damage = 50, radius = 150, countdownTime 
         updateFunc: function () {bombUpdate(this)},
         drawFunc: function () {bombVisuals(this)},
         team: team,
+        destroySound: "bomb",
         physicsPointsOffsets: [
             { x: 0, y: 0 }, // Left foot
        
@@ -120,7 +121,13 @@ export function bombUpdate(entity) {
    
     entity.countdown--;
     entity.countdownDiv.textContent = entity.countdown > 5 ? parseInt(1+entity.countdown/60) : '💥' ;
-    
+    // TODO: Implement tick sound
+    if (entity.countdown < 4 || audio.sounds) {
+        audio.manager.playSample("tick", {
+            gain: audio.soundsVolume,
+            throttleMs: 1000,
+        })
+    }
     if (entity.countdown <= 0) {
     
         createExplosion(entity.x, entity.y, entity.team, entity.damage, entity.radius)

@@ -186,14 +186,14 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
         if (team === "player") {
             audio.manager.playSample("lazer", {
                 gain: audio.soundsVolume,
-                pan: audio.xToPan(bullet.x),
+                pan: audio.xToPan(bullet.x, gameArea.offsetWidth),
                 throttleMs: 60,
                 pitchRandom: [0.98, 1.02]
             });
         } else {
             audio.manager.playSample("lazer_short", {
                 gain: audio.soundsVolume,
-                pan: audio.xToPan(bullet.x),
+                pan: audio.xToPan(bullet.x, gameArea.offsetWidth),
                 throttleMs: 60,
                 pitchRandom: [0.98, 1.02]
             });
