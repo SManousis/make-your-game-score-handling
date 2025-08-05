@@ -1,7 +1,7 @@
 // Static vending machine. Feels colide
 // Spits random items
 import * as utils from './utils.js'
-import { gameArea, allEntities, audio } from './game.js';
+import { gameArea, allEntities, audio, updateScore } from './game.js';
 import { shootSandwich } from './sandwich.js'
 import { createBomb } from './explosion.js';
 
@@ -9,15 +9,15 @@ const shootSandwichDebounce = utils.opDebounce(shootSandwich, 300, { leading: tr
 
 
 
-export function createVendingStatic() {
+export function createVending(x = 1600, y = 270) {
     const vendingElement = document.createElement('img');
     vendingElement.className = 'vending-img';
-    vendingElement.src = 'assets/enemies/machine.svg'
+    vendingElement.src = 'assets/enemies/machine.png'
     gameArea.appendChild(vendingElement);
 
     //choose randomly between left and right
 
-    const newVending = {
+    const Vending = {
         name: "vending",
         health: 1000,
         damage: 50,
@@ -26,12 +26,16 @@ export function createVendingStatic() {
         state: 'friendly', //friendly, badMother, disabled
         velX: 0,
         velY: 0,
-        x: 1600,
-        y: 400,
+        x: x,
+        xStart: x,
+        y: y,
+        yStart: y,
         width: 200,
         height: 200,
+        flySequence: 0,
+        uniCounter: 0,
         body: [
-            utils.createRect(1625, 265, 125, 160)
+            utils.createRect(x, y, 125, 160)
         ],
         drawFunc: function () { vendingVisuals(this) },
         updateFunc: function () { vendingUpdate(this) },
@@ -56,13 +60,15 @@ export function createVendingStatic() {
                         break;
                     case 'friendly':
                         console.log("I was shot at !")
-                        if (Math.round(Math.random()*13) == 0 ){
-                            shootSandwich('left', this.x, this.y)
-                        }else if (Math.round(Math.random()*5) == 0 ){
-                            let count = Math.round(Math.random()*4)+3
+                        if (Math.round(Math.random()*5) == 0 ){
+                            shootSandwich('left', this.x-10, this.y+20)
+                        }else if (Math.round(Math.random()*1) == 0 ){
+                            let count = Math.round(Math.random()*20)+3
                             for (let i = 0; i < count; i++){
-                                createBomb(this.x, this.y-50, -(Math.random()*15+1), (Math.random()*15+10), 'enemy', 20, 200, 10, true, true, false, 'assets/items/rotten_sandwich.svg')
+                                createBomb(this.x, this.y+20, -(Math.random()*15+2), (Math.random()*20+10), 'enemy', 20, 300, 10, true, true, false, 'assets/items/rotten_sandwich.svg')
                             }
+                            createBomb(this.x, this.y+20, 1, 20, 'enemy', 20, 300, 10, true, true, false, 'assets/items/rotten_sandwich.svg')
+                            createBomb(this.x, this.y+20, 2, 15, 'enemy', 20, 300, 10, true, true, false, 'assets/items/rotten_sandwich.svg')
                         }
                         break;
                 }
@@ -70,17 +76,62 @@ export function createVendingStatic() {
             },
     };
 
-    allEntities.push(newVending);
+    allEntities.push(Vending);
 
     //push to allentities
+    return Vending
 }
 
-function vendingVisuals() {
-
+function vendingVisuals(entity) {
+    entity.dom.style.setProperty('--x', `${entity.x}px`);
+    entity.dom.style.setProperty('--y', `${-entity.y}px`);
 }
+
 
 
 function vendingUpdate(vending) {
+    if (vending.state != 'badMother'){
+        return
+    }
+
+
     
+
+    vending.flySequence += 1
+
+    vending.dom.src = 'assets/enemies/vendingBoss.png'
+
+    if (vending.flySequence < 100){
+        return
+    }
+ 
+    if (vending.flySequence < 220){
+        utils.setUnit(vending, utils.lerp(vending.x, 100, 0.03), utils.lerp(vending.y, 700, 0.03))
+    
+        return
+    }
+
+    
+
+    if (vending.flySequence < 310){
+        vending.health = 100
+        return
+    }
+
+    if (vending.health <= 0) {
+        utils.destroyUnit(vending)
+        updateScore(10000);
+    }
+
+    
+
+    vending.uniCounter += 0.04
+
+    vending.velY = Math.sin(vending.uniCounter)*3
+    vending.velX = (Math.sin(vending.uniCounter/2.2))*13
+    console.log(Math.sin(vending.uniCounter))
+
+    utils.moveUnit(vending, vending.velX, vending.velY)
+
 }
 

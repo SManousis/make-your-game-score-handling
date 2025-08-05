@@ -111,9 +111,6 @@ export function createBomb(x, y, startVelX, startVelY, team, damage = 50, radius
         ],
     };
 
-    
-    
-
     allEntities.push(bomb);
     return bomb;
 }

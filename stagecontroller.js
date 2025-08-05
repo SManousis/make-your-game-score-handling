@@ -2,7 +2,7 @@ import { spawnCicada } from "./cicadas.js"
 import { spawnTurtle } from "./turtles.js"
 import { createCupid, cupids } from "./cupids.js"
 import { createGhost, ghosts } from "./ghosts.js"
-import { createVendingStatic } from "./vending.js"
+import { createVending } from "./vending.js"
 import { allEntities,gameState, audio, currentGameGen } from "./game.js"
 import { createFlower, flowers } from "./flowers.js"
 import { tetros, createTetro } from "./tetros.js"
@@ -12,13 +12,20 @@ import { unicorns, createUnicorn } from "./unicorn.js"
 const gameArea = document.getElementById('game-area')
 
 export async function stage1(gameGen) {
-    createVendingStatic();
+    const vending = createVending();
 
 
-     const unicorn = createUnicorn(-100, gameArea.offsetHeight / 2);
+    const unicorn = createUnicorn(-100, gameArea.offsetHeight / 2);
     unicorn.velX = 4;
-    await waitForCondition(() => !allEntities.includes(unicorn));
+    await waitForCondition(() => !allEntities.includes(unicorn), 3000);
     if (abortStage(gameGen)) return;
+
+    await spawnSwarm(5, createFlower, 5, 200, flowers, 400, 0, 3000);
+    if (abortStage(gameGen)) return;
+
+    vending.state = 'badMother'
+
+    await waitForCondition(() => !allEntities.includes(vending), 2500);
 
     await spawnSwarm(30, createTetro, 5, 200, tetros, 400, 2300);
     if (abortStage(gameGen)) return;
@@ -89,7 +96,7 @@ function abortStage(gameGen) {
     }
 }
 
-async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, array, ySeparation = 90, yoffset = 0) {
+async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, array, ySeparation = 90, yoffset = 0, delay = 0) {
     const rows = count / maxInRow
     const leftOver = (rows - parseInt(rows)) * maxInRow
     const exactRows = parseInt(rows)
@@ -110,7 +117,7 @@ async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, 
         spawnUnitFunc(startX + x * (endX - startX) / (leftOver - 1), -downOffset + gameArea.offsetWidth - (exactRows * ySeparation), unitIndex, exactRows)
         unitIndex++
     }
-    await waitForCondition(() => array.length == 0);
+    await waitForCondition(() => array.length == 0, delay);
 }
 
 
@@ -194,12 +201,12 @@ export function startSpawner(position, x, y, spawnUnitFunc, count = 1) {
 
 
 // Helper to wait for a condition to become true
-function waitForCondition(conditionFn, checkInterval = 200) {
+function waitForCondition(conditionFn, checkInterval = 200, delay = 0) {
     return new Promise((resolve) => {
         const interval = setInterval(() => {
             if (conditionFn()) {
                 clearInterval(interval);
-                resolve();
+                setTimeout(resolve, delay);
             }
         }, checkInterval);
     });

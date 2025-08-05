@@ -269,14 +269,14 @@ body {
 
 .vending-img {
   position: absolute;
-  width: 200px;
+  width: 350px;
   height: 200px;
   z-index: 3;
-  right: 10px;
-  bottom: 255px;
+  left: 0px;
+  bottom: 0px;
   /* Center the image on its x/y coordinates and flip it horizontally */
   /* transform-origin: center; */
-  /* transform: translateX(-50%) translateY(30%) scaleX(var(--cicada-scale-x, 1)); */
+  transform: translate(calc(-30% + var(--x)), calc(0% + var(--y)));
 }
 
 .sandwich-img {

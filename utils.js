@@ -315,3 +315,7 @@ export function createTilesDiv(x,y, tileSize){
     document.getElementById('game-area').appendChild(div)
     return div
 }
+
+export function lerp(a, b, t) {
+  return a + (b - a) * t;
+}

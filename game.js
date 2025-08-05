@@ -7,7 +7,7 @@ import * as walkables from './walkables.js'
 import * as bullets from './bullets.js'
 import * as collision from './collision.js'
 import { stage1, stageControllerTicker, removeEvent, addEvent, eventQueue } from './stagecontroller.js'
-import { createVendingStatic } from "./vending.js"
+import { createVending } from "./vending.js"
 import { healthItems } from './healthItem.js'
 import * as utils from "./utils.js"
 import * as ghosts from './ghosts.js'
