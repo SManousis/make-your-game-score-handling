@@ -1,8 +1,9 @@
 // Static vending machine. Feels colide
 // Spits random items
 import * as utils from './utils.js'
-import { gameArea, allEntities } from './game.js';
+import { gameArea, allEntities, audio } from './game.js';
 import { shootSandwich } from './sandwich.js'
+import { createBomb } from './explosion.js';
 
 const shootSandwichDebounce = utils.opDebounce(shootSandwich, 300, { leading: true })
 
@@ -40,6 +41,33 @@ export function createVendingStatic() {
         ],
         dom: vendingElement,
         team: "enemy",
+        takeDamage: function (damage, sourceX, sound) {
+                // if (audio.sounds) {
+                //     audio.manager.playSample(sound, {
+                //         gain: audio.soundsVolume,
+                //         pan: audio.xToPan(this.x, gameArea.offsetWidth),
+                //         throttleMs: 60,
+                //         pitchRandom: [0.98, 1.02]
+                //     });
+                // }
+                switch (this.state){
+                    case "badMother":
+                        this.health -= damage;
+                        break;
+                    case 'friendly':
+                        console.log("I was shot at !")
+                        if (Math.round(Math.random()*13) == 0 ){
+                            shootSandwich('left', this.x, this.y)
+                        }else if (Math.round(Math.random()*5) == 0 ){
+                            let count = Math.round(Math.random()*4)+3
+                            for (let i = 0; i < count; i++){
+                                createBomb(this.x, this.y-50, -(Math.random()*15+1), (Math.random()*15+10), 'enemy', 20, 200, 10, true, true, false, 'assets/items/rotten_sandwich.svg')
+                            }
+                        }
+                        break;
+                }
+                
+            },
     };
 
     allEntities.push(newVending);
@@ -52,11 +80,7 @@ function vendingVisuals() {
 }
 
 
-function vendingUpdate(newVending) {
-    if (newVending.health < 1000) {
-        newVending.health = 1000;
-        shootSandwichDebounce('left', newVending.x, newVending.y) // TODO: Check Mario's position
-    }
+function vendingUpdate(vending) {
+    
 }
-
 

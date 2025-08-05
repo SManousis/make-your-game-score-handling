@@ -70,10 +70,10 @@ export function explosionVisuals(entity) {
 
 
 
-export function createBomb(x, y, team, damage = 50, radius = 150, countdownTime = 3, canFall = true){
+export function createBomb(x, y, startVelX, startVelY, team, damage = 50, radius = 150, countdownTime = 3, canFall = true, explodeOnContact = false, countDownVisible = true, img = "assets/items/bomb.svg"){
     const bombBody = document.createElement('img');
     bombBody.className = "bomb-img";
-    bombBody.src = "assets/items/bomb.svg";
+    bombBody.src = img;
     document.getElementById('game-area').appendChild(bombBody);
 
     
@@ -86,13 +86,15 @@ export function createBomb(x, y, team, damage = 50, radius = 150, countdownTime 
     const bomb = {
         name: "bomb",
         damage: damage,
-        velX: 0,
-        velY: 0,
+        velX: startVelX,
+        velY: startVelY,
         x: x,
         y: y,
+        explodeOnContact: explodeOnContact,
         countdown: countdownTime*60,
         radius: radius,
         exploded: false,
+        countDownVisible: countDownVisible,
         body: [],
         dom: bombBody,
         countdownDiv: countdownDiv,
@@ -120,14 +122,19 @@ export function createBomb(x, y, team, damage = 50, radius = 150, countdownTime 
 export function bombUpdate(entity) {
    
     entity.countdown--;
-    entity.countdownDiv.textContent = entity.countdown > 5 ? parseInt(1+entity.countdown/60) : '💥' ;
-    // TODO: Implement tick sound
-    if (audio.sounds && entity.countdown > 5) {
-        audio.manager.playSample("tick", {
-            gain: audio.soundsVolume,
-            throttleMs: 1000,
-        })
+    if (entity.countDownVisible){
+        entity.countdownDiv.textContent = entity.countdown > 5 ? parseInt(1+entity.countdown/60) : '💥' ;
+        // TODO: Implement tick sound
+        if (audio.sounds && entity.countdown > 5) {
+            audio.manager.playSample("tick", {
+                gain: audio.soundsVolume,
+                throttleMs: 1000,
+            })
+        }
+    }else{
+        entity.countdownDiv.textContent = ''
     }
+    
     if (entity.countdown <= 0) {
     
         createExplosion(entity.x, entity.y, entity.team, entity.damage, entity.radius)
@@ -136,9 +143,22 @@ export function bombUpdate(entity) {
     }
 
     if (entity.canFall){
-        
         const grounded = moveAndCollide(entity)
-        
+        if (grounded){
+            if (Math.abs(entity.velX) < 2){
+                entity.velX = 0
+            }else if (entity.velX > 0){
+                entity.velX -= 2
+            }else{
+                entity.velX += 2
+            }
+        }
+
+        if (entity.explodeOnContact && grounded){
+            createExplosion(entity.x, entity.y, entity.team, entity.damage, entity.radius)
+            entity.countdownDiv.remove()
+            utils.destroyUnit(entity)
+        }
     }
 }
 

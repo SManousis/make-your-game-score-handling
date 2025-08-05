@@ -267,9 +267,6 @@ function restartGame() {
     playerRankInfo.textContent = '';
 
     stage1(currentGameGen);
-    createBomb(800, 500),
-        createBomb(300, 500) // pass currentGameGen here
-
 
 }
 
@@ -568,7 +565,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key.toLowerCase() === 'b') {
         if (keysPressed.bomb == false) {
             keysPressed.bomb = true
-            createBomb(mario.x, mario.y, 'player', 500, 500, 2, true)
+            createBomb(mario.x, mario.y, mario.velX, mario.velY, 'player', 500, 500, 2, true)
         }
     }
 
@@ -808,6 +805,3 @@ visualGameLoop();
 
 
 stage1(currentGameGen)
-
-//cupids.createCupid(500, 200, 0)
-createBomb(800, 500)

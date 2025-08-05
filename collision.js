@@ -15,9 +15,12 @@ export function isShot(entity) {
             bullet.disabled = true
             bullet.body.forEach(body => body.div.remove())
             bullet.dom.remove()
-            if (entity.type !== "turtle") {
+            if (Object.hasOwn(entity, 'takeDamage')){
+                entity.takeDamage(bullet.damage)
+            }else if (entity.type !== "turtle") {
                 entity.health -= bullet.damage
             }
+            
             if (entity.health <= 0) {
                 entity.disabled = true
             }
@@ -57,7 +60,7 @@ export function inAoe(unit) {
 export function healthItemPicked(entity) {
     for (const candy of healthItem.healthItems) {
         if (candy.disabled) continue;
-        console.log("Checking collision between:", entity, "and", candy);
+        // console.log("Checking collision between:", entity, "and", candy);
         if (collisionCheck(entity, candy)) {
             if (Object.hasOwn(entity, 'healthUpgrade')) {
                 entity.healthUpgrade(candy.healthAdd, "health");

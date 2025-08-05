@@ -8,7 +8,7 @@ import * as walkables from './walkables.js'
 
 
 
-export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10, targetX = 0, targetY = 0, ) {
+export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10, targetX = 0, targetY = 0) {
     let bulletBody = document.createElement("img");
     bulletBody.className = "bullet-img";
     
