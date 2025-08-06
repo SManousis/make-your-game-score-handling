@@ -36,7 +36,7 @@ export let mario = {
     invincibilityTimer: 0,
     body: [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0 - 30, 0 + 20, 30), utils.createCircle(0 + 30, 0 + 20, 30)], //his gameplay body represented in circles
     physicsPointsOffsets: [{ x: -20, y: 0 }, { x: 20, y: 0 }], //These points will be used
-    drawFunc: function () {marioVisuals(this)}, //his visual representation in the game
+    drawFunc: function () { marioVisuals(this) }, //his visual representation in the game
     updateFunc: marioUpdate,
     team: "player",
     dom: marioDiv,
@@ -58,11 +58,12 @@ export let mario = {
             return;
         }
         if (audio.sounds) {
-            audio.manager.playSample(this.getRandomHitSound(this.takeHitSounds), {
+            if (!sound) sound = this.getRandomHitSound(this.takeHitSounds);
+            audio.manager.playSample(sound, {
                 gain: audio.soundsVolume,
                 pan: audio.xToPan(this.x, gameArea.offsetWidth),
                 throttleMs: 60,
-            })
+            });
         }
         this.health -= damage;
         const KNOCKBACK_VERTICAL = 13;
@@ -341,12 +342,14 @@ export function marioUpdate() {
     //if mario on the ground and jump button pressed
     if (keysPressed.space && grounded) {
         mario.velY += mario.jump_power
-        audio.manager.playSample(mario.getRandomHitSound(mario.jumpSounds), {
-            gain: audio.soundsVolume,
-            pan: audio.xToPan(mario.x, gameArea.offsetWidth),
-            throttleMs: 60,
-            pitchRandom: [0.98, 1.02]
-        })
+        if (audio.sounds) {
+            audio.manager.playSample(mario.getRandomHitSound(mario.jumpSounds), {
+                gain: audio.soundsVolume,
+                pan: audio.xToPan(mario.x, gameArea.offsetWidth),
+                throttleMs: 60,
+                pitchRandom: [0.98, 1.02]
+            });
+        }
     }
 
 

@@ -697,7 +697,7 @@ let updateTimestamp = 0
 function update() {
     updateTimestamp = Date.now()
 
-    if (gameState.currentState == 'paused'){
+    if (gameState.currentState == 'paused' || gameState.currentState == 'gameOver'){
         return
     }
 
