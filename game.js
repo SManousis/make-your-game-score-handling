@@ -16,7 +16,7 @@ import { AudioManager, xToPan } from './audio.js'
 import { flowers } from './flowers.js'
 import { tetros } from './tetros.js'
 import { Tiles } from './Tiles.js'
-import {unicorns} from './unicorn.js'
+import { unicorns } from './unicorn.js'
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -149,6 +149,15 @@ export const audio = {
         tick: "./assets/audio/time_tick.mp3",
         turtle_hit: "./assets/audio/turtle_hit.mp3",
         vending_rising: "./assets/audio/vending_rising.mp3",
+        // vocal
+        mario_death: "./assets/audio/mario_death.mp3",
+        mario_hit1: "./assets/audio/mario_hit1.mp3",
+        mario_hit2: "./assets/audio/mario_hit2.mp3",
+        mario_hit3: "./assets/audio/mario_hit3.mp3",
+        mario_hit4_rare: "./assets/audio/mario_hit4_rare.mp3",
+        mario_jump1: "./assets/audio/mario_jump1.mp3",
+        mario_jump2: "./assets/audio/mario_jump2.mp3",
+        mario_jump3: "./assets/audio/mario_jump3.mp3",
     }, 4),
     tracks: [
         { url: "./assets/audio/mario.mp3", overlapDuration: 7.742 },
@@ -167,7 +176,7 @@ export let allEntities = []
 export let groundedEnemies = []
 export let aoeDamage = []
 
-export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts.ghosts, unicorns,aoeDamage, flowers, tetros]
+export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts.ghosts, unicorns, aoeDamage, flowers, tetros]
 
 export const gameArea = document.getElementById('game-area');
 
@@ -225,7 +234,7 @@ function restartGame() {
     allEntities.length = 0;
     groundedEnemies.length = 0;
     ghosts.ghosts.length = 0;
-    unicorns.length=0;
+    unicorns.length = 0;
     cupids.cupids.length = 0;
     cicadas.cicadas.length = 0;
     turtles.turtles.length = 0;
@@ -324,7 +333,7 @@ playButton.addEventListener('click', async () => {
     } else {
         audio.manager.stopMusic();
     }
-    if (endGame){
+    if (endGame) {
         restartGame()
         endGame = false;
     } else {
@@ -432,7 +441,7 @@ submitScoreButton.addEventListener('click', async () => {
 document.querySelectorAll('#back-to-menu-button').forEach(btn => {
     btn.addEventListener('click', () => {
         const result = confirm("All progress will be lost are you sure");
-        if (result){
+        if (result) {
             endGame = true;
             gameState.currentState = 'mainMenu';
             updateMenuVisibility();

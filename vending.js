@@ -45,35 +45,36 @@ export function createVending(x = 1600, y = 270) {
         ],
         dom: vendingElement,
         team: "enemy",
+        vendTakeOff: false,
         takeDamage: function (damage, sourceX, sound) {
-                // if (audio.sounds) {
-                //     audio.manager.playSample(sound, {
-                //         gain: audio.soundsVolume,
-                //         pan: audio.xToPan(this.x, gameArea.offsetWidth),
-                //         throttleMs: 60,
-                //         pitchRandom: [0.98, 1.02]
-                //     });
-                // }
-                switch (this.state){
-                    case "badMother":
-                        this.health -= damage;
-                        break;
-                    case 'friendly':
-                        console.log("I was shot at !")
-                        if (Math.round(Math.random()*5) == 0 ){
-                            shootSandwich('left', this.x-10, this.y+20)
-                        }else if (Math.round(Math.random()*1) == 0 ){
-                            let count = Math.round(Math.random()*20)+3
-                            for (let i = 0; i < count; i++){
-                                createBomb(this.x, this.y+20, -(Math.random()*15+2), (Math.random()*20+10), 'enemy', 20, 300, 10, true, true, false, 'assets/items/rotten_sandwich.svg')
-                            }
-                            createBomb(this.x, this.y+20, 1, 20, 'enemy', 20, 300, 10, true, true, false, 'assets/items/rotten_sandwich.svg')
-                            createBomb(this.x, this.y+20, 2, 15, 'enemy', 20, 300, 10, true, true, false, 'assets/items/rotten_sandwich.svg')
+            // if (audio.sounds) {
+            //     audio.manager.playSample(sound, {
+            //         gain: audio.soundsVolume,
+            //         pan: audio.xToPan(this.x, gameArea.offsetWidth),
+            //         throttleMs: 60,
+            //         pitchRandom: [0.98, 1.02]
+            //     });
+            // }
+            switch (this.state) {
+                case "badMother":
+                    this.health -= damage;
+                    break;
+                case 'friendly':
+                    console.log("I was shot at !")
+                    if (Math.round(Math.random() * 5) == 0) {
+                        shootSandwich('left', this.x - 10, this.y + 20)
+                    } else if (Math.round(Math.random() * 1) == 0) {
+                        let count = Math.round(Math.random() * 20) + 3
+                        for (let i = 0; i < count; i++) {
+                            createBomb(this.x, this.y + 20, -(Math.random() * 15 + 2), (Math.random() * 20 + 10), 'enemy', 20, 300, 10, true, true, false, 'assets/items/rotten_sandwich.svg')
                         }
-                        break;
-                }
-                
-            },
+                        createBomb(this.x, this.y + 20, 1, 20, 'enemy', 20, 300, 10, true, true, false, 'assets/items/rotten_sandwich.svg')
+                        createBomb(this.x, this.y + 20, 2, 15, 'enemy', 20, 300, 10, true, true, false, 'assets/items/rotten_sandwich.svg')
+                    }
+                    break;
+            }
+
+        },
     };
 
     allEntities.push(Vending);
@@ -90,30 +91,38 @@ function vendingVisuals(entity) {
 
 
 function vendingUpdate(vending) {
-    if (vending.state != 'badMother'){
+    if (vending.state != 'badMother') {
         return
     }
 
+    if (audio.sounds && !vending.vendTakeOff) {
+        audio.manager.playSample("vending_rising", {
+            gain: audio.soundsVolume,
+            throttleMs: 60,
+        });
+        vending.vendTakeOff = true;
+    }
 
-    
+
+
 
     vending.flySequence += 1
 
     vending.dom.src = 'assets/enemies/vendingBoss.png'
 
-    if (vending.flySequence < 100){
+    if (vending.flySequence < 100) {
         return
     }
- 
-    if (vending.flySequence < 220){
+
+    if (vending.flySequence < 220) {
         utils.setUnit(vending, utils.lerp(vending.x, 100, 0.03), utils.lerp(vending.y, 700, 0.03))
-    
+
         return
     }
 
-    
 
-    if (vending.flySequence < 310){
+
+    if (vending.flySequence < 310) {
         vending.health = 100
         return
     }
@@ -123,12 +132,12 @@ function vendingUpdate(vending) {
         updateScore(10000);
     }
 
-    
+
 
     vending.uniCounter += 0.04
 
-    vending.velY = Math.sin(vending.uniCounter)*3
-    vending.velX = (Math.sin(vending.uniCounter/2.2))*13
+    vending.velY = Math.sin(vending.uniCounter) * 3
+    vending.velX = (Math.sin(vending.uniCounter / 2.2)) * 13
     console.log(Math.sin(vending.uniCounter))
 
     utils.moveUnit(vending, vending.velX, vending.velY)

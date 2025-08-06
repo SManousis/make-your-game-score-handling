@@ -1,6 +1,6 @@
 import * as utils from './utils.js'
 import { walkables } from './walkables.js'
-import { keysPressed, gameArea, gameState, updateMenuVisibility, audio,triggerGameOver } from './game.js'
+import { keysPressed, gameArea, gameState, updateMenuVisibility, audio, triggerGameOver } from './game.js'
 import * as physics from './physicsStep.js'
 import * as bullets from './bullets.js'
 
@@ -40,6 +40,16 @@ export let mario = {
     updateFunc: marioUpdate,
     team: "player",
     dom: marioDiv,
+    takeHitSounds: ["mario_hit1", "mario_hit2", "mario_hit3", "mario_hit4_rare"],
+    get randomHitSound() {
+        const weighted = [
+            "mario_hit1", "mario_hit1",
+            "mario_hit2", "mario_hit2",
+            "mario_hit3", "mario_hit3",
+            "mario_hit4_rare" // appears only once → less likely
+        ];
+        return weighted[Math.floor(Math.random() * weighted.length)];
+    },
     takeDamage: function (damage, sourceX, sound) {
         if (this.isInvincible) {
             return;
@@ -229,7 +239,7 @@ export function marioUpdate() {
         mario.health = 100
         if (gameState.lives === 0) {
             triggerGameOver();
-            
+
             console.log("mario died")
         }
     }
