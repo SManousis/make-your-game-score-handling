@@ -19,7 +19,7 @@ export function createVending(x = 1600, y = 270) {
 
     const Vending = {
         name: "vending",
-        health: 1000,
+        health: 4000,
         damage: 50,
         maxspeed: 1.5,
         gravity: 0.8,
@@ -34,6 +34,9 @@ export function createVending(x = 1600, y = 270) {
         height: 200,
         flySequence: 0,
         uniCounter: 0,
+        attackTimer: 120,
+        attackType: 'none',
+        attackCounter: 0,
         body: [
             utils.createRect(x, y, 125, 160)
         ],
@@ -60,11 +63,10 @@ export function createVending(x = 1600, y = 270) {
                     this.health -= damage;
                     break;
                 case 'friendly':
-                    console.log("I was shot at !")
                     if (Math.round(Math.random() * 5) == 0) {
                         shootSandwich('left', this.x - 10, this.y + 20)
-                    } else if (Math.round(Math.random() * 1) == 0) {
-                        let count = Math.round(Math.random() * 20) + 3
+                    } else if (Math.round(Math.random() * 20) == 0) {
+                        let count = Math.round(Math.random() * 4) + 3
                         for (let i = 0; i < count; i++) {
                             createBomb(this.x, this.y + 20, -(Math.random() * 15 + 2), (Math.random() * 20 + 10), 'enemy', 20, 300, 10, true, true, false, 'assets/items/rotten_sandwich.svg')
                         }
@@ -103,9 +105,6 @@ function vendingUpdate(vending) {
         vending.vendTakeOff = true;
     }
 
-
-
-
     vending.flySequence += 1
 
     vending.dom.src = 'assets/enemies/vendingBoss.png'
@@ -138,9 +137,57 @@ function vendingUpdate(vending) {
 
     vending.velY = Math.sin(vending.uniCounter) * 3
     vending.velX = (Math.sin(vending.uniCounter / 2.2)) * 13
-    console.log(Math.sin(vending.uniCounter))
+  
 
     utils.moveUnit(vending, vending.velX, vending.velY)
+
+    if (vending.attackType == 'none'){
+        vending.attackTimer -= 1
+    }
+
+    if (vending.attackTimer <= 0) {
+        vending.attackTimer = 100 + Math.random() * 50
+        vending.attackType = 'carpet'
+    }
+
+    // console.log(vending.attackType, vending.attackTimer)
+    if (vending.attackType != 'none') {
+        vending.attackCounter++
+        switch (vending.attackType) {
+            case 'carpet': //many bombs down in a row
+                if (vending.attackCounter%30 == 0){
+                    createBomb(vending.x, vending.y, 0, 0, 'enemy', 20, 100, 100, true, true, false, 'assets/items/rotten_sandwich.svg')
+                }
+                if (vending.attackCounter == 400) {
+                    vending.attackCounter = 0
+                    vending.attackType = 'none'
+                }
+                break;
+
+            case 'homing': //lazers towards mario
+                if (vending.attackCounter == 100) {
+                    vending.attackCounter = 0
+                    vending.attackType = 'none'
+                }
+                break;
+
+            case 'balls': //bouncing balls
+                if (vending.attackCounter == 100) {
+                    vending.attackCounter = 0
+                    vending.attackType = 'none'
+                }
+                break;
+
+            case 'bigbomb': //big slow falling atomic bomb
+
+                if (vending.attackCounter == 100) {
+                    vending.attackCounter = 0
+                    vending.attackType = 'none'
+                }
+                break;
+        }
+    }
+
 
 }
 

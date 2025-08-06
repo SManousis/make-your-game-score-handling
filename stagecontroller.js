@@ -15,13 +15,13 @@ export async function stage1(gameGen) {
     const vending = createVending();
 
 
-    const unicorn = createUnicorn(-100, gameArea.offsetHeight / 2);
-    unicorn.velX = 4;
-    await waitForCondition(() => !allEntities.includes(unicorn), 3000);
-    if (abortStage(gameGen)) return;
+    // const unicorn = createUnicorn(-100, gameArea.offsetHeight / 2);
+    // unicorn.velX = 4;
+    // await waitForCondition(() => !allEntities.includes(unicorn), 3000);
+    // if (abortStage(gameGen)) return;
 
-    await spawnSwarm(5, createFlower, 5, 200, flowers, 400, 0, 3000);
-    if (abortStage(gameGen)) return;
+    // await spawnSwarm(5, createFlower, 5, 200, flowers, 400, 0, 3000);
+    // if (abortStage(gameGen)) return;
 
     vending.state = 'badMother'
 

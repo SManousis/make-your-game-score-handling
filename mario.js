@@ -36,7 +36,7 @@ export let mario = {
     invincibilityTimer: 0,
     body: [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0 - 30, 0 + 20, 30), utils.createCircle(0 + 30, 0 + 20, 30)], //his gameplay body represented in circles
     physicsPointsOffsets: [{ x: -20, y: 0 }, { x: 20, y: 0 }], //These points will be used
-    drawFunc: marioVisuals, //his visual representation in the game
+    drawFunc: function () {marioVisuals(this)}, //his visual representation in the game
     updateFunc: marioUpdate,
     team: "player",
     dom: marioDiv,
@@ -124,7 +124,16 @@ utils.setUnit(mario, 500, 500)
 export let currentBody = document.getElementById("mario-body-forward")
 export let currentLegs = document.getElementById("mario-legs0")
 export let marioFeetFrames = ["mario-legs0", "mario-legs1", "mario-legs2", "mario-legs3", "mario-legs3"]
-export function marioVisuals() {
+export function marioVisuals(mario) {
+    if (mario.health <= 0) {
+        currentBody.style.opacity = '0%'
+        currentLegs.style.opacity = '0%'
+        currentBody = document.getElementById('mario-dead-body')
+
+        currentBody.style.opacity = "100%"
+        currentBody.style.setProperty('--mario-x', `${mario.x}px`);
+        currentBody.style.setProperty('--mario-y', `${-mario.y}px`);
+    }
     if (mario.crouching) {
         mario.body[0].active = false;
         mario.body[1].active = false;

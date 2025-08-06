@@ -681,42 +681,28 @@ document.addEventListener('keyup', (event) => {
 });
 
 
-let counter = 0
-let prev = 0
-
-
 
 // The main game loop
-let logicGameLoopTimeNow = Date.now()
-function logicGameLoop() {
-    if (gameState.currentState === 'running') {
-        gameState.gameTime += 16.666666;
-        update();
-    }
-
-    const diff = Date.now() - logicGameLoopTimeNow //is positive number, means update is early so next update needs to happen later, if negative
-    logicGameLoopTimeNow = Date.now() + 16.666666 - diff
-
-    counter++
-    setTimeout(logicGameLoop, parseInt(16.666666 - diff))
-}
-
-// The main game loop
-function visualGameLoop() {
+async function GameLoop() {
     if (gameState.currentState === 'running' || gameState.currentState === 'paused' || gameState.currentState === 'gameOver') {
+        const count = Math.round((Date.now() - updateTimestamp)/16.66666)
+        for (let i = 0; i < count; i++){
+            update();
+        }
+
         draw();
     }
-    requestAnimationFrame(visualGameLoop);
+    requestAnimationFrame(GameLoop);
 }
-
 
 let updateCounter = 0
 let updateCounterTimestamp = Date.now()
 let updatefpsMeter = 0
-
+let updateTimestamp = 0
 
 // Update the game state, only physics
 function update() {
+    updateTimestamp = Date.now()
     updateCounter++
     if (updateCounter == 30) {
         updateCounter = 0
@@ -821,9 +807,8 @@ updateMenuVisibility();
 
 
 // Start the game
-logicGameLoopTimeNow = Date.now()
-logicGameLoop();
-visualGameLoop();
+updateTimestamp = Date.now() - 16.66
+GameLoop();
 
 
 stage1(currentGameGen)
