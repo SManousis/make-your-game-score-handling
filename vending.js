@@ -47,14 +47,14 @@ export function createVending(x = 1600, y = 270) {
         team: "enemy",
         vendTakeOff: false,
         takeDamage: function (damage, sourceX, sound) {
-            // if (audio.sounds) {
-            //     audio.manager.playSample(sound, {
-            //         gain: audio.soundsVolume,
-            //         pan: audio.xToPan(this.x, gameArea.offsetWidth),
-            //         throttleMs: 60,
-            //         pitchRandom: [0.98, 1.02]
-            //     });
-            // }
+            if (audio.sounds) {
+                audio.manager.playSample("destroy_fly", {
+                    gain: audio.soundsVolume,
+                    pan: audio.xToPan(this.x, gameArea.offsetWidth),
+                    throttleMs: 60,
+                    pitchRandom: [0.98, 1.02]
+                });
+            }
             switch (this.state) {
                 case "badMother":
                     this.health -= damage;
