@@ -58,12 +58,11 @@ export let mario = {
             return;
         }
         if (audio.sounds) {
-            audio.manager.playSample(sound, {
+            audio.manager.playSample(this.getRandomHitSound(this.takeHitSounds), {
                 gain: audio.soundsVolume,
                 pan: audio.xToPan(this.x, gameArea.offsetWidth),
                 throttleMs: 60,
-                pitchRandom: [0.98, 1.02]
-            });
+            })
         }
         this.health -= damage;
         const KNOCKBACK_VERTICAL = 13;
@@ -342,6 +341,12 @@ export function marioUpdate() {
     //if mario on the ground and jump button pressed
     if (keysPressed.space && grounded) {
         mario.velY += mario.jump_power
+        audio.manager.playSample(mario.getRandomHitSound(mario.jumpSounds), {
+            gain: audio.soundsVolume,
+            pan: audio.xToPan(mario.x, gameArea.offsetWidth),
+            throttleMs: 60,
+            pitchRandom: [0.98, 1.02]
+        })
     }
 
 

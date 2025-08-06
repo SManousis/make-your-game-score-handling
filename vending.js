@@ -151,6 +151,7 @@ function vendingUpdate(vending) {
     if (vending.attackTimer <= 0) {
         vending.attackTimer = 100 + Math.random() * 50
         
+        vending.attackType = utils.returnRandomElement(['carpet', 'homing', 'balls', 'bigbomb'])
         while (vending.attackType == vending.prevAttack){
             vending.attackType = utils.returnRandomElement(['carpet', 'homing', 'balls', 'bigbomb'])
         }

@@ -623,14 +623,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key === ' ' || event.code === 'Space') {
         keysPressed.space = true
     }
-    if (!space && keysPressed.space) {
-        audio.manager.playSample(mario.getRandomHitSound(mario.jumpSounds), {
-            gain: audio.soundsVolume,
-            pan: audio.xToPan(mario.x, gameArea.offsetWidth),
-            throttleMs: 60,
-            pitchRandom: [0.98, 1.02]
-        })
-    }
+   
 
 });
 
@@ -703,6 +696,11 @@ let updateTimestamp = 0
 // Update the game state, only physics
 function update() {
     updateTimestamp = Date.now()
+
+    if (gameState.currentState == 'paused'){
+        return
+    }
+
     updateCounter++
     if (updateCounter == 30) {
         updateCounter = 0
