@@ -41,9 +41,9 @@ export let mario = {
     team: "player",
     dom: marioDiv,
     takeHitSounds: [
-        "mario_hit1", "mario_hit1",
-        "mario_hit2", "mario_hit2",
-        "mario_hit3", "mario_hit3",
+        "mario_hit1", "mario_hit1", "mario_hit1", "mario_hit1", "mario_hit1",
+        "mario_hit2", "mario_hit2", "mario_hit2", "mario_hit2", "mario_hit2",
+        "mario_hit3", "mario_hit3", "mario_hit3", "mario_hit3", "mario_hit3",
         "mario_hit4_rare"],
     jumpSounds: [
         "mario_jump1",

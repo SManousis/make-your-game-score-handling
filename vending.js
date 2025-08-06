@@ -4,6 +4,8 @@ import * as utils from './utils.js'
 import { gameArea, allEntities, audio, updateScore } from './game.js';
 import { shootSandwich } from './sandwich.js'
 import { createBomb } from './explosion.js';
+import { createBullet } from './bullets.js';
+import { mario } from './mario.js';
 
 const shootSandwichDebounce = utils.opDebounce(shootSandwich, 300, { leading: true })
 
@@ -147,7 +149,7 @@ function vendingUpdate(vending) {
 
     if (vending.attackTimer <= 0) {
         vending.attackTimer = 100 + Math.random() * 50
-        vending.attackType = 'carpet'
+        vending.attackType = 'balls'
     }
 
     // console.log(vending.attackType, vending.attackTimer)
@@ -165,14 +167,24 @@ function vendingUpdate(vending) {
                 break;
 
             case 'homing': //lazers towards mario
-                if (vending.attackCounter == 100) {
+                if (vending.attackCounter%30 == 0){
+                    createBullet('target', 'enemy', 'sandwich', vending.x, vending.y, 10, 10, mario.x, mario.y)
+                    createBullet('target', 'enemy', 'sandwich', vending.x-20, vending.y, 10, 10, mario.x-150-(Math.random()*10), mario.y)
+                    createBullet('target', 'enemy', 'sandwich', vending.x+20, vending.y, 10, 10, mario.x+150+(Math.random()*10), mario.y)
+                }
+                if (vending.attackCounter == 400) {
                     vending.attackCounter = 0
                     vending.attackType = 'none'
                 }
                 break;
 
             case 'balls': //bouncing balls
-                if (vending.attackCounter == 100) {
+                if (vending.attackCounter%63 == 0 || vending.attackCounter%73 == 0 || vending.attackCounter%83 == 0){
+                    createBullet('target', 'enemy', 'sphere', vending.x, vending.y, 5, 10, Math.random(), -0.02)
+                    createBullet('target', 'enemy', 'sphere', vending.x-20, vending.y, 5, 10, Math.random(), -0.02)
+                    createBullet('target', 'enemy', 'sphere', vending.x+20, vending.y, 5, 10, Math.random(), -0.02)
+                }
+                if (vending.attackCounter == 300) {
                     vending.attackCounter = 0
                     vending.attackType = 'none'
                 }
