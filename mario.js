@@ -40,15 +40,18 @@ export let mario = {
     updateFunc: marioUpdate,
     team: "player",
     dom: marioDiv,
-    takeHitSounds: ["mario_hit1", "mario_hit2", "mario_hit3", "mario_hit4_rare"],
-    get randomHitSound() {
-        const weighted = [
-            "mario_hit1", "mario_hit1",
-            "mario_hit2", "mario_hit2",
-            "mario_hit3", "mario_hit3",
-            "mario_hit4_rare" // appears only once → less likely
-        ];
-        return weighted[Math.floor(Math.random() * weighted.length)];
+    takeHitSounds: [
+        "mario_hit1", "mario_hit1",
+        "mario_hit2", "mario_hit2",
+        "mario_hit3", "mario_hit3",
+        "mario_hit4_rare"],
+    jumpSounds: [
+        "mario_jump1",
+        "mario_jump2",
+        "mario_jump3",
+    ],
+    getRandomHitSound(sounds) {
+        return sounds[Math.floor(Math.random() * sounds.length)];
     },
     takeDamage: function (damage, sourceX, sound) {
         if (this.isInvincible) {
@@ -344,7 +347,6 @@ export function marioUpdate() {
 
     } else {
         mario.crouching = false
-
     }
 
 }

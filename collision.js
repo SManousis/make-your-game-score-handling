@@ -25,7 +25,7 @@ export function isShot(entity) {
                 entity.disabled = true
             }
             if (entity === mario.mario && game.audio.sounds) {
-                game.audio.manager.playSample(mario.mario.randomHitSound, {
+                game.audio.manager.playSample(mario.mario.getRandomHitSound(mario.mario.takeHitSounds), {
                     gain: game.audio.soundsVolume,
                     pan: game.audio.xToPan(mario.mario.x, game.gameArea.offsetWidth),
                     throttleMs: 60,

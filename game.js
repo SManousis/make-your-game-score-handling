@@ -7,7 +7,6 @@ import * as walkables from './walkables.js'
 import * as bullets from './bullets.js'
 import * as collision from './collision.js'
 import { stage1, stageControllerTicker, removeEvent, addEvent, eventQueue } from './stagecontroller.js'
-import { createVending } from "./vending.js"
 import { healthItems } from './healthItem.js'
 import * as utils from "./utils.js"
 import * as ghosts from './ghosts.js'
@@ -296,11 +295,16 @@ export function triggerGameOver() {
     endGame = true;
     finalScoreElement.textContent = gameState.score;
     finalTimeElement.textContent = utils.formatTime(gameState.gameTime);
-
     audio.manager.stopMusic();
     if (audio.sounds) {
         audio.manager.killSamples();
-        audio.manager.playSample("game_over", { gain: audio.soundsVolume });
+        audio.manager.playSample("mario_death", {
+            gain: audio.soundsVolume,
+            pan: audio.xToPan(mario.x, gameArea.offsetWidth),
+        })
+        setTimeout(() => {
+            audio.manager.playSample("game_over", { gain: audio.soundsVolume });
+        }, 1000);
     }
 
     updateMenuVisibility();
@@ -615,10 +619,19 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowDown') {
         keysPressed.down = true;
     }
-
+    let space = keysPressed.space;
     if (event.key === ' ' || event.code === 'Space') {
         keysPressed.space = true
     }
+    if (!space && keysPressed.space) {
+        audio.manager.playSample(mario.getRandomHitSound(mario.jumpSounds), {
+            gain: audio.soundsVolume,
+            pan: audio.xToPan(mario.x, gameArea.offsetWidth),
+            throttleMs: 60,
+            pitchRandom: [0.98, 1.02]
+        })
+    }
+
 });
 
 document.addEventListener('keyup', (event) => {
