@@ -35,10 +35,12 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
             break;
 
         case 'bullet':
-            if (mario.mario.aimDirection == "left" || mario.mario.aimDirection == "right"){    
+            if (team == "player" && (mario.mario.aimDirection == "left" || mario.mario.aimDirection == "right")){    
                 [bodyX, bodyY] = [x - 10 - (bodyWidth / 2), y + 27 - (bodyHeight / 2)];
-            }else{
+            }else if(team == "player" && mario.mario.aimDirection == "up"){
                 [bodyX, bodyY] = [x - (bodyWidth / 2), y + 15 - (bodyHeight / 2)];
+            }else{
+                [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];
             }
             bodyWidth = 20;
             bodyHeight = 40;
