@@ -70,7 +70,7 @@ export function explosionVisuals(entity) {
 
 
 
-export function createBomb(x, y, startVelX, startVelY, team, damage = 50, radius = 150, countdownTime = 3, canFall = true, explodeOnContact = false, countDownVisible = true, img = "assets/items/bomb.svg"){
+export function createBomb(x, y, startVelX, startVelY, team, damage = 50, radius = 150, countdownTime = 3, canFall = true, explodeOnContact = false, countDownVisible = true, img = "assets/items/bomb.svg", gravity = 0.5){
     const bombBody = document.createElement('img');
     bombBody.className = "bomb-img";
     bombBody.src = img;
@@ -99,7 +99,7 @@ export function createBomb(x, y, startVelX, startVelY, team, damage = 50, radius
         dom: bombBody,
         countdownDiv: countdownDiv,
         disabled: false,
-        gravity: 0.5,
+        gravity: gravity,
         canFall: canFall,
         updateFunc: function () {bombUpdate(this)},
         drawFunc: function () {bombVisuals(this)},

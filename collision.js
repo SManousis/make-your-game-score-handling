@@ -24,13 +24,9 @@ export function isShot(entity) {
             if (entity.health <= 0) {
                 entity.disabled = true
             }
-            if (entity === mario.mario && game.audio.sounds) {
-                game.audio.manager.playSample(mario.mario.getRandomHitSound(mario.mario.takeHitSounds), {
-                    gain: game.audio.soundsVolume,
-                    pan: game.audio.xToPan(mario.mario.x, game.gameArea.offsetWidth),
-                    throttleMs: 60,
-                })
-            }
+            // if (entity === mario.mario && game.audio.sounds) {
+                
+            // }
         }
     }
 }

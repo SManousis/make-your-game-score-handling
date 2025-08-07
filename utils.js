@@ -243,7 +243,9 @@ export function getRandomInt(min = 30, max = 250) {
     return Math.floor((Math.random() + 0.2) * (max - min + 1)) + min;
 }
 
-
+export function returnRandomElement(list) {
+        return list[Math.floor(Math.random() * list.length)];
+    }
 
 export function removeUnitFromArray(unit, array) {
     for (let i = 0; i < array.length; i++) {
