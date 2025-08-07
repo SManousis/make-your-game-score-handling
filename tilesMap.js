@@ -13,10 +13,10 @@ export let walkables = [];
 export function createTilesDiv(x,y, tileSize, tile){
     let div = document.createElement('div');
     div.classList.add ('tile');
-    div.style.width = (tileSize) + 'px';
-    div.style.height = tileSize + 'px';
-    div.style.top = y*tileSize + 'px';
-    div.style.left = x*tileSize + 'px';
+    div.style.width = Math.round(tileSize) + 'px';
+    div.style.height = Math.round(tileSize) + 'px';
+    div.style.top = Math.round(y*tileSize) + 'px';
+    div.style.left = Math.round(x*tileSize) + 'px';
     div.style.position = 'absolute';
     div.style.background = tile.color
     div.setAttribute('data-tile', tile.name);
