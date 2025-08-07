@@ -60,7 +60,7 @@ export function powerUpPicked(entity) {
         if (collisionCheck(entity, powerUp)) {
             if (Object.hasOwn(entity, 'applyPowerUp')) {
                 console.log(powerUp.powerUpType, powerUp.value)
-                entity.applyPowerUp(powerUp.powerUpType, powerUp.value);
+                entity.applyPowerUp(powerUp.powerUpType, powerUp.value, "health");
             } 
 
              console.log(`powerUp touched ${entity.name} gained ${powerUp.healthAdd}`);
