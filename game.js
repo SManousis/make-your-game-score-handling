@@ -133,30 +133,30 @@ export const audio = {
     musicVolume: 0.2,
     soundsVolume: 0.1,
     manager: new AudioManager({
-        bomb: "./assets/audio/bomb.mp3",
-        bubble: "./assets/audio/bubble.mp3",
-        catching_sandwich: "./assets/audio/catching_sandwich.mp3",
-        cicada_hit: "./assets/audio/cicada_hit.mp3",
-        destroy_fly: "./assets/audio/destroy_fly_2.mp3",
-        mario_bullet_hit: "./assets/audio/destroy_fly.mp3",
-        game_over: "./assets/audio/game_over.mp3",
-        health_short: "./assets/audio/health_short.mp3",
-        health: "./assets/audio/health.mp3",
-        lazer_short: "./assets/audio/lazer_short.mp3",
-        lazer: "./assets/audio/lazer.mp3",
-        swarm: "./assets/audio/swarm.mp3",
-        tick: "./assets/audio/time_tick.mp3",
-        turtle_hit: "./assets/audio/turtle_hit.mp3",
-        vending_rising: "./assets/audio/vending_rising.mp3",
+        bomb: "./assets/audio/bomb.wav",
+        bubble: "./assets/audio/bubble.wav",
+        catching_sandwich: "./assets/audio/catching_sandwich.wav",
+        cicada_hit: "./assets/audio/cicada_hit.wav",
+        destroy_fly: "./assets/audio/destroy_fly.wav",
+        mario_bullet_hit: "./assets/audio/bullet_hit.wav",
+        game_over: "./assets/audio/game_over.wav",
+        health_short: "./assets/audio/health_short.wav",
+        health: "./assets/audio/health.wav",
+        lazer_short: "./assets/audio/lazer_short.wav",
+        lazer: "./assets/audio/lazer.wav",
+        swarm: "./assets/audio/swarm.wav",
+        tick: "./assets/audio/time_tick.wav",
+        turtle_hit: "./assets/audio/turtle_hit.wav",
+        vending_rising: "./assets/audio/vending_rising.wav",
         // vocal
-        mario_death: "./assets/audio/mario_death.mp3",
-        mario_hit1: "./assets/audio/mario_hit1.mp3",
-        mario_hit2: "./assets/audio/mario_hit2.mp3",
-        mario_hit3: "./assets/audio/mario_hit3.mp3",
-        mario_hit4_rare: "./assets/audio/mario_hit4_rare.mp3",
-        mario_jump1: "./assets/audio/mario_jump1.mp3",
-        mario_jump2: "./assets/audio/mario_jump2.mp3",
-        mario_jump3: "./assets/audio/mario_jump3.mp3",
+        mario_death: "./assets/audio/mario_death.wav",
+        mario_hit1: "./assets/audio/mario_hit1.wav",
+        mario_hit2: "./assets/audio/mario_hit2.wav",
+        mario_hit3: "./assets/audio/mario_hit3.wav",
+        mario_hit4_rare: "./assets/audio/mario_hit4_rare.wav",
+        mario_jump1: "./assets/audio/mario_jump1.wav",
+        mario_jump2: "./assets/audio/mario_jump2.wav",
+        mario_jump3: "./assets/audio/mario_jump3.wav",
     }, 4),
     tracks: [
         { url: "./assets/audio/mario.mp3", overlapDuration: 7.742 },
@@ -523,7 +523,6 @@ function syncToggles(changedToggle, group, setValue) {
 musicToggles.forEach(toggle => {
     toggle.addEventListener('input', () => {
         syncToggles(toggle, musicToggles, val => audio.music = val);
-        console.log('Music:', audio.music);
     });
 });
 
@@ -531,7 +530,6 @@ musicToggles.forEach(toggle => {
 soundsToggles.forEach(toggle => {
     toggle.addEventListener('input', () => {
         syncToggles(toggle, soundsToggles, val => audio.sounds = val);
-        console.log('Sounds:', audio.sounds);
     });
 });
 
