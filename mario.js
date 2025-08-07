@@ -357,12 +357,18 @@ mario.bullet_count=1
 
 
     //don't allow mario to move past screen bounds
-    if (mario.x < 0) {
-        utils.setUnit(mario, 0, mario.y)
-    }
-    if (mario.x > gameArea.offsetWidth) {
-        utils.setUnit(mario, gameArea.offsetWidth, mario.y)
-    }
+        if (mario.x < 0) {
+            utils.setUnit(mario, 0, mario.y)
+        }
+        if (mario.x > gameArea.offsetWidth) {
+            utils.setUnit(mario, gameArea.offsetWidth, mario.y)
+        }
+        if (mario.y < 0) {
+            utils.setUnit(mario, mario.x, 0)
+        }
+        if (mario.y > gameArea.offsetHeight) {
+            utils.setUnit(mario, mario.x, gameArea.offsetHeight)
+        }
 
     //if mario on the ground and jump button pressed
     if (keysPressed.space && grounded) {
