@@ -61,7 +61,8 @@ export let mario = {
         }
         if (audio.sounds) {
             if (!sound) sound = this.getRandomHitSound(this.takeHitSounds);
-            audio.manager.playSample(sound, {
+            // TODO: Throtlle this
+            audio.playSampleDeb(sound, {
                 gain: audio.soundsVolume,
                 pan: audio.xToPan(this.x, gameArea.offsetWidth),
                 throttleMs: 60,
