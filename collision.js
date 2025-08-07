@@ -4,7 +4,7 @@ import * as turtles from './turtles.js'
 import * as bullets from './bullets.js'
 import * as utils from './utils.js'
 import * as game from './game.js'
-import * as healthItem from './healthItem.js'
+import * as powerups from './powerups.js'
 
 
 export function isShot(entity) {
@@ -53,22 +53,20 @@ export function inAoe(unit) {
     }
 }
 
-export function healthItemPicked(entity) {
-    for (const candy of healthItem.healthItems) {
-        if (candy.disabled) continue;
+export function powerUpPicked(entity) {
+    for (const powerUp of powerups.powerUps) {
+        if (powerUp.disabled) continue;
         // console.log("Checking collision between:", entity, "and", candy);
-        if (collisionCheck(entity, candy)) {
-            if (Object.hasOwn(entity, 'healthUpgrade')) {
-                entity.healthUpgrade(candy.healthAdd, "health");
-            } else {
-                entity.health += candy.healthAdd;
-                if (entity.health > entity.maxhealth) entity.health = entity.maxhealth;
-            }
+        if (collisionCheck(entity, powerUp)) {
+            if (Object.hasOwn(entity, 'applyPowerUp')) {
+                console.log(powerUp.powerUpType, powerUp.value)
+                entity.applyPowerUp(powerUp.powerUpType, powerUp.value);
+            } 
 
-            // console.log(`healthItem touched ${entity.name} gained ${candy.healthAdd}`);
-            candy.disabled = true
-            candy.body.forEach(body => body.div.remove())
-            candy.dom.remove()
+             console.log(`powerUp touched ${entity.name} gained ${powerUp.healthAdd}`);
+            powerUp.disabled = true
+            powerUp.body.forEach(body => body.div.remove())
+            powerUp.dom.remove()
         }
     }
 }
@@ -95,7 +93,7 @@ export function healthItemPicked(entity) {
 
 export function collisionCheck(entit1, entit2) {
     // Optionally skip if on the same team
-    if (entit1.team && entit2.team && entit1.team === entit2.team && entit2.type !== "healthItem") return false;
+    if (entit1.team && entit2.team && entit1.team === entit2.team && entit2.type !== "powerUp") return false;
     // Loop through all bodies in both entities
     for (const body1 of entit1.body) {
         for (const body2 of entit2.body) {

@@ -23,6 +23,8 @@ export let mario = {
     gravity: 0.8, //the speed that which he is pushed down while airborne
     drag: 1.2, //how much mario slows downs in x axis if he's not actively walking left or right
     bullet_count: 1, //how many bullets mario will fire
+    multibulletTimer: 0,
+    bombs: 0,
     aimDirection: "left", //left, right, up
     velX: 0, //his current velocity in x axis
     velY: 0, //his current velocity in y axis
@@ -78,17 +80,30 @@ export let mario = {
         this.isInvincible = true;
         this.invincibilityTimer = 40;
     },
-    healthUpgrade: function (health, sound) {
-        this.health += health;
-        if (this.health > this.maxhealth) this.health = this.maxhealth;
-        if (audio.sounds) {
-            audio.manager.playSample(sound, {
-                gain: audio.soundsVolume,
-                pan: audio.xToPan(this.x, gameArea.offsetWidth),
-                throttleMs: 60,
-                pitchRandom: [0.98, 1.02]
-            });
-        };
+    applyPowerUp: function (type, value,sound) {
+          if (audio.sounds) {
+                    audio.manager.playSample(sound, {
+                        gain: audio.soundsVolume,
+                        pan: audio.xToPan(this.x, gameArea.offsetWidth),
+                        throttleMs: 60,
+                        pitchRandom: [0.98, 1.02]
+                    });
+                };
+        switch (type) {
+            case 'health':
+                this.health += value;
+                if (this.health > this.maxhealth) this.health = this.maxhealth;
+              
+                break;
+            case 'bomb':
+                this.bombs += value;
+                break;
+            case 'multibullet':
+
+                this.multibulletTimer = 600;
+                this.bullet_count=4
+                break;
+        }
     },
     // reset() {
     //     this.x = 500;
@@ -257,10 +272,17 @@ export function marioUpdate() {
         }
     }
 
-    if (keysPressed.upgrade) {
-        mario.bullet_count = 4
-        keysPressed.upgrade = false
-    }
+    if (mario.multibulletTimer > 0) {
+    mario.multibulletTimer--;
+}
+if (mario.multibulletTimer<=0){
+mario.bullet_count=1
+}
+
+    // if (keysPressed.upgrade) {
+    //     mario.bullet_count = 4
+    //     keysPressed.upgrade = false
+    // }
 
     if (keysPressed.right) {
         mario.lookingDir = "right"

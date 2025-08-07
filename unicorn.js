@@ -2,8 +2,8 @@ import * as utils from "./utils.js";
 import * as mario from './mario.js'
 import { allEntities, gameArea, gameState, updateMenuVisibility, updateScore } from './game.js'
 import * as bullets from './bullets.js'
-import * as healthItem from './healthItem.js'
-import * as walkables from './tilesMap.js'
+import * as powerups from './powerups.js'
+import * as walkables from './walkables.js'
 
 export let unicorns = [];
 
@@ -138,7 +138,7 @@ export function unicornUpdate(unicorn) {
 if (Math.random() < 0.02) { 
 
     if (Math.random() < 0.15) {
-        healthItem.createHealthItem(unicorn.x, unicorn.y, 25,"rainbow");
+        powerups.createPowerUp(unicorn.x, unicorn.y, 25,"health","rainbow");
     } else { 
         bullets.createBullet(
             'target',       
