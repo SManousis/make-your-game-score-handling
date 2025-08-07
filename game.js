@@ -349,6 +349,7 @@ playButton.addEventListener('click', async () => {
     if (!audio.initialized) {
         await audio.setUp();
         audio.initialized = true;
+        audio.playSampleDeb = utils.opDebounce(audio.manager.playSample.bind(audio.manager), 100, {leading: true});
     }
 
     if (audio.music) {
@@ -688,9 +689,6 @@ document.addEventListener('keyup', (event) => {
     if (event.key === ' ' || event.code === 'Space') {
         keysPressed.space = false
     }
-
-
-
 });
 
 
@@ -780,7 +778,7 @@ export function draw() {
     }
 
 
-    const MarioHealthBar = document.getElementById('mario-healthBar-container');
+    // const MarioHealthBar = document.getElementById('mario-healthBar-container');
 
     timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;

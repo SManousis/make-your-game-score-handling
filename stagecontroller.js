@@ -7,6 +7,7 @@ import { allEntities,gameState, audio, currentGameGen } from "./game.js"
 import { createFlower, flowers } from "./flowers.js"
 import { tetros, createTetro } from "./tetros.js"
 import { unicorns, createUnicorn } from "./unicorn.js"
+import { createBomb } from "./explosion.js"
 
 
 const gameArea = document.getElementById('game-area')
