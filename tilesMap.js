@@ -13,7 +13,7 @@ export let walkables = [];
 export function createTilesDiv(x,y, tileSize, tile){
     let div = document.createElement('div');
     div.classList.add ('tile');
-    div.style.width = tileSize + 'px';
+    div.style.width = (tileSize) + 'px';
     div.style.height = tileSize + 'px';
     div.style.top = y*tileSize + 'px';
     div.style.left = x*tileSize + 'px';
