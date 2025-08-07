@@ -12,7 +12,7 @@ type wrapper struct {
 }
 
 func (w wrapper) ServeHTTP(wr http.ResponseWriter, re *http.Request) {
-	fmt.Println("endpoint hit: ", re.URL.Path)
+	// fmt.Println("endpoint hit: ", re.URL.Path)
 	w.next.ServeHTTP(wr, re)
 }
 
