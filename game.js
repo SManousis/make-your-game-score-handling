@@ -145,6 +145,7 @@ export const audio = {
         health: "./assets/audio/health.wav",
         lazer_short: "./assets/audio/lazer_short.wav",
         lazer: "./assets/audio/lazer.wav",
+        loose_life: "./assets/audio/looze_life.wav",
         swarm: "./assets/audio/swarm.wav",
         tick: "./assets/audio/time_tick.wav",
         turtle_hit: "./assets/audio/turtle_hit.wav",
