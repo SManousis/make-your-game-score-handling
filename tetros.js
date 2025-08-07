@@ -2,8 +2,8 @@ import * as utils from "./utils.js";
 import * as mario from './mario.js'
 import { allEntities, gameState, updateMenuVisibility, updateScore } from './game.js'
 import * as bullets from './bullets.js'
-import * as healthItem from './healthItem.js'
-import * as walkables from './tilesMap.js'
+import * as powerups from './powerups.js'
+import * as walkables from './walkables.js'
 import { createExplosion } from "./explosion.js";
 import * as collision from './collision.js'
 

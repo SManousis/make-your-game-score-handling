@@ -248,8 +248,10 @@ export function returnRandomElement(list) {
     }
 
 export function removeUnitFromArray(unit, array) {
+    //console.log(unit,array)
     for (let i = 0; i < array.length; i++) {
         if (array[i] === unit) {
+            
             array.splice(i, 1); // ✅ Remove at index i
             break;
         }

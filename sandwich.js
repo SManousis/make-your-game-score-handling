@@ -43,7 +43,7 @@ export function shootSandwich(dir, vendX, vendY) {
         ],
         dom: sandwichElement,
         team: "player",
-        type: "healthItem"
+        type: "powerUp"
     };
     allEntities.push(newSandwich);
 }
@@ -59,7 +59,7 @@ function sandwichUpdate(newSandwich) {
     for (const BodyPart of newSandwich.body) {
         if (utils.IsBodyCollidingWithUnit(BodyPart, mario)) {
             if (newSandwich.state === 'friend') {
-                mario.healthUpgrade(newSandwich.damage, "catching_sandwich")
+                mario.applyPowerUp("health",newSandwich.damage, "catching_sandwich")
             } else {
                 mario.takeDamage(newSandwich.damage, newSandwich.x, "turtle_hit")
             }
