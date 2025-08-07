@@ -1,5 +1,5 @@
 import * as utils from './utils.js'
-import { walkables } from './walkables.js'
+import * as walkables from './tilesMap.js'
 import { keysPressed, gameArea, gameState, updateMenuVisibility, audio, triggerGameOver } from './game.js'
 import * as physics from './physicsStep.js'
 import * as bullets from './bullets.js'

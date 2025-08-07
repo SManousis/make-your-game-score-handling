@@ -1,6 +1,6 @@
 // Static vending machine. Feels colide
 // Spits random items
-import * as utils from './utils.js'
+import * as utils from './utils.js';
 import { gameArea, allEntities, audio, updateScore } from './game.js';
 import { shootSandwich } from './sandwich.js'
 import { createBomb } from './explosion.js';

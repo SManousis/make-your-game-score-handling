@@ -1,7 +1,7 @@
 import * as utils from "./utils.js"
 import * as mario from "./mario.js"
 import { allEntities, gameArea, audio } from './game.js'
-import * as walkables from './walkables.js'
+import * as walkables from './tilesMap.js'
 
 //dirTypes can be down, up, right, left, target
 //team = player, enemy
