@@ -7,7 +7,7 @@ import * as cicadas from './cicadas.js'
 import * as bullets from './bullets.js'
 import * as collision from './collision.js'
 import { stage1, stageControllerTicker, removeEvent, addEvent, eventQueue } from './stagecontroller.js'
-import { healthItems } from './healthItem.js'
+import { powerUps } from './powerups.js'
 import * as utils from "./utils.js"
 import * as ghosts from './ghosts.js'
 import { createBomb, createExplosion } from './explosion.js'
@@ -21,7 +21,7 @@ import { stage1Map, renderTileMap, walkables } from './tilesMap.js'
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
 const backImage = new Image();
-backImage.src = "./assets/backgrounds/background.png";
+// backImage.src = "./assets/backgrounds/background.png";
 const TILE_SIZE = 32;
 const tiles = new Tiles();
 const tileMap = []
@@ -145,7 +145,7 @@ export const audio = {
         health: "./assets/audio/health.wav",
         lazer_short: "./assets/audio/lazer_short.wav",
         lazer: "./assets/audio/lazer.wav",
-        loose_life: "./assets/audio/looze_life.wav",
+        loose_life: "./assets/audio/loose_life.wav",
         swarm: "./assets/audio/swarm.wav",
         tick: "./assets/audio/time_tick.wav",
         turtle_hit: "./assets/audio/turtle_hit.wav",
@@ -177,7 +177,7 @@ export let allEntities = []
 export let groundedEnemies = []
 export let aoeDamage = []
 
-export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables, ghosts.ghosts, unicorns, aoeDamage, flowers, tetros]
+export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, powerUps, walkables, ghosts.ghosts, unicorns, aoeDamage, flowers, tetros]
 
 export const gameArea = document.getElementById('game-area');
 
@@ -240,7 +240,7 @@ function restartGame() {
     cicadas.cicadas.length = 0;
     turtles.turtles.length = 0;
     bullets.allBullets.length = 0;
-    healthItems.length = 0;
+    powerUps.length = 0;
     flowers.length = 0;
     tetros.length = 0;
 
@@ -326,6 +326,13 @@ export const keysPressed = {
 };
 
 //--- EVENT LISTENERS ----
+
+window.addEventListener("keydown", function(e) {
+  const keysToPrevent = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "];
+  if (keysToPrevent.includes(e.key)) {
+    e.preventDefault(); // Stops scrolling
+  }
+}, false);
 
 // Main menu buttons
 playButton.addEventListener('click', async () => {
@@ -571,14 +578,17 @@ document.addEventListener('keydown', (event) => {
         keysPressed.autofire = !keysPressed.autofire;
     }
 
-    if (event.key.toLowerCase() === 'u') {
-        keysPressed.upgrade = !keysPressed.upgrade;
-    }
+    // if (event.key.toLowerCase() === 'u') {
+    //     keysPressed.upgrade = !keysPressed.upgrade;
+    // }
 
     if (event.key.toLowerCase() === 'b') {
         if (keysPressed.bomb == false) {
             keysPressed.bomb = true
+            if (mario.bombs>0){
             createBomb(mario.x, mario.y, mario.velX, mario.velY, 'player', 500, 500, 2, true)
+            mario.bombs-=1
+            }
         }
     }
 
@@ -709,7 +719,7 @@ function update() {
     }
 
 
-    collision.healthItemPicked(mario) // checks if mario touched a health item//collision.isShot(mario);
+    collision.powerUpPicked(mario) // checks if mario touched a health item//collision.isShot(mario);
 
     //running all entities' update function
     for (let entity of allEntities) {
@@ -719,7 +729,7 @@ function update() {
 
         if (entity.updateFunc) entity.updateFunc(entity);
 
-        if (entity.type !== "healthItem" && entity.type !== "bullet") {
+        if (entity.type !== "powerUp" && entity.type !== "bullet") {
             collision.isShot(entity)
         }
 

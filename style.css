@@ -1,11 +1,9 @@
 html,
 body {
-  overflow: hidden;
-}
-
-body {
-  margin-top: -9%;
-  transform: scale(0.8);
+  height: auto;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
 }
 
 #game-area {
@@ -20,7 +18,45 @@ body {
   margin-top: 100px;
   margin-left: auto;
   margin-right: auto;
+  transform: scale(0.8);
+  transform-origin: top center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
+
+/* html,
+body {
+  overflow: hidden;
+}
+
+body {
+  margin-top: -9%;
+  transform: scale(0.8);
+}
+
+.banner {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+#game-area {
+  width: 1792px;
+  height: 1024px;
+  background-image: url("./assets/backgrounds/space2.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  margin-top: 100px;
+  margin-left: auto;
+  margin-right: auto;
+} */
+
 
 #score {
   position: absolute;
@@ -31,6 +67,7 @@ body {
   font-size: 24px;
   font-family: Arial, sans-serif;
   font-weight: bold;
+  padding-right: 60px;
   /* This z-index ensures it's above the game content but below the menus */
   z-index: 10;
 }
@@ -203,8 +240,8 @@ body {
 }
 
 .bomb-countdown {
-  bottom:0px;
-  left:0px;
+  bottom: 0px;
+  left: 0px;
   position: absolute;
   color: red;
   font-size: 30px;
@@ -347,7 +384,10 @@ body {
 .slider {
   position: absolute;
   cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background-color: #ccc;
   transition: 0.3s;
   border-radius: 26px;
@@ -365,11 +405,11 @@ body {
   border-radius: 50%;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: #4CAF50;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   transform: translateX(24px);
 }
 
@@ -488,8 +528,10 @@ input:checked + .slider:before {
 
 #player-rank-info {
   font-weight: bold;
-  color: #a6ffae; /* A nice green color */
-  min-height: 25px; /* Prevents layout shift when text appears */
+  color: #a6ffae;
+  /* A nice green color */
+  min-height: 25px;
+  /* Prevents layout shift when text appears */
 }
 
 #leaderboard-container {
@@ -503,7 +545,8 @@ input:checked + .slider:before {
   color: white;
 }
 
-#leaderboard-table th, #leaderboard-table td {
+#leaderboard-table th,
+#leaderboard-table td {
   border: 1px solid #555;
   padding: 8px;
   text-align: center;
@@ -516,9 +559,9 @@ input:checked + .slider:before {
 #pagination-controls {
   margin-top: 15px;
   color: white;
-   display: flex;             
-  justify-content: center; 
-  align-items: center;     
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 

@@ -2,15 +2,15 @@ import * as utils from "./utils.js";
 import * as mario from './mario.js'
 import { allEntities, gameState, updateMenuVisibility, updateScore } from './game.js'
 import * as bullets from './bullets.js'
-import * as healthItem from './healthItem.js'
-import * as walkables from './tilesMap.js'
+import * as powerups from './powerups.js'
+import * as walkables from './walkables.js'
 import { createExplosion } from "./explosion.js";
 import * as collision from './collision.js'
 
 export let flowers = [];
 
 let preloadedFiringImage = new Image();
-preloadedFiringImage.src = "assets/enemies/TrumpflowerFired.svg";
+// preloadedFiringImage.src = "/assets/enemies/TrumpflowerFired.svg";
 
 
 export function createFlower(x, y, index, row) {
