@@ -21,7 +21,7 @@ import { stage1Map, renderTileMap, walkables } from './tilesMap.js'
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
 const backImage = new Image();
-backImage.src = "./assets/backgrounds/background.png";
+// backImage.src = "./assets/backgrounds/background.png";
 const TILE_SIZE = 32;
 const tiles = new Tiles();
 const tileMap = []
@@ -145,7 +145,7 @@ export const audio = {
         health: "./assets/audio/health.wav",
         lazer_short: "./assets/audio/lazer_short.wav",
         lazer: "./assets/audio/lazer.wav",
-        loose_life: "./assets/audio/looze_life.wav",
+        loose_life: "./assets/audio/loose_life.wav",
         swarm: "./assets/audio/swarm.wav",
         tick: "./assets/audio/time_tick.wav",
         turtle_hit: "./assets/audio/turtle_hit.wav",
@@ -326,6 +326,13 @@ export const keysPressed = {
 };
 
 //--- EVENT LISTENERS ----
+
+window.addEventListener("keydown", function(e) {
+  const keysToPrevent = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "];
+  if (keysToPrevent.includes(e.key)) {
+    e.preventDefault(); // Stops scrolling
+  }
+}, false);
 
 // Main menu buttons
 playButton.addEventListener('click', async () => {

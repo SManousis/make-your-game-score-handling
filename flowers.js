@@ -10,7 +10,7 @@ import * as collision from './collision.js'
 export let flowers = [];
 
 let preloadedFiringImage = new Image();
-preloadedFiringImage.src = "assets/enemies/TrumpflowerFired.svg";
+// preloadedFiringImage.src = "/assets/enemies/TrumpflowerFired.svg";
 
 
 export function createFlower(x, y, index, row) {
