@@ -1,0 +1,94 @@
+import {Tiles} from './Tiles.js'
+import { createRect } from './utils.js';
+
+export const TILE_SIZE = 32;
+export const ROWS = 32;
+export const COLUMNS = 56;
+export const tiles = new Tiles();
+export function tileMap(){
+    return Array.from({length : ROWS}, () => Array.from({length: COLUMNS}, () => 0))
+}
+export let walkables = [];
+
+export function createTilesDiv(x,y, tileSize, tile){
+    let div = document.createElement('div');
+    div.classList.add ('tile');
+    div.style.width = tileSize + 'px';
+    div.style.height = tileSize + 'px';
+    div.style.top = y*tileSize + 'px';
+    div.style.left = x*tileSize + 'px';
+    div.style.position = 'absolute';
+    div.style.background = tile.color
+    div.setAttribute('data-tile', tile.name);
+    div.dataset.walkable = tile.walkable
+    document.getElementById('game-area').appendChild(div)
+
+    if (tile.walkable == true){
+        const walkableTile = {
+            body: [createRect(x * tileSize, (ROWS-1-y)*tileSize, tileSize, tileSize, true)]
+        }
+        walkables.push(walkableTile)
+    }
+
+    return div
+}
+
+export function renderTileMap(map) {
+   document.querySelectorAll('#game-area .tile').forEach(el => el.remove());
+    for (let i = 0; i < ROWS; i++) {
+        for (let j = 0; j < COLUMNS; j++) {
+            const tileObj = tiles.getTile(map[i][j]);
+            if (tileObj.name != 'empty'){
+                createTilesDiv(j, i, TILE_SIZE, tiles.getTile(map[i][j]))
+            }
+        }
+    }
+}
+
+export function stage1Map(){
+    let map = tileMap()
+    
+        for (let j = 0; j < COLUMNS; j++) {  
+                map[ROWS-1][j] = 1;            
+        }
+        for (let j = 0; j < 9; j++){
+            map[ROWS-11][j] = 1;
+        }
+
+        for (let j = 12; j < 20; j++){
+            map[ROWS-6][j] = 1;
+        }
+
+        for (let j = COLUMNS-1; j >= COLUMNS- 9; j--){
+            map[ROWS-9][j] = 1
+        }
+        for (let j = COLUMNS-14; j >= COLUMNS- 21; j--){
+            map[ROWS-5][j] = 1
+        }
+    
+    return map
+}
+
+export function stage2Map(){
+    let map = tileMap()
+    
+        for (let j = 0; j < COLUMNS; j++) {  
+                map[ROWS-1][j] = 1;            
+        }
+        for (let j = 0; j < 9; j++){
+            map[ROWS-6][j] = 1;
+        }
+
+        for (let j = 12; j < 20; j++){
+            map[ROWS-10][j] = 1;
+        }
+
+        for (let j = COLUMNS-1; j >= COLUMNS- 9; j--){
+            map[ROWS-6][j] = 1
+        }
+        for (let j = 22; j < 30; j++){
+            map[ROWS-15][j] = 1
+        }
+    
+    return map
+}

@@ -3,7 +3,7 @@ import { mario, marioShoot, updateMarioHealthBar } from './mario.js'
 import * as cupids from './cupids.js'
 import * as turtles from './turtles.js'
 import * as cicadas from './cicadas.js'
-import * as walkables from './walkables.js'
+//import * as walkables from './walkables.js'
 import * as bullets from './bullets.js'
 import * as collision from './collision.js'
 import { stage1, stageControllerTicker, removeEvent, addEvent, eventQueue } from './stagecontroller.js'
@@ -16,6 +16,7 @@ import { flowers } from './flowers.js'
 import { tetros } from './tetros.js'
 import { Tiles } from './Tiles.js'
 import { unicorns } from './unicorn.js'
+import { stage1Map, renderTileMap, walkables } from './tilesMap.js'
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -175,7 +176,7 @@ export let allEntities = []
 export let groundedEnemies = []
 export let aoeDamage = []
 
-export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables.walkables, ghosts.ghosts, unicorns, aoeDamage, flowers, tetros]
+export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, healthItems, walkables, ghosts.ghosts, unicorns, aoeDamage, flowers, tetros]
 
 export const gameArea = document.getElementById('game-area');
 
@@ -805,6 +806,6 @@ updateMenuVisibility();
 // Start the game
 updateTimestamp = Date.now() - 16.66
 GameLoop();
-
-
+let map = stage1Map()
+renderTileMap(map);
 stage1(currentGameGen)

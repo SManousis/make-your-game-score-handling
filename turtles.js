@@ -2,6 +2,7 @@ import * as utils from './utils.js'
 import { mario } from './mario.js'
 import { gameArea, allEntities, updateScore, groundedEnemies } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
+import * as walkables from './tilesMap.js'
 
 //turtle spawning
 export let turtles = [];

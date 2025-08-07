@@ -3,7 +3,7 @@ import * as mario from './mario.js'
 import { allEntities, gameArea, gameState, updateMenuVisibility, updateScore } from './game.js'
 import * as bullets from './bullets.js'
 import * as healthItem from './healthItem.js'
-import * as walkables from './walkables.js'
+import * as walkables from './tilesMap.js'
 
 export let unicorns = [];
 
