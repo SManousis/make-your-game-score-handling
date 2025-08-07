@@ -219,25 +219,39 @@ export function setUnit(unit, x, y) {
 export function opDebounce(fn, wait, options = {}) {
     let timeout;
     let lastCallTime;
+    let pendingResolve;
+    let pendingReject;
 
     return function (...args) {
-        const now = Date.now();
-        const callNow = options.leading && !timeout;
+        return new Promise((resolve, reject) => {
+            const context = this;
+            const now = Date.now();
+            const callNow = options.leading && !timeout;
 
-        clearTimeout(timeout);
+            const later = async () => {
+                timeout = null;
+                if (!options.leading) {
+                    try {
+                        const result = await fn.apply(context, args);
+                        resolve(result);
+                    } catch (err) {
+                        reject(err);
+                    }
+                }
+            };
 
-        timeout = setTimeout(() => {
-            timeout = null;
-            if (!options.leading) {
-                fn.apply(this, args);
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+
+            if (callNow) {
+                fn.apply(context, args)
+                    .then(resolve)
+                    .catch(reject);
             }
-        }, wait);
-
-        if (callNow) {
-            fn.apply(this, args);
-        }
+        });
     };
 }
+
 
 export function getRandomInt(min = 30, max = 250) {
     return Math.floor((Math.random() + 0.2) * (max - min + 1)) + min;

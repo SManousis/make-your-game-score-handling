@@ -26,38 +26,6 @@ body {
   align-items: center;
 }
 
-/* html,
-body {
-  overflow: hidden;
-}
-
-body {
-  margin-top: -9%;
-  transform: scale(0.8);
-}
-
-.banner {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-}
-
-#game-area {
-  width: 1792px;
-  height: 1024px;
-  background-image: url("./assets/backgrounds/space2.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  position: relative;
-  overflow: hidden;
-  margin-top: 100px;
-  margin-left: auto;
-  margin-right: auto;
-} */
-
-
 #score {
   position: absolute;
   /* Position relative to the nearest positioned ancestor */
@@ -67,9 +35,11 @@ body {
   font-size: 24px;
   font-family: Arial, sans-serif;
   font-weight: bold;
+  padding-left: 10px;
   padding-right: 60px;
   /* This z-index ensures it's above the game content but below the menus */
   z-index: 10;
+
 }
 
 #lives {
@@ -82,6 +52,7 @@ body {
   font-family: Arial, sans-serif;
   font-weight: bold;
   z-index: 10;
+  padding-right: 10px;
 }
 
 #time-counter {
@@ -101,14 +72,16 @@ body {
 }
 
 #mario-healthBar-container {
+  color: white;
+  font-size: 24px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
   position: absolute;
-  /*left: 120px;    Adjust based on Mario's position */
-  /*top: 60px;     Adjust based on Mario's position */
-  width: 60px;
-  /* Width of the bar container */
+  left: 20px;
+  top: 60px;
+  width: auto;
   height: 10px;
   background: #222;
-  /* (optional) dark background behind health */
   border: 1px solid #333;
   border-radius: 6px;
   z-index: 11;

@@ -339,6 +339,7 @@ playButton.addEventListener('click', async () => {
     if (!audio.initialized) {
         await audio.setUp();
         audio.initialized = true;
+        audio.playSampleDeb = utils.opDebounce(audio.manager.playSample.bind(audio.manager), 100, {leading: true});
     }
 
     if (audio.music) {
@@ -675,9 +676,6 @@ document.addEventListener('keyup', (event) => {
     if (event.key === ' ' || event.code === 'Space') {
         keysPressed.space = false
     }
-
-
-
 });
 
 
@@ -767,15 +765,15 @@ export function draw() {
     }
 
 
-    const MarioHealthBar = document.getElementById('mario-healthBar-container');
+    // const MarioHealthBar = document.getElementById('mario-healthBar-container');
 
     timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;
-    MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
-    MarioHealthBar.style.bottom = (mario.y + 90) + "px";
-    if (mario.crouching) {
-        MarioHealthBar.style.bottom = (mario.y + 60) + "px";
-    }
+    // MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
+    // MarioHealthBar.style.bottom = (mario.y + 90) + "px";
+    // if (mario.crouching) {
+    //     MarioHealthBar.style.bottom = (mario.y + 60) + "px";
+    // }
 
 
 
