@@ -1,6 +1,6 @@
 import * as utils from './utils.js'
 import * as walkables from './tilesMap.js'
-import { keysPressed, gameArea, gameState, updateMenuVisibility, audio, triggerGameOver } from './game.js'
+import { keysPressed, gameArea, gameState, updateMenuVisibility, audio, triggerGameOver,lifeLostFanfare } from './game.js'
 import * as physics from './physicsStep.js'
 import * as bullets from './bullets.js'
 
@@ -262,7 +262,9 @@ export function marioUpdate() {
         }
     }
     if (mario.health <= 0) {
+        
         gameState.lives -= 1
+        lifeLostFanfare();
         mario.health = 100
         if (gameState.lives === 0) {
             triggerGameOver();

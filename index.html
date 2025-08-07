@@ -13,6 +13,9 @@
   <div id="game-area" tabindex="0">
     <div id="score">Score: 0</div>
     <div id="lives">Lives: 5</div>
+    <div id="powerup-indicators">
+      <span id="powerup-text"></span>
+    </div>
     <div id="time-counter">Time: 0:00</div>
     <div id="mario-healthBar-container">
       <div id="mario-healthBar"></div>
@@ -42,7 +45,7 @@
       <button id="play-button">Play</button>
       <button id="leaderboard-button">Leaderboard</button>
       <button id="main-help-button">Help</button>
-  
+
       <label class="switch-label">
         <span>Music</span>
         <label class="switch">
@@ -50,10 +53,10 @@
           <span class="slider"></span>
         </label>
       </label>
-  
+
       <label for="music-slider-main">Music Volume</label>
       <input type="range" id="music-slider-main" min="0" max="1" step="0.01" value="0.2">
-  
+
       <label class="switch-label">
         <span>Sounds</span>
         <label class="switch">
@@ -61,11 +64,11 @@
           <span class="slider"></span>
         </label>
       </label>
-  
+
       <label for="sounds-slider-main">Sounds Volume</label>
       <input type="range" id="sounds-slider-main" min="0" max="1" step="0.01" value="0.1">
     </div>
-  
+
     <!--PAUSE MENU-->
     <div id="pause-menu" class="menu-container hidden">
       <h2>Paused</h2>
@@ -82,7 +85,7 @@
       </label>
       <label for="music-slider-pause">Music Volume</label>
       <input type="range" id="music-slider-pause" min="0" max="1" step="0.01" value="0.2">
-  
+
       <label class="switch-label">
         <span>Sounds</span>
         <label class="switch">
@@ -94,22 +97,22 @@
       <label for="sounds-slider-pause">Sounds Volume</label>
       <input type="range" id="sounds-slider-pause" min="0" max="1" step="0.01" value="0.1">
     </div>
-  
+
     <!--GAME OVER MENU-->
     <div id="game-over-menu" class="menu-container hidden">
       <h2>Game Over</h2>
-  
+
       <div class="game-over-stats">
         <p>Final Score: <span id="final-score">0</span></p>
         <p>Time Elapsed: <span id="final-time">0:00</span></p>
         <p id="player-rank-info"></p>
       </div>
-  
+
       <div class="submit-score-container">
         <input type="text" id="player-name-input" placeholder="Enter your name" maxlength="15">
         <button id="submit-score-button">Submit Score</button>
       </div>
-  
+
       <div id="leaderboard-container" class="hidden">
         <h3>Leaderboard</h3>
         <table id="leaderboard-table">
@@ -131,12 +134,12 @@
               <button id="leaderboard-next-button">-></button>
         </div>
       </div>
-  
+
       <button id="restart-button">Restart</button>
       <button id="back-to-menu-button">Back to Menu</button>
     </div>
-  
-  
+
+
     <!-- HELP MENU -->
     <div id="help-menu" class="menu-container hidden">
       <h2>Controls</h2>
@@ -151,7 +154,7 @@
       </ul>
       <button id="back-from-help-button">Back</button>
     </div>
-  
+
     <!-- LEADERBOARD MENU (Standalone View) -->
     <div id="leaderboard-menu" class="menu-container hidden">
       <!-- The leaderboard container and its contents will be moved here by JS -->

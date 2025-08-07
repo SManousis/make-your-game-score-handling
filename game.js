@@ -29,6 +29,7 @@ const mainMenu = document.getElementById('main-menu');
 const pauseMenu = document.getElementById('pause-menu');
 const scoreElement = document.getElementById('score');
 const livesElement = document.getElementById('lives');
+const powerupText = document.getElementById('powerup-text');
 const gameOverMenu = document.getElementById('game-over-menu');
 const helpMenu = document.getElementById('help-menu');
 const mainHelpButton = document.getElementById('main-help-button');
@@ -145,7 +146,7 @@ export const audio = {
         health: "./assets/audio/health.wav",
         lazer_short: "./assets/audio/lazer_short.wav",
         lazer: "./assets/audio/lazer.wav",
-        loose_life: "./assets/audio/loose_life.wav",
+        lose_life: "./assets/audio/lose_life.wav",
         swarm: "./assets/audio/swarm.wav",
         tick: "./assets/audio/time_tick.wav",
         turtle_hit: "./assets/audio/turtle_hit.wav",
@@ -312,6 +313,15 @@ export function triggerGameOver() {
     updateMenuVisibility();
 }
 
+export function lifeLostFanfare(){
+      if (audio.sounds) {
+         audio.manager.playSample("lose_life", { gain: audio.soundsVolume });
+    }
+     livesElement.classList.add('life-lost-flash');
+      setTimeout(() => {
+        livesElement.classList.remove('life-lost-flash');
+    }, 600);
+}
 
 //keeps track of which buttons are currently held down
 export const keysPressed = {
@@ -774,6 +784,17 @@ export function draw() {
 
     timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;
+
+ let indicators = [];
+    if (mario.bombs > 0) {
+        indicators.push(`B: ${mario.bombs}`);
+    }
+
+    if (mario.multibulletTimer > 0) {
+        indicators.push("U");
+    }
+      powerupText.textContent = indicators.join(' | ');
+
     MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
     MarioHealthBar.style.bottom = (mario.y + 90) + "px";
     if (mario.crouching) {
