@@ -14,7 +14,7 @@ const shootSandwichDebounce = utils.opDebounce(shootSandwich, 300, { leading: tr
 export function createVending(x = 1600, y = 270) {
     const vendingElement = document.createElement('img');
     vendingElement.className = 'vending-img';
-    vendingElement.src = 'assets/enemies/machine.png'
+    vendingElement.src = 'assets/enemies/machine.svg'
     gameArea.appendChild(vendingElement);
 
     //choose randomly between left and right
@@ -110,7 +110,7 @@ function vendingUpdate(vending) {
 
     vending.flySequence += 1
 
-    vending.dom.src = 'assets/enemies/vendingBoss.png'
+    vending.dom.src = 'assets/enemies/vendingBoss.svg'
 
     if (vending.flySequence < 100) {
         return

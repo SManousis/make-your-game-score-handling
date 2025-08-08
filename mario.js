@@ -353,22 +353,36 @@ mario.bullet_count=1
 
 
 
-    let grounded = physics.moveAndCollide(mario)
+   
 
 
     //don't allow mario to move past screen bounds
-        if (mario.x < 0) {
-            utils.setUnit(mario, 0, mario.y)
-        }
-        if (mario.x > gameArea.offsetWidth) {
-            utils.setUnit(mario, gameArea.offsetWidth, mario.y)
-        }
-        if (mario.y < 0) {
-            utils.setUnit(mario, mario.x, 0)
-        }
-        if (mario.y > gameArea.offsetHeight) {
-            utils.setUnit(mario, mario.x, gameArea.offsetHeight)
-        }
+if (mario.x <= 0) {
+    utils.setUnit(mario, 0, mario.y);
+    if (mario.velX < 0) { // Only kill velocity if moving INTO the wall
+        mario.velX = 0;
+    }
+}
+if (mario.x >= gameArea.offsetWidth) {
+    utils.setUnit(mario, gameArea.offsetWidth, mario.y);
+    if (mario.velX > 0) { // Only kill velocity if moving INTO the wall
+        mario.velX = 0;
+    }
+}
+if (mario.y < 0) {
+    utils.setUnit(mario, mario.x, 0);
+    if (mario.velY < 0) { // Only kill velocity if moving INTO the wall
+        mario.velY = 0;
+    }
+}
+
+// Top of screen check
+if (mario.y > gameArea.offsetHeight) {
+    utils.setUnit(mario, mario.x, gameArea.offsetHeight);
+    mario.velY = 0;
+}
+
+ let grounded = physics.moveAndCollide(mario)
 
     //if mario on the ground and jump button pressed
     if (keysPressed.space && grounded) {

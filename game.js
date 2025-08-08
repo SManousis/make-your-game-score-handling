@@ -715,6 +715,10 @@ let updateTimestamp = 0
 function update() {
     updateTimestamp = Date.now()
 
+        if (gameState.currentState === 'running') {
+        gameState.gameTime += 16.666666;
+    }
+
     if (gameState.currentState == 'paused' || gameState.currentState == 'gameOver'){
         return
     }

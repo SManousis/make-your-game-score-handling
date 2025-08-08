@@ -18,7 +18,7 @@ export function createTetro(x, y, index, row) {
     for (let i = 0; i < 4; i++){
         let a = document.createElement("img");
         a.className = "tetro-img";
-        a.src = "assets/enemies/tetris.png";
+        a.src = "assets/enemies/tetris.svg";
         parts.push(a)
     }
 
