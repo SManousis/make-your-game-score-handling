@@ -1,0 +1,91 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #0c0c27;
+    color: #ffffff;
+    text-align: center;
+    padding-top: 15vh;
+    overflow: hidden; 
+}
+
+.landing-container h1 {
+    font-size: 3.5em;
+    text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.3);
+}
+
+#play-game-btn {
+    padding: 18px 35px;
+    font-size: 1.6em;
+    cursor: pointer;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+#play-game-btn:hover {
+    background-color: #4a934a;
+}
+
+
+/* --- MODAL STYLES --- */
+
+#game-modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    align-items: center;
+    justify-content: center;
+}
+
+#game-modal.modal-visible {
+    display: flex;
+}
+
+/* The scaler is the element that gets transformed */
+.modal-scaler {
+    position: relative; 
+    transition: transform 0.2s ease-out;
+    /* The scaler itself has no size; it fits its content */
+}
+
+/* The game content area remains the same */
+.modal-content {
+    width: 1792px;
+    height: 1024px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+#game-frame {
+    width: 100%;
+    height: 100%;
+    border: 3px solid #ffffff;
+    box-sizing: border-box;
+}
+
+/* The close button is positioned relative to the scaler */
+.close-btn {
+    position: absolute;
+    /* Position it at the top-right corner of the scaler */
+    top: 0;
+    right: 0;
+    /* push it up by its own height to sit just above the game frame */
+    transform: translateY(-110%);
+    
+    color: #fff;
+    font-size: 45px;
+    font-weight: bold;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s ease-out;
+}
+
+.close-btn:hover {
+    color: #cccccc;
+    transform: translateY(-110%) scale(1.1); /* Slight zoom effect on hover */
+}

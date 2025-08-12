@@ -15,11 +15,8 @@ body {
   background-position: center;
   position: relative;
   overflow: hidden;
-  margin-top: 100px;
-  margin-left: auto;
-  margin-right: auto;
-  transform: scale(0.8);
-  transform-origin: top center;
+ margin:0;
+ transform:none;
 
   display: flex;
   flex-direction: column;

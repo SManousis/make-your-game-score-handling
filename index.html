@@ -1,169 +1,29 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-  <title>Space Invaders</title>
-  <link rel="stylesheet" href="style.css">
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Mario vs Space Invaders - Welcome!</title>
+    <img src="assets/backgrounds/banner-black.png" alt="El Mario vs Space Invaders">
+    <link rel="stylesheet" href="landing.css">
 </head>
-
 <body>
-  <!--GAME AREA-->
-  <div id="game-area" tabindex="0">
-    <div id="score">Score: 0</div>
-    <div id="lives">Lives: 5</div>
-    <div id="powerup-indicators">
-      <span id="powerup-text"></span>
-    </div>
-    <div id="time-counter">Time: 0:00</div>
-    <div id="mario-healthBar-container">
-      <div id="mario-healthBar"></div>
-    </div>
-    <div id="mario-img-cont">
-
-      <img class="mario-img" id="mario-legs0" src="assets/mario/legs0.svg"></img>
-      <img class="mario-img" id="mario-legs1" src="assets/mario/legs1.svg"></img>
-      <img class="mario-img" id="mario-legs2" src="assets/mario/legs2.svg"></img>
-      <img class="mario-img" id="mario-legs3" src="assets/mario/legs3.svg"></img>
-      <img class="mario-img" id="mario-legs-crouch" src="assets/mario/legs_crouch.svg"></img>
-      <img class="mario-img" id="mario-legs-jump" src="assets/mario/legs_jump.svg"></img>
-      <img class="mario-img" id="mario-legs-falling" src="assets/mario/legs_falling.svg"></img>
-      <img class="mario-img" id="mario-body-forward" src="assets/mario/body_forward.svg"></img>
-      <img class="mario-img" id="mario-body-up" src="assets/mario/body_up.svg"></img>
-      <img class="mario-img" id="mario-body-crouch-forward" src="assets/mario/body_crouch_forward.svg"></img>
-      <img class="mario-img" id="mario-body-crouch-up" src="assets/mario/body_crouch_up.svg"></img>
-      <img class="mario-img" id="mario-dead-body" src="assets/mario/mario_dead.svg"></img>
+    <div class="landing-container">
+      
+        <button id="play-game-btn">Play Game</button>
     </div>
 
-    <div id="debug-visuals"></div>
-    <div id="spaceship"></div>
-    <div id="mario"></div>
-    <!--MAIN MENU-->
-    <div id="main-menu" class="menu-container">
-      <h2> El Mario vs Space Invaders</h2>
-      <button id="play-button">Play</button>
-      <button id="leaderboard-button">Leaderboard</button>
-      <button id="main-help-button">Help</button>
-
-      <label class="switch-label">
-        <span>Music</span>
-        <label class="switch">
-          <input type="checkbox" id="music-toggle-main" checked>
-          <span class="slider"></span>
-        </label>
-      </label>
-
-      <label for="music-slider-main">Music Volume</label>
-      <input type="range" id="music-slider-main" min="0" max="1" step="0.01" value="0.2">
-
-      <label class="switch-label">
-        <span>Sounds</span>
-        <label class="switch">
-          <input type="checkbox" id="sounds-toggle-main" checked>
-          <span class="slider"></span>
-        </label>
-      </label>
-
-      <label for="sounds-slider-main">Sounds Volume</label>
-      <input type="range" id="sounds-slider-main" min="0" max="1" step="0.01" value="0.1">
-    </div>
-
-    <!--PAUSE MENU-->
-    <div id="pause-menu" class="menu-container hidden">
-      <h2>Paused</h2>
-      <button id="resume-button">Resume</button>
-      <button id="restart-button">Restart</button>
-      <button id="back-to-menu-button">Back to Menu</button>
-      <button id="pause-help-button">Help</button>
-      <label class="switch-label">
-        <span>Music</span>
-        <label class="switch">
-          <input type="checkbox" id="music-toggle-pause" checked>
-          <span class="slider"></span>
-        </label>
-      </label>
-      <label for="music-slider-pause">Music Volume</label>
-      <input type="range" id="music-slider-pause" min="0" max="1" step="0.01" value="0.2">
-
-      <label class="switch-label">
-        <span>Sounds</span>
-        <label class="switch">
-          <input type="checkbox" id="sounds-toggle-pause" checked>
-          <span class="slider"></span>
-        </label>
-      </label>
-      <!-- <button id="play-sounds-button-pause"> Play Sounds </button> -->
-      <label for="sounds-slider-pause">Sounds Volume</label>
-      <input type="range" id="sounds-slider-pause" min="0" max="1" step="0.01" value="0.1">
-    </div>
-
-    <!--GAME OVER MENU-->
-    <div id="game-over-menu" class="menu-container hidden">
-      <h2>Game Over</h2>
-
-      <div class="game-over-stats">
-        <p>Final Score: <span id="final-score">0</span></p>
-        <p>Time Elapsed: <span id="final-time">0:00</span></p>
-        <p id="player-rank-info"></p>
-      </div>
-
-      <div class="submit-score-container">
-        <input type="text" id="player-name-input" placeholder="Enter your name" maxlength="15">
-        <button id="submit-score-button">Submit Score</button>
-      </div>
-
-      <div id="leaderboard-container" class="hidden">
-        <h3>Leaderboard</h3>
-        <table id="leaderboard-table">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Name</th>
-              <th>Score</th>
-              <th>Time</th>
-            </tr>
-          </thead>
-          <tbody id="leaderboard-body">
-            <!-- Score rows will be dynamically inserted here by JavaScript -->
-          </tbody>
-        </table>
-        <div id="pagination-controls">
-          <button id="leaderboard-prev-button"><-< /button>
-              <span id="pagination-info">Page 1 / 1</span>
-              <button id="leaderboard-next-button">-></button>
+    <!-- The Modal -->
+    <div id="game-modal">
+        <!-- This div will be scaled, containing both the game and the button -->
+        <div class="modal-scaler">
+            <span class="close-btn">&times;</span>
+            <div class="modal-content">
+                <iframe id="game-frame" src="game.html" frameborder="0"></iframe>
+            </div>
         </div>
-      </div>
-
-      <button id="restart-button">Restart</button>
-      <button id="back-to-menu-button">Back to Menu</button>
     </div>
 
-
-    <!-- HELP MENU -->
-    <div id="help-menu" class="menu-container hidden">
-      <h2>Controls</h2>
-      <ul class="controls-list">
-        <li><strong>Arrow Keys</strong>: Move Left & Right</li>
-        <li><strong>Spacebar</strong>: Jump</li>
-        <li><strong>F</strong>: Fire a single shot</li>
-        <li><strong>A</strong>: Toggle Autofire</li>
-        <li><strong>U</strong>: Use Double Bullets (Power-up)</li>
-        <li><strong>B</strong>: Drop bomb</li>
-        <li><strong>P</strong>: Pause / Resume Game</li>
-      </ul>
-      <button id="back-from-help-button">Back</button>
-    </div>
-
-    <!-- LEADERBOARD MENU (Standalone View) -->
-    <div id="leaderboard-menu" class="menu-container hidden">
-      <!-- The leaderboard container and its contents will be moved here by JS -->
-      <button id="back-from-leaderboard-button">Back to Main Menu</button>
-    </div>
-  </div>
-
-
-  <script type="module" src="game.js"></script>
+    <script src="landing.js"></script>
 </body>
-
 </html>
