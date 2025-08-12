@@ -89,3 +89,11 @@ body {
     color: #cccccc;
     transform: translateY(-110%) scale(1.1); /* Slight zoom effect on hover */
 }
+
+.banner-img {
+    max-width: 1000px;  
+    width: 100%;       
+    height: auto;      
+    display: block;
+    margin: 0 auto 4rem auto;    
+}
