@@ -453,7 +453,7 @@ export function marioShoot() {
                 "player",
                 'bullet',
                 mario.x - 40,
-                mario.y + yCorrection + offset, // Apply spread on Y
+                mario.y + yCorrection + offset +20, // Apply spread on Y
                 14,
                 8
             );
@@ -466,7 +466,7 @@ export function marioShoot() {
                 "player",
                 'bullet',
                 mario.x + 40,
-                mario.y + yCorrection + offset, // Apply spread on Y
+                mario.y + yCorrection + offset +20, // Apply spread on Y
                 14,
                 8
             );

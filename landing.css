@@ -57,7 +57,7 @@ body {
 /* The game content area remains the same */
 .modal-content {
     width: 1792px;
-    height: 1024px;
+    height: 1010px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
