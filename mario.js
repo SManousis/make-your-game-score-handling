@@ -286,12 +286,12 @@ mario.bullet_count=1
     //     keysPressed.upgrade = false
     // }
 
-    if (keysPressed.right) {
-        mario.lookingDir = "right"
-        mario.aimDirection = "right"
-    } else if (keysPressed.left) {
+    if (keysPressed.left) {
         mario.lookingDir = "left"
         mario.aimDirection = "left"
+    } else if (keysPressed.right) {
+        mario.lookingDir = "right"
+        mario.aimDirection = "right"
     }
 
     if (keysPressed.up) {
@@ -323,7 +323,7 @@ mario.bullet_count=1
         }
     }
 
-    if (keysPressed.right && !mario.is && !keysPressed.down) {
+    if (keysPressed.right && !keysPressed.down) {
         if (mario.velX < mario.maxSpeed) {
             mario.velX += impulse
         }
