@@ -64,14 +64,6 @@ export function createCupid(x, y, index, row) {
 }
 
 
-// export function reset() {
-//     // Remove ghosts from allEntities
-//         for (const cupid of cupids) {
-//             utils.destroyUnit(cupid)
-//         }
-//         // Empty the ghosts array
-//         cupids.length = 0;
-// }
 
 
 //let  parallelmovecount = 0
@@ -152,8 +144,8 @@ export function cupidUpdate(cupid) {
             }
         }
     }
-    if (cupids.length > 0 && cupids[0].y <= 350) {
-        for (let cupid of cupids) {
+    if (cupids.length > 0 && gameState.cupids[0].y <= 350) {
+        for (let cupid of gameState.cupids) {
             cupid.kamikazeMode = true
         }
     }

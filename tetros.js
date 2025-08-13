@@ -1,10 +1,7 @@
 import * as utils from "./utils.js";
-import * as mario from './mario.js'
 import {  gameState,  updateScore } from './game.js'
 import { createExplosion } from "./explosion.js";
 
-
-export let tetros = [];
 
 export function createTetro(x, y, index, row) {
 
@@ -189,16 +186,16 @@ export function tetroUpdate(tetro) {
 
     utils.moveUnit(tetro, tetro.velX, tetro.velY)
 
-    if (tetros.length > 0 && tetros[0].y <= 350) {
-        for (let tetro of tetros) {
+    if (gameState.tetros.length > 0 && gameState.tetros[0].y <= 350) {
+        for (let tetro of gameState.tetros) {
             tetro.kamikazeMode = true
         }
     }
 
     if (tetro.kamikazeMode) {
-        utils.kamikaze(tetro, mario.mario);
+        utils.kamikaze(tetro, gameState.mario);
         utils.moveUnit(tetro, tetro.velX, tetro.velY);
-        if (utils.IsBodyCollidingWithUnit(tetro.body[0], mario.mario)){
+        if (utils.IsBodyCollidingWithUnit(tetro.body[0], gameState.mario)){
             createExplosion(tetro.x, tetro.y, "enemy", 100, 50)
             utils.destroyUnit(tetro)
         }

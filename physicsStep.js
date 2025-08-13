@@ -1,6 +1,7 @@
 
+import { gameState } from './game.js'
 import * as utils from './utils.js'
-import {walkables} from './tilesMap.js'
+
 
 
 //it will simulate the physics step of a unit, 
@@ -47,7 +48,7 @@ export function moveAndCollide(unit) {
 
 export function isUnitColliding(unit) {
     let largest = { vertical: 0, horizontal: 0 }
-    for (let walkable of walkables) {
+    for (let walkable of gameState.walkables) {
         for (let walkableBody of walkable.body) {
             for (let pointOffset of unit.physicsPointsOffsets) {
                 const result = utils.isPointCollidingWithBody(unit.x + pointOffset.x, unit.y + pointOffset.y, walkableBody, unit.velX, unit.velY)

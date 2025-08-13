@@ -1,5 +1,4 @@
 import * as utils from './utils.js'
-import * as walkables from './tilesMap.js'
 import { keysPressed, gameArea, gameState, audio, triggerGameOver, lifeLostFanfare } from './game.js'
 import * as physics from './physicsStep.js'
 import * as bullets from './bullets.js'
@@ -11,11 +10,12 @@ let fireCooldown = 0;
 
 
 //the character the player controls
-export function createMario(x = 500, y = 500) {
-    mario = {
+export function createMario(arr, x = 500, y = 500) {
+    console.log('creating mario function called!')
+    let mario = {
         name: "mario",
         health: 100,
-        maxhealth: 120, //how much health point he has, if it reaches 0 he dies!
+        maxHealth: 120, //how much health point he has, if it reaches 0 he dies!
         attack_damage: 10, //how damage marios bullets deal to enemies
         accel: 1, //how quickly accelerates in x axis
         maxSpeed: 10, //maximum running speed in x axis
@@ -23,9 +23,9 @@ export function createMario(x = 500, y = 500) {
         state: "standing", //crouch, standing, airborne, dead
         gravity: 0.8, //the speed that which he is pushed down while airborne
         drag: 1.2, //how much mario slows downs in x axis if he's not actively walking left or right
-        bullet_count: bullets, //how many bullets mario will fire
+        bullet_count: 1, //how many bullets mario will fire
         multibulletTimer: 0,
-        bombs: bombs,
+        bombs: 0,
         aimDirection: "left", //left, right, up
         velX: 0, //his current velocity in x axis
         velY: 0, //his current velocity in y axis
@@ -40,7 +40,7 @@ export function createMario(x = 500, y = 500) {
         body: [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0 - 30, 0 + 20, 30), utils.createCircle(0 + 30, 0 + 20, 30)], //his gameplay body represented in circles
         physicsPointsOffsets: [{ x: -20, y: 0 }, { x: 20, y: 0 }], //These points will be used
         drawFunc: function () { marioVisuals(this) }, //his visual representation in the game
-        updateFunc: marioUpdate,
+        updateFunc: function () { marioUpdate(this) },
         team: "player",
         dom: marioDiv,
         takeHitSounds: [
@@ -93,7 +93,7 @@ export function createMario(x = 500, y = 500) {
             switch (type) {
                 case 'health':
                     this.health += value;
-                    if (this.health > this.maxhealth) this.health = this.maxhealth;
+                    if (this.health > this.maxHealth) this.health = this.maxHealth;
 
                     break;
                 case 'bomb':
@@ -135,10 +135,9 @@ export function createMario(x = 500, y = 500) {
 
 
     }
-    gameState.allEntities.push(mario)
+    arr.push(mario)
+    return mario
 }
-
-utils.setUnit(mario, 500, 500)
 
 
 
@@ -226,10 +225,10 @@ export function marioVisuals(mario) {
 
 export function isMarioTouchingGround() {
     let largest = 0
-    for (let walkable of walkables) {
+    for (let walkable of gameState.walkables) {
         for (let walkableBody of walkable.body) {
-            const result1 = utils.isPointCollidingWithBody(mario.x - 20, mario.y, walkableBody).vertical
-            const result2 = utils.isPointCollidingWithBody(mario.x + 20, mario.y, walkableBody).vertical
+            const result1 = utils.isPointCollidingWithBody(gameState.mario.x - 20, gameState.mario.y, walkableBody).vertical
+            const result2 = utils.isPointCollidingWithBody(gameState.mario.x + 20, gameState.mario.y, walkableBody).vertical
             if (result1 != 0 || result2 != 0) {
                 largest = utils.largestMag(utils.largestMag(result1, result2), utils.largestMag(largest, 0))
             }
@@ -241,11 +240,11 @@ export function isMarioTouchingGround() {
 export function isMarioWalkingIntoGround() {
     let largestV = 0
     let largestH = 0
-    for (let walkable of walkables) {
+    for (let walkable of gameState.walkables) {
         for (let walkableBody of walkable.body) {
 
-            const result1 = utils.isPointCollidingWithBody(mario.x - 21, mario.y, walkableBody)
-            const result2 = utils.isPointCollidingWithBody(mario.x + 21, mario.y, walkableBody)
+            const result1 = utils.isPointCollidingWithBody(gameState.mario.x - 21, gameState.mario.y, walkableBody)
+            const result2 = utils.isPointCollidingWithBody(gameState.mario.x + 21, gameState.mario.y, walkableBody)
 
 
             if (result1.vertical != 0 || result2.vertical != 0) {
@@ -260,7 +259,7 @@ export function isMarioWalkingIntoGround() {
 }
 
 
-export function marioUpdate() {
+export function marioUpdate(mario) {
     if (mario.isInvincible) {
         mario.invincibilityTimer--;
         if (mario.invincibilityTimer <= 0) {
@@ -444,47 +443,47 @@ function getSpreadValues(count) {
 }
 
 export function marioShoot() {
-    const spreadValues = getSpreadValues(mario.bullet_count);
+    const spreadValues = getSpreadValues(gameState.mario.bullet_count);
 
 
     let yCorrection = 40;
-    if (mario.crouching) {
+    if (gameState.mario.crouching) {
         yCorrection = yCorrection - 22
     }
-    if (mario.aimDirection === 'left') {
+    if (gameState.mario.aimDirection === 'left') {
         for (const offset of spreadValues) {
             bullets.createBullet(
-                mario.aimDirection,
+                gameState.mario.aimDirection,
                 "player",
                 'bullet',
-                mario.x - 40,
-                mario.y + yCorrection + offset + 20, // Apply spread on Y
+                gameState.mario.x - 40,
+                gameState.mario.y + yCorrection + offset + 20, // Apply spread on Y
                 14,
                 8
             );
         }
 
-    } else if (mario.aimDirection === 'right') {
+    } else if (gameState.mario.aimDirection === 'right') {
         for (const offset of spreadValues) {
             bullets.createBullet(
-                mario.aimDirection,
+                gameState.mario.aimDirection,
                 "player",
                 'bullet',
-                mario.x + 40,
-                mario.y + yCorrection + offset + 20, // Apply spread on Y
+                gameState.mario.x + 40,
+                gameState.mario.y + yCorrection + offset + 20, // Apply spread on Y
                 14,
                 8
             );
         }
 
-    } else if (mario.aimDirection === 'up') {
+    } else if (gameState.mario.aimDirection === 'up') {
         for (const offset of spreadValues) {
             bullets.createBullet(
-                mario.aimDirection,
+                gameState.mario.aimDirection,
                 "player",
                 'bullet',
-                mario.x + offset, // Apply spread on X
-                mario.y + 100,
+                gameState.mario.x + offset, // Apply spread on X
+                gameState.mario.y + 100,
                 14,
                 8
             );
@@ -495,9 +494,9 @@ export function marioShoot() {
 export function updateMarioHealthBar(current, max) {
     const healthBar = Math.max(0, current / max) * 100
     document.getElementById('mario-healthBar').style.width = healthBar + '%'
-    if (mario.health <= 20) {
+    if (gameState.mario.health <= 20) {
         document.getElementById('mario-healthBar').style.background = '#f00';
-    } else if (mario.health <= 40) {
+    } else if (gameState.mario.health <= 40) {
         document.getElementById('mario-healthBar').style.background = '#ff0';
     } else {
         document.getElementById('mario-healthBar').style.background = '#0f0';

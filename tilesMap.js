@@ -1,3 +1,4 @@
+import { gameState } from './game.js';
 import {Tiles} from './Tiles.js'
 import { createRect } from './utils.js';
 

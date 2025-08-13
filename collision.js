@@ -1,7 +1,6 @@
-import * as bullets from './bullets.js'
 import * as utils from './utils.js'
 import * as game from './game.js'
-import * as powerups from './powerups.js'
+
 
 
 export function isShot(entity) {
@@ -30,7 +29,7 @@ export function isShot(entity) {
 
 export function inAoe(unit) {
 
-    for (const aoe of game.aoeDamage) {
+    for (const aoe of game.gameState.aoeDamage) {
         if (aoe.active == false || aoe.team == unit.team) {
             console.log("skipping: ", aoe.name, aoe.team == unit.team, aoe.active == false)
             continue
@@ -51,7 +50,7 @@ export function inAoe(unit) {
 }
 
 export function powerUpPicked(entity) {
-    for (const powerUp of powerups.powerUps) {
+    for (const powerUp of game.gameState.powerUps) {
         if (powerUp.disabled) continue;
         // console.log("Checking collision between:", entity, "and", candy);
         if (collisionCheck(entity, powerUp)) {
@@ -69,24 +68,6 @@ export function powerUpPicked(entity) {
 }
 
 
-// export function MarioCollision() {
-//     for (const bullet of bullets.allBullets) {
-//         if (bullet.disabled) continue;
-//         if (collisionCheck(mario.mario, bullet)) {
-//             console.log("bullet touched mario")
-//             bullet.disabled = true
-//             bullet.body.forEach(body => body.div.remove())
-//             bullet.dom.remove()
-//             mario.mario.health -= bullet.damage
-//             if (mario.mario.health <= 0) {
-//                 mario.mario.disabled = true
-//                 game.gameState.currentState = 'gameOver'
-//                 game.updateMenuVisibility();
-//                 console.log("mario died")
-//             }
-//         }
-//     }
-// }
 
 export function collisionCheck(entit1, entit2) {
     // Optionally skip if on the same team

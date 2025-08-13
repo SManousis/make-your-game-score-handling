@@ -2,8 +2,6 @@ import * as utils from "./utils.js";
 import * as game from "./game.js";
 import * as physics from "./physicsStep.js";
 
-export let powerUps = [];
-
 
 export function createPowerUp(x, y, value=0, type="health", graphic="healthCandy") {
     let powerUpBody = document.createElement("img");

@@ -1,6 +1,5 @@
 import * as utils from './utils.js'
-import { mario } from './mario.js'
-import { updateScore, groundedEnemies } from './game.js'
+import { updateScore } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
 
 //turtle spawning
@@ -71,7 +70,7 @@ function turtleUpdate(turtle) {
 
     if (turtle.state === 'walking') {
         //follow Mario
-        let dx = mario.x - turtle.x;
+        let dx = gameState.mario.x - turtle.x;
 
 
         if (dx > 0) {
@@ -87,7 +86,7 @@ function turtleUpdate(turtle) {
         //check for other turtles in the way
         const detectionDistance = turtle.width * 0.8
 
-        for (const groundedEnemy of groundedEnemies) {
+        for (const groundedEnemy of gameState.groundedEnemies) {
             if (groundedEnemy === turtle || Math.abs(groundedEnemy.y - turtle.y) > 1) continue;
 
             if (turtle.velX > 0 && groundedEnemy.x > turtle.x) {
@@ -125,26 +124,26 @@ function turtleUpdate(turtle) {
 
     let isColliding = false;
     for (const BodyPart of turtle.body) {
-        if (utils.IsBodyCollidingWithUnit(BodyPart, mario)) {
+        if (utils.IsBodyCollidingWithUnit(BodyPart, gameState.mario)) {
             isColliding = true;
             break;
         }
     }
 
     if (turtle.state === 'walking' && isColliding) {
-        // console.log("mar.y", mario.y, "turt.y", (turtle.y + (turtle.height / 1.5)))
+        // console.log("mar.y", gameState.mario.y, "turt.y", (turtle.y + (turtle.height / 1.5)))
         //check if collision was Mario jumping on turtle
-        if (mario.y > (turtle.y + 20)) {
+        if (gameState.mario.y > (turtle.y + 20)) {
 
             console.log("turtle disabled")
             turtle.state = "disabled"
-            mario.velY = 12;
+            gameState.mario.velY = 12;
             updateScore(turtle.scoreValue);
             utils.destroyUnit(turtle, 300)
         } else {
             console.log("Mario was hurt by a turtle")
             //inflict damage on Mario
-            mario.takeDamage(turtle.damage, turtle, "turtle_hit")
+            gameState.mario.takeDamage(turtle.damage, turtle, "turtle_hit")
         }
     }
 

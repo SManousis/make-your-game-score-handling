@@ -1,11 +1,10 @@
 // Static vending machine. Feels colide
 // Spits random items
 import * as utils from './utils.js';
-import { gameArea, gameState, allEntities, audio, updateScore } from './game.js';
+import { gameArea, gameState, audio, updateScore } from './game.js';
 import { shootSandwich } from './sandwich.js'
 import { createBomb } from './explosion.js';
 import { createBullet } from './bullets.js';
-import { mario } from './mario.js';
 
 const shootSandwichDebounce = utils.opDebounce(shootSandwich, 300, { leading: true })
 
@@ -174,9 +173,9 @@ function vendingUpdate(vending) {
 
             case 'homing': //lazers towards mario
                 if (vending.attackCounter % 30 == 0) {
-                    createBullet('target', 'enemy', 'sandwich', vending.x, vending.y, 10, 10, mario.x, mario.y)
-                    createBullet('target', 'enemy', 'sandwich', vending.x - 20, vending.y, 10, 10, mario.x - 200 - (Math.random() * 30), mario.y)
-                    createBullet('target', 'enemy', 'sandwich', vending.x + 20, vending.y, 10, 10, mario.x + 200 + (Math.random() * 30), mario.y)
+                    createBullet('target', 'enemy', 'sandwich', vending.x, vending.y, 10, 10, gameState.mario.x, gameState.mario.y)
+                    createBullet('target', 'enemy', 'sandwich', vending.x - 20, vending.y, 10, 10, gameState.mario.x - 200 - (Math.random() * 30), gameState.mario.y)
+                    createBullet('target', 'enemy', 'sandwich', vending.x + 20, vending.y, 10, 10, gameState.mario.x + 200 + (Math.random() * 30), gameState.mario.y)
                 }
                 if (vending.attackCounter == 400) {
                     vending.attackCounter = 0

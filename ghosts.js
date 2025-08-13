@@ -2,7 +2,6 @@ import * as utils from "./utils.js";
 import { gameState, updateScore } from './game.js'
 import * as bullets from './bullets.js'
 
-export let ghosts = [];
 
 export function createGhost(x, y, index, row) {
     let ghostBody = document.createElement("img");
@@ -56,14 +55,6 @@ export function createGhost(x, y, index, row) {
 }
 
 
-// export function reset() {
-//     // Remove ghosts from allEntities
-//     for (const ghost of ghosts) {
-//         utils.destroyUnit(ghost)
-//     }
-//     // Empty the ghosts array
-//     ghosts.length = 0;
-// }
 
 //let  parallelmovecount = 0
 

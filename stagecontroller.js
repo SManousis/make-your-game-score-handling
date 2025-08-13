@@ -1,10 +1,10 @@
 import { spawnCicada } from "./cicadas.js"
 import { spawnTurtle } from "./turtles.js"
-import { createCupid, cupids } from "./cupids.js"
+import { createCupid } from "./cupids.js"
 import { createVending } from "./vending.js"
-import { gameState,  currentGameGen } from "./game.js"
-import { createFlower, flowers } from "./flowers.js"
-import { tetros, createTetro } from "./tetros.js"
+import { gameState } from "./game.js"
+import { createFlower } from "./flowers.js"
+import { createTetro } from "./tetros.js"
 
 
 const gameArea = document.getElementById('game-area')
@@ -20,12 +20,12 @@ export async function stage1(gameGen) {
     // await waitForCondition(() => !gameState.allEntities.includes(unicorn), 3000);
     // if (abortStage(gameGen)) return;
 
-    await spawnSwarm(20, createFlower, 5, 200, flowers, 400, 0, 3000);
+    await spawnSwarm(20, createFlower, 5, 200, gameState.flowers, 400, 0, 3000);
     if (abortStage(gameGen)) return;
 
     
 
-    await spawnSwarm(30, createTetro, 5, 200, tetros, 400, 2300);
+    await spawnSwarm(30, createTetro, 5, 200, gameState.tetros, 400, 2300);
     if (abortStage(gameGen)) return;
 
     await sleep(1000);
@@ -34,7 +34,7 @@ export async function stage1(gameGen) {
     const turt1 = addEvent(() => startSpawner("left", 0, 0, spawnTurtle, 1), 500);
     const turt2 = addEvent(() => startSpawner("right", 0, 0, spawnTurtle, 1), 433);
 
-    await spawnSwarm(10, createCupid, 5, 500, cupids);
+    await spawnSwarm(10, createCupid, 5, 500, gameState.cupids);
     if (abortStage(gameGen)) return;
 
     await sleep(1000);
@@ -43,7 +43,7 @@ export async function stage1(gameGen) {
     const turt3 = addEvent(() => startSpawner("topleft", 0, 0, spawnTurtle, 1), 422);
     const turt4 = addEvent(() => startSpawner("topright", 0, 0, spawnTurtle, 1), 366);
 
-    await spawnSwarm(20, createCupid, 10, 400, cupids);
+    await spawnSwarm(20, createCupid, 10, 400, gameState.cupids);
     if (abortStage(gameGen)) return;
 
     removeEvent(turt1);
@@ -57,7 +57,7 @@ export async function stage1(gameGen) {
     const c1 = addEvent(() => startSpawner("left", 0, 0, spawnCicada, 1), 350);
     const c2 = addEvent(() => startSpawner("right", 0, 0, spawnCicada, 1), 433);
 
-    await spawnSwarm(40, createCupid, 20, 300, cupids);
+    await spawnSwarm(40, createCupid, 20, 300, gameState.cupids);
     if (abortStage(gameGen)) return;
 
     await sleep(1000);
@@ -66,7 +66,7 @@ export async function stage1(gameGen) {
     const c3 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada, 1), 220);
     const c4 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada, 1), 333);
 
-    await spawnSwarm(80, createCupid, 25, 200, cupids);
+    await spawnSwarm(80, createCupid, 25, 200, gameState.cupids);
     if (abortStage(gameGen)) return;
 
     await sleep(3000);
@@ -80,7 +80,7 @@ export async function stage1(gameGen) {
     await sleep(1000);
     if (abortStage(gameGen)) return;
 
-    await spawnSwarm(160, createCupid, 35, 100, cupids);
+    await spawnSwarm(160, createCupid, 35, 100, gameState.cupids);
     if (abortStage(gameGen)) return;
 
     await sleep(1000);
@@ -106,7 +106,7 @@ export async function stage3(gameGen) {
 
 
 function abortStage(gameGen) {
-    if (gameGen !== currentGameGen) {
+    if (gameGen !== gameState.currentGameGen) {
         removeAllEvents()
         return true
     }

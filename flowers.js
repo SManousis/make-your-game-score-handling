@@ -94,8 +94,8 @@ export function flowerUpdate(flower) {
         let bullet = bullets.createBullet("target", "enemy", 'sphere', flower.x, flower.y, 9, 20, gameState.mario.x, gameState.mario.y+40)
     }
 
-    if (flowers.length > 0 && flowers[0].y <= 350) {
-        for (let flower of flowers) {
+    if (gameState.flowers.length > 0 && gameState.flowers[0].y <= 350) {
+        for (let flower of gameState.flowers) {
             flower.kamikazeMode = true
         }
     }

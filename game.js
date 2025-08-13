@@ -1,13 +1,14 @@
-import { mario, marioShoot, updateMarioHealthBar } from './mario.js'
+import { createMario, marioShoot, updateMarioHealthBar } from './mario.js'
 //import * as floaters from './floaters.js'
 //import * as walkables from './walkables.js'
 import * as collision from './collision.js'
-import { stage1, stageControllerTicker, removeEvent, addEvent, eventQueue, stage2, stage3 } from './stagecontroller.js'
+import { stage1, stageControllerTicker, eventQueue, stage2, stage3 } from './stagecontroller.js'
 import * as utils from "./utils.js"
-import { createBomb, createExplosion } from './explosion.js'
+import { createBomb } from './explosion.js'
 import { AudioManager, xToPan } from './audio.js'
 import { Tiles } from './Tiles.js'
 import { stage1Map, renderTileMap, stage2Map, stage3Map } from './tilesMap.js'
+import { cinematicTicker } from './cinematics.js'
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -158,7 +159,7 @@ export const audio = {
 }
 
 //master
-export let gameState = {}
+export let gameState = undefined
 
 
 
@@ -195,9 +196,13 @@ export function updateMenuVisibility() {
 
 
 function restartGame() {
+    console.log("RESTART CALLED")
+    throw Error("WTF")
+    return
+
     //TODO delete everything under stage-resources
 
-    currentGameGen++; // In
+    gameState.currentGameGen++; // In
 
     // suppressing destroy sounds for restart
     let soundsTemp = audio.sounds;
@@ -343,7 +348,8 @@ playButton.addEventListener('click', async () => {
         restartGame()
         endGame = false;
     } else {
-        gameState.currentState = 'running';
+
+        startStorymode()
         updateMenuVisibility();
     }
 });
@@ -374,6 +380,7 @@ resumeButton.addEventListener('click', () => {
     } else {
         audio.manager.stopMusic();
     }
+
 
     gameState.currentState = 'running';
     updateMenuVisibility();
@@ -557,6 +564,7 @@ document.addEventListener('keydown', (event) => {
             if (audio.sounds) audio.manager.killSamples();
 
         } else if (gameState.currentState === 'paused') {
+         
             gameState.currentState = 'running';
 
             if (audio.music) {
@@ -588,7 +596,7 @@ document.addEventListener('keydown', (event) => {
 
 
     if (event.key.toLocaleLowerCase() === 'f' && !fireState.isFiring) {
-       
+
         if (keysPressed.autofire) return;
 
         fireState.isFiring = true;
@@ -610,12 +618,12 @@ document.addEventListener('keydown', (event) => {
 
     if (event.key === 'ArrowLeft') {
         keysPressed.left = true;
-       
+
     }
 
     if (event.key === 'ArrowRight') {
         keysPressed.right = true;
-        
+
     }
 
     if (event.key === 'ArrowUp') {
@@ -626,7 +634,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowDown') {
         keysPressed.down = true;
     }
-   // let space = keysPressed.space;
+    // let space = keysPressed.space;
     if (event.key === ' ' || event.code === 'Space') {
         keysPressed.space = true
     }
@@ -675,53 +683,65 @@ document.addEventListener('keyup', (event) => {
 });
 
 
+let stop = false
 
 // The main game loop
 async function GameLoop() {
-    console.log(gameState.currentState)
-    if (gameState.currentState === 'running' && gameState.mapLoaded == false) {
+    if (!stop) {
+        requestAnimationFrame(GameLoop);
+    }
 
-        if (gameState = {}){
+
+
+    if (gameState == undefined) {
+        return
+    }
+   
+    if (gameState.currentState === 'running' && gameState.mapLoaded == false) {
+        console.log("loading game state")
+        if (gameState == undefined) {
             gameState = createNewGameState()
+        }
+
+        if (gameState.mario == undefined) {
+            stop = true
         }
 
         gameState.mario.health = gameState.mario.maxHealth
         gameState.mario.x = 500
         gameState.mario.y = 500
-        
-        const newGameState = createNewGameState()
-        
-        newGameState.mario = gameState.mario
-        newGameState.score = gameState.score
-        newGameState.lives = gameState.lives
-        newGameState.gameTime = gameState.gameTime
-        newGameState.level = gameState.level
 
-        gameState = newGameState
+        gameState = createNewGameState(gameState)
+        gameState.currentState = 'running'
 
-        //soft reset game state
 
         switch (gameState.level) {
             case 1:
+
                 renderTileMap(stage1Map());
-                stage1(currentGameGen)
+                stage1(gameState.currentGameGen)
                 break;
 
             case 2:
                 renderTileMap(stage2Map());
-                stage2(currentGameGen)
+                stage2(gameState.currentGameGen)
                 break;
 
             case 3:
                 renderTileMap(stage3Map());
-                stage3(currentGameGen)
+                stage3(gameState.currentGameGen)
                 break;
         }
+        gameState.mapLoaded = true
     }
 
 
     if (gameState.currentState === 'running') {
-        const count = Math.round((Date.now() - updateTimestamp) / 16.66666)
+        
+        if (updateTimestamp == 0){
+            updateTimestamp = Date.now()-16.666
+        }
+        const count = Math.min(10, Math.round((Date.now() - updateTimestamp) / 16.66666))
         for (let i = 0; i < count; i++) {
             update();
         }
@@ -740,8 +760,6 @@ async function GameLoop() {
         if (unit.dom) unit.dom.remove();
     }
     queueFree.length = 0
-
-    requestAnimationFrame(GameLoop);
 }
 
 let updateCounter = 0
@@ -769,7 +787,7 @@ function update() {
 
     //running all entities' update function
     for (let entity of gameState.allEntities) {
-        if (aoeDamage.length > 0 && (entity.team == 'enemy' || entity.team == 'player') && Object.hasOwn(entity, 'health')) {
+        if (gameState.aoeDamage.length > 0 && (entity.team == 'enemy' || entity.team == 'player') && Object.hasOwn(entity, 'health')) {
             collision.inAoe(entity)
         }
 
@@ -786,7 +804,7 @@ function update() {
 
     gameState.frameCounter++
 
-    
+
 
     stageControllerTicker()
 
@@ -857,9 +875,8 @@ export function draw() {
 
 }
 
-updateMenuVisibility();
 
-updateTimestamp = Date.now() - 16.66
+
 GameLoop();
 
 
@@ -875,15 +892,13 @@ function startStorymode(firstTime = false) {
 export const queueFree = []
 export const gameArea = document.getElementById('game-area')
 
-function createNewGameState(){
-  
-    
-    state = {
-        mario: createMario(),
-        score: 0,
-        lives: 5,
-        gameTime: 0,
-        level: 0,
+function createNewGameState(oldState = undefined) {
+    let state = {
+        mario: oldState ? oldState.mario : {},
+        score: oldState ? oldState.score : 0,
+        lives: oldState ? oldState.lives : 5,
+        gameTime: oldState ? oldState.gameTime : 0,
+        level: oldState ? oldState.level : 0,
 
         //non persisting
         stageCinematicCounter: 0, //counter used by cinematicTicker to control the speed that cinematics play out
@@ -902,16 +917,22 @@ function createNewGameState(){
         walkables: [],
         ghosts: [],
         unicorns: [],
-        aoeDamage: [],
         flowers: [],
         tetros: [],
         allGroups: [],
         currentGameGen: 0,
     }
 
-    state.allGroups = [state.allEntities, state.groundedEnemies, state.aoeDamage, state.allBullets, state.cicadas, state.cupids, state.turtles, state.powerUps, state.walkables, state.ghosts, state.unicorns, state.aoeDamage, state.flowers, state.tetros]
+    state.allGroups = [state.allEntities, state.groundedEnemies, state.aoeDamage, state.allBullets, state.cicadas, state.cupids, state.turtles, state.powerUps, state.walkables, state.ghosts, state.unicorns, state.flowers, state.tetros]
+
+    if (oldState == undefined) {
+        state.mario = createMario(state.allEntities)
+    }else{
+        state.allEntities.push(state.mario)
+    }
+
+
 
     return state
 }
 
-startStorymode(true)

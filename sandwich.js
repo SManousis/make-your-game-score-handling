@@ -1,6 +1,5 @@
 import * as utils from './utils.js'
 import { gameState } from './game.js';
-import { mario } from './mario.js';
 import { moveAndCollide } from './physicsStep.js';
 
 export function shootSandwich(dir, vendX, vendY) {
@@ -57,11 +56,11 @@ function sandwichUpdate(newSandwich) {
     }
 
     for (const BodyPart of newSandwich.body) {
-        if (utils.IsBodyCollidingWithUnit(BodyPart, mario)) {
+        if (utils.IsBodyCollidingWithUnit(BodyPart, gameState.mario)) {
             if (newSandwich.state === 'friend') {
-                mario.applyPowerUp("health", newSandwich.damage, "catching_sandwich")
+                gameState.mario.applyPowerUp("health", newSandwich.damage, "catching_sandwich")
             } else {
-                mario.takeDamage(newSandwich.damage, newSandwich.x, "turtle_hit")
+                gameState.mario.takeDamage(newSandwich.damage, newSandwich.x, "turtle_hit")
             }
             removeSandwich(newSandwich);
             return;

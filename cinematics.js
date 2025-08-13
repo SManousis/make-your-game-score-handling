@@ -1,7 +1,9 @@
 let i = 0
 
 //based on gamestate it will understand what cinematic to play
-function cinematicTicker(gamestate){
+export function cinematicTicker(gamestate){
+    console.log("cin ticker")
+
     gamestate.stageCinematicCounter++
     
     i = gamestate.stageCinematicCounter
@@ -10,9 +12,11 @@ function cinematicTicker(gamestate){
         case 0:
 
             //todo, play music, voice over and mutate text
-
+            
+            console.log("i: ",i, activePanel)
             if (i == 60){
-                show(p1.jpg)
+                i = 500
+                show("p1.jpg")
                 opacity = 0
                 opacityDir = 'up'
             }
@@ -21,8 +25,10 @@ function cinematicTicker(gamestate){
                 opacityDir = 'down'
             }
 
-            if ( i = 500){
+            if ( i == 500){
+                console.log("0")
                 gamestate.currentState = 'running'
+                gamestate.level = 1
                 activePanel.remove()
                 gamestate.stageCinematicCounter = 0
                 opacityDir = ''
@@ -30,11 +36,13 @@ function cinematicTicker(gamestate){
 
             if (opacityDir == 'up'){
                 opacity += 1
+                opacity = Math.min(100, opacity)
             } else if (opacityDir = 'down'){
-                opacity -= 1 
+                opacity -= 1
+                opacity = Math.max(0, opacity)
             }
             if (activePanel != undefined){
-                activePanel.style.opacity = opacity+'px'
+                activePanel.style.opacity = `${opacity}%`
             }
 
             break;
@@ -46,9 +54,13 @@ let opacity = 0
 let opacityDir = ''
 
 function show(panelName){
+    console.log("show called")
     let p = document.createElement('img')
-    p.classList.add('cinematic-panel')
-    p.style.src = `assets/cinematics/${panelName}`
+    p.className = 'cinematic-panel'
+    p.src = `assets/cinematics/${panelName}`
+    console.log(p.style.src)
     document.getElementById('game-area').appendChild(p)
+    activePanel = p
+    console.log(activePanel)
 }
 

@@ -147,8 +147,8 @@ if (Math.random() < 0.02) {
             unicorn.y,      
             5,              
             10,             
-            mario.mario.x,  
-            mario.mario.y   
+            gameState.mario.x,  
+            gameState.mario.y   
         );
     }
 }
