@@ -588,6 +588,8 @@ document.addEventListener('keydown', (event) => {
 
 
     if (event.key.toLocaleLowerCase() === 'f' && !fireState.isFiring) {
+       
+        if (keysPressed.autofire) return;
 
         fireState.isFiring = true;
 
@@ -608,10 +610,12 @@ document.addEventListener('keydown', (event) => {
 
     if (event.key === 'ArrowLeft') {
         keysPressed.left = true;
+       
     }
 
     if (event.key === 'ArrowRight') {
         keysPressed.right = true;
+        
     }
 
     if (event.key === 'ArrowUp') {
@@ -622,7 +626,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowDown') {
         keysPressed.down = true;
     }
-    let space = keysPressed.space;
+   // let space = keysPressed.space;
     if (event.key === ' ' || event.code === 'Space') {
         keysPressed.space = true
     }
@@ -648,9 +652,6 @@ document.addEventListener('keyup', (event) => {
         keysPressed.left = false;
     }
 
-    if (event.key === 'ArrowLeft') {
-        keysPressed.left = false;
-    }
 
     if (event.key === 'ArrowRight') {
         keysPressed.right = false;

@@ -38,9 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
     closeModalBtn.addEventListener('click', closeModal);
     window.addEventListener('resize', resizeGame);
 
-    window.addEventListener('click', (event) => {
-        if (event.target === gameModal) {
-            closeModal();
-        }
-    });
+    // window.addEventListener('click', (event) => {
+    //     if (event.target === gameModal) {
+    //         closeModal();
+    //     }
+    // });
 });
