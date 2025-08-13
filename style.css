@@ -4,6 +4,7 @@ body {
   overflow: auto;
   margin: 0;
   padding: 0;
+  overflow:hidden;
 }
 
 #modal-content {
