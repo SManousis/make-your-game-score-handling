@@ -1,6 +1,3 @@
-import * as mario from './mario.js'
-import * as enemies from './cupids.js'
-import * as turtles from './turtles.js'
 import * as bullets from './bullets.js'
 import * as utils from './utils.js'
 import * as game from './game.js'
@@ -8,7 +5,7 @@ import * as powerups from './powerups.js'
 
 
 export function isShot(entity) {
-    for (const bullet of bullets.allBullets) {
+    for (const bullet of game.gameState.allBullets) {
         if (bullet.disabled) continue;
         if (collisionCheck(entity, bullet)) {
             // console.log(`bullet touched ${entity.name}`)

@@ -1,22 +1,13 @@
 import { mario, marioShoot, updateMarioHealthBar } from './mario.js'
 //import * as floaters from './floaters.js'
-import * as cupids from './cupids.js'
-import * as turtles from './turtles.js'
-import * as cicadas from './cicadas.js'
 //import * as walkables from './walkables.js'
-import * as bullets from './bullets.js'
 import * as collision from './collision.js'
-import { stage1, stageControllerTicker, removeEvent, addEvent, eventQueue } from './stagecontroller.js'
-import { powerUps } from './powerups.js'
+import { stage1, stageControllerTicker, removeEvent, addEvent, eventQueue, stage2, stage3 } from './stagecontroller.js'
 import * as utils from "./utils.js"
-import * as ghosts from './ghosts.js'
 import { createBomb, createExplosion } from './explosion.js'
 import { AudioManager, xToPan } from './audio.js'
-import { flowers } from './flowers.js'
-import { tetros } from './tetros.js'
 import { Tiles } from './Tiles.js'
-import { unicorns } from './unicorn.js'
-import { stage1Map, renderTileMap, walkables } from './tilesMap.js'
+import { stage1Map, renderTileMap, stage2Map, stage3Map } from './tilesMap.js'
 
 //import * as lasers from './lasers'
 //import * as utils from './utils.js'
@@ -56,7 +47,9 @@ const nextButton = document.getElementById('leaderboard-next-button');
 
 const leaderboardMenu = document.getElementById('leaderboard-menu');
 const backFromLeaderboardButton = document.getElementById('back-from-leaderboard-button');
+
 let endGame = false;
+
 const leaderboard = {
     currentPage: 1,
     totalPages: 1,
@@ -116,16 +109,7 @@ const leaderboard = {
 
 leaderboard.addPaginationListeners();
 
-export let gameState = {
-    currentState: 'mainMenu', //'mainMenu', 'paused','gameover','running'
-    previousState: '',
-    score: 0,
-    lives: 5,
-    isMuted: false,
-    frameCounter: 0,
-    gameTime: 0,
-    level: 1,
-}
+
 
 let lastTime = 0;
 
@@ -173,19 +157,14 @@ export const audio = {
     }
 }
 
+//master
+export let gameState = {}
 
-export let allEntities = []
-export let groundedEnemies = []
-export let aoeDamage = []
 
-export let allGroups = [allEntities, groundedEnemies, bullets.allBullets, cicadas.cicadas, cupids.cupids, turtles.turtles, powerUps, walkables, ghosts.ghosts, unicorns, aoeDamage, flowers, tetros]
 
-export const gameArea = document.getElementById('game-area');
-
-export const queueFree = []
 
 //adding our created entities to allEntities if they are not static
-allEntities.push(mario)
+
 
 
 
@@ -213,9 +192,11 @@ export function updateMenuVisibility() {
     }
 }
 
-export let currentGameGen = 0;
+
 
 function restartGame() {
+    //TODO delete everything under stage-resources
+
     currentGameGen++; // In
 
     // suppressing destroy sounds for restart
@@ -223,7 +204,7 @@ function restartGame() {
     audio.sounds = false;
 
     // crement at every restart
-    for (let entity of allEntities) {
+    for (let entity of gameState.allEntities) {
         if (entity.countdownDiv) {
             entity.countdownDiv.remove()
             utils.destroyUnit(entity)
@@ -233,23 +214,23 @@ function restartGame() {
     }
     audio.sounds = soundsTemp;
 
-    allEntities.length = 0;
-    groundedEnemies.length = 0;
-    ghosts.ghosts.length = 0;
-    unicorns.length = 0;
-    cupids.cupids.length = 0;
-    cicadas.cicadas.length = 0;
-    turtles.turtles.length = 0;
-    bullets.allBullets.length = 0;
-    powerUps.length = 0;
-    flowers.length = 0;
-    tetros.length = 0;
+    gameState.allEntities.length = 0;
+    gameState.groundedEnemies.length = 0;
+    gameState.ghosts.ghosts.length = 0;
+    gameState.unicorns.length = 0;
+    gameState.cupids.cupids.length = 0;
+    gameState.cicadas.cicadas.length = 0;
+    gameState.turtles.turtles.length = 0;
+    gameState.bullets.allBullets.length = 0;
+    gameState.powerUps.length = 0;
+    gameState.flowers.length = 0;
+    gameState.tetros.length = 0;
 
     eventQueue.length = 0;
 
     utils.setUnit(mario, 500, 500);
-    mario.health = 100;
-    allEntities.push(mario);
+    gameState.mario.health = 100;
+    gameState.allEntities.push(mario);
 
     for (const key in keysPressed) {
         keysPressed[key] = false;
@@ -277,7 +258,8 @@ function restartGame() {
     leaderboardContainer.classList.add('hidden');
     playerRankInfo.textContent = '';
 
-    stage1(currentGameGen);
+
+    startStorymode()
 
 }
 
@@ -313,12 +295,12 @@ export function triggerGameOver() {
     updateMenuVisibility();
 }
 
-export function lifeLostFanfare(){
-      if (audio.sounds) {
-         audio.manager.playSample("lose_life", { gain: audio.soundsVolume });
+export function lifeLostFanfare() {
+    if (audio.sounds) {
+        audio.manager.playSample("lose_life", { gain: audio.soundsVolume });
     }
-     livesElement.classList.add('life-lost-flash');
-      setTimeout(() => {
+    livesElement.classList.add('life-lost-flash');
+    setTimeout(() => {
         livesElement.classList.remove('life-lost-flash');
     }, 600);
 }
@@ -337,11 +319,11 @@ export const keysPressed = {
 
 //--- EVENT LISTENERS ----
 
-window.addEventListener("keydown", function(e) {
-  const keysToPrevent = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "];
-  if (keysToPrevent.includes(e.key)) {
-    e.preventDefault(); // Stops scrolling
-  }
+window.addEventListener("keydown", function (e) {
+    const keysToPrevent = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " "];
+    if (keysToPrevent.includes(e.key)) {
+        e.preventDefault(); // Stops scrolling
+    }
 }, false);
 
 // Main menu buttons
@@ -349,7 +331,7 @@ playButton.addEventListener('click', async () => {
     if (!audio.initialized) {
         await audio.setUp();
         audio.initialized = true;
-        audio.playSampleDeb = utils.opDebounce(audio.manager.playSample.bind(audio.manager), 100, {leading: true});
+        audio.playSampleDeb = utils.opDebounce(audio.manager.playSample.bind(audio.manager), 100, { leading: true });
     }
 
     if (audio.music) {
@@ -596,9 +578,9 @@ document.addEventListener('keydown', (event) => {
     if (event.key.toLowerCase() === 'b') {
         if (keysPressed.bomb == false) {
             keysPressed.bomb = true
-            if (mario.bombs>0){
-            createBomb(mario.x, mario.y, mario.velX, mario.velY, 'player', 500, 500, 2, true)
-            mario.bombs-=1
+            if (mario.bombs > 0) {
+                createBomb(mario.x, mario.y, mario.velX, mario.velY, 'player', 500, 500, 2, true)
+                mario.bombs -= 1
             }
         }
     }
@@ -644,7 +626,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key === ' ' || event.code === 'Space') {
         keysPressed.space = true
     }
-   
+
 
 });
 
@@ -695,14 +677,69 @@ document.addEventListener('keyup', (event) => {
 
 // The main game loop
 async function GameLoop() {
-    if (gameState.currentState === 'running' || gameState.currentState === 'paused' || gameState.currentState === 'gameOver') {
-        const count = Math.round((Date.now() - updateTimestamp)/16.66666)
-        for (let i = 0; i < count; i++){
+    console.log(gameState.currentState)
+    if (gameState.currentState === 'running' && gameState.mapLoaded == false) {
+
+        if (gameState = {}){
+            gameState = createNewGameState()
+        }
+
+        gameState.mario.health = gameState.mario.maxHealth
+        gameState.mario.x = 500
+        gameState.mario.y = 500
+        
+        const newGameState = createNewGameState()
+        
+        newGameState.mario = gameState.mario
+        newGameState.score = gameState.score
+        newGameState.lives = gameState.lives
+        newGameState.gameTime = gameState.gameTime
+        newGameState.level = gameState.level
+
+        gameState = newGameState
+
+        //soft reset game state
+
+        switch (gameState.level) {
+            case 1:
+                renderTileMap(stage1Map());
+                stage1(currentGameGen)
+                break;
+
+            case 2:
+                renderTileMap(stage2Map());
+                stage2(currentGameGen)
+                break;
+
+            case 3:
+                renderTileMap(stage3Map());
+                stage3(currentGameGen)
+                break;
+        }
+    }
+
+
+    if (gameState.currentState === 'running') {
+        const count = Math.round((Date.now() - updateTimestamp) / 16.66666)
+        for (let i = 0; i < count; i++) {
             update();
         }
 
         draw();
+
+    } else if (gameState.currentState == 'cinematic') {
+        cinematicTicker(gameState)
     }
+
+    for (let unit of queueFree) {
+        for (let group of gameState.allGroups) {
+            utils.removeUnitFromArray(unit, group)
+        }
+        unit.body.forEach(b => { if (b.div) b.div.remove(); })
+        if (unit.dom) unit.dom.remove();
+    }
+    queueFree.length = 0
+
     requestAnimationFrame(GameLoop);
 }
 
@@ -715,12 +752,8 @@ let updateTimestamp = 0
 function update() {
     updateTimestamp = Date.now()
 
-        if (gameState.currentState === 'running') {
+    if (gameState.currentState === 'running') {
         gameState.gameTime += 16.666666;
-    }
-
-    if (gameState.currentState == 'paused' || gameState.currentState == 'gameOver'){
-        return
     }
 
     updateCounter++
@@ -734,7 +767,7 @@ function update() {
     collision.powerUpPicked(mario) // checks if mario touched a health item//collision.isShot(mario);
 
     //running all entities' update function
-    for (let entity of allEntities) {
+    for (let entity of gameState.allEntities) {
         if (aoeDamage.length > 0 && (entity.team == 'enemy' || entity.team == 'player') && Object.hasOwn(entity, 'health')) {
             collision.inAoe(entity)
         }
@@ -748,21 +781,11 @@ function update() {
         if (entity.name === "mario") {
             updateMarioHealthBar(entity.health, 100)
         }
-
-
-
     }
 
     gameState.frameCounter++
 
-    for (let unit of queueFree) {
-        for (let group of allGroups) {
-            utils.removeUnitFromArray(unit, group)
-        }
-        unit.body.forEach(b => { if (b.div) b.div.remove(); })
-        if (unit.dom) unit.dom.remove();
-    }
-    queueFree.length = 0
+    
 
     stageControllerTicker()
 
@@ -784,10 +807,10 @@ export function draw() {
 
     const MarioHealthBar = document.getElementById('mario-healthBar-container');
 
-    timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
+    timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;
 
- let indicators = [];
+    let indicators = [];
     if (mario.bombs > 0) {
         indicators.push(`B: ${mario.bombs}`);
     }
@@ -795,7 +818,7 @@ export function draw() {
     if (mario.multibulletTimer > 0) {
         indicators.push("U");
     }
-      powerupText.textContent = indicators.join(' | ');
+    powerupText.textContent = indicators.join(' | ');
 
     MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
     MarioHealthBar.style.bottom = (mario.y + 90) + "px";
@@ -805,7 +828,7 @@ export function draw() {
 
 
 
-    for (let entity of allEntities) {
+    for (let entity of gameState.allEntities) {
 
         if (entity.drawFunc != undefined) {
             entity.drawFunc()
@@ -833,13 +856,61 @@ export function draw() {
 
 }
 
-
 updateMenuVisibility();
+
+updateTimestamp = Date.now() - 16.66
+GameLoop();
 
 
 // Start the game
-updateTimestamp = Date.now() - 16.66
-GameLoop();
-let map = stage1Map()
-renderTileMap(map);
-stage1(currentGameGen)
+function startStorymode(firstTime = false) {
+    gameState = createNewGameState()
+
+    if (firstTime) {
+        gameState.currentState = 'mainMenu'
+    }
+}
+
+export const queueFree = []
+export const gameArea = document.getElementById('game-area')
+
+function createNewGameState(){
+  
+    
+    state = {
+        mario: createMario(),
+        score: 0,
+        lives: 5,
+        gameTime: 0,
+        level: 0,
+
+        //non persisting
+        stageCinematicCounter: 0, //counter used by cinematicTicker to control the speed that cinematics play out
+        currentState: 'cinematic', //'cinematic', 'mainMenu', 'paused', 'gameover', 'running'
+        previousState: '',
+        frameCounter: 0,
+        mapLoaded: false,
+        allEntities: [],
+        groundedEnemies: [],
+        aoeDamage: [],
+        allBullets: [],
+        cicadas: [],
+        cupids: [],
+        turtles: [],
+        powerUps: [],
+        walkables: [],
+        ghosts: [],
+        unicorns: [],
+        aoeDamage: [],
+        flowers: [],
+        tetros: [],
+        allGroups: [],
+        currentGameGen: 0,
+    }
+
+    state.allGroups = [state.allEntities, state.groundedEnemies, state.aoeDamage, state.allBullets, state.cicadas, state.cupids, state.turtles, state.powerUps, state.walkables, state.ghosts, state.unicorns, state.aoeDamage, state.flowers, state.tetros]
+
+    return state
+}
+
+startStorymode(true)

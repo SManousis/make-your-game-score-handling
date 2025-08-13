@@ -1,8 +1,7 @@
 import * as utils from './utils.js'
 import { mario } from './mario.js'
-import { gameArea, allEntities, updateScore, groundedEnemies } from './game.js'
+import { updateScore, groundedEnemies } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
-import * as walkables from './tilesMap.js'
 
 //turtle spawning
 export let turtles = [];
@@ -15,7 +14,7 @@ export function spawnTurtle(x, y) {
     const turtleElement = document.createElement('img');
     turtleElement.className = 'turtle-img';
     turtleElement.src = 'assets/enemies/caretta.svg'
-    gameArea.appendChild(turtleElement);
+    document.getElementById('stage-resources').appendChild(turtleElement);
 
     const newTurtle = {
         name: "turtle",
@@ -48,9 +47,9 @@ export function spawnTurtle(x, y) {
     };
 
 
-    turtles.push(newTurtle);
-    allEntities.push(newTurtle);
-    groundedEnemies.push(newTurtle)
+    gameState.turtles.push(newTurtle);
+    gameState.allEntities.push(newTurtle);
+    gameState.groundedEnemies.push(newTurtle)
 
     //push to allentities
 }

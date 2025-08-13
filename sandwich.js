@@ -1,5 +1,5 @@
 import * as utils from './utils.js'
-import { gameArea, allEntities } from './game.js';
+import { gameState } from './game.js';
 import { mario } from './mario.js';
 import { moveAndCollide } from './physicsStep.js';
 
@@ -12,7 +12,7 @@ export function shootSandwich(dir, vendX, vendY) {
     } else {
         sandwichElement.src = 'assets/items/rotten_sandwich.svg'
     }
-    gameArea.appendChild(sandwichElement);
+    document.getElementById('stage-resources').appendChild(sandwichElement);
 
     const randomSign = dir === 'left' ? -1 : 1;
     const velX = utils.getRandomInt(5, 20) * randomSign
@@ -45,7 +45,7 @@ export function shootSandwich(dir, vendX, vendY) {
         team: "player",
         type: "powerUp"
     };
-    allEntities.push(newSandwich);
+    gameState.allEntities.push(newSandwich);
 }
 
 function sandwichUpdate(newSandwich) {

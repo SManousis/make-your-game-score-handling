@@ -1,32 +1,29 @@
 import { spawnCicada } from "./cicadas.js"
 import { spawnTurtle } from "./turtles.js"
 import { createCupid, cupids } from "./cupids.js"
-import { createGhost, ghosts } from "./ghosts.js"
 import { createVending } from "./vending.js"
-import { allEntities,gameState, audio, currentGameGen } from "./game.js"
+import { gameState,  currentGameGen } from "./game.js"
 import { createFlower, flowers } from "./flowers.js"
 import { tetros, createTetro } from "./tetros.js"
-import { unicorns, createUnicorn } from "./unicorn.js"
-import { createBomb } from "./explosion.js"
 
 
 const gameArea = document.getElementById('game-area')
 
 export async function stage1(gameGen) {
     const vending = createVending();
+    vending.state = 'badMother'
 
+    await waitForCondition(() => !gameState.allEntities.includes(vending), 2500);
 
     // const unicorn = createUnicorn(-100, gameArea.offsetHeight / 2);
     // unicorn.velX = 4;
-    // await waitForCondition(() => !allEntities.includes(unicorn), 3000);
+    // await waitForCondition(() => !gameState.allEntities.includes(unicorn), 3000);
     // if (abortStage(gameGen)) return;
 
-    // await spawnSwarm(5, createFlower, 5, 200, flowers, 400, 0, 3000);
-    // if (abortStage(gameGen)) return;
+    await spawnSwarm(20, createFlower, 5, 200, flowers, 400, 0, 3000);
+    if (abortStage(gameGen)) return;
 
-    vending.state = 'badMother'
-
-    await waitForCondition(() => !allEntities.includes(vending), 2500);
+    
 
     await spawnSwarm(30, createTetro, 5, 200, tetros, 400, 2300);
     if (abortStage(gameGen)) return;
@@ -89,6 +86,24 @@ export async function stage1(gameGen) {
     await sleep(1000);
     if (abortStage(gameGen)) return;
 }
+
+
+
+
+export async function stage2(gameGen) {
+
+}
+
+
+
+
+export async function stage3(gameGen) {
+
+}
+
+
+
+
 
 function abortStage(gameGen) {
     if (gameGen !== currentGameGen) {

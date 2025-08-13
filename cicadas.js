@@ -1,18 +1,16 @@
 import * as utils from './utils.js'
-import { mario } from './mario.js'
-import { gameArea, allEntities, updateScore } from './game.js'
+import { gameState, updateScore } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
-import * as game from './game.js'
 
 
-//cicadas spawning
-export let cicadas = [];
+
+
 
 export function spawnCicada(x, y) {
     const cicadaElement = document.createElement('img')
     cicadaElement.className = 'cicada-img';
     cicadaElement.src = 'assets/enemies/cicada.svg';
-    gameArea.appendChild(cicadaElement);
+    document.getElementById('stage-resources').appendChild(cicadaElement);
 
     const newCicada = {
         name: "cicada",
@@ -46,9 +44,9 @@ export function spawnCicada(x, y) {
         destroySound: "bubble",
     };
 
-    cicadas.push(newCicada);
-    allEntities.push(newCicada);
-    game.groundedEnemies.push(newCicada)
+    gameState.cicadas.push(newCicada);
+    gameState.allEntities.push(newCicada);
+    gameState.groundedEnemies.push(newCicada)
 }
 
 function cicadaUpdate(cicada) {
@@ -60,7 +58,7 @@ function cicadaUpdate(cicada) {
 
 
     if (cicada.state === 'walking') {
-        let marioIsOnTheRight = mario.x - cicada.x >= 0;
+        let marioIsOnTheRight = gameState.mario.x - cicada.x >= 0;
 
 
         if (marioIsOnTheRight) {
@@ -74,7 +72,7 @@ function cicadaUpdate(cicada) {
         //check for other cicadas in the way
         const detectionDistance = cicada.width * 0.8
 
-        for (const groundedEnemy of game.groundedEnemies) {
+        for (const groundedEnemy of gameState.groundedEnemies) {
             if (groundedEnemy === cicadas || Math.abs(groundedEnemy.y - cicadas.y) > 1) continue;
 
             if (cicadas.velX > 0 && groundedEnemy.x > cicadas.x) {
@@ -131,7 +129,7 @@ function cicadaUpdate(cicada) {
 
     let isColliding = false;
     for (const BodyPart of cicada.body) {
-        if (utils.IsBodyCollidingWithUnit(BodyPart, mario)) {
+        if (utils.IsBodyCollidingWithUnit(BodyPart, gameState.mario)) {
             isColliding = true;
             break;
         }
@@ -140,13 +138,13 @@ function cicadaUpdate(cicada) {
     if ((cicada.state === 'walking' || cicada.state === 'jumping') && isColliding) {
 
         //check if collision was Mario jumping on cicada
-        if (mario.y > cicada.y + (cicada.height / 1.5)) {
+        if (gameState.mario.y > cicada.y + (cicada.height / 1.5)) {
             // console.log("cicada disabled")
             cicada.state = "disabled"
-            mario.velY = 22;
+            gameState.mario.velY = 22;
             deleteCicada(cicada, 300)
         } else {
-            mario.takeDamage(cicada.damage, cicada.x, "cicada_hit")
+            gameState.mario.takeDamage(cicada.damage, cicada.x, "cicada_hit")
         }
     }
 }

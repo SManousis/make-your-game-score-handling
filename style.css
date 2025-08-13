@@ -24,6 +24,20 @@ body {
   transform: none;
 }
 
+#stage-resource {
+  width: 100%;
+  max-width: 1792px;
+  aspect-ratio: 16/9;
+  background-image: url("./assets/backgrounds/space2.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  margin: 0;
+  transform: none;
+}
+
 #score {
   position: absolute;
   /* Position relative to the nearest positioned ancestor */
@@ -52,6 +66,8 @@ body {
   z-index: 10;
   padding-right: 10px;
 }
+
+
 
 #time-counter {
   position: absolute;
@@ -289,6 +305,14 @@ body {
   transform: translateX(-50%) translateY(30%) scaleX(var(--turtle-scale-x, 1));
 }
 
+.cinematic-panel {
+  top: 0px;
+  left: 0px;
+  width: 960;
+  height: 960;
+  z-index: 98;
+  opacity: 0%;
+}
 
 .vending-img {
   position: absolute;

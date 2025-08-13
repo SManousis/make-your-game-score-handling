@@ -1,7 +1,5 @@
 import * as utils from "./utils.js"
-import * as mario from "./mario.js"
-import { allEntities, gameArea, audio } from './game.js'
-import * as walkables from './tilesMap.js'
+import { gameState, gameArea, audio } from './game.js'
 
 //dirTypes can be down, up, right, left, target
 //team = player, enemy
@@ -159,7 +157,7 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
     }
 
 
-    document.getElementById("game-area").appendChild(bulletBody);
+    document.getElementById("stage-resources").appendChild(bulletBody);
 
 
 
@@ -217,8 +215,8 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
         bounceEdges: bounceEdges,
         penetrateWalkable: penetrateWalkable,
     }
-    allEntities.push(bullet);
-    allBullets.push(bullet);
+    gameState.allEntities.push(bullet);
+    gameState.allBullets.push(bullet);
 
     if (audio.sounds) {
         if (team === "player") {
@@ -261,7 +259,7 @@ export function bulletUpdate(bullet) {
     }
 
     if (!bullet.penetrateWalkable){
-        for (const walkable of walkables.walkables) {
+        for (const walkable of gameState.walkables) {
             for (const walkableBody of walkable.body) {
                 for (const body of bullet.body) {
                     if (utils.IsBodyCollidingWithBody(body, walkableBody)) {
@@ -288,6 +286,3 @@ export function bulletVisuals(bullet) {
         bullet.dom.style.setProperty('--bullet-rotation', '90deg');
     }
 }
-
-export let allBullets = [];
-

@@ -1,9 +1,6 @@
 import * as utils from "./utils.js";
-import * as mario from './mario.js'
-import { allEntities, gameState, updateMenuVisibility, updateScore } from './game.js'
+import { gameState, updateScore } from './game.js'
 import * as bullets from './bullets.js'
-import * as powerups from './powerups.js'
-import * as walkables from './tilesMap.js'
 
 export let ghosts = [];
 
@@ -11,7 +8,7 @@ export function createGhost(x, y, index, row) {
     let ghostBody = document.createElement("img");
     ghostBody.className = "ghost-img";
     ghostBody.src = "assets/enemies/ghost.svg";
-    document.getElementById("game-area").appendChild(ghostBody);
+    document.getElementById("stage-resources").appendChild(ghostBody);
     // store reference in object
 
     let ghost = {
@@ -53,8 +50,8 @@ export function createGhost(x, y, index, row) {
         // }
     }
     console.log("I was created at ", x, y)
-    ghosts.push(ghost)
-    allEntities.push(ghost)
+    gameState.ghosts.push(ghost)
+    gameState.allEntities.push(ghost)
     return ghost
 }
 

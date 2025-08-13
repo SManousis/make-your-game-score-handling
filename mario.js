@@ -1,6 +1,6 @@
 import * as utils from './utils.js'
 import * as walkables from './tilesMap.js'
-import { keysPressed, gameArea, gameState, updateMenuVisibility, audio, triggerGameOver,lifeLostFanfare } from './game.js'
+import { keysPressed, gameArea, gameState, audio, triggerGameOver, lifeLostFanfare } from './game.js'
 import * as physics from './physicsStep.js'
 import * as bullets from './bullets.js'
 
@@ -11,126 +11,131 @@ let fireCooldown = 0;
 
 
 //the character the player controls
-export let mario = {
-    name: "mario",
-    health: 100,
-    maxhealth: 120, //how much health point he has, if it reaches 0 he dies!
-    attack_damage: 10, //how damage marios bullets deal to enemies
-    accel: 1, //how quickly accelerates in x axis
-    maxSpeed: 10, //maximum running speed in x axis
-    jump_power: 17,
-    state: "standing", //crouch, standing, airborne, dead
-    gravity: 0.8, //the speed that which he is pushed down while airborne
-    drag: 1.2, //how much mario slows downs in x axis if he's not actively walking left or right
-    bullet_count: 1, //how many bullets mario will fire
-    multibulletTimer: 0,
-    bombs: 0,
-    aimDirection: "left", //left, right, up
-    velX: 0, //his current velocity in x axis
-    velY: 0, //his current velocity in y axis
-    x: 0, //his current x position
-    y: 0, //his current y position
-    lookingDir: "left", //which direction mario is looking at
-    lookingUp: false,
-    walkCounter: 0, //a counter that counts for how many frames mario has been walking towards a direction, for walk animation purposes
-    crouching: false,
-    isInvincible: false,
-    invincibilityTimer: 0,
-    body: [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0 - 30, 0 + 20, 30), utils.createCircle(0 + 30, 0 + 20, 30)], //his gameplay body represented in circles
-    physicsPointsOffsets: [{ x: -20, y: 0 }, { x: 20, y: 0 }], //These points will be used
-    drawFunc: function () { marioVisuals(this) }, //his visual representation in the game
-    updateFunc: marioUpdate,
-    team: "player",
-    dom: marioDiv,
-    takeHitSounds: [
-        "mario_hit1", "mario_hit1", "mario_hit1", "mario_hit1", "mario_hit1",
-        "mario_hit2", "mario_hit2", "mario_hit2", "mario_hit2", "mario_hit2",
-        "mario_hit3", "mario_hit3", "mario_hit3", "mario_hit3", "mario_hit3",
-        "mario_hit4_rare"],
-    jumpSounds: [
-        "mario_jump1",
-        "mario_jump2",
-        "mario_jump3",
-    ],
-    getRandomHitSound(sounds) {
-        return sounds[Math.floor(Math.random() * sounds.length)];
-    },
-    takeDamage: function (damage, sourceX, sound) {
-        if (this.isInvincible) {
-            return;
-        }
-        if (audio.sounds) {
-            if (!sound) sound = this.getRandomHitSound(this.takeHitSounds);
-            // TODO: Throtlle this
-            audio.playSampleDeb(sound, {
-                gain: audio.soundsVolume,
-                pan: audio.xToPan(this.x, gameArea.offsetWidth),
-                throttleMs: 60,
-            });
-        }
-        this.health -= damage;
-        const KNOCKBACK_VERTICAL = 13;
-        const KNOCKBACK_HORIZONTAL = 20;
-        this.velY = KNOCKBACK_VERTICAL;
-        if (this.x < sourceX) {
-            this.velX -= KNOCKBACK_HORIZONTAL;
-        } else {
-            this.velX += KNOCKBACK_HORIZONTAL;
-        }
-        this.isInvincible = true;
-        this.invincibilityTimer = 40;
-    },
-    applyPowerUp: function (type, value,sound) {
-          if (audio.sounds) {
-                    audio.manager.playSample(sound, {
-                        gain: audio.soundsVolume,
-                        pan: audio.xToPan(this.x, gameArea.offsetWidth),
-                        throttleMs: 60,
-                        pitchRandom: [0.98, 1.02]
-                    });
-                };
-        switch (type) {
-            case 'health':
-                this.health += value;
-                if (this.health > this.maxhealth) this.health = this.maxhealth;
-              
-                break;
-            case 'bomb':
-                this.bombs += value;
-                break;
-            case 'multibullet':
+export function createMario(x = 500, y = 500) {
+    mario = {
+        name: "mario",
+        health: 100,
+        maxhealth: 120, //how much health point he has, if it reaches 0 he dies!
+        attack_damage: 10, //how damage marios bullets deal to enemies
+        accel: 1, //how quickly accelerates in x axis
+        maxSpeed: 10, //maximum running speed in x axis
+        jump_power: 17,
+        state: "standing", //crouch, standing, airborne, dead
+        gravity: 0.8, //the speed that which he is pushed down while airborne
+        drag: 1.2, //how much mario slows downs in x axis if he's not actively walking left or right
+        bullet_count: bullets, //how many bullets mario will fire
+        multibulletTimer: 0,
+        bombs: bombs,
+        aimDirection: "left", //left, right, up
+        velX: 0, //his current velocity in x axis
+        velY: 0, //his current velocity in y axis
+        x: 0, //his current x position
+        y: 0, //his current y position
+        lookingDir: "left", //which direction mario is looking at
+        lookingUp: false,
+        walkCounter: 0, //a counter that counts for how many frames mario has been walking towards a direction, for walk animation purposes
+        crouching: false,
+        isInvincible: false,
+        invincibilityTimer: 0,
+        body: [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0 - 30, 0 + 20, 30), utils.createCircle(0 + 30, 0 + 20, 30)], //his gameplay body represented in circles
+        physicsPointsOffsets: [{ x: -20, y: 0 }, { x: 20, y: 0 }], //These points will be used
+        drawFunc: function () { marioVisuals(this) }, //his visual representation in the game
+        updateFunc: marioUpdate,
+        team: "player",
+        dom: marioDiv,
+        takeHitSounds: [
+            "mario_hit1", "mario_hit1", "mario_hit1", "mario_hit1", "mario_hit1",
+            "mario_hit2", "mario_hit2", "mario_hit2", "mario_hit2", "mario_hit2",
+            "mario_hit3", "mario_hit3", "mario_hit3", "mario_hit3", "mario_hit3",
+            "mario_hit4_rare"],
+        jumpSounds: [
+            "mario_jump1",
+            "mario_jump2",
+            "mario_jump3",
+        ],
+        getRandomHitSound(sounds) {
+            return sounds[Math.floor(Math.random() * sounds.length)];
+        },
+        takeDamage: function (damage, sourceX, sound) {
+            if (this.isInvincible) {
+                return;
+            }
+            if (audio.sounds) {
+                if (!sound) sound = this.getRandomHitSound(this.takeHitSounds);
+                // TODO: Throtlle this
+                audio.playSampleDeb(sound, {
+                    gain: audio.soundsVolume,
+                    pan: audio.xToPan(this.x, gameArea.offsetWidth),
+                    throttleMs: 60,
+                });
+            }
+            this.health -= damage;
+            const KNOCKBACK_VERTICAL = 13;
+            const KNOCKBACK_HORIZONTAL = 20;
+            this.velY = KNOCKBACK_VERTICAL;
+            if (this.x < sourceX) {
+                this.velX -= KNOCKBACK_HORIZONTAL;
+            } else {
+                this.velX += KNOCKBACK_HORIZONTAL;
+            }
+            this.isInvincible = true;
+            this.invincibilityTimer = 40;
+        },
+        applyPowerUp: function (type, value, sound) {
+            if (audio.sounds) {
+                audio.manager.playSample(sound, {
+                    gain: audio.soundsVolume,
+                    pan: audio.xToPan(this.x, gameArea.offsetWidth),
+                    throttleMs: 60,
+                    pitchRandom: [0.98, 1.02]
+                });
+            };
+            switch (type) {
+                case 'health':
+                    this.health += value;
+                    if (this.health > this.maxhealth) this.health = this.maxhealth;
 
-                this.multibulletTimer = 600;
-                this.bullet_count=4
-                break;
+                    break;
+                case 'bomb':
+                    this.bombs += value;
+                    break;
+                case 'multibullet':
+
+                    this.multibulletTimer = 600;
+                    this.bullet_count = 4
+                    break;
+            }
         }
-    },
-    // reset() {
-    //     this.x = 500;
-    //     this.y = 500;
-    //     this.health = 100;
-    //     this.velX = 0;
-    //     this.velY = 0;
-    //     this.disabled = false;
-    //     this.body.forEach(body => body.div.remove());
-    //     this.body = [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0-30, 0 + 20, 30), utils.createCircle(0+30, 0 + 20, 30)];
-    //     this.bullet_count = 1;
-    //     this.dom.innerHTML = "";
-    //     const defaultBody = document.getElementById("mario-body-forward").cloneNode(true);
-    //     const defaultLegs = document.getElementById("mario-legs0").cloneNode(true);
-    //     this.dom.appendChild(defaultLegs);
-    //     this.dom.appendChild(defaultBody);
-    //     this.currentBody = defaultBody;
-    //     this.currentLegs = defaultLegs;
+        // reset() {
+        //     this.x = 500;
+        //     this.y = 500;
+        //     this.health = 100;
+        //     this.velX = 0;
+        //     this.velY = 0;
+        //     this.disabled = false;
+        //     this.body.forEach(body => body.div.remove());
+        //     this.body = [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0-30, 0 + 20, 30), utils.createCircle(0+30, 0 + 20, 30)];
+        //     this.bullet_count = 1;
+        //     this.dom.innerHTML = "";
+        //     const defaultBody = document.getElementById("mario-body-forward").cloneNode(true);
+        //     const defaultLegs = document.getElementById("mario-legs0").cloneNode(true);
+        //     this.dom.appendChild(defaultLegs);
+        //     this.dom.appendChild(defaultBody);
+        //     this.currentBody = defaultBody;
+        //     this.currentLegs = defaultLegs;
 
-    //     this.currentBody.style.opacity = "100%"
-    //     this.currentBody.style.setProperty('--mario-x', `${this.x}px`);
-    //     this.currentBody.style.setProperty('--mario-y', `${-this.y}px`);
+        //     this.currentBody.style.opacity = "100%"
+        //     this.currentBody.style.setProperty('--mario-x', `${this.x}px`);
+        //     this.currentBody.style.setProperty('--mario-y', `${-this.y}px`);
 
-    //     this.currentLegs.style.opacity = "100%"
-    //     this.currentLegs.style.setProperty('--mario-x', `${this.x}px`);
-    //     this.currentLegs.style.setProperty('--mario-y', `${-this.y}px`);
-    // }
+        //     this.currentLegs.style.opacity = "100%"
+        //     this.currentLegs.style.setProperty('--mario-x', `${this.x}px`);
+        //     this.currentLegs.style.setProperty('--mario-y', `${-this.y}px`);
+        // }
+
+
+    }
+    gameState.allEntities.push(mario)
 }
 
 utils.setUnit(mario, 500, 500)
@@ -263,7 +268,7 @@ export function marioUpdate() {
         }
     }
     if (mario.health <= 0) {
-        
+
         gameState.lives -= 1
         lifeLostFanfare();
         mario.health = 100
@@ -275,11 +280,11 @@ export function marioUpdate() {
     }
 
     if (mario.multibulletTimer > 0) {
-    mario.multibulletTimer--;
-}
-if (mario.multibulletTimer<=0){
-mario.bullet_count=1
-}
+        mario.multibulletTimer--;
+    }
+    if (mario.multibulletTimer <= 0) {
+        mario.bullet_count = 1
+    }
 
     // if (keysPressed.upgrade) {
     //     mario.bullet_count = 4
@@ -353,36 +358,36 @@ mario.bullet_count=1
 
 
 
-   
+
 
 
     //don't allow mario to move past screen bounds
-if (mario.x <= 0) {
-    utils.setUnit(mario, 0, mario.y);
-    if (mario.velX < 0) { // Only kill velocity if moving INTO the wall
-        mario.velX = 0;
+    if (mario.x <= 0) {
+        utils.setUnit(mario, 0, mario.y);
+        if (mario.velX < 0) { // Only kill velocity if moving INTO the wall
+            mario.velX = 0;
+        }
     }
-}
-if (mario.x >= gameArea.offsetWidth) {
-    utils.setUnit(mario, gameArea.offsetWidth, mario.y);
-    if (mario.velX > 0) { // Only kill velocity if moving INTO the wall
-        mario.velX = 0;
+    if (mario.x >= gameArea.offsetWidth) {
+        utils.setUnit(mario, gameArea.offsetWidth, mario.y);
+        if (mario.velX > 0) { // Only kill velocity if moving INTO the wall
+            mario.velX = 0;
+        }
     }
-}
-if (mario.y < 0) {
-    utils.setUnit(mario, mario.x, 0);
-    if (mario.velY < 0) { // Only kill velocity if moving INTO the wall
+    if (mario.y < 0) {
+        utils.setUnit(mario, mario.x, 0);
+        if (mario.velY < 0) { // Only kill velocity if moving INTO the wall
+            mario.velY = 0;
+        }
+    }
+
+    // Top of screen check
+    if (mario.y > gameArea.offsetHeight) {
+        utils.setUnit(mario, mario.x, gameArea.offsetHeight);
         mario.velY = 0;
     }
-}
 
-// Top of screen check
-if (mario.y > gameArea.offsetHeight) {
-    utils.setUnit(mario, mario.x, gameArea.offsetHeight);
-    mario.velY = 0;
-}
-
- let grounded = physics.moveAndCollide(mario)
+    let grounded = physics.moveAndCollide(mario)
 
     //if mario on the ground and jump button pressed
     if (keysPressed.space && grounded) {
@@ -453,7 +458,7 @@ export function marioShoot() {
                 "player",
                 'bullet',
                 mario.x - 40,
-                mario.y + yCorrection + offset +20, // Apply spread on Y
+                mario.y + yCorrection + offset + 20, // Apply spread on Y
                 14,
                 8
             );
@@ -466,7 +471,7 @@ export function marioShoot() {
                 "player",
                 'bullet',
                 mario.x + 40,
-                mario.y + yCorrection + offset +20, // Apply spread on Y
+                mario.y + yCorrection + offset + 20, // Apply spread on Y
                 14,
                 8
             );

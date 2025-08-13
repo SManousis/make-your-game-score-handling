@@ -2,8 +2,6 @@
 import * as utils from './utils.js'
 import {walkables} from './tilesMap.js'
 
-import {gameArea, draw} from './game.js'
-
 
 //it will simulate the physics step of a unit, 
 // assumes the unit has x, y, velX, velY, gravity. returns data about the state of the unit after the physics step 

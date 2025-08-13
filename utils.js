@@ -1,4 +1,4 @@
-import { allGroups, gameArea, queueFree } from "./game.js";
+import { gameArea, queueFree } from "./game.js";
 import { audio } from "./game.js";
 
 export let id = 0
@@ -330,7 +330,7 @@ export function createTilesDiv(x,y, tileSize){
     div.style.background = tile.color
     div.setAttribute('data-tile', tile.name);
     div.dataset.walkable = tile.walkable
-    document.getElementById('game-area').appendChild(div)
+    document.getElementById('stage-resources').appendChild(div)
     return div
 }
 

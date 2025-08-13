@@ -1,23 +1,15 @@
 import * as utils from "./utils.js";
-import * as mario from './mario.js'
-import { allEntities, gameState, updateMenuVisibility, updateScore } from './game.js'
+import { gameState, updateScore } from './game.js'
 import * as bullets from './bullets.js'
-import * as powerups from './powerups.js'
-import * as walkables from './tilesMap.js'
 import { createExplosion } from "./explosion.js";
-import * as collision from './collision.js'
 
-export let flowers = [];
-
-let preloadedFiringImage = new Image();
-// preloadedFiringImage.src = "/assets/enemies/TrumpflowerFired.svg";
 
 
 export function createFlower(x, y, index, row) {
     let flowerBody = document.createElement("img");
     flowerBody.className = "flower-img";
     flowerBody.src = "assets/enemies/flower.svg";
-    document.getElementById("game-area").appendChild(flowerBody);
+    document.getElementById("stage-resources").appendChild(flowerBody);
     // store reference in object
 
     let flower = {
@@ -52,8 +44,8 @@ export function createFlower(x, y, index, row) {
         destroySound: "destroy_fly",
     }
     // console.log("I was created at ", x, y)
-    flowers.push(flower)
-    allEntities.push(flower)
+    gameState.flowers.push(flower)
+    gameState.allEntities.push(flower)
     return flower
 }
 
@@ -99,7 +91,7 @@ export function flowerUpdate(flower) {
 
    
     if (parseInt(Math.random() * 1200) == 0) {
-        let bullet = bullets.createBullet("target", "enemy", 'sphere', flower.x, flower.y, 9, 20, mario.mario.x, mario.mario.y+40)
+        let bullet = bullets.createBullet("target", "enemy", 'sphere', flower.x, flower.y, 9, 20, gameState.mario.x, gameState.mario.y+40)
     }
 
     if (flowers.length > 0 && flowers[0].y <= 350) {
@@ -109,9 +101,9 @@ export function flowerUpdate(flower) {
     }
 
     if (flower.kamikazeMode) {
-        utils.kamikaze(flower, mario.mario);
+        utils.kamikaze(flower, gameState.mario);
         utils.moveUnit(flower, flower.velX, flower.velY);
-        if (utils.IsBodyCollidingWithUnit(flower.body[0], mario.mario)){
+        if (utils.IsBodyCollidingWithUnit(flower.body[0], gameState.mario)){
             createExplosion(flower.x, flower.y, "enemy", 100, 50)
             utils.destroyUnit(flower)
         }

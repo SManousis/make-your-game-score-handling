@@ -1,5 +1,5 @@
 
-import { allEntities, aoeDamage, audio } from "./game.js";
+import { gameState, audio } from "./game.js";
 import { moveAndCollide } from "./physicsStep.js";
 import * as utils from "./utils.js"
 
@@ -12,7 +12,7 @@ export function createExplosion(x, y, team, damage = 50, radius = 150, flashDura
 
     
 
-    document.getElementById('game-area').appendChild(explosionBody);
+    document.getElementById('stage-resources').appendChild(explosionBody);
 
     const explosion = {
         name: "explosion",
@@ -32,8 +32,8 @@ export function createExplosion(x, y, team, damage = 50, radius = 150, flashDura
         team: team,
     };
 
-    aoeDamage.push(explosion)
-    allEntities.push(explosion);
+    gameState.aoeDamage.push(explosion)
+    gameState.allEntities.push(explosion);
     return explosion;
 }
 
@@ -74,13 +74,13 @@ export function createBomb(x, y, startVelX, startVelY, team, damage = 50, radius
     const bombBody = document.createElement('img');
     bombBody.className = "bomb-img";
     bombBody.src = img;
-    document.getElementById('game-area').appendChild(bombBody);
+    document.getElementById('stage-resources').appendChild(bombBody);
 
     
     const countdownDiv = document.createElement('div');
     countdownDiv.className = 'bomb-countdown';
     countdownDiv.textContent = 'yo';
-    document.getElementById('game-area').appendChild(countdownDiv);
+    document.getElementById('stage-resources').appendChild(countdownDiv);
 
 
     const bomb = {
@@ -111,7 +111,7 @@ export function createBomb(x, y, startVelX, startVelY, team, damage = 50, radius
         ],
     };
 
-    allEntities.push(bomb);
+    gameState.allEntities.push(bomb);
     return bomb;
 }
 

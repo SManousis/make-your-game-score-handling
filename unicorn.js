@@ -1,9 +1,8 @@
 import * as utils from "./utils.js";
 import * as mario from './mario.js'
-import { allEntities, gameArea, gameState, updateMenuVisibility, updateScore } from './game.js'
+import { gameArea, gameState, updateScore } from './game.js'
 import * as bullets from './bullets.js'
 import * as powerups from './powerups.js'
-import * as walkables from './tilesMap.js'
 
 export let unicorns = [];
 
@@ -11,7 +10,7 @@ export function createUnicorn(x, y, index, row) {
     let unicornBody = document.createElement("img");
     unicornBody.className = "unicorn-img";
     unicornBody.src = "assets/enemies/unicorn.svg";
-    document.getElementById("game-area").appendChild(unicornBody);
+    document.getElementById("stage-resources").appendChild(unicornBody);
     // store reference in object
 
     let unicorn = {
@@ -57,8 +56,8 @@ export function createUnicorn(x, y, index, row) {
         // }
     }
     console.log("I was created at ", x, y)
-    unicorns.push(unicorn)
-    allEntities.push(unicorn)
+    gameState.unicorns.push(unicorn)
+    gameState.allEntities.push(unicorn)
     return unicorn
 }
 

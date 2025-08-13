@@ -1,7 +1,7 @@
 // Static vending machine. Feels colide
 // Spits random items
 import * as utils from './utils.js';
-import { gameArea, allEntities, audio, updateScore } from './game.js';
+import { gameArea, gameState, allEntities, audio, updateScore } from './game.js';
 import { shootSandwich } from './sandwich.js'
 import { createBomb } from './explosion.js';
 import { createBullet } from './bullets.js';
@@ -15,7 +15,7 @@ export function createVending(x = 1600, y = 270) {
     const vendingElement = document.createElement('img');
     vendingElement.className = 'vending-img';
     vendingElement.src = 'assets/enemies/machine.svg'
-    gameArea.appendChild(vendingElement);
+    document.getElementById('stage-resources').appendChild(vendingElement);
 
     //choose randomly between left and right
 
@@ -82,7 +82,7 @@ export function createVending(x = 1600, y = 270) {
         },
     };
 
-    allEntities.push(Vending);
+    gameState.allEntities.push(Vending);
 
     //push to allentities
     return Vending

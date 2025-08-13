@@ -1,11 +1,8 @@
 import * as utils from "./utils.js";
 import * as mario from './mario.js'
-import { allEntities, gameState, updateMenuVisibility, updateScore } from './game.js'
-import * as bullets from './bullets.js'
-import * as powerups from './powerups.js'
-import * as walkables from './tilesMap.js'
+import {  gameState,  updateScore } from './game.js'
 import { createExplosion } from "./explosion.js";
-import * as collision from './collision.js'
+
 
 export let tetros = [];
 
@@ -145,7 +142,7 @@ export function createTetro(x, y, index, row) {
         tetroBody.appendChild(p);
     }
 
-    document.getElementById("game-area").appendChild(tetroBody);
+    document.getElementById("stage-resources").appendChild(tetroBody);
 
     let tetro = {
         name: "tetro",
@@ -176,8 +173,8 @@ export function createTetro(x, y, index, row) {
         destroySound: "destroy_fly",
     }
     // console.log("I was created at ", x, y)
-    tetros.push(tetro)
-    allEntities.push(tetro)
+    gameState.tetros.push(tetro)
+    gameState.allEntities.push(tetro)
     return tetro
 }
 

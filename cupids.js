@@ -1,13 +1,11 @@
 import * as utils from "./utils.js";
 import * as mario from './mario.js'
-import { allEntities, gameState, updateMenuVisibility, updateScore } from './game.js'
+import { gameState, updateScore } from './game.js'
 import * as bullets from './bullets.js'
 import * as powerups from './powerups.js'
 import * as walkables from './tilesMap.js'
 import { createExplosion } from "./explosion.js";
-import * as collision from './collision.js'
 
-export let cupids = [];
 
 let preloadedFiringImage = new Image();
 preloadedFiringImage.src = "assets/enemies/TrumpCupidFired.svg";
@@ -17,7 +15,7 @@ export function createCupid(x, y, index, row) {
     let cupidBody = document.createElement("img");
     cupidBody.className = "cupid-img";
     cupidBody.src = "assets/enemies/TrumpCupid.svg";
-    document.getElementById("game-area").appendChild(cupidBody);
+    document.getElementById("stage-resources").appendChild(cupidBody);
     // store reference in object
 
     let cupid = {
@@ -60,8 +58,8 @@ export function createCupid(x, y, index, row) {
         // }
     }
     // console.log("I was created at ", x, y)
-    cupids.push(cupid)
-    allEntities.push(cupid)
+    gameState.cupids.push(cupid)
+    gameState.allEntities.push(cupid)
     return cupid
 }
 
@@ -135,7 +133,7 @@ export function cupidUpdate(cupid) {
         let powerUp = powerups.createPowerUp(cupid.x, cupid.y - 60, 20)
     }
 
-    for (let walkable of walkables.walkables) {
+    for (let walkable of gameState.walkables) {
         for (let walkableBody of walkable.body) {
             for (let cupidBody of cupid.body) {
                 const explosiveX = cupid.x
@@ -161,7 +159,7 @@ export function cupidUpdate(cupid) {
     }
 
     if (cupid.kamikazeMode) {
-        utils.kamikaze(cupid, mario.mario);
+        utils.kamikaze(cupid, gameState.mario);
         utils.moveUnit(cupid, cupid.velX, cupid.velY);
         return;
     }

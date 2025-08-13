@@ -21,20 +21,20 @@ export function createTilesDiv(x,y, tileSize, tile){
     div.style.background = tile.color
     div.setAttribute('data-tile', tile.name);
     div.dataset.walkable = tile.walkable
-    document.getElementById('game-area').appendChild(div)
+    document.getElementById('stage-resources').appendChild(div)
 
     if (tile.walkable == true){
         const walkableTile = {
             body: [createRect(x * tileSize, (ROWS-1-y)*tileSize, tileSize, tileSize, true)]
         }
-        walkables.push(walkableTile)
+        gameState.walkables.push(walkableTile)
     }
 
     return div
 }
 
 export function renderTileMap(map) {
-   document.querySelectorAll('#game-area .tile').forEach(el => el.remove());
+   document.querySelectorAll('#stage-resources .tile').forEach(el => el.remove());
     for (let i = 0; i < ROWS; i++) {
         for (let j = 0; j < COLUMNS; j++) {
             const tileObj = tiles.getTile(map[i][j]);

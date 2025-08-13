@@ -9,7 +9,7 @@ export function createPowerUp(x, y, value=0, type="health", graphic="healthCandy
     let powerUpBody = document.createElement("img");
     powerUpBody.className = "health-item-img";
     powerUpBody.src = `assets/items/${graphic}.svg`;
-    document.getElementById("game-area").appendChild(powerUpBody);
+    document.getElementById("stage-resources").appendChild(powerUpBody);
 
     let powerUp = {
         x: x,
@@ -28,8 +28,8 @@ export function createPowerUp(x, y, value=0, type="health", graphic="healthCandy
         type: "powerUp",
     }
     // console.log("Health item was created at ", x, y)
-    powerUps.push(powerUp)
-    game.allEntities.push(powerUp);
+    game.gameState.powerUps.push(powerUp)
+    game.gameState.allEntities.push(powerUp);
     return powerUp;
 }
 
@@ -38,8 +38,8 @@ export function powerUpUpdate(powerUp) {
     setTimeout(() => {
         powerUp.dom.remove()
         powerUp.body.forEach(body => body.div.remove())
-        const idx = game.allEntities.indexOf(powerUp);
-        if (idx !== -1) game.allEntities.splice(idx, 1);
+        const idx = game.gameState.allEntities.indexOf(powerUp);
+        if (idx !== -1) game.gameState.allEntities.splice(idx, 1);
     }, 10000)
 }
 
