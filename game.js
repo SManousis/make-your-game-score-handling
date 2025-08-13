@@ -290,7 +290,7 @@ export function triggerGameOver() {
         audio.manager.killSamples();
         audio.manager.playSample("mario_death", {
             gain: audio.soundsVolume,
-            pan: audio.xToPan(mario.x, gameArea.offsetWidth),
+            pan: audio.xToPan(gameState.mario.x, gameArea.offsetWidth),
         })
         setTimeout(() => {
             audio.manager.playSample("game_over", { gain: audio.soundsVolume });
@@ -586,9 +586,9 @@ document.addEventListener('keydown', (event) => {
     if (event.key.toLowerCase() === 'b') {
         if (keysPressed.bomb == false) {
             keysPressed.bomb = true
-            if (mario.bombs > 0) {
+            if (gameState.mario.bombs > 0) {
                 createBomb(mario.x, mario.y, mario.velX, mario.velY, 'player', 500, 500, 2, true)
-                mario.bombs -= 1
+                gameState.mario.bombs -= 1
             }
         }
     }
