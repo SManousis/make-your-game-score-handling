@@ -1,5 +1,5 @@
 import * as utils from './utils.js'
-import { updateScore } from './game.js'
+import { gameState,updateScore } from './game.js'
 import { moveAndCollide } from './physicsStep.js'
 
 //turtle spawning
@@ -153,13 +153,13 @@ function turtleUpdate(turtle) {
 function turtleVisuals(turtle) {
     if (!turtle.dom) return;
 
-    turtle.dom.style.setProperty('--turtle-x', `${turtle.x}px`)
-    turtle.dom.style.setProperty('--turtle-y', `${turtle.y}px`)
+       turtle.dom.style.setProperty('--x', `${turtle.x}px`);
+    turtle.dom.style.setProperty('--y', `${-turtle.y}px`);
 
     if (turtle.lookingDir === 'left') {
-        turtle.dom.style.setProperty('--turtle-scale-x', `-1`)
+        turtle.dom.style.setProperty('--scale-x', `-1`); 
     } else {
-        turtle.dom.style.setProperty('--turtle-scale-x', `1`)
+        turtle.dom.style.setProperty('--scale-x', `1`); 
     }
 
     if (turtle.state === "disabled") {

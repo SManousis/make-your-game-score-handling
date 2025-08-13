@@ -66,6 +66,7 @@ body {
     height: 100%;
     border: 3px solid #ffffff;
     box-sizing: border-box;
+    display: block;
 }
 
 /* The close button is positioned relative to the scaler */

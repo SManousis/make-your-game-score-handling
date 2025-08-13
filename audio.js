@@ -5,9 +5,12 @@ export class AudioManager {
         this.sampleBuffers = {};
         this.pools = {};
         this.poolSize = poolSize;
-        this.cooldowns = {}; // for throttling
+        this.cooldowns = {};
         this.musicBufferCache = {};
-        this.bgMusic = null;
+        this.musicState = { // bundle these to single objet to assing in a single step to avoid race conditions
+            bgMusic: null,
+            pervBgMusic: null
+        };
         this.musicLoopTimer = null;
         this.musicOffset = 0;
         this.startTime = null;
@@ -43,7 +46,7 @@ export class AudioManager {
     }
 
 
-    async playSample(name, { gain = 1.0, pan = 0.0, throttleMs = 0, pitchRandom = null } = {}) {
+    async playSample(name, { gain = 1.0, pan = 0.0, throttleMs = 0, pitchRandom = null, reduction = 0, fadeTime = 0 } = {}) {
         if (!this.locks) this.locks = {}; // init lock storage
 
         if (this.locks[name]) return; // Skip if already processing this sample
@@ -91,7 +94,8 @@ export class AudioManager {
             }
 
             source.connect(gainNode).connect(panNode).connect(this.context.destination);
-            source.start();
+            this.duckMusic(source.buffer.duration, reduction, fadeTime)
+            source.start(this.context.currentTime + fadeTime);
 
             slot.playing = true;
             slot.source = source; // Make sure source is tracked
@@ -122,7 +126,15 @@ export class AudioManager {
         }
     }
 
+    duckMusic(duration, reduction, fadeTime) {
+        if (!this.musicState.bgMusic || reduction === 0) return;
 
+        const now = this.context.currentTime;
+        const volume = this.musicState.bgMusic.gainNode.gain.value;
+
+        this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(volume - reduction, now + fadeTime);
+        this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(volume, now + fadeTime + duration);
+    }
 
     async resume() {
         if (this.context.state === "suspended") {
@@ -161,6 +173,7 @@ export class AudioManager {
         this.isPlaying = true;
 
         const scheduleLoop = (startTime) => {
+            this.startTime = startTime;
             const source = context.createBufferSource();
             const gainNode = context.createGain();
             source.buffer = buffer;
@@ -170,12 +183,18 @@ export class AudioManager {
             source.start(startTime, this.musicOffset);
             this.musicOffset = 0;
 
-            this.bgMusic = { source, gainNode };
+            let oldMusic = this.musicState.bgMusic;
+            let newMusic = { source, gainNode };
+            this.musicState = {
+                pervBgMusic: oldMusic,
+                bgMusic: newMusic,
+            }
+
 
             const nextStartTime = startTime + loopDuration - overlap - this.latencyCompensation;
             this.musicLoopTimer = setTimeout(() => {
                 scheduleLoop(nextStartTime);
-            }, (loopDuration - overlap - 1) * 1000); // run the new scheduleLoop ahead of time
+            }, (loopDuration - overlap - 1) * 1000); // run the new scheduleLoop one sec ahead of time
         };
 
         const now = context.currentTime;
@@ -183,30 +202,51 @@ export class AudioManager {
     }
 
     pauseMusic() {
-        if (!this.isPlaying || !this.bgMusic?.source) return;
+        if (!this.isPlaying) return;
 
         this.musicOffset = this.context.currentTime - this.startTime;
 
-        this.bgMusic.source.stop();
+        if (this.musicState.pervBgMusic?.source) {
+            this.musicState.pervBgMusic.source.stop();
+            this.musicState.pervBgMusic = null;
+        }
+        if (this.musicState.bgMusic?.source) {
+            this.musicState.bgMusic.source.stop();
+            this.musicState.bgMusic = null;
+        }
+
         clearTimeout(this.musicLoopTimer);
         this.isPlaying = false;
     }
 
-    stopMusic() {
-        if (this.bgMusic?.source) {
+    stopMusic(fadeTime = 1) {
+        // stopping previous music source if overlap is used
+        if (this.musicState.pervBgMusic?.source) {
             const now = this.context.currentTime;
-            this.bgMusic.gainNode.gain.linearRampToValueAtTime(0, now + 1)
-            this.bgMusic.source.stop();
+            this.musicState.pervBgMusic.gainNode.gain.linearRampToValueAtTime(0, now + fadeTime)
+            this.musicState.pervBgMusic.source.stop();
         }
+
+        if (this.musicState.bgMusic?.source) {
+            const now = this.context.currentTime;
+            this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(0, now + fadeTime)
+            this.musicState.bgMusic.source.stop();
+            this.musicState.bgMusic.source = null;
+        }
+
         clearTimeout(this.musicLoopTimer);
-        this.bgMusic = null;
+        this.musicState.pervBgMusic = null;
+        this.musicState.bgMusic = null;
         this.isPlaying = false;
         this.musicOffset = 0;
     }
 
     setMusicVolume(vol) { // TODO: Use this ??
-        if (this.bgMusic?.gainNode) {
-            this.bgMusic.gainNode.gain.value = vol;
+        if (this.musicState.bgMusic?.gainNode) {
+            this.musicState.bgMusic.gainNode.gain.value = vol;
+        }
+        if (this.musicState.pervBgMusic?.gainNode) {
+            this.musicState.pervBgMusic.gainNode.gain.value = vol;
         }
     }
 }
