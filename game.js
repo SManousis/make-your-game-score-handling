@@ -136,6 +136,7 @@ export const audio = {
         tick: "./assets/audio/time_tick.wav",
         turtle_hit: "./assets/audio/turtle_hit.wav",
         vending_rising: "./assets/audio/vending_rising.wav",
+
         // vocal
         mario_death: "./assets/audio/mario_death.wav",
         mario_hit1: "./assets/audio/mario_hit1.wav",
@@ -145,16 +146,33 @@ export const audio = {
         mario_jump1: "./assets/audio/mario_jump1.wav",
         mario_jump2: "./assets/audio/mario_jump2.wav",
         mario_jump3: "./assets/audio/mario_jump3.wav",
+
+        // narration
+        nar1: "./assets/audio/nar1.mp3",
+        nar2: "./assets/audio/nar2.mp3",
+        nar3: "./assets/audio/nar3.mp3",
+        nar4: "./assets/audio/nar4.mp3",
+        nar5: "./assets/audio/nar5.mp3",
+        nar6: "./assets/audio/nar6.mp3",
+        nar7: "./assets/audio/nar7.mp3",
+        nar8: "./assets/audio/nar8.mp3",
+        nar9: "./assets/audio/nar9.mp3",
+        nar10: "./assets/audio/nar10.mp3",
+        nar11: "./assets/audio/nar11.mp3",
+        nar12: "./assets/audio/nar12.mp3",
     }, 4),
     tracks: [
         { url: "./assets/audio/mario.mp3", overlapDuration: 7.742 },
+        { url: "./assets/audio/intro.mp3" },
     ],
     initialized: false,
     xToPan: xToPan,
     setUp: async function () {
         this.manager.resume();
         await this.manager.loadSamples();
-        await this.manager.getOrLoadMusicBuffer(this.tracks[0].url);
+        for (let i = 0; i < this.tracks.length; i++) {
+            await this.manager.getOrLoadMusicBuffer(this.tracks[i].url);
+        }
     }
 }
 

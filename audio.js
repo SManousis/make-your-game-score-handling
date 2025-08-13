@@ -8,6 +8,7 @@ export class AudioManager {
         this.cooldowns = {}; // for throttling
         this.musicBufferCache = {};
         this.bgMusic = null;
+        this.pervBgMusic = null;
         this.musicLoopTimer = null;
         this.musicOffset = 0;
         this.startTime = null;
@@ -43,7 +44,7 @@ export class AudioManager {
     }
 
 
-    async playSample(name, { gain = 1.0, pan = 0.0, throttleMs = 0, pitchRandom = null } = {}) {
+    async playSample(name, { gain = 1.0, pan = 0.0, throttleMs = 0, pitchRandom = null, reduction = 0, fadeTime = 0 } = {}) {
         if (!this.locks) this.locks = {}; // init lock storage
 
         if (this.locks[name]) return; // Skip if already processing this sample
@@ -91,7 +92,8 @@ export class AudioManager {
             }
 
             source.connect(gainNode).connect(panNode).connect(this.context.destination);
-            source.start();
+            this.duckMusic(source.buffer.duration, reduction, fadeTime)
+            source.start(this.context.currentTime + fadeTime);
 
             slot.playing = true;
             slot.source = source; // Make sure source is tracked
@@ -122,7 +124,15 @@ export class AudioManager {
         }
     }
 
+    duckMusic(duration, reduction, fadeTime) {
+        if (!this.bgMusic || reduction === 0) return;
 
+        const now = this.context.currentTime;
+        const volume = this.bgMusic.gainNode.gain.value;
+
+        this.bgMusic.gainNode.gain.linearRampToValueAtTime(volume - reduction, now + fadeTime);
+        this.bgMusic.gainNode.gain.linearRampToValueAtTime(volume, now + fadeTime + duration);
+    }
 
     async resume() {
         if (this.context.state === "suspended") {
@@ -170,6 +180,7 @@ export class AudioManager {
             source.start(startTime, this.musicOffset);
             this.musicOffset = 0;
 
+            this.pervBgMusic = this.bgMusic;
             this.bgMusic = { source, gainNode };
 
             const nextStartTime = startTime + loopDuration - overlap - this.latencyCompensation;
@@ -192,13 +203,22 @@ export class AudioManager {
         this.isPlaying = false;
     }
 
-    stopMusic() {
+    stopMusic(fadeTime = 1) {
+        // stopping previous music source if overlap is used
+        if (this.pervBgMusic?.source) {
+            const now = this.context.currentTime;
+            this.pervBgMusic.gainNode.gain.linearRampToValueAtTime(0, now + fadeTime)
+            this.pervBgMusic.source.stop();
+        }
+
         if (this.bgMusic?.source) {
             const now = this.context.currentTime;
-            this.bgMusic.gainNode.gain.linearRampToValueAtTime(0, now + 1)
+            this.bgMusic.gainNode.gain.linearRampToValueAtTime(0, now + fadeTime)
             this.bgMusic.source.stop();
         }
+
         clearTimeout(this.musicLoopTimer);
+        this.pervBgMusic = null;
         this.bgMusic = null;
         this.isPlaying = false;
         this.musicOffset = 0;
