@@ -29,15 +29,15 @@ export function createMario(arr, x = 500, y = 500) {
         aimDirection: "left", //left, right, up
         velX: 0, //his current velocity in x axis
         velY: 0, //his current velocity in y axis
-        x: 0, //his current x position
-        y: 0, //his current y position
+        x: x, //his current x position
+        y: y, //his current y position
         lookingDir: "left", //which direction mario is looking at
         lookingUp: false,
         walkCounter: 0, //a counter that counts for how many frames mario has been walking towards a direction, for walk animation purposes
         crouching: false,
         isInvincible: false,
         invincibilityTimer: 0,
-        body: [utils.createCircle(0, 0 + 20, 20), utils.createCircle(0, 0 + 20 + 40, 20), utils.createCircle(0 - 30, 0 + 20, 30), utils.createCircle(0 + 30, 0 + 20, 30)], //his gameplay body represented in circles
+        body: [utils.createCircle(x, y + 20, 20), utils.createCircle(x, y + 20 + 40, 20), utils.createCircle(x - 30, y + 20, 30), utils.createCircle(x + 30, y + 20, 30)], //his gameplay body represented in circles
         physicsPointsOffsets: [{ x: -20, y: 0 }, { x: 20, y: 0 }], //These points will be used
         drawFunc: function () { marioVisuals(this) }, //his visual representation in the game
         updateFunc: function () { marioUpdate(this) },
@@ -219,6 +219,24 @@ export function marioVisuals(mario) {
         currentBody.style.setProperty('--mario-scale-x', `${1}`);
         currentLegs.style.setProperty('--mario-scale-x', `${1}`);
     }
+
+    //health bar
+      const MarioHealthBar = document.getElementById('mario-healthBar-container');
+ 
+    const offsetX = -30;
+    let offsetY = 90;
+    if (mario.crouching) {
+        offsetY = 60;
+    }
+
+
+    const finalX = mario.x + offsetX;
+    const finalY = mario.y + offsetY;
+
+
+    MarioHealthBar.style.left = `${finalX}px`;
+    MarioHealthBar.style.bottom = `${finalY}px`;
+
 }
 
 
@@ -321,20 +339,20 @@ export function marioUpdate(mario) {
     // if (!grounded) {
     //   impulse = mario.accel / 1.5 //to make aerial x axis acceleration harder than grounded
     // }
-    if (keysPressed.left && !keysPressed.down) {
+    if (keysPressed.left && mario.lookingDir==="left" ) {//&& !keysPressed.down
         if (mario.velX > -mario.maxSpeed) {
             mario.velX -= impulse
         }
     }
 
-    if (keysPressed.right && !keysPressed.down) {
+    if (keysPressed.right && mario.lookingDir==="right" ) {//&& !keysPressed.down
         if (mario.velX < mario.maxSpeed) {
             mario.velX += impulse
         }
     }
 
 
-    //add x drag when one ground
+    //add x drag when on ground
     if (!keysPressed.left && !keysPressed.right) {
         let impulse = mario.drag
         // if (!grounded) {
@@ -361,14 +379,14 @@ export function marioUpdate(mario) {
 
 
     //don't allow mario to move past screen bounds
-    if (mario.x <= 0) {
-        utils.setUnit(mario, 0, mario.y);
+    if (mario.x <= 40) {
+        utils.setUnit(mario, 40, mario.y);
         if (mario.velX < 0) { // Only kill velocity if moving INTO the wall
             mario.velX = 0;
         }
     }
-    if (mario.x >= gameArea.offsetWidth) {
-        utils.setUnit(mario, gameArea.offsetWidth, mario.y);
+    if (mario.x >= gameArea.offsetWidth-40) {
+        utils.setUnit(mario, gameArea.offsetWidth-40, mario.y);
         if (mario.velX > 0) { // Only kill velocity if moving INTO the wall
             mario.velX = 0;
         }

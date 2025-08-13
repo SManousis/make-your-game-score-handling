@@ -108,6 +108,7 @@ body {
   width: 60px;
   /* Width of the bar container */
   height: 10px;
+  
   background: #222;
   /* (optional) dark background behind health */
   border: 1px solid #333;

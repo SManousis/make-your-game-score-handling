@@ -564,7 +564,7 @@ document.addEventListener('keydown', (event) => {
             if (audio.sounds) audio.manager.killSamples();
 
         } else if (gameState.currentState === 'paused') {
-         
+
             gameState.currentState = 'running';
 
             if (audio.music) {
@@ -696,7 +696,7 @@ async function GameLoop() {
     if (gameState == undefined) {
         return
     }
-   
+
     if (gameState.currentState === 'running' && gameState.mapLoaded == false) {
         console.log("loading game state")
         if (gameState == undefined) {
@@ -737,9 +737,9 @@ async function GameLoop() {
 
 
     if (gameState.currentState === 'running') {
-        
-        if (updateTimestamp == 0){
-            updateTimestamp = Date.now()-16.666
+
+        if (updateTimestamp == 0) {
+            updateTimestamp = Date.now() - 16.666
         }
         const count = Math.min(10, Math.round((Date.now() - updateTimestamp) / 16.66666))
         for (let i = 0; i < count; i++) {
@@ -824,7 +824,7 @@ export function draw() {
     }
 
 
-    const MarioHealthBar = document.getElementById('mario-healthBar-container');
+  
 
     timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;
@@ -839,11 +839,6 @@ export function draw() {
     }
     powerupText.textContent = indicators.join(' | ');
 
-    MarioHealthBar.style.left = (mario.x - 30) + "px"; // tune offset
-    MarioHealthBar.style.bottom = (mario.y + 90) + "px";
-    if (mario.crouching) {
-        MarioHealthBar.style.bottom = (mario.y + 60) + "px";
-    }
 
 
 
@@ -927,7 +922,7 @@ function createNewGameState(oldState = undefined) {
 
     if (oldState == undefined) {
         state.mario = createMario(state.allEntities)
-    }else{
+    } else {
         state.allEntities.push(state.mario)
     }
 
