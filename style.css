@@ -298,12 +298,10 @@ body {
   height: 120px;
   z-index: 7;
   /* set by turtleVisuals */
-  left: var(--turtle-x);
-  bottom: var(--turtle-y);
-
-  /* Center the image on its x/y coordinates and flip it horizontally */
-  transform-origin: center;
-  transform: translateX(-50%) translateY(30%) scaleX(var(--turtle-scale-x, 1));
+  left: 0;
+  bottom: 0;
+ transform: translate(calc(-50% + var(--x)), calc(30% + var(--y))) scaleX(var(--scale-x, 1));
+  will-change: transform;
 }
 
 .cinematic-panel {

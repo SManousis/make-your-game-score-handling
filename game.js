@@ -290,7 +290,7 @@ export function triggerGameOver() {
         audio.manager.killSamples();
         audio.manager.playSample("mario_death", {
             gain: audio.soundsVolume,
-            pan: audio.xToPan(mario.x, gameArea.offsetWidth),
+            pan: audio.xToPan(gameState.mario.x, gameArea.offsetWidth),
         })
         setTimeout(() => {
             audio.manager.playSample("game_over", { gain: audio.soundsVolume });
@@ -586,9 +586,9 @@ document.addEventListener('keydown', (event) => {
     if (event.key.toLowerCase() === 'b') {
         if (keysPressed.bomb == false) {
             keysPressed.bomb = true
-            if (mario.bombs > 0) {
-                createBomb(mario.x, mario.y, mario.velX, mario.velY, 'player', 500, 500, 2, true)
-                mario.bombs -= 1
+            if (gameState.mario.bombs > 0) {
+                createBomb(gameState.mario.x, gameState.mario.y, gameState.mario.velX, gameState.mario.velY, 'player', 500, 500, 2, true)
+                gameState.mario.bombs -= 1
             }
         }
     }
@@ -783,7 +783,7 @@ function update() {
     }
 
 
-    collision.powerUpPicked(mario) // checks if mario touched a health item//collision.isShot(mario);
+    collision.powerUpPicked(gameState.mario) // checks if mario touched a health item//collision.isShot(mario);
 
     //running all entities' update function
     for (let entity of gameState.allEntities) {
@@ -830,11 +830,11 @@ export function draw() {
     livesElement.textContent = `Lives: ${gameState.lives}`;
 
     let indicators = [];
-    if (mario.bombs > 0) {
+    if (gameState.mario.bombs > 0) {
         indicators.push(`B: ${mario.bombs}`);
     }
 
-    if (mario.multibulletTimer > 0) {
+    if (gameState.mario.multibulletTimer > 0) {
         indicators.push("U");
     }
     powerupText.textContent = indicators.join(' | ');

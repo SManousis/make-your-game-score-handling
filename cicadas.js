@@ -73,25 +73,25 @@ function cicadaUpdate(cicada) {
         const detectionDistance = cicada.width * 0.8
 
         for (const groundedEnemy of gameState.groundedEnemies) {
-            if (groundedEnemy === cicadas || Math.abs(groundedEnemy.y - cicadas.y) > 1) continue;
+            if (groundedEnemy === cicada || Math.abs(groundedEnemy.y - cicada.y) > 1) continue;
 
-            if (cicadas.velX > 0 && groundedEnemy.x > cicadas.x) {
-                const distance = groundedEnemy.x - cicadas.x;
+            if (cicada.velX > 0 && groundedEnemy.x > cicada.x) {
+                const distance = groundedEnemy.x - cicada.x;
                 if (distance < detectionDistance) {
 
-                    cicadas.velX = 0;
+                    cicada.velX = 0;
                     if (distance == 0) {
-                        cicadas.velX = Math.random() * 100
+                        cicada.velX = Math.random() * 100
                     }
                     break;
                 }
-            } else if (cicadas.velX < 0 && groundedEnemy.x < cicadas.x) {
-                const distance = cicadas.x - groundedEnemy.x;
+            } else if (cicada.velX < 0 && groundedEnemy.x < cicada.x) {
+                const distance = cicada.x - groundedEnemy.x;
                 if (distance < detectionDistance) {
 
-                    cicadas.velX = 0;
+                    cicada.velX = 0;
                     if (distance == 0) {
-                        cicadas.velX = Math.random() * 100
+                        cicada.velX = Math.random() * 100
                     }
                     break
                 }

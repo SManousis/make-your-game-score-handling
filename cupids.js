@@ -144,7 +144,7 @@ export function cupidUpdate(cupid) {
             }
         }
     }
-    if (cupids.length > 0 && gameState.cupids[0].y <= 350) {
+    if (gameState.cupids.length > 0 && gameState.cupids[0].y <= 350) {
         for (let cupid of gameState.cupids) {
             cupid.kamikazeMode = true
         }
