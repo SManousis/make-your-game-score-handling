@@ -47,6 +47,7 @@ export class AudioManager {
 
 
     async playSample(name, { gain = 1.0, pan = 0.0, throttleMs = 0, pitchRandom = null, reduction = 0, fadeTime = 0 } = {}) {
+        if (!reduction) fadeTime = 0;
         if (!this.locks) this.locks = {}; // init lock storage
 
         if (this.locks[name]) return; // Skip if already processing this sample
@@ -76,24 +77,24 @@ export class AudioManager {
                 oldest.playing = false;
                 slot = oldest;
             }
-            
+
             const source = this.context.createBufferSource();
             const gainNode = this.context.createGain();
             const panNode = this.context.createStereoPanner();
-            
+
             source.buffer = buffer;
             gainNode.gain.value = gain;
             panNode.pan.value = pan;
-            
+
             if (pitchRandom && pitchRandom.length === 2) {
                 const [min, max] = pitchRandom;
                 source.playbackRate.value = min + Math.random() * (max - min);
             }
-            
+
             source.connect(gainNode).connect(panNode).connect(this.context.destination);
             this.duckMusic(source.buffer.duration, reduction, fadeTime)
             source.start(this.context.currentTime + fadeTime);
-            
+
             slot.started = this.context.currentTime;
             slot.playing = true;
             slot.source = source;
@@ -131,7 +132,7 @@ export class AudioManager {
         const volume = this.musicState.bgMusic.gainNode.gain.value;
 
         this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(volume - reduction, now + fadeTime);
-        this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(volume, now + fadeTime*2 + duration);
+        this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(volume, now + fadeTime * 3 + duration);
     }
 
     async resume() {
@@ -217,18 +218,31 @@ export class AudioManager {
         this.isPlaying = false;
     }
 
-    stopMusic(fadeTime = 1) {
+    stopMusic(fadeTime) {
+        const now = this.context.currentTime;
+        
         // stopping previous music source if overlap is used
         if (this.musicState.pervBgMusic?.source) {
-            const now = this.context.currentTime;
-            this.musicState.pervBgMusic.gainNode.gain.linearRampToValueAtTime(0, now + fadeTime)
+            if (fadeTime) {
+                this.musicState.pervBgMusic.gainNode.gain.linearRampToValueAtTime(0, now + fadeTime)
+                setTimeout(() => {
+                    this.musicState.pervBgMusic.source.stop();
+                }, fadeTime * 1000);
+            } else {
+                this.musicState.pervBgMusic.source.stop();
+            }
             this.musicState.pervBgMusic.source.stop();
         }
 
         if (this.musicState.bgMusic?.source) {
-            const now = this.context.currentTime;
-            this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(0, now + fadeTime)
-            setTimeout(this.musicState.bgMusic.source.stop(), fadeTime*1000);
+            if (fadeTime) {
+                this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(0, now + fadeTime)
+                setTimeout(() => {
+                    this.musicState.bgMusic.source.stop();
+                }, fadeTime * 1000);
+            } else {
+                this.musicState.bgMusic.source.stop();
+            }
             this.musicState.bgMusic.source = null;
         }
 

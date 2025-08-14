@@ -164,7 +164,7 @@ export const audio = {
     }, 4),
     tracks: [
         { url: "./assets/audio/mario.mp3", overlapDuration: 7.742 },
-        { url: "./assets/audio/intro.mp3" },
+        { url: "./assets/audio/intro.mp3", overlapDuration: 9.474},
     ],
     initialized: false,
     xToPan: xToPan,
