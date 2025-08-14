@@ -337,6 +337,7 @@ export const keysPressed = {
     down: false,
     space: false,
     autofire: false,
+    fire: false,
     upgrade: false,
     bomb: false,
     esc: false,
@@ -562,13 +563,7 @@ soundsToggles.forEach(toggle => {
     });
 });
 
-const fireState = {
-    isFiring: false,
-    initialDelay: 300,
-    repeatRate: 100,
-    delayTimer: null,
-    repeatTimer: null,
-};
+
 
 
 // Listen for key presses
@@ -603,41 +598,16 @@ document.addEventListener('keydown', (event) => {
         keysPressed.esc = true
     }
 
-    // if (event.key.toLowerCase() === 'u') {
-    //     keysPressed.upgrade = !keysPressed.upgrade;
-    // }
 
     if (event.key.toLowerCase() === 'b') {
-        if (keysPressed.bomb == false) {
             keysPressed.bomb = true
-            if (gameState.mario.bombs > 0) {
-                createBomb(gameState.mario.x, gameState.mario.y, gameState.mario.velX, gameState.mario.velY, 'player', 500, 500, 2, true)
-                gameState.mario.bombs -= 1
-            }
-        }
     }
 
 
 
-    if (event.key.toLocaleLowerCase() === 'f' && !fireState.isFiring) {
-
-        if (keysPressed.autofire) return;
-
-        fireState.isFiring = true;
-
-        //fire immediately on the initial key press.
-        marioShoot();
-
-        //start a timer for the delay. After 100ms, it will start the continuous fire.
-        fireState.delayTimer = setTimeout(() => {
-            // check if the key is still being held down after the delay.
-            if (fireState.isFiring) {
-                // start the repeating timer for continuous fire.
-                fireState.repeatTimer = setInterval(marioShoot, fireState.repeatRate);
-            }
-        }, fireState.initialDelay);
+    if (event.key.toLocaleLowerCase() === 'f'){
+        keysPressed.fire=true
     }
-
 
 
     if (event.key === 'ArrowLeft') {
@@ -658,27 +628,19 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowDown') {
         keysPressed.down = true;
     }
-    // let space = keysPressed.space;
+    
     if (event.key === ' ' || event.code === 'Space') {
         keysPressed.space = true
-        console.log("space on")
     }
 
 
 });
 
 document.addEventListener('keyup', (event) => {
-    // if (gameState.currentState !== 'running') {
-    //     return;
-    // }
+
 
     if (event.key.toLocaleLowerCase() === 'f') {
-        // 1. Mark that we have stopped firing.
-        fireState.isFiring = false;
-
-        // 2. IMPORTANT: Clear any running timers to stop the firing sequence.
-        clearTimeout(fireState.delayTimer);
-        clearInterval(fireState.repeatTimer);
+        keysPressed.fire=false
     }
 
     if (event.key === 'ArrowLeft') {
@@ -688,7 +650,6 @@ document.addEventListener('keyup', (event) => {
     if (event.key === 'Escape') {
         keysPressed.esc = false
     }
-
 
     if (event.key === 'ArrowRight') {
         keysPressed.right = false;
@@ -708,7 +669,6 @@ document.addEventListener('keyup', (event) => {
 
     if (event.key === ' ' || event.code === 'Space') {
         keysPressed.space = false
-        console.log("space off")
     }
 });
 

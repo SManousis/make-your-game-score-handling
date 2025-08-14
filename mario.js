@@ -8,6 +8,14 @@ export const marioDiv = document.getElementById('mario');
 const FIRE_RATE = 30;
 let fireCooldown = 0;
 
+const fireState = {
+    isFiring: false,
+    initialDelay: 300,
+    repeatRate: 100,
+    delayTimer: null,
+    repeatTimer: null,
+};
+
 
 //the character the player controls
 export function createMario(arr, x = 500, y = 500) {
@@ -439,6 +447,45 @@ export function marioUpdate(mario) {
         mario.crouching = false
     }
 
+    //mario actions
+    if (keysPressed.bomb) {
+        if (gameState.mario.bombs > 0) {
+            createBomb(gameState.mario.x, gameState.mario.y, gameState.mario.velX, gameState.mario.velY, 'player', 500, 500, 2, true)
+            gameState.mario.bombs -= 1
+
+        }
+        keysPressed.bomb = false
+    }
+
+    if (keysPressed.fire) {
+        if (!fireState.isFiring) {
+
+            if (keysPressed.autofire) return;
+
+            fireState.isFiring = true;
+
+            //fire immediately on the initial key press.
+            marioShoot();
+
+            //start a timer for the delay. After 100ms, it will start the continuous fire.
+            fireState.delayTimer = setTimeout(() => {
+                // check if the key is still being held down after the delay.
+                if (fireState.isFiring) {
+                    // start the repeating timer for continuous fire.
+                    fireState.repeatTimer = setInterval(marioShoot, fireState.repeatRate);
+                }
+            }, fireState.initialDelay);
+        }
+
+    } else {
+        // 1. Mark that we have stopped firing.
+        fireState.isFiring = false;
+
+        // 2. IMPORTANT: Clear any running timers to stop the firing sequence.
+        clearTimeout(fireState.delayTimer);
+        clearInterval(fireState.repeatTimer);
+        keysPressed.fire=false;
+    }
 }
 
 // Helper function to generate symmetric spread values
