@@ -76,29 +76,27 @@ export class AudioManager {
                 oldest.playing = false;
                 slot = oldest;
             }
-            slot.started = this.context.currentTime;
-
+            
             const source = this.context.createBufferSource();
-            slot.source = source;
             const gainNode = this.context.createGain();
             const panNode = this.context.createStereoPanner();
-
-
+            
             source.buffer = buffer;
             gainNode.gain.value = gain;
             panNode.pan.value = pan;
-
+            
             if (pitchRandom && pitchRandom.length === 2) {
                 const [min, max] = pitchRandom;
                 source.playbackRate.value = min + Math.random() * (max - min);
             }
-
+            
             source.connect(gainNode).connect(panNode).connect(this.context.destination);
             this.duckMusic(source.buffer.duration, reduction, fadeTime)
             source.start(this.context.currentTime + fadeTime);
-
+            
+            slot.started = this.context.currentTime;
             slot.playing = true;
-            slot.source = source; // Make sure source is tracked
+            slot.source = source;
             source.onended = () => {
                 slot.playing = false;
             };
