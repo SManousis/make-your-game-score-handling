@@ -178,8 +178,12 @@ export const audio = {
 }
 
 //master
-export let gameState = undefined
+export let gameState = {
+    currentState:"mainMenu"
+}
 
+export const queueFree = []
+export const gameArea = document.getElementById('game-area')
 
 
 
@@ -876,8 +880,7 @@ function startStorymode(firstTime = false) {
     }
 }
 
-export const queueFree = []
-export const gameArea = document.getElementById('game-area')
+
 
 function createNewGameState(oldState = undefined) {
     let state = {
