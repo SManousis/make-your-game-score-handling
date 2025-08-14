@@ -24,6 +24,11 @@ const lines = {
 
 //based on gameState it will understand what cinematic to play
 export function cinematicTicker() {
+    let reduction = audio.musicVolume - audio.soundsVolume;
+    if (reduction<0) {
+        reduction = 0;
+    }
+
     //cinematic preperation
     if (started == false) {
         audio.manager.playMusicLoop(audio.tracks[1].url, audio.musicVolume, 2);
@@ -86,7 +91,7 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 3:
-                        audio.manager.playSample('nar1')
+                        audio.manager.playSample('nar1', {gain: audio.soundsVolume, reduction: reduction, fadeTime: reduction})
                         wait(8 * 70)
                         break;
                     case 4:
@@ -107,7 +112,7 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 8:
-                        audio.manager.playSample('nar2')
+                        audio.manager.playSample('nar2', {gain: audio.soundsVolume, reduction: reduction, fadeTime: reduction})
                         wait(7.5 * 72)
                         break;
                     case 9:
@@ -128,7 +133,7 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 13:
-                        audio.manager.playSample('nar3')
+                        audio.manager.playSample('nar3', {gain: audio.soundsVolume, reduction: reduction, fadeTime: reduction})
                         wait(6 * 65)
                         break;
                     case 14:
@@ -149,7 +154,7 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 18:
-                        audio.manager.playSample('nar4')
+                        audio.manager.playSample('nar4', {gain: audio.soundsVolume, reduction: reduction, fadeTime: reduction})
                         wait(6.5 * 60)
                         break;
                     case 19:
@@ -184,7 +189,7 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 3:
-                        audio.manager.playSample('nar5')
+                        audio.manager.playSample('nar5', {gain: audio.soundsVolume, reduction: reduction, fadeTime: reduction})
                         wait(8 * 70)
                         break;
                     case 4:
@@ -208,7 +213,7 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 9:
-                        audio.manager.playSample('nar6')
+                        audio.manager.playSample('nar6', {gain: audio.soundsVolume, reduction: reduction, fadeTime: reduction})
                         wait(21 * 70)
                         break;
                     case 10:
@@ -232,7 +237,7 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 15:
-                        audio.manager.playSample('nar7')
+                        audio.manager.playSample('nar7', {gain: audio.soundsVolume, reduction: reduction, fadeTime: reduction})
                         wait(10 * 67)
                         break;
                     case 16:
@@ -266,7 +271,7 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 3:
-                        audio.manager.playSample('nar8')
+                        audio.manager.playSample('nar8', {gain: audio.soundsVolume, reduction: reduction, fadeTime: reduction})
                         wait(8 * 65)
                         break;
                     case 4:
@@ -290,7 +295,7 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 9:
-                        audio.manager.playSample('nar9')
+                        audio.manager.playSample('nar9', {gain: audio.soundsVolume, reduction: reduction, fadeTime: reduction})
                         wait(11.5 * 70)
                         break;
                     case 10:
@@ -315,7 +320,7 @@ export function cinematicTicker() {
                         wait(1)
                         break;
                     case 15:
-                        audio.manager.playSample('nar10')
+                        audio.manager.playSample('nar10', {gain: audio.soundsVolume, reduction: reduction, fadeTime: reduction})
                         wait(2 * 70)
                         break;
                     case 16:
@@ -347,7 +352,7 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 3:
-                        audio.manager.playSample('nar11')
+                        audio.manager.playSample('nar11', {gain: audio.soundsVolume, reduction: reduction, fadeTime: reduction})
                         wait(14 * 65)
                         break;
                     case 4:
@@ -375,7 +380,7 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 10:
-                        audio.manager.playSample('nar12')
+                        audio.manager.playSample('nar12', {gain: audio.soundsVolume, reduction: reduction, fadeTime: reduction})
                         wait(5 * 70)
                         break;
                     case 11:

@@ -131,7 +131,7 @@ export class AudioManager {
         const volume = this.musicState.bgMusic.gainNode.gain.value;
 
         this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(volume - reduction, now + fadeTime);
-        this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(volume, now + fadeTime + duration);
+        this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(volume, now + fadeTime*2 + duration);
     }
 
     async resume() {
@@ -228,7 +228,7 @@ export class AudioManager {
         if (this.musicState.bgMusic?.source) {
             const now = this.context.currentTime;
             this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(0, now + fadeTime)
-            this.musicState.bgMusic.source.stop();
+            setTimeout(this.musicState.bgMusic.source.stop(), fadeTime*1000);
             this.musicState.bgMusic.source = null;
         }
 
