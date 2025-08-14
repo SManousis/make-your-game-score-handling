@@ -5,7 +5,6 @@ let i = 0
 let started = false
 let textShown = 0
 let abort = false
-let stopSample;
 
 const lines = {
     1: 'After spending hours working on a malfunctioning vending machine with no progress in sight, El Mario decided to call it a day.',
@@ -87,7 +86,7 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 3:
-                        stopSample = audio.manager.playSample('nar1')
+                        audio.manager.playSample('nar1')
                         wait(8 * 70)
                         break;
                     case 4:
