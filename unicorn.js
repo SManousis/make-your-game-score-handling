@@ -4,8 +4,6 @@ import { gameArea, gameState, updateScore } from './game.js'
 import * as bullets from './bullets.js'
 import * as powerups from './powerups.js'
 
-export let unicorns = [];
-
 export function createUnicorn(x, y, index, row) {
     let unicornBody = document.createElement("img");
     unicornBody.className = "unicorn-img";
@@ -73,7 +71,6 @@ export function createUnicorn(x, y, index, row) {
 
 export function unicornUpdate(unicorn) {
     if (unicorn.health <= 0) {
-        unicorns = unicorns.filter(u => u !== unicorn);
         utils.destroyUnit(unicorn)
         updateScore(unicorn.scoreValue);
         return;
@@ -114,7 +111,6 @@ export function unicornUpdate(unicorn) {
         if (isOffScreenLeft || isOffScreenRight) {
             if (unicorn.passesMade >= 2) {
                 // If two passes are done, destroy the unicorn.
-                unicorns = unicorns.filter(u => u !== unicorn);
                 utils.destroyUnit(unicorn);
                 return;
             } else {

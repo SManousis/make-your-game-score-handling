@@ -221,8 +221,8 @@ export function marioVisuals(mario) {
     }
 
     //health bar
-      const MarioHealthBar = document.getElementById('mario-healthBar-container');
- 
+    const MarioHealthBar = document.getElementById('mario-healthBar-container');
+
     const offsetX = -30;
     let offsetY = 90;
     if (mario.crouching) {
@@ -284,14 +284,13 @@ export function marioUpdate(mario) {
             mario.isInvincible = false;
         }
     }
-    if (mario.health <= 0) {
 
+    if (mario.health <= 0) {
         gameState.lives -= 1
         lifeLostFanfare();
         mario.health = 100
         if (gameState.lives === 0) {
             triggerGameOver();
-
             console.log("mario died")
         }
     }
@@ -331,30 +330,37 @@ export function marioUpdate(mario) {
             marioShoot();
             fireCooldown = FIRE_RATE;
         }
-
     }
 
     // add x acceleration
     let impulse = mario.accel
+
     // if (!grounded) {
     //   impulse = mario.accel / 1.5 //to make aerial x axis acceleration harder than grounded
     // }
-if (keysPressed.left && keysPressed.right){
-    mario.velX=0
-}
 
-    if (keysPressed.left && !keysPressed.right ) {//&& !keysPressed.down
+    if ((keysPressed.left && keysPressed.right) || keysPressed.down) {
+        if (Math.abs(mario.velX) < mario.drag) {
+            mario.velX = 0
+        } else if (mario.velX > 0) {
+            mario.velX -= mario.drag
+        } else if (mario.velX < 0) {
+            mario.velX += mario.drag
+        }
+    }
+
+
+    if (keysPressed.left && !keysPressed.right && !keysPressed.down) {//&& !keysPressed.down
         if (mario.velX > -mario.maxSpeed) {
             mario.velX -= impulse
         }
     }
 
-    if (keysPressed.right && !keysPressed.left ) {//&& !keysPressed.down
+    if (keysPressed.right && !keysPressed.left && !keysPressed.down) {//&& !keysPressed.down
         if (mario.velX < mario.maxSpeed) {
             mario.velX += impulse
         }
     }
-
 
     //add x drag when on ground
     if (!keysPressed.left && !keysPressed.right) {
@@ -378,10 +384,6 @@ if (keysPressed.left && keysPressed.right){
     }
 
 
-
-
-
-
     //don't allow mario to move past screen bounds
     if (mario.x <= 40) {
         utils.setUnit(mario, 40, mario.y);
@@ -389,8 +391,8 @@ if (keysPressed.left && keysPressed.right){
             mario.velX = 0;
         }
     }
-    if (mario.x >= gameArea.offsetWidth-40) {
-        utils.setUnit(mario, gameArea.offsetWidth-40, mario.y);
+    if (mario.x >= gameArea.offsetWidth - 40) {
+        utils.setUnit(mario, gameArea.offsetWidth - 40, mario.y);
         if (mario.velX > 0) { // Only kill velocity if moving INTO the wall
             mario.velX = 0;
         }

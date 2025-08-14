@@ -70,10 +70,6 @@ export function createCupid(x, y, index, row) {
 
 export function cupidUpdate(cupid) {
     if (cupid.health <= 0) {
-        // if (cupid.dom) cupid.dom.remove();
-        // cupid.body.forEach(b => { if (b.div) b.div.remove(); })
-        // utils.removeUnitFromArray(cupid, cupids)
-        // game.removeFromAllEntities(cupid)
         utils.destroyUnit(cupid)
         updateScore(cupid.scoreValue);
     }

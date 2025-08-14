@@ -148,18 +148,19 @@ export const audio = {
         mario_jump3: "./assets/audio/mario_jump3.wav",
 
         // narration
-        nar1: "./assets/audio/nar1.mp3",
-        nar2: "./assets/audio/nar2.mp3",
-        nar3: "./assets/audio/nar3.mp3",
-        nar4: "./assets/audio/nar4.mp3",
-        nar5: "./assets/audio/nar5.mp3",
-        nar6: "./assets/audio/nar6.mp3",
-        nar7: "./assets/audio/nar7.mp3",
-        nar8: "./assets/audio/nar8.mp3",
-        nar9: "./assets/audio/nar9.mp3",
+        nar1: "./assets/audio/nar1.ogg",
+        nar2: "./assets/audio/nar2.ogg",
+        nar3: "./assets/audio/nar3.ogg",
+        nar4: "./assets/audio/nar4.ogg",
+        nar5: "./assets/audio/nar5.ogg",
+        nar6: "./assets/audio/nar6.ogg",
+        nar7: "./assets/audio/nar7.ogg",
+        nar8: "./assets/audio/nar8.ogg",
+        nar9: "./assets/audio/nar9.ogg",
         nar10: "./assets/audio/nar10.mp3",
-        nar11: "./assets/audio/nar11.mp3",
-        nar12: "./assets/audio/nar12.mp3",
+        nar11: "./assets/audio/nar11.ogg",
+        nar12: "./assets/audio/shrooms.ogg",
+        // nar12: "./assets/audio/nar12.ogg",
     }, 4),
     tracks: [
         { url: "./assets/audio/mario.mp3", overlapDuration: 7.742 },
@@ -239,12 +240,12 @@ function restartGame() {
 
     gameState.allEntities.length = 0;
     gameState.groundedEnemies.length = 0;
-    gameState.ghosts.ghosts.length = 0;
+    gameState.ghosts.length = 0;
     gameState.unicorns.length = 0;
-    gameState.cupids.cupids.length = 0;
-    gameState.cicadas.cicadas.length = 0;
-    gameState.turtles.turtles.length = 0;
-    gameState.bullets.allBullets.length = 0;
+    gameState.cupids.length = 0;
+    gameState.cicadas.length = 0;
+    gameState.turtles.length = 0;
+    gameState.allBullets.length = 0;
     gameState.powerUps.length = 0;
     gameState.flowers.length = 0;
     gameState.tetros.length = 0;
@@ -338,6 +339,7 @@ export const keysPressed = {
     autofire: false,
     upgrade: false,
     bomb: false,
+    esc: false,
 };
 
 //--- EVENT LISTENERS ----
@@ -571,9 +573,9 @@ const fireState = {
 
 // Listen for key presses
 document.addEventListener('keydown', (event) => {
-    if (gameState.currentState !== 'running' && event.key.toLowerCase() !== 'p') {
-        return;
-    }
+    // if (gameState.currentState !== 'running' && event.key.toLowerCase() !== 'p') {
+    //     return;
+    // }
 
     if (event.key.toLowerCase() === 'p' && (gameState.currentState === 'running' || gameState.currentState === 'paused')) {
         if (gameState.currentState === 'running') {
@@ -595,6 +597,10 @@ document.addEventListener('keydown', (event) => {
     }
     if (event.key.toLowerCase() === 'a') {
         keysPressed.autofire = !keysPressed.autofire;
+    }
+
+    if (event.key === 'Escape') {
+        keysPressed.esc = true
     }
 
     // if (event.key.toLowerCase() === 'u') {
@@ -655,15 +661,16 @@ document.addEventListener('keydown', (event) => {
     // let space = keysPressed.space;
     if (event.key === ' ' || event.code === 'Space') {
         keysPressed.space = true
+        console.log("space on")
     }
 
 
 });
 
 document.addEventListener('keyup', (event) => {
-    if (gameState.currentState !== 'running') {
-        return;
-    }
+    // if (gameState.currentState !== 'running') {
+    //     return;
+    // }
 
     if (event.key.toLocaleLowerCase() === 'f') {
         // 1. Mark that we have stopped firing.
@@ -676,6 +683,10 @@ document.addEventListener('keyup', (event) => {
 
     if (event.key === 'ArrowLeft') {
         keysPressed.left = false;
+    }
+
+    if (event.key === 'Escape') {
+        keysPressed.esc = false
     }
 
 
@@ -697,6 +708,7 @@ document.addEventListener('keyup', (event) => {
 
     if (event.key === ' ' || event.code === 'Space') {
         keysPressed.space = false
+        console.log("space off")
     }
 });
 
@@ -717,6 +729,8 @@ async function GameLoop() {
 
     if (gameState.currentState === 'running' && gameState.mapLoaded == false) {
         console.log("loading game state")
+        document.getElementById('mario-img-cont').style.opacity = "100%"
+        document.getElementById('mario-healthBar-container').style.opacity = "100%"
         if (gameState == undefined) {
             gameState = createNewGameState()
         }
@@ -767,7 +781,7 @@ async function GameLoop() {
         draw();
 
     } else if (gameState.currentState == 'cinematic') {
-        cinematicTicker(gameState)
+        cinematicTicker()
     }
 
     for (let unit of queueFree) {
@@ -849,7 +863,7 @@ export function draw() {
 
     let indicators = [];
     if (gameState.mario.bombs > 0) {
-        indicators.push(`B: ${mario.bombs}`);
+        indicators.push(`B: ${gameState.mario.bombs}`);
     }
 
     if (gameState.mario.multibulletTimer > 0) {
@@ -911,10 +925,11 @@ function createNewGameState(oldState = undefined) {
         score: oldState ? oldState.score : 0,
         lives: oldState ? oldState.lives : 5,
         gameTime: oldState ? oldState.gameTime : 0,
-        level: oldState ? oldState.level : 0,
+        level: oldState ? oldState.level : 1,
 
         //non persisting
-        stageCinematicCounter: 0, //counter used by cinematicTicker to control the speed that cinematics play out
+        cinematicTimer: 0, //counter used by cinematicTicker to control the speed that cinematics play out
+        cinematicStep: 0,
         currentState: 'cinematic', //'cinematic', 'mainMenu', 'paused', 'gameover', 'running'
         previousState: '',
         frameCounter: 0,
