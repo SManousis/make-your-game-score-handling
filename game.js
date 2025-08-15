@@ -1,4 +1,4 @@
-import { createMario, marioShoot, marioStopFiring,updateMarioHealthBar } from './mario.js'
+import { createMario, marioShoot, marioStopFiring, updateMarioHealthBar } from './mario.js'
 //import * as floaters from './floaters.js'
 //import * as walkables from './walkables.js'
 import * as collision from './collision.js'
@@ -164,7 +164,7 @@ export const audio = {
     }, 4),
     tracks: [
         { url: "./assets/audio/mario.mp3", overlapDuration: 7.742 },
-        { url: "./assets/audio/intro.mp3", overlapDuration: 9.474},
+        { url: "./assets/audio/intro.mp3", overlapDuration: 9.474 },
     ],
     initialized: false,
     xToPan: xToPan,
@@ -179,8 +179,9 @@ export const audio = {
 
 //master
 export let gameState = {
-    currentState:"mainMenu"
+    currentState: "mainMenu"
 }
+
 
 export const queueFree = []
 export const gameArea = document.getElementById('game-area')
@@ -218,16 +219,80 @@ export function updateMenuVisibility() {
 
 
 
+// function restartGame() {
+//     console.log("RESTART CALLED")
+//     throw Error("WTF")
+//     return
+
+//     //TODO delete everything under stage-resources
+
+//     gameState.currentGameGen++; // In
+
+//     // suppressing destroy sounds for restart
+//     let soundsTemp = audio.sounds;
+//     audio.sounds = false;
+
+//     // crement at every restart
+//     for (let entity of gameState.allEntities) {
+//         if (entity.countdownDiv) {
+//             entity.countdownDiv.remove()
+//             utils.destroyUnit(entity)
+//         }
+//         if (entity.dom) entity.dom.remove();
+//         if (entity.body) entity.body.forEach(body => body.div.remove());
+//     }
+//     audio.sounds = soundsTemp;
+
+//     gameState.allEntities.length = 0;
+//     gameState.groundedEnemies.length = 0;
+//     gameState.ghosts.length = 0;
+//     gameState.unicorns.length = 0;
+//     gameState.cupids.length = 0;
+//     gameState.cicadas.length = 0;
+//     gameState.turtles.length = 0;
+//     gameState.allBullets.length = 0;
+//     gameState.powerUps.length = 0;
+//     gameState.flowers.length = 0;
+//     gameState.tetros.length = 0;
+
+//     eventQueue.length = 0;
+
+//     utils.setUnit(mario, 500, 500);
+//     gameState.mario.health = 100;
+//     gameState.allEntities.push(mario);
+
+//     for (const key in keysPressed) {
+//         keysPressed[key] = false;
+//     }
+
+//     gameState.gameTime = 0;
+//     gameState.score = 0;
+//     gameState.lives = 5;
+//     scoreElement.textContent = `Score: ${gameState.score}`;
+//     livesElement.textContent = `Lives: ${gameState.lives}`;
+
+//     gameState.currentState = 'running';
+//     updateMenuVisibility();
+
+//     if (audio.music) {
+//         audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
+//     } else {
+//         audio.manager.stopMusic();
+//     }
+
+//     //reset game over screen
+//     playerNameInput.value = '';
+//     submitScoreButton.disabled = false;
+//     submitScoreButton.textContent = 'Submit Score';
+//     leaderboardContainer.classList.add('hidden');
+//     playerRankInfo.textContent = '';
+
+
+//     startStorymode()
+
+// }
+
 function restartGame() {
-    console.log("RESTART CALLED")
-    throw Error("WTF")
-    return
-
-    //TODO delete everything under stage-resources
-
-    gameState.currentGameGen++; // In
-
-    // suppressing destroy sounds for restart
     let soundsTemp = audio.sounds;
     audio.sounds = false;
 
@@ -241,54 +306,15 @@ function restartGame() {
         if (entity.body) entity.body.forEach(body => body.div.remove());
     }
     audio.sounds = soundsTemp;
-
-    gameState.allEntities.length = 0;
-    gameState.groundedEnemies.length = 0;
-    gameState.ghosts.length = 0;
-    gameState.unicorns.length = 0;
-    gameState.cupids.length = 0;
-    gameState.cicadas.length = 0;
-    gameState.turtles.length = 0;
-    gameState.allBullets.length = 0;
-    gameState.powerUps.length = 0;
-    gameState.flowers.length = 0;
-    gameState.tetros.length = 0;
-
-    eventQueue.length = 0;
-
-    utils.setUnit(mario, 500, 500);
-    gameState.mario.health = 100;
-    gameState.allEntities.push(mario);
-
-    for (const key in keysPressed) {
-        keysPressed[key] = false;
-    }
-
-    gameState.gameTime = 0;
-    gameState.score = 0;
-    gameState.lives = 5;
-    scoreElement.textContent = `Score: ${gameState.score}`;
-    livesElement.textContent = `Lives: ${gameState.lives}`;
-
-    gameState.currentState = 'running';
+    gameState = {}
+    startStorymode();
+    gameState.currentState = "running";
+    gameState.mapLoaded = false;
     updateMenuVisibility();
-
     if (audio.music) {
-        audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
-    } else {
-        audio.manager.stopMusic();
+        audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration)
     }
-
-    //reset game over screen
-    playerNameInput.value = '';
-    submitScoreButton.disabled = false;
-    submitScoreButton.textContent = 'Submit Score';
-    leaderboardContainer.classList.add('hidden');
-    playerRankInfo.textContent = '';
-
-
-    startStorymode()
-
+    console.log(gameState);
 }
 
 
@@ -615,13 +641,13 @@ document.addEventListener('keydown', (event) => {
 
 
     if (event.key.toLowerCase() === 'b') {
-            keysPressed.bomb = true
+        keysPressed.bomb = true
     }
 
 
 
-    if (event.key.toLocaleLowerCase() === 'f'){
-        keysPressed.fire=true
+    if (event.key.toLocaleLowerCase() === 'f') {
+        keysPressed.fire = true
     }
 
 
@@ -643,7 +669,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowDown') {
         keysPressed.down = true;
     }
-    
+
     if (event.key === ' ' || event.code === 'Space') {
         keysPressed.space = true
     }
@@ -655,7 +681,7 @@ document.addEventListener('keyup', (event) => {
 
 
     if (event.key.toLocaleLowerCase() === 'f') {
-        keysPressed.fire=false
+        keysPressed.fire = false
     }
 
     if (event.key === 'ArrowLeft') {
@@ -707,6 +733,8 @@ async function GameLoop() {
         console.log("loading game state")
         document.getElementById('mario-img-cont').style.opacity = "100%"
         document.getElementById('mario-healthBar-container').style.opacity = "100%"
+
+        // Clean this up?? it is checked above
         if (gameState == undefined) {
             gameState = createNewGameState()
         }
@@ -716,7 +744,7 @@ async function GameLoop() {
         }
 
 
-        
+
         gameState.mario.health = gameState.mario.maxHealth
         // gameState.mario.x = 500
         // gameState.mario.y = 500
@@ -837,7 +865,7 @@ export function draw() {
     }
 
 
-  
+
 
     timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
     livesElement.textContent = `Lives: ${gameState.lives}`;

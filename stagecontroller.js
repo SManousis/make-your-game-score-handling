@@ -24,7 +24,7 @@ const gameArea = document.getElementById('game-area')
 //     await spawnSwarm(20, createFlower, 5, 200, gameState.flowers, 400, 0, 3000);
 //     if (abortStage(gameGen)) return;
 
-    
+
 
 //     await spawnSwarm(30, createTetro, 5, 200, gameState.tetros, 400, 2300);
 //     if (abortStage(gameGen)) return;
@@ -113,13 +113,13 @@ export async function stage2(gameGen) {
 
     await spawnSwarm(2, createFlower, 5, 200, gameState.flowers, 400, 0, 3000);
     if (abortStage(gameGen)) return;
-    
+
     await spawnSwarm(2, createFlower, 5, 200, gameState.flowers, 400, 0, 3000);
     if (abortStage(gameGen)) return;
 
     sleep(3000)
 
-     marioStopFiring();
+    marioStopFiring();
     gameState.level++
     gameState.currentState = 'cinematic'
     updateMenuVisibility();
@@ -134,10 +134,10 @@ export async function stage3(gameGen) {
 
     await spawnSwarm(2, createFlower, 5, 200, gameState.flowers, 400, 0, 3000);
     if (abortStage(gameGen)) return;
-    
+
     await spawnSwarm(2, createFlower, 5, 200, gameState.flowers, 400, 0, 3000);
     if (abortStage(gameGen)) return;
-        
+
     vending.state = 'badMother'
 
     await waitForCondition(() => !gameState.allEntities.includes(vending), 2500);
@@ -145,7 +145,7 @@ export async function stage3(gameGen) {
 
     sleep(3000)
 
-     marioStopFiring();
+    marioStopFiring();
     gameState.level++
     gameState.currentState = 'cinematic'
     updateMenuVisibility();
