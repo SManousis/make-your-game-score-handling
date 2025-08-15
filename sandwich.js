@@ -37,8 +37,8 @@ export function shootSandwich(dir, vendX, vendY) {
         drawFunc: function () { sandwichVisuals(this) },
         updateFunc: function () { sandwichUpdate(this) },
         physicsPointsOffsets: [
-            { x: (-120 / 2) + 1, y: 0 }, // Left foot
-            { x: (120 / 2) + 1, y: 0 }  // Right foot
+            { x: -12, y: 0 }, // Left foot
+            { x: 12, y: 0 }  // Right foot
         ],
         dom: sandwichElement,
         team: "player",
