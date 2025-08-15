@@ -307,9 +307,10 @@ function restartGame() {
     }
     audio.sounds = soundsTemp;
     gameState = {}
-    startStorymode();
+    
     gameState.currentState = "running";
     gameState.mapLoaded = false;
+    startStorymode();
     updateMenuVisibility();
     if (audio.music) {
         audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration)
