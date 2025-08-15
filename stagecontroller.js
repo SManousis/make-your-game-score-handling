@@ -2,10 +2,10 @@ import { spawnCicada } from "./cicadas.js"
 import { spawnTurtle } from "./turtles.js"
 import { createCupid } from "./cupids.js"
 import { createVending } from "./vending.js"
-import { gameState } from "./game.js"
+import { gameState, updateMenuVisibility } from "./game.js"
 import { createFlower } from "./flowers.js"
 import { createTetro } from "./tetros.js"
-import { marioStopFiring } from "./mario.js"
+import { marioStopFiring, updateMarioHealthBar } from "./mario.js"
 
 
 const gameArea = document.getElementById('game-area')
@@ -122,6 +122,7 @@ export async function stage2(gameGen) {
      marioStopFiring();
     gameState.level++
     gameState.currentState = 'cinematic'
+    updateMenuVisibility();
     gameState.mapLoaded = false
 }
 
@@ -147,6 +148,7 @@ export async function stage3(gameGen) {
      marioStopFiring();
     gameState.level++
     gameState.currentState = 'cinematic'
+    updateMenuVisibility();
     gameState.mapLoaded = false
 
 }
