@@ -306,6 +306,11 @@ function restartGame() {
         if (entity.body) entity.body.forEach(body => body.div.remove());
     }
     audio.sounds = soundsTemp;
+
+livesElement.textContent = `Lives: ${gameState.lives}`;
+timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
+scoreElement.textContent = `Score: ${gameState.score}`;
+
     gameState = {}
     
     gameState.currentState = "running";
