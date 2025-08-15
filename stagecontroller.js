@@ -5,6 +5,7 @@ import { createVending } from "./vending.js"
 import { gameState } from "./game.js"
 import { createFlower } from "./flowers.js"
 import { createTetro } from "./tetros.js"
+import { marioStopFiring } from "./mario.js"
 
 
 const gameArea = document.getElementById('game-area')
@@ -100,6 +101,7 @@ export async function stage1(gameGen) {
 
     sleep(3000)
 
+    marioStopFiring();
     gameState.level++
     gameState.currentState = 'cinematic'
     gameState.mapLoaded = false
@@ -117,6 +119,7 @@ export async function stage2(gameGen) {
 
     sleep(3000)
 
+     marioStopFiring();
     gameState.level++
     gameState.currentState = 'cinematic'
     gameState.mapLoaded = false
@@ -141,6 +144,7 @@ export async function stage3(gameGen) {
 
     sleep(3000)
 
+     marioStopFiring();
     gameState.level++
     gameState.currentState = 'cinematic'
     gameState.mapLoaded = false

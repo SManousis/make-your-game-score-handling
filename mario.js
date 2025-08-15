@@ -8,7 +8,7 @@ export const marioDiv = document.getElementById('mario');
 const FIRE_RATE = 30;
 let fireCooldown = 0;
 
-const fireState = {
+export const fireState = {
     isFiring: false,
     initialDelay: 300,
     repeatRate: 100,
@@ -478,15 +478,18 @@ export function marioUpdate(mario) {
         }
 
     } else {
-        // 1. Mark that we have stopped firing.
-        fireState.isFiring = false;
-
-        // 2. IMPORTANT: Clear any running timers to stop the firing sequence.
-        clearTimeout(fireState.delayTimer);
-        clearInterval(fireState.repeatTimer);
-        keysPressed.fire=false;
+       marioStopFiring();
     }
 }
+
+export function marioStopFiring(){
+    fireState.isFiring = false;
+    clearTimeout(fireState.delayTimer);
+    clearInterval(fireState.repeatTimer);
+    keysPressed.fire = false; 
+}
+
+
 
 // Helper function to generate symmetric spread values
 function getSpreadValues(count) {

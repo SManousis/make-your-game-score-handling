@@ -1,4 +1,4 @@
-import { createMario, marioShoot, updateMarioHealthBar } from './mario.js'
+import { createMario, marioShoot, marioStopFiring,updateMarioHealthBar } from './mario.js'
 //import * as floaters from './floaters.js'
 //import * as walkables from './walkables.js'
 import * as collision from './collision.js'
@@ -579,6 +579,7 @@ document.addEventListener('keydown', (event) => {
     if (event.key.toLowerCase() === 'p' && (gameState.currentState === 'running' || gameState.currentState === 'paused')) {
         if (gameState.currentState === 'running') {
             gameState.currentState = 'paused';
+            marioStopFiring();
             if (audio.music) audio.manager.pauseMusic();
             if (audio.sounds) audio.manager.killSamples();
 
@@ -691,6 +692,7 @@ async function GameLoop() {
         return
     }
 
+
     if (gameState.currentState === 'running' && gameState.mapLoaded == false) {
         console.log("loading game state")
         document.getElementById('mario-img-cont').style.opacity = "100%"
@@ -703,9 +705,14 @@ async function GameLoop() {
             stop = true
         }
 
+
+        
         gameState.mario.health = gameState.mario.maxHealth
-        gameState.mario.x = 500
-        gameState.mario.y = 500
+        // gameState.mario.x = 500
+        // gameState.mario.y = 500
+        utils.setUnit(gameState.mario, 500, 500);
+
+
 
         gameState = createNewGameState(gameState)
         gameState.currentState = 'running'
