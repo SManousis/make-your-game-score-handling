@@ -317,7 +317,7 @@ export function cinematicTicker() {
                         break;
                     case 14:
                         startText(lines[10])
-                        audio.manager.stopMusic()
+                        audio.manager.stopMusic(2)
                         wait(1)
                         break;
                     case 15:
@@ -373,7 +373,7 @@ export function cinematicTicker() {
                         wait(50)
                         break;
                     case 8:
-                        audio.manager.stopMusic()
+                        audio.manager.stopMusic(2)
                         wait(130)
                         break;
                     case 9:
@@ -393,6 +393,7 @@ export function cinematicTicker() {
                         break;
                     //=========================
                     default:
+                        audio.stopMusic(2);
                         endCinematic('gameOver')
                         break;
                 }

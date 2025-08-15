@@ -117,8 +117,8 @@ let lastTime = 0;
 export const audio = {
     music: true,
     sounds: true,
-    musicVolume: 0.2,
-    soundsVolume: 0.1,
+    musicVolume: 0.5,
+    soundsVolume: 0.5,
     manager: new AudioManager({
         bomb: "./assets/audio/bomb.wav",
         bubble: "./assets/audio/bubble.wav",
@@ -564,6 +564,16 @@ musicToggles.forEach(toggle => {
 soundsToggles.forEach(toggle => {
     toggle.addEventListener('input', () => {
         syncToggles(toggle, soundsToggles, val => audio.sounds = val);
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    sliders.music.forEach(slider => {
+        slider.value = audio.musicVolume;
+    });
+
+    sliders.sounds.forEach(slider => {
+        slider.value = audio.soundsVolume;
     });
 });
 
