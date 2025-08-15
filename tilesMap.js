@@ -9,7 +9,6 @@ export const tiles = new Tiles();
 export function tileMap(){
     return Array.from({length : ROWS}, () => Array.from({length: COLUMNS}, () => 0))
 }
-export let walkables = [];
 
 export function createTilesDiv(x,y, tileSize, tile){
     let div = document.createElement('div');

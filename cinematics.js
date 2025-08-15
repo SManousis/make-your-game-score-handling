@@ -72,7 +72,7 @@ export function cinematicTicker() {
             hidePanel()
             hideText()
             audio.manager.killSamples();
-            wait(60)
+            wait(20)
             gameState.cinematicStep = 50
         }
         gameState.cinematicTimer -= 1
@@ -81,9 +81,11 @@ export function cinematicTicker() {
             case 1: //cinematic for level 1
                 switch (gameState.cinematicStep) {
                     case 0:
+                        startText('.  .  .  .  .  .  . Location: Mexico .  .  .  .  .  .  .', '25%')
                         wait(280)
                         break;
                     case 1:
+                        hideText()
                         showPanel("p1.jpg")
                         wait(150)
                         break;
@@ -448,10 +450,11 @@ function endCinematic(nextState = 'running') {
 }
 
 let currentText = ''
-function startText(text) {
+function startText(text, left = '20%') {
     currentText = text
     textShown = 0
     document.getElementById('cinematic-text').style.opacity = '100%'
+    document.getElementById('cinematic-text').style.left = left
 }
 
 function hideText() {
