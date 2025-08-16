@@ -2,7 +2,7 @@ import { createMario, marioShoot, marioStopFiring, updateMarioHealthBar } from '
 //import * as floaters from './floaters.js'
 //import * as walkables from './walkables.js'
 import * as collision from './collision.js'
-import { stage1, stageControllerTicker, eventQueue, stage2, stage3 } from './stagecontroller.js'
+import { stage1, stageControllerTicker, eventQueue, stage2, stage3, removeAllEvents, stopAllSpawners } from './stagecontroller.js'
 import * as utils from "./utils.js"
 import { createBomb } from './explosion.js'
 import { AudioManager, xToPan } from './audio.js'
@@ -295,7 +295,9 @@ export function updateMenuVisibility() {
 function restartGame() {
     let soundsTemp = audio.sounds;
     audio.sounds = false;
-
+    gameState.currentGameGen++;
+    stopAllSpawners();
+    removeAllEvents();
     // crement at every restart
     for (let entity of gameState.allEntities) {
         if (entity.countdownDiv) {
@@ -940,7 +942,7 @@ function createNewGameState(oldState = undefined) {
         lives: oldState ? oldState.lives : 5,
         gameTime: oldState ? oldState.gameTime : 0,
         level: oldState ? oldState.level : 1,
-
+        
         //non persisting
         cinematicTimer: 0, //counter used by cinematicTicker to control the speed that cinematics play out
         cinematicStep: 0,
