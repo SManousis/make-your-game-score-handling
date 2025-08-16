@@ -10,6 +10,7 @@ const SPAWN_RATE = 180; //spawn a new turtle every 180 frames/3 secs
 const max_turtles = 5;
 
 export function spawnTurtle(x, y) {
+    console.log("I'm created at: ", x,y )
     const turtleElement = document.createElement('img');
     turtleElement.className = 'turtle-img';
     turtleElement.src = 'assets/enemies/caretta.svg'

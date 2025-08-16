@@ -395,7 +395,7 @@ export function cinematicTicker() {
                         break;
                     //=========================
                     default:
-                        audio.stopMusic(2);
+                        audio.manager.stopMusic(2);
                         endCinematic('gameOver')
                         break;
                 }

@@ -5,101 +5,43 @@ import { createVending } from "./vending.js"
 import { gameState, updateMenuVisibility } from "./game.js"
 import { createFlower } from "./flowers.js"
 import { createTetro } from "./tetros.js"
+import { createGhost } from "./ghosts.js"
 import { marioStopFiring, updateMarioHealthBar } from "./mario.js"
+import { createUnicorn } from "./unicorn.js"
 
-
-const gameArea = document.getElementById('game-area')
-
-// export async function oldStage(gameGen) {
-//     const vending = createVending();
-//     vending.state = 'badMother'
-
-//     await waitForCondition(() => !gameState.allEntities.includes(vending), 2500);
-
-//     // const unicorn = createUnicorn(-100, gameArea.offsetHeight / 2);
-//     // unicorn.velX = 4;
-//     // await waitForCondition(() => !gameState.allEntities.includes(unicorn), 3000);
-//     // if (abortStage(gameGen)) return;
-
-//     await spawnSwarm(20, createFlower, 5, 200, gameState.flowers, 400, 0, 3000);
-//     if (abortStage(gameGen)) return;
-
-
-
-//     await spawnSwarm(30, createTetro, 5, 200, gameState.tetros, 400, 2300);
-//     if (abortStage(gameGen)) return;
-
-//     await sleep(1000);
-//     if (abortStage(gameGen)) return;
-
-//     const turt1 = addEvent(() => startSpawner("left", 0, 0, spawnTurtle, 1), 500);
-//     const turt2 = addEvent(() => startSpawner("right", 0, 0, spawnTurtle, 1), 433);
-
-//     await spawnSwarm(10, createCupid, 5, 500, gameState.cupids);
-//     if (abortStage(gameGen)) return;
-
-//     await sleep(1000);
-//     if (abortStage(gameGen)) return;
-
-//     const turt3 = addEvent(() => startSpawner("topleft", 0, 0, spawnTurtle, 1), 422);
-//     const turt4 = addEvent(() => startSpawner("topright", 0, 0, spawnTurtle, 1), 366);
-
-//     await spawnSwarm(20, createCupid, 10, 400, gameState.cupids);
-//     if (abortStage(gameGen)) return;
-
-//     removeEvent(turt1);
-//     removeEvent(turt2);
-//     removeEvent(turt3);
-//     removeEvent(turt4);
-
-//     await sleep(1000);
-//     if (abortStage(gameGen)) return;
-
-//     const c1 = addEvent(() => startSpawner("left", 0, 0, spawnCicada, 1), 350);
-//     const c2 = addEvent(() => startSpawner("right", 0, 0, spawnCicada, 1), 433);
-
-//     await spawnSwarm(40, createCupid, 20, 300, gameState.cupids);
-//     if (abortStage(gameGen)) return;
-
-//     await sleep(1000);
-//     if (abortStage(gameGen)) return;
-
-//     const c3 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada, 1), 220);
-//     const c4 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada, 1), 333);
-
-//     await spawnSwarm(80, createCupid, 25, 200, gameState.cupids);
-//     if (abortStage(gameGen)) return;
-
-//     await sleep(3000);
-//     if (abortStage(gameGen)) return;
-
-//     const c5 = addEvent(() => startSpawner("left", 0, 0, spawnCicada, 1), 20);
-//     const c6 = addEvent(() => startSpawner("right", 0, 0, spawnCicada, 1), 20);
-//     const c7 = addEvent(() => startSpawner("topleft", 0, 0, spawnCicada, 1), 20);
-//     const c8 = addEvent(() => startSpawner("topright", 0, 0, spawnCicada, 1), 20);
-
-//     await sleep(1000);
-//     if (abortStage(gameGen)) return;
-
-//     await spawnSwarm(160, createCupid, 35, 100, gameState.cupids);
-//     if (abortStage(gameGen)) return;
-
-//     await sleep(1000);
-//     if (abortStage(gameGen)) return;
-// }
-
-
+let gameArea = document.getElementById('game-area')
 
 
 export async function stage1(gameGen) {
+    //freshing up variables:  ==============================
+    gameArea = document.getElementById('game-area')
+    spawnPositions = {
+        left: { x: -50, y: 50 },
+        topleft: { x: -50, y: 350 },
+        right: { x: gameArea.offsetWidth + 50, y: 50 },
+        topright: { x: gameArea.offsetWidth + 50, y: 350 },
+    }
+    //======================================================
 
-    await spawnSwarm(2, createFlower, 5, 200, gameState.flowers, 400, 0, 3000);
+    await spawnSwarm(10, createCupid, 5, 200, gameState.cupids, 100, 0, 4000);
     if (abortStage(gameGen)) return;
 
-    await spawnSwarm(2, createFlower, 5, 200, gameState.flowers, 400, 0, 3000);
+    await spawnSwarm(10, createGhost, 10, 200, gameState.ghosts, 100, 0, 4000);
     if (abortStage(gameGen)) return;
 
-    sleep(3000)
+
+    addEvent(() => startSpawner("left", 0, 0, spawnTurtle, 1), 5 * 60);
+    addEvent(() => startSpawner("right", 0, 0, spawnTurtle, 1), 6 * 60);
+
+    await spawnSwarm(16, createCupid, 4, 200, gameState.cupids, 100, 0, 4000);
+    if (abortStage(gameGen)) return;
+
+    let u = async () => {await sleep(4000); createUnicorn(-100, gameArea.offsetHeight / 2);}; u();
+
+    await spawnSwarm(15, createGhost, 15, 200, gameState.ghosts, 100, 0, 4000);
+    if (abortStage(gameGen)) return;
+
+    removeAllEvents()
 
     marioStopFiring();
     gameState.level++
@@ -109,15 +51,39 @@ export async function stage1(gameGen) {
 
 
 export async function stage2(gameGen) {
+    
+
     createVending();
 
-    await spawnSwarm(2, createFlower, 5, 200, gameState.flowers, 400, 0, 3000);
+    await spawnSwarm(20, createTetro, 5, 200, gameState.tetros, 400, 1700, 4000);
     if (abortStage(gameGen)) return;
 
-    await spawnSwarm(2, createFlower, 5, 200, gameState.flowers, 400, 0, 3000);
+    addEvent(() => startSpawner("left", 0, 0, spawnCicada, 1), 6 * 60);
+    addEvent(() => startSpawner("right", 0, 0, spawnCicada, 2), 9 * 60);
+
+    await spawnSwarm(16, createCupid, 4, 350, gameState.cupids, 100, 0, 4000);
     if (abortStage(gameGen)) return;
 
-    sleep(3000)
+    let u = async () => {await sleep(6000); createUnicorn(-100, gameArea.offsetHeight / 2);}; u();
+
+    await spawnSwarm(20, createGhost, 15, 200, gameState.ghosts, 100, 0, 4000);
+    if (abortStage(gameGen)) return;
+
+    
+
+    removeAllEvents()
+
+    addEvent(() => startSpawner("topleft", 0, 0, spawnCicada, 2), 12 * 60);
+    addEvent(() => startSpawner("topright", 0, 0, spawnCicada, 1), 8 * 60);
+    addEvent(() => startSpawner("left", 0, 0, spawnTurtle, 1), 7 * 60);
+    addEvent(() => startSpawner("right", 0, 0, spawnTurtle, 1), 13 * 60);
+    
+    
+    await spawnSwarm(30, createTetro, 6, 200, gameState.tetros, 400, 2000, 4000);
+    if (abortStage(gameGen)) return;
+
+    removeAllEvents()
+
 
     marioStopFiring();
     gameState.level++
@@ -132,18 +98,42 @@ export async function stage2(gameGen) {
 export async function stage3(gameGen) {
     const vending = createVending();
 
-    await spawnSwarm(2, createFlower, 5, 200, gameState.flowers, 400, 0, 3000);
+    await spawnSwarm(15, createFlower, 5, 200, gameState.flowers, 50, 0, 3000);
     if (abortStage(gameGen)) return;
 
-    await spawnSwarm(2, createFlower, 5, 200, gameState.flowers, 400, 0, 3000);
+    addEvent(() => startSpawner("topleft", 0, 0, spawnCicada, 1), 6 * 60);
+    addEvent(() => startSpawner("topright", 0, 0, spawnCicada, 1), 6 * 60);
+
+    let u = async () => {await sleep(6000); createUnicorn(-100, gameArea.offsetHeight / 2);}; u();
+
+    await spawnSwarm(16, createCupid, 4, 350, gameState.cupids, 100, 0, 4000);
+    if (abortStage(gameGen)) return;
+
+    removeAllEvents()
+
+    addEvent(() => startSpawner("topleft", 0, 0, spawnTurtle, 1), 6 * 60);
+    addEvent(() => startSpawner("topright", 0, 0, spawnTurtle, 1), 6 * 60);
+
+    await spawnSwarm(20, createTetro, 5, 200, gameState.tetros, 400, 1700, 4000);
+    if (abortStage(gameGen)) return;
+    removeAllEvents()
+
+    addEvent(() => startSpawner("topleft", 0, 0, spawnCicada, 1), 8 * 60);
+    addEvent(() => startSpawner("topright", 0, 0, spawnCicada, 1), 9 * 60);
+    addEvent(() => startSpawner("left", 0, 0, spawnTurtle, 1), 10 * 60);
+    addEvent(() => startSpawner("right", 0, 0, spawnTurtle, 1), 11 * 60);
+
+    await spawnSwarm(20, createGhost, 15, 200, gameState.ghosts, 100, 0, 4000);
+    if (abortStage(gameGen)) return;
+
+    await spawnSwarm(30, createFlower, 5, 200, gameState.flowers, 50, 0, 3000);
     if (abortStage(gameGen)) return;
 
     vending.state = 'badMother'
 
     await waitForCondition(() => !gameState.allEntities.includes(vending), 2500);
-    if (abortStage(gameGen)) return;
 
-    sleep(3000)
+
 
     marioStopFiring();
     gameState.level++
@@ -160,8 +150,10 @@ export async function stage3(gameGen) {
 function abortStage(gameGen) {
     if (gameGen !== gameState.currentGameGen) {
         removeAllEvents()
+        console.log("abort!")
         return true
     }
+    console.log("don't abort!")
 }
 
 async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, array, ySeparation = 90, yoffset = 0, delay = 0) {
@@ -213,11 +205,11 @@ export function addEvent(fn, interval) {
 }
 
 
-const spawnPositions = {
-    left: { x: -50, y: 50 },
-    topleft: { x: -50, y: 350 },
-    right: { x: gameArea.offsetWidth + 50, y: 50 },
-    topright: { x: gameArea.offsetWidth + 50, y: 350 },
+let spawnPositions = {
+    left: { x: 5, y: 50 },
+    topleft: { x: 5, y: 700 },
+    right: { x: gameArea.offsetWidth -5, y: 50 },
+    topright: { x: gameArea.offsetWidth -5, y: 700 },
 }
 
 
@@ -258,6 +250,7 @@ export function startSpawner(position, x, y, spawnUnitFunc, count = 1) {
     if (spawnPositions.hasOwnProperty(position)) {
         x = spawnPositions[position].x
         y = spawnPositions[position].y
+        console.log(gameArea.offsetWidth)
     }
 
     for (let i = 0; i < count; i++) {
