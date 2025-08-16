@@ -295,10 +295,10 @@ export function marioUpdate(mario) {
 
     if (mario.health <= 0) {
         gameState.lives -= 1
-        marioStopFiring();
         lifeLostFanfare();
         mario.health = 100
         if (gameState.lives === 0) {
+            marioStopFiring();
             triggerGameOver();
             console.log("mario died")
         }
