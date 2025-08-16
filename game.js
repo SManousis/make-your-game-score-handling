@@ -957,7 +957,7 @@ function createNewGameState(oldState = undefined) {
         flowers: [],
         tetros: [],
         allGroups: [],
-        currentGameGen: 0,
+        currentGameGen: parseInt(Math.random()*100000),
     }
 
     state.allGroups = [state.allEntities, state.groundedEnemies, state.aoeDamage, state.allBullets, state.cicadas, state.cupids, state.turtles, state.powerUps, state.walkables, state.ghosts, state.unicorns, state.flowers, state.tetros]
