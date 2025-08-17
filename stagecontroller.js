@@ -14,6 +14,7 @@ let gameArea = document.getElementById('game-area')
 const spawnerFlags = new Map();
 const activeSpawners = new Set();
 
+
 export async function stage1(gameGen) {
     //freshing up variables:  ==============================
     gameArea = document.getElementById('game-area')
@@ -32,15 +33,11 @@ export async function stage1(gameGen) {
     if (abortStage(gameGen)) return;
 
 
-    let tLeft  = startSpawner('left', 0, 0, spawnTurtle, -1, 5*60);
-    let tRight = startSpawner('right',0, 0, spawnTurtle, -1, 6*60);
+    addEvent(() => startSpawner("left", 0, 0, spawnTurtle, 1), 5 * 60);
+    addEvent(() => startSpawner("right", 0, 0, spawnTurtle, 1), 6 * 60);
 
     await spawnSwarm(16, createCupid, 4, 200, gameState.cupids, 100, 0, 4000);
-    if (abortStage(gameGen)) {
-        stopSpawner(tLeft)
-        stopSpawner(tRight)
-        return
-    }
+    if (abortStage(gameGen)) return;
 
     let u = async () => {await sleep(4000); createUnicorn(-100, gameArea.offsetHeight / 2);}; u();
 
@@ -48,8 +45,7 @@ export async function stage1(gameGen) {
     if (abortStage(gameGen)) return;
 
     removeAllEvents()
-    stopSpawner(tLeft)
-    stopSpawner(tRight)
+
     marioStopFiring();
     gameState.level++
     gameState.currentState = 'cinematic'
@@ -65,15 +61,12 @@ export async function stage2(gameGen) {
     await spawnSwarm(20, createTetro, 5, 200, gameState.tetros, 400, 1700, 4000);
     if (abortStage(gameGen)) return;
 
-    let cLeft = startSpawner("left", 0, 0, spawnCicada, -1, 6 * 60);
-    let cRight = startSpawner("right", 0, 0, spawnCicada, -1, 9 * 60);
+    addEvent(() => startSpawner("left", 0, 0, spawnCicada, 1), 6 * 60);
+    addEvent(() => startSpawner("right", 0, 0, spawnCicada, 2), 9 * 60);
 
     await spawnSwarm(16, createCupid, 4, 350, gameState.cupids, 100, 0, 4000);
-    if (abortStage(gameGen)){ 
-        stopSpawner(cLeft)
-        stopSpawner(cRight)
-        return;
-    }
+    if (abortStage(gameGen)) return;
+
     let u = async () => {await sleep(6000); createUnicorn(-100, gameArea.offsetHeight / 2);}; u();
 
     await spawnSwarm(20, createGhost, 15, 200, gameState.ghosts, 100, 0, 4000);
@@ -83,28 +76,18 @@ export async function stage2(gameGen) {
 
     removeAllEvents()
 
-    let cTopRight = startSpawner("topleft", 0, 0, spawnCicada, -1, 12 * 60);
-    let cTopLeft = startSpawner("topright", 0, 0, spawnCicada, -1, 8 * 60);
-    let tLeft = startSpawner("left", 0, 0, spawnTurtle, -1, 7 * 60);
-    let tRight = startSpawner("right", 0, 0, spawnTurtle, -1, 13 * 60);
+    addEvent(() => startSpawner("topleft", 0, 0, spawnCicada, 2), 12 * 60);
+    addEvent(() => startSpawner("topright", 0, 0, spawnCicada, 1), 8 * 60);
+    addEvent(() => startSpawner("left", 0, 0, spawnTurtle, 1), 7 * 60);
+    addEvent(() => startSpawner("right", 0, 0, spawnTurtle, 1), 13 * 60);
     
     
     await spawnSwarm(30, createTetro, 6, 200, gameState.tetros, 400, 2000, 4000);
-    if (abortStage(gameGen)) {
-        stopSpawner(cTopLeft)
-        stopSpawner(cTopRight)
-        stopSpawner(tLeft)
-        stopSpawner(tRight)
-        return
-    };
+    if (abortStage(gameGen)) return;
 
     removeAllEvents()
-    stopSpawner(cLeft)
-    stopSpawner(cRight)
-    stopSpawner(cTopLeft)
-    stopSpawner(cTopRight)
-    stopSpawner(tLeft)
-    stopSpawner(tRight)
+
+
     marioStopFiring();
     gameState.level++
     gameState.currentState = 'cinematic'
@@ -131,29 +114,20 @@ export async function stage3(gameGen) {
 
     removeAllEvents()
 
-    let cTopLeft1 = startSpawner("topleft", 0, 0, spawnTurtle, -1, 6 * 60);
-    let cTopRight1 = startSpawner("topright", 0, 0, spawnTurtle, -1, 6 * 60);
+    addEvent(() => startSpawner("topleft", 0, 0, spawnTurtle, 1), 6 * 60);
+    addEvent(() => startSpawner("topright", 0, 0, spawnTurtle, 1), 6 * 60);
 
     await spawnSwarm(20, createTetro, 5, 200, gameState.tetros, 400, 1700, 4000);
-    if (abortStage(gameGen)) {
-        stopSpawner(cTopLeft1)
-        stopSpawner(cTopRight1)
-        return};
+    if (abortStage(gameGen)) return;
     removeAllEvents()
 
-    let cTopLeft2 = startSpawner("topleft", 0, 0, spawnCicada, -1, 8 * 60);
-    let cTopRight2 = startSpawner("topright", 0, 0, spawnCicada, -1, 9 * 60);
-    let tLeft = startSpawner("left", 0, 0, spawnTurtle, -1, 10 * 60);
-    let tRight = startSpawner("right", 0, 0, spawnTurtle, -1, 11 * 60);
+    addEvent(() => startSpawner("topleft", 0, 0, spawnCicada, 1), 8 * 60);
+    addEvent(() => startSpawner("topright", 0, 0, spawnCicada, 1), 9 * 60);
+    addEvent(() => startSpawner("left", 0, 0, spawnTurtle, 1), 10 * 60);
+    addEvent(() => startSpawner("right", 0, 0, spawnTurtle, 1), 11 * 60);
 
     await spawnSwarm(20, createGhost, 15, 200, gameState.ghosts, 100, 0, 4000);
-    if (abortStage(gameGen)) {
-        stopSpawner(cTopLeft2)
-        stopSpawner(cTopRight2)
-        stopSpawner(tLeft)
-        stopSpawner(tRight)    
-        return
-    };
+    if (abortStage(gameGen)) return;
 
     await spawnSwarm(30, createFlower, 5, 200, gameState.flowers, 50, 0, 3000);
     if (abortStage(gameGen)) return;
@@ -162,12 +136,8 @@ export async function stage3(gameGen) {
 
     await waitForCondition(() => !gameState.allEntities.includes(vending), 2500);
 
-    stopSpawner(cTopLeft1)
-    stopSpawner(cTopRight1)
-    stopSpawner(cTopLeft2)
-    stopSpawner(cTopRight2)
-    stopSpawner(tLeft)
-    stopSpawner(tRight)    
+
+
     marioStopFiring();
     gameState.level++
     gameState.currentState = 'cinematic'
@@ -175,6 +145,7 @@ export async function stage3(gameGen) {
     gameState.mapLoaded = false
 
 }
+
 
 
 

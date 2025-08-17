@@ -296,8 +296,14 @@ function restartGame() {
     let soundsTemp = audio.sounds;
     audio.sounds = false;
     gameState.currentGameGen++;
-    stopAllSpawners();
-    removeAllEvents();
+    // stopAllSpawners();
+    // removeAllEvents();
+
+    //resetting these so that these old references get checked by a possible old stageController function and then it closes
+    for (let group of gameState.allGroups){
+        group.length = 0
+    }
+
     // crement at every restart
     for (let entity of gameState.allEntities) {
         if (entity.countdownDiv) {
