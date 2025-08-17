@@ -1,4 +1,5 @@
-import { audio, gameState, keysPressed } from "./game.js"
+import { audio, gameState, keysPressed, updateTimestampFunc} from "./game.js"
+
 
 let i = 0
 
@@ -9,21 +10,23 @@ let abort = false
 const lines = {
     1: 'After spending hours working on a malfunctioning vending machine with no progress in sight, El Mario decided to call it a day.',
     2: 'Discouraged by the unexplained difficulty of this repair, El Mario sat down to watch tv and have a good time.',
-    3: 'And then it happened, the alien invasion of earth began.',
-    4: 'Out of nowhere, a beam of light pulled El Mario through the window into the air.',
-    5: 'Unexpectedly the unrelenting waves of enemies stopped. As El Mario was catching his breath, he heard a thud behind him.',
-    6: `A familiar friend was standing looking at him. It was the vending machine he was repairing earlier that day. The vending machine vowed to assist El Mario in his fight with the aliens. But because it was malfunctioning, El Mario would need to shake it for healing items to drop. Unbeknownst to El Mario some of its products weren't in fresh condition.`,
+    3: 'And then it happened,     the alien invasion of earth began.',
+    4: 'Out of nowhere,     a beam of light pulled El Mario through the window into the air.',
+    5: 'Unexpectedly the unrelenting waves of enemies stopped.             As El Mario was catching his breath, he heard a thud behind him.',
+    6: `A familiar friend was standing looking at him.   It was the vending machine he was repairing earlier that day.         The vending machine vowed to assist El Mario in his fight with the aliens.      But because it was malfunctioning, El Mario would need to shake it for healing items to drop.            Unbeknownst to El Mario some of its products weren't in fresh condition.`,
     7: 'Before they could talk further, another swarm of enemies appeared. "You will never reach our leader", they proclaimed as they flew into battle.',
     8: 'El Mario could feel that he was close to their leader. Defeating him would mean saving the world.',
     9: `So with the last and most formidable swarm of enemies in the distance, he turned to the vending machine and said. "Thank you weird fridge-san, I swear I'll fix you when we get back home.`,
     10: ``,
-    11: `El Mario left devastated by the vending machine's betrayal. Kneeling among his former partners remains, he closes his eyes as he's saying the final goodbye`,
+    11: `El Mario left devastated by the vending machine's betrayal.       Kneeling among his former partners remains,            he closes his eyes as he's saying the final goodbye`,
     12: 'IN MEXICAN: Oh damn! These magic mushroom are amazing!',
 
 }
 
 //based on gameState it will understand what cinematic to play
 export function cinematicTicker() {
+    updateTimestampFunc()
+
     let reduction = audio.musicVolume - audio.soundsVolume;
     if (reduction < 0) {
         reduction = 0;
@@ -59,13 +62,17 @@ export function cinematicTicker() {
         activePanel.style.opacity = `${opacity}%`
     }
 
-    if (wordsShown < currentWords.length) {
-        document.getElementById('cinematic-text').textContent =
-            currentWords.slice(0, Math.ceil(wordsShown)).join(" ")
-        wordsShown += 0.08
+    // if (wordsShown < currentWords.length) {
+    //     document.getElementById('cinematic-text').textContent =
+    //         currentWords.slice(0, Math.ceil(wordsShown)).join(" ")
+    //     wordsShown += 0.08
+    // }
+    document.getElementById('cinematic-text').textContent = currentText.substring(0, textShown)
+    textShown += 0.25
+
+    if (gameState.level == 2 && gameState.cinematicStep > 6){
+        textShown += 0.04
     }
-    // document.getElementById('cinematic-text').textContent = currentText.substring(0, textShown)
-    // textShown += 0.25
 
 
 
@@ -456,29 +463,29 @@ function endCinematic(nextState = 'running') {
 let currentWords = []
 let wordsShown = 0
 
-function startText(text, left = '20%') {
-    currentWords = text.split(" ")   // split by spaces
-    wordsShown = 0
-    document.getElementById('cinematic-text').style.opacity = '100%'
-    document.getElementById('cinematic-text').style.left = left
-}
-
-function hideText() {
-    document.getElementById('cinematic-text').style.opacity = '0%'
-    currentWords = []
-    wordsShown = 0
-}
-
-// let currentText = ''
 // function startText(text, left = '20%') {
-//     currentText = text
-//     textShown = 0
+//     currentWords = text.split(" ")   // split by spaces
+//     wordsShown = 0
 //     document.getElementById('cinematic-text').style.opacity = '100%'
 //     document.getElementById('cinematic-text').style.left = left
 // }
 
 // function hideText() {
 //     document.getElementById('cinematic-text').style.opacity = '0%'
-//     currentText = ''
+//     currentWords = []
+//     wordsShown = 0
 // }
+
+let currentText = ''
+function startText(text, left = '20%') {
+    currentText = text
+    textShown = 0
+    document.getElementById('cinematic-text').style.opacity = '100%'
+    document.getElementById('cinematic-text').style.left = left
+}
+
+function hideText() {
+    document.getElementById('cinematic-text').style.opacity = '0%'
+    currentText = ''
+}
 

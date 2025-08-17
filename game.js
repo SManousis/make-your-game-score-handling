@@ -804,7 +804,14 @@ async function GameLoop() {
         draw();
 
     } else if (gameState.currentState == 'cinematic') {
-        cinematicTicker()
+        if (updateTimestamp == 0) {
+            updateTimestamp = Date.now() - 16.666
+        }
+        const count = Math.min(5, Math.round((Date.now() - updateTimestamp) / 16.66666))
+        for (let i = 0; i < count; i++) {
+            cinematicTicker()
+        }
+        
     }
 
     for (let unit of queueFree) {
@@ -822,9 +829,13 @@ let updateCounterTimestamp = Date.now()
 let updatefpsMeter = 0
 let updateTimestamp = 0
 
+export function updateTimestampFunc(){
+    updateTimestamp = Date.now()
+}
+
 // Update the game state, only physics
 function update() {
-    updateTimestamp = Date.now()
+    updateTimestampFunc()
 
     if (gameState.currentState === 'running') {
         gameState.gameTime += 16.666666;
