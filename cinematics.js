@@ -16,9 +16,9 @@ const lines = {
     6: `A familiar friend was standing looking at him.   It was the vending machine he was repairing earlier that day.         The vending machine vowed to assist El Mario in his fight with the aliens.      But because it was malfunctioning, El Mario would need to shake it for healing items to drop.            Unbeknownst to El Mario some of its products weren't in fresh condition.`,
     7: 'Before they could talk further, another swarm of enemies appeared. "You will never reach our leader", they proclaimed as they flew into battle.',
     8: 'El Mario could feel that he was close to their leader. Defeating him would mean saving the world.',
-    9: `So with the last and most formidable swarm of enemies in the distance, he turned to the vending machine and said. "Thank you weird fridge-san, I swear I'll fix you when we get back home.`,
+    9: `So with the last and most formidable swarm of enemies in the distance, he turned to the vending machine and said. "Thank you weird fridge-san, I swear I'll fix you when we get back home."`,
     10: ``,
-    11: `El Mario left devastated by the vending machine's betrayal.       Kneeling among his former partners remains,            he closes his eyes as he's saying the final goodbye`,
+    11: `El Mario left devastated by the vending machine's betrayal.       Kneeling among his former partner's remains,            he closes his eyes as he's saying the final goodbye`,
     12: 'IN MEXICAN: Oh damn! These magic mushroom are amazing!',
 
 }
