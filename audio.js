@@ -7,10 +7,11 @@ export class AudioManager {
         this.poolSize = poolSize;
         this.cooldowns = {};
         this.musicBufferCache = {};
-        this.musicState = { // bundle these to single objet to assing in a single step to avoid race conditions
-            bgMusic: null,
-            pervBgMusic: null
-        };
+        // this.musicState = { // bundle these to single objet to assing in a single step to avoid race conditions
+        //     bgMusic: null,
+        //     prevBgMusic: null
+        // };
+        this.sources = []
         this.musicLoopTimer = null;
         this.musicOffset = 0;
         this.startTime = null;
@@ -126,13 +127,17 @@ export class AudioManager {
     }
 
     duckMusic(duration, reduction, fadeTime) {
-        if (!this.musicState.bgMusic || reduction === 0) return;
+        // if (!this.musicState.bgMusic || reduction === 0) return;
+        if (this.sources.length === 0 || reduction === 0) return;
 
         const now = this.context.currentTime;
-        const volume = this.musicState.bgMusic.gainNode.gain.value;
+        for (let i = 0; i < this.sources.length; i++) {
+            const s = this.sources[i];
+            const volume = s.gainNode.gain.value;
 
-        this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(volume - reduction, now + fadeTime);
-        this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(volume, now + fadeTime * 3 + duration);
+            s.gainNode.gain.linearRampToValueAtTime(volume - reduction, now + fadeTime);
+            s.gainNode.gain.linearRampToValueAtTime(volume, now + fadeTime * 3 + duration);
+        }
     }
 
     async resume() {
@@ -182,13 +187,7 @@ export class AudioManager {
             source.start(startTime, this.musicOffset);
             this.musicOffset = 0;
 
-            let oldMusic = this.musicState.bgMusic;
-            let newMusic = { source, gainNode };
-            this.musicState = {
-                pervBgMusic: oldMusic,
-                bgMusic: newMusic,
-            }
-
+            this.sources.push({ source, gainNode })
 
             const nextStartTime = startTime + loopDuration - overlap - this.latencyCompensation;
             this.musicLoopTimer = setTimeout(() => {
@@ -202,63 +201,49 @@ export class AudioManager {
 
     pauseMusic() {
         if (!this.isPlaying) return;
+        clearTimeout(this.musicLoopTimer);
+        this.isPlaying = false;
 
         this.musicOffset = this.context.currentTime - this.startTime;
+        for (let i = 0; i < this.sources.length; i++) {
+            const s = this.sources[i];
+            if (s?.source) {
+                s.source.stop()
+                s.source = null;
+            }
+        };
 
-        if (this.musicState.pervBgMusic?.source) {
-            this.musicState.pervBgMusic.source.stop();
-            this.musicState.pervBgMusic = null;
-        }
-        if (this.musicState.bgMusic?.source) {
-            this.musicState.bgMusic.source.stop();
-            this.musicState.bgMusic = null;
-        }
-
-        clearTimeout(this.musicLoopTimer);
-        this.isPlaying = false;
+        this.sources = []
     }
 
+
     stopMusic(fadeTime) {
-        const now = this.context.currentTime;
-        
-        // stopping previous music source if overlap is used
-        if (this.musicState.pervBgMusic?.source) {
-            if (fadeTime) {
-                this.musicState.pervBgMusic.gainNode.gain.linearRampToValueAtTime(0, now + fadeTime)
-                setTimeout(() => {
-                    this.musicState.pervBgMusic.source.stop();
-                }, fadeTime * 1000);
-            } else {
-                this.musicState.pervBgMusic.source.stop();
-            }
-            this.musicState.pervBgMusic.source.stop();
-        }
-
-        if (this.musicState.bgMusic?.source) {
-            if (fadeTime) {
-                this.musicState.bgMusic.gainNode.gain.linearRampToValueAtTime(0, now + fadeTime)
-                setTimeout(() => {
-                    this.musicState.bgMusic.source.stop();
-                }, fadeTime * 1000);
-            } else {
-                this.musicState.bgMusic.source.stop();
-            }
-            this.musicState.bgMusic.source = null;
-        }
-
         clearTimeout(this.musicLoopTimer);
-        this.musicState.pervBgMusic = null;
-        this.musicState.bgMusic = null;
         this.isPlaying = false;
         this.musicOffset = 0;
+
+        const now = this.context.currentTime;
+        for (let i = 0; i < this.sources.length; i++) {
+            const s = this.sources[i];
+            if (fadeTime) {
+                s.gainNode.gain.linearRampToValueAtTime(0, now + fadeTime);
+                setTimeout(() => {
+                    s.source.stop();
+                }, fadeTime * 1000);
+            } else {
+                s.source.stop();
+            }
+            s.source = null;
+        };
+
+        this.sources = [];
+
     }
 
     setMusicVolume(vol) { // TODO: Use this ??
-        if (this.musicState.bgMusic?.gainNode) {
-            this.musicState.bgMusic.gainNode.gain.value = vol;
-        }
-        if (this.musicState.pervBgMusic?.gainNode) {
-            this.musicState.pervBgMusic.gainNode.gain.value = vol;
+        for (let i = 0; i < this.sources.length; i++) {
+            const s = this.sources[i];
+            if (s?.source) s.gainNode.gain.value = vol;
         }
     }
 }

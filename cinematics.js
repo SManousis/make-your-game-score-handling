@@ -330,7 +330,7 @@ export function cinematicTicker() {
                         break;
                     case 14:
                         startText(lines[10])
-                        audio.manager.stopMusic(2)
+                        audio.manager.stopMusic()
                         wait(1)
                         break;
                     case 15:
@@ -386,7 +386,7 @@ export function cinematicTicker() {
                         wait(50)
                         break;
                     case 8:
-                        audio.manager.stopMusic(2)
+                        audio.manager.stopMusic()
                         wait(130)
                         break;
                     case 9:
@@ -406,7 +406,6 @@ export function cinematicTicker() {
                         break;
                     //=========================
                     default:
-                        audio.manager.stopMusic(2);
                         endCinematic('gameOver')
                         break;
                 }
@@ -446,6 +445,7 @@ function hidePanel() {
 }
 
 function endCinematic(nextState = 'running') {
+    audio.manager.stopMusic();
     if (activePanel) {
         activePanel.remove()
     }
@@ -460,21 +460,6 @@ function endCinematic(nextState = 'running') {
     started = false
 }
 
-let currentWords = []
-let wordsShown = 0
-
-// function startText(text, left = '20%') {
-//     currentWords = text.split(" ")   // split by spaces
-//     wordsShown = 0
-//     document.getElementById('cinematic-text').style.opacity = '100%'
-//     document.getElementById('cinematic-text').style.left = left
-// }
-
-// function hideText() {
-//     document.getElementById('cinematic-text').style.opacity = '0%'
-//     currentWords = []
-//     wordsShown = 0
-// }
 
 let currentText = ''
 function startText(text, left = '20%') {
