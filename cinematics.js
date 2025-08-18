@@ -16,9 +16,9 @@ const lines = {
     6: `A familiar friend was standing looking at him.   It was the vending machine he was repairing earlier that day.         The vending machine vowed to assist El Mario in his fight with the aliens.      But because it was malfunctioning, El Mario would need to shake it for healing items to drop.            Unbeknownst to El Mario some of its products weren't in fresh condition.`,
     7: 'Before they could talk further, another swarm of enemies appeared. "You will never reach our leader", they proclaimed as they flew into battle.',
     8: 'El Mario could feel that he was close to their leader. Defeating him would mean saving the world.',
-    9: `So with the last and most formidable swarm of enemies in the distance, he turned to the vending machine and said. "Thank you weird fridge-san, I swear I'll fix you when we get back home.`,
+    9: `So with the last and most formidable swarm of enemies in the distance, he turned to the vending machine and said. "Thank you weird fridge-san, I swear I'll fix you when we get back home."`,
     10: ``,
-    11: `El Mario left devastated by the vending machine's betrayal.       Kneeling among his former partners remains,            he closes his eyes as he's saying the final goodbye`,
+    11: `El Mario left devastated by the vending machine's betrayal.       Kneeling among his former partner's remains,            he closes his eyes as he's saying the final goodbye`,
     12: 'IN MEXICAN: Oh damn! These magic mushroom are amazing!',
 
 }
@@ -330,7 +330,7 @@ export function cinematicTicker() {
                         break;
                     case 14:
                         startText(lines[10])
-                        audio.manager.stopMusic(2)
+                        audio.manager.stopMusic()
                         wait(1)
                         break;
                     case 15:
@@ -386,7 +386,7 @@ export function cinematicTicker() {
                         wait(50)
                         break;
                     case 8:
-                        audio.manager.stopMusic(2)
+                        audio.manager.stopMusic()
                         wait(130)
                         break;
                     case 9:
@@ -406,7 +406,6 @@ export function cinematicTicker() {
                         break;
                     //=========================
                     default:
-                        audio.manager.stopMusic(2);
                         endCinematic('gameOver')
                         break;
                 }
@@ -446,6 +445,7 @@ function hidePanel() {
 }
 
 function endCinematic(nextState = 'running') {
+    audio.manager.stopMusic();
     if (activePanel) {
         activePanel.remove()
     }
@@ -460,21 +460,6 @@ function endCinematic(nextState = 'running') {
     started = false
 }
 
-let currentWords = []
-let wordsShown = 0
-
-// function startText(text, left = '20%') {
-//     currentWords = text.split(" ")   // split by spaces
-//     wordsShown = 0
-//     document.getElementById('cinematic-text').style.opacity = '100%'
-//     document.getElementById('cinematic-text').style.left = left
-// }
-
-// function hideText() {
-//     document.getElementById('cinematic-text').style.opacity = '0%'
-//     currentWords = []
-//     wordsShown = 0
-// }
 
 let currentText = ''
 function startText(text, left = '20%') {

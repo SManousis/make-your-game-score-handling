@@ -49,6 +49,7 @@ export async function stage1(gameGen) {
     marioStopFiring();
     gameState.level++
     gameState.currentState = 'cinematic'
+     updateMenuVisibility();
     gameState.mapLoaded = false
 }
 

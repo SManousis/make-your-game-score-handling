@@ -118,7 +118,7 @@ export const audio = {
     music: true,
     sounds: true,
     musicVolume: 0.5,
-    soundsVolume: 0.5,
+    soundsVolume: 0.25,
     manager: new AudioManager({
         bomb: "./assets/audio/bomb.wav",
         bubble: "./assets/audio/bubble.wav",
@@ -396,15 +396,18 @@ window.addEventListener("keydown", function (e) {
     }
 }, false);
 
+
 // Main menu buttons
 playButton.addEventListener('click', async () => {
+    let intial = false;
     if (!audio.initialized) {
         await audio.setUp();
         audio.initialized = true;
         audio.playSampleDeb = utils.opDebounce(audio.manager.playSample.bind(audio.manager), 100, { leading: true });
+        intial = true;
     }
 
-    if (audio.music) {
+    if (audio.music && !intial) {
         audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
     } else {
         audio.manager.stopMusic();
