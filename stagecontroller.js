@@ -15,7 +15,7 @@ const spawnerFlags = new Map();
 const activeSpawners = new Set();
 
 
-export async function stage1(gameGen) {
+export async function stage2(gameGen) {
     //freshing up variables:  ==============================
     gameArea = document.getElementById('game-area')
     spawnPositions = {
@@ -54,10 +54,11 @@ export async function stage1(gameGen) {
 }
 
 
-export async function stage2(gameGen) {
-    
-
+export async function stage1(gameGen) {
     createVending();
+
+    addEvent(() => startSpawner("left", 0, 0, spawnCicada, 1), 2 * 60);
+    addEvent(() => startSpawner("right", 0, 0, spawnCicada, 2), 2 * 60);
 
     await spawnSwarm(20, createTetro, 5, 200, gameState.tetros, 400, 1700, 4000);
     if (abortStage(gameGen)) return;

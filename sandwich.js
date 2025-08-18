@@ -76,8 +76,8 @@ function sandwichUpdate(newSandwich) {
 function sandwichVisuals(newSandwich) {
     if (!newSandwich.dom) return;
 
-    newSandwich.dom.style.setProperty('--sandwich-x', `${newSandwich.x}px`)
-    newSandwich.dom.style.setProperty('--sandwich-y', `${newSandwich.y}px`)
+    newSandwich.dom.style.setProperty('--x', `${newSandwich.x}px`)
+    newSandwich.dom.style.setProperty('--y', `${-newSandwich.y}px`)
 
     if (newSandwich.state === "disabled") {
         newSandwich.dom.style.height = '20px'

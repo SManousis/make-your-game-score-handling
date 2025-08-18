@@ -156,13 +156,14 @@ function deleteCicada(cicada, timeout=0) {
 function cicadaVisuals(cicada) {
     if (!cicada.dom) return;
 
-    cicada.dom.style.setProperty('--cicada-x', `${cicada.x}px`)
-    cicada.dom.style.setProperty('--cicada-y', `${cicada.y}px`)
+    cicada.dom.style.setProperty('--x', `${cicada.x}px`)
+    cicada.dom.style.setProperty('--y', `${-cicada.y}px`)
 
     if (cicada.lookingDir === 'left') {
-        cicada.dom.style.setProperty('--cicada-scale-x', `-1`)
+        cicada.dom.style.setProperty('--scale-x', `-1`)
     } else {
-        cicada.dom.style.setProperty('--cicada-scale-x', `1`)
+       
+        cicada.dom.style.setProperty('--scale-x', `1`)
     }
 
     if (cicada.state === "disabled") {

@@ -161,6 +161,7 @@ body {
   bottom: 0px;
   left: 0px;
   transform: translate(calc(-52% + var(--bullet-x)), calc(20% + var(--bullet-y))) rotate(var(--bullet-rotation, 0deg));
+  will-change: transform;
   opacity: 100%;
   z-index: 10;
 }
@@ -238,6 +239,7 @@ body {
   left: 0px;
   bottom: 0px;
   transform: translate(calc(-52% + var(--x)), calc(20% + var(--y)));
+  will-change: transform;
   opacity: 0%;
   z-index: 100;
 }
@@ -249,6 +251,7 @@ body {
   left: 0px;
   bottom: 0px;
   transform: translate(calc(-52% + var(--x)), calc(20% + var(--y)));
+  will-change: transform;
   opacity: 0%;
   z-index: 102;
 }
@@ -262,6 +265,7 @@ body {
   font-weight: bold;
   z-index: 1001;
   transform: translate(calc(-52% + var(--x)), calc(-120% + var(--y)));
+  will-change: transform;
 }
 
 .ghost-img {
@@ -277,19 +281,7 @@ body {
   z-index: 8;
 }
 
-.cicada-img {
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  z-index: 7;
-  /* set by cicadaVisuals */
-  left: var(--cicada-x);
-  bottom: var(--cicada-y);
 
-  /* Center the image on its x/y coordinates and flip it horizontally */
-  transform-origin: center;
-  transform: translateX(-50%) translateY(30%) scaleX(var(--cicada-scale-x, 1));
-}
 
 
 .health-item-img {
@@ -299,8 +291,22 @@ body {
   bottom: 0px;
   left: 0px;
   transform: translate(calc(-52% + var(--health-item-x)), calc(20% + var(--health-item-y)));
+  will-change: transform;
   opacity: 100%;
   z-index: 10;
+}
+
+.cicada-img {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  z-index: 7;
+  left: 0px; 
+  bottom: 0px;
+  /* Center the image on its x/y coordinates and flip it horizontally */
+  transform-origin: center;
+  transform: translate(calc(-50% + var(--x)), calc(30% + var(--y))) scaleX(var(--scale-x, 1));
+  will-change: transform;
 }
 
 .turtle-img {
@@ -309,9 +315,20 @@ body {
   height: 120px;
   z-index: 7;
   /* set by turtleVisuals */
-  left: 0;
-  bottom: 0;
-  transform: translate(calc(-50% + var(--x)), calc(30% + var(--y))) scaleX(var(--scale-x, 1));
+  left: 0px;
+  bottom: 0px;
+  transform: translate(calc(50% + var(--x)), calc(-50% + var(--y))) scaleX(var(--scale-x, 1));
+  will-change: transform;
+}
+
+.sandwich-img {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  bottom: 0px;
+  left: 0px;
+  z-index: 3;
+  transform: translate(calc(-50% + var(--x)), calc(50% + var(--y)));
   will-change: transform;
 }
 
@@ -359,18 +376,10 @@ body {
   /* transform-origin: center; */
   transform: translate(calc(-30% + var(--x)), calc(0% + var(--y)));
   opacity: 0;
-
-
+  will-change: transform;
 }
 
-.sandwich-img {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  z-index: 3;
-  left: var(--sandwich-x);
-  bottom: var(--sandwich-y);
-}
+
 
 .circle {
   border-radius: 100%;
@@ -378,6 +387,7 @@ body {
   position: absolute;
   /* transform: translate(-50%, 50%); */
   transform: translate(calc(-50% + var(--x)), calc(50% + var(--y)));
+  will-change: transform;
   z-index: 1
     /* Start in the middle */
 }
@@ -393,6 +403,7 @@ body {
   border: none;
   position: absolute;
   transform: translate(var(--x), calc(0% + var(--y)));
+  will-change: transform;
   /* bottom: 10px;
    left: 225px; */
   /* Start in the middle */
