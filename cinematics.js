@@ -1,4 +1,4 @@
-import { audio, gameState, keysPressed, updateTimestampFunc} from "./game.js"
+import { audio, gameState, keysPressed, updateMenuVisibility, updateTimestampFunc} from "./game.js"
 
 
 let i = 0
@@ -450,13 +450,13 @@ function endCinematic(nextState = 'running') {
         activePanel.remove()
     }
     gameState.currentState = nextState
-
+    
     gameState.stageCinematicCounter = 0
     opacityDir = ''
     document.getElementById('game-cover').style.opacity = '0%'
     audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
     document.getElementById('cinematic-text').textContent = ''
-
+updateMenuVisibility();
     started = false
 }
 
