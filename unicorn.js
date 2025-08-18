@@ -50,6 +50,7 @@ export function createUnicorn(x, y, index, row) {
                 });
             }
             this.health -= damage;
+            powerups.createPowerUp(this.x, this.y - 60, 1, "bomb", "bomb");
         }
         // reset() {
         //     this.health = 20;
