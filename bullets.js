@@ -120,6 +120,7 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
             }
             bulletPhysicsBody = utils.createCircle(bodyX, bodyY, (bodyWidth / 2))
 
+
             break;
         case 'poo':
             [bodyX, bodyY] = [x - (bodyWidth / 2), y + 10 - (bodyHeight / 2)];
@@ -214,6 +215,7 @@ export function createBullet(dirType, team, bulletType, x, y, speed, damage = 10
         type: "bullet",
         bounceEdges: bounceEdges,
         penetrateWalkable: penetrateWalkable,
+        ...(bulletType === "pacman" ? { destroySound: "bubble" } : { destroySound: "destroy_fly"}),
     }
     gameState.allEntities.push(bullet);
     gameState.allBullets.push(bullet);
@@ -248,12 +250,14 @@ export function bulletUpdate(bullet) {
     }
 
     if (bullet.y < -10 || bullet.x < -10 || bullet.y > gameArea.offsetHeight + 10 || bullet.x > gameArea.offsetWidth + 10) {
+        bullet.destroySound = undefined;
         utils.destroyUnit(bullet)
         return;
     }
 
     if (bullet.touched) {
         bullet.disabled = true
+        bullet.destroySound = undefined;
         utils.destroyUnit(bullet)
         return;
     }
@@ -266,6 +270,7 @@ export function bulletUpdate(bullet) {
                         // console.log(`walkable touched ${entity.name}`)
                         bullet.disabled = true
                         bullet.dom.remove()
+                        bullet.destroySound = undefined;
                         utils.destroyUnit(bullet)
                         return;
                     }

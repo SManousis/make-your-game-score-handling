@@ -8,6 +8,7 @@ export function isShot(entity) {
         if (collisionCheck(entity, bullet)) {
             console.log('collision detected!')
             // console.log(`bullet touched ${entity.name}`)
+            if (entity === game.gameState.mario) bullet.destroySound = undefined;
             utils.destroyUnit(bullet)
             bullet.disabled = true
   

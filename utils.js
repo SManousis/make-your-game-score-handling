@@ -280,7 +280,7 @@ export function destroyUnit(unit, timeout = 0) {
     } else {
         destroyUnitNow(unit);
     }
-    if (Object.hasOwn(unit, "destroySound") && audio.sounds) {
+    if (Object.hasOwn(unit, "destroySound") && unit.destroySound !== null && audio.sounds) {
         audio.manager.playSample(unit.destroySound, {
             gain: audio.soundsVolume,
             pan: audio.xToPan(unit.x, gameArea.offsetWidth),
