@@ -89,7 +89,7 @@ export function cupidUpdate(cupid) {
         }
         if (cupid.parallelMoveCount === distance * 2) {
             cupid.velX = -cupid.velX
-            cupid.velY = -30.8
+            cupid.velY = -3.8
             cupid.parallelMoveCount = 0
         }
 
