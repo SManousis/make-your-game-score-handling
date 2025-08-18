@@ -26,6 +26,7 @@ export async function stage1(gameGen) {
     }
     //======================================================
 
+
     await spawnSwarm(10, createCupid, 5, 200, gameState.cupids, 100, 0, 4000);
     if (abortStage(gameGen)) return;
 
