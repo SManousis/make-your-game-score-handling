@@ -15,7 +15,7 @@ export function createTilesDiv(x,y, tileSize, tile){
     div.classList.add ('tile');
     div.style.width = Math.round(tileSize) + 'px';
     div.style.height = Math.round(tileSize) + 'px';
-    div.style.top = Math.round(y*tileSize) + 'px';
+    div.style.top = Math.round(y*tileSize - 18) + 'px';
     div.style.left = Math.round(x*tileSize) + 'px';
     div.style.position = 'absolute';
     div.style.background = tile.color
