@@ -46,6 +46,12 @@ const paginationInfo = document.getElementById('pagination-info');
 const prevButton = document.getElementById('leaderboard-prev-button');
 const nextButton = document.getElementById('leaderboard-next-button');
 
+const scoreTallyScreen = document.getElementById('score-tally-screen');
+const tallyBaseScore = document.getElementById('tally-base-score');
+const tallyLivesBonus = document.getElementById('tally-lives-bonus');
+const tallyTimeBonus = document.getElementById('tally-time-bonus');
+const tallyFinalScore = document.getElementById('tally-final-score');
+
 const leaderboardMenu = document.getElementById('leaderboard-menu');
 const backFromLeaderboardButton = document.getElementById('back-from-leaderboard-button');
 
@@ -203,6 +209,7 @@ export function updateMenuVisibility() {
     gameOverMenu.classList.add('hidden');
     helpMenu.classList.add('hidden');
     leaderboardMenu.classList.add('hidden');
+    scoreTallyScreen.classList.add('hidden');
 
     if (gameState.currentState === 'mainMenu') {
         mainMenu.classList.remove('hidden');
@@ -214,6 +221,8 @@ export function updateMenuVisibility() {
         helpMenu.classList.remove('hidden');
     } else if (gameState.currentState === 'leaderboard') {
         leaderboardMenu.classList.remove('hidden')
+    } else if (gameState.currentState === 'tally') { 
+        scoreTallyScreen.classList.remove('hidden');
     }
 }
 
@@ -291,6 +300,59 @@ export function updateMenuVisibility() {
 //     startStorymode()
 
 // }
+
+const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+
+export async function startScoreTally() {
+
+    gameState.currentState = 'tally';
+    updateMenuVisibility();
+    audio.manager.stopMusic(); 
+
+
+    const SCORE_PER_LIFE = 5000;
+    const MAX_TIME_BONUS = 20000;
+    const TIME_BONUS_THRESHOLD_SECONDS = 300 // Player gets max bonus if they finish in under 5 minutes
+
+    // Display the initial base score
+    tallyBaseScore.textContent = gameState.score;
+    tallyFinalScore.textContent = gameState.score;
+    await wait(1000); // Wait 1 second for dramatic effect
+
+    // Calculate and animate the Lives Bonus
+    const livesBonus = gameState.lives * SCORE_PER_LIFE;
+    if (livesBonus > 0) {
+        if (audio.sounds) audio.manager.playSample("tick", { gain: audio.soundsVolume });
+        tallyLivesBonus.textContent = `+ ${livesBonus} (${gameState.lives} x ${SCORE_PER_LIFE})`;
+        updateScore(livesBonus); 
+        tallyFinalScore.textContent = gameState.score; 
+        await wait(1000); 
+    } else {
+        tallyLivesBonus.textContent = `+ 0`;
+    }
+
+    // Calculate and animate the Time Bonus
+    let timeBonus = 0;
+    const totalSeconds = Math.floor(gameState.gameTime / 1000);
+    if (totalSeconds < TIME_BONUS_THRESHOLD_SECONDS) {
+        if (audio.sounds) audio.manager.playSample("tick", { gain: audio.soundsVolume });
+        // The faster you finish, the closer the factor is to 1
+        const timeFactor = 1 - (totalSeconds / TIME_BONUS_THRESHOLD_SECONDS);
+        timeBonus = Math.floor(MAX_TIME_BONUS * timeFactor);
+        
+        tallyTimeBonus.textContent = `+ ${timeBonus} (Speed Bonus!)`;
+        updateScore(timeBonus); // Add the bonus to the master score
+        tallyFinalScore.textContent = gameState.score;
+        await wait(1000); 
+    } else {
+        tallyTimeBonus.textContent = `+ 0`;
+    }
+    
+    // Final pause before proceeding to the game over / score submission screen
+    await wait(2500); 
+    triggerGameOver(); 
+}
 
 function restartGame() {
     let soundsTemp = audio.sounds;
