@@ -324,7 +324,7 @@ export function updateScore(points) {
     scoreElement.textContent = `Score: ${gameState.score}`;
 }
 
-export function triggerGameOver(won = true) {
+export function triggerGameOver(won = false) {
     //check so that it's not called multiple times
     if (gameState.currentState === 'gameOver') {
         return;
