@@ -634,7 +634,7 @@ input:checked+.slider:before {
 }
 
 .tile {
-  opacity: 0.1;
+  opacity: 1;
   position: absolute;
   transition: background 0.15s;
   z-index: 0;
