@@ -50,7 +50,12 @@ export function createUnicorn(x, y, index, row) {
                 });
             }
             this.health -= damage;
-            powerups.createPowerUp(this.x, this.y - 60, 1, "bomb", "bomb");
+             if (Math.random() < 0.15) {
+            powerups.createPowerUp(unicorn.x, unicorn.y, 0, "multibullet", "rainbow");
+        } else {
+           powerups.createPowerUp(unicorn.x, unicorn.y - 60, 0, "bomb", "bomb");
+        }
+            
         }
         // reset() {
         //     this.health = 20;
