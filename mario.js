@@ -2,6 +2,7 @@ import * as utils from './utils.js'
 import { keysPressed, gameArea, gameState, audio, triggerGameOver, lifeLostFanfare } from './game.js'
 import * as physics from './physicsStep.js'
 import * as bullets from './bullets.js'
+import { createBomb } from './explosion.js'
 
 export const marioDiv = document.getElementById('mario');
 
