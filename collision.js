@@ -13,7 +13,7 @@ export function isShot(entity) {
   
             if (Object.hasOwn(entity, 'takeDamage')){
                 entity.takeDamage(bullet.damage, bullet.x)
-            }else if (entity.type !== "turtle") {
+            } else if (entity.type !== "turtle") {
                 entity.health -= bullet.damage
             }
             

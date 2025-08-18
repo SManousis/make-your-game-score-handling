@@ -1,6 +1,6 @@
 import * as utils from "./utils.js";
 import * as mario from './mario.js'
-import { gameArea, gameState, updateScore } from './game.js'
+import { gameArea, gameState, updateScore, audio } from './game.js'
 import * as bullets from './bullets.js'
 import * as powerups from './powerups.js'
 
@@ -14,7 +14,7 @@ export function createUnicorn(x, y, index, row) {
     let unicorn = {
         name: "unicorn",
         index: index,
-        health: 8,
+        health: 24,
         damage: 10,
         moveSpeed: 0.1,
         x: x,
@@ -31,8 +31,8 @@ export function createUnicorn(x, y, index, row) {
         rand1: Math.random() * 10,
         rand2: Math.random() * 10,
         body: [
-                    utils.createCircle(x,y,80)
-                ],
+            utils.createCircle(x, y, 80)
+        ],
         updateFunc: function () { unicornUpdate(this) },
         drawFunc: function () { unicornVisuals(this) },
         dom: unicornBody,
@@ -40,6 +40,17 @@ export function createUnicorn(x, y, index, row) {
         team: "enemy",
         scoreValue: 10,
         hasExploded: false,
+        takeDamage: function (damage, sourceX, sound) {
+            if (audio.sounds) {
+                audio.manager.playSample("destroy_fly", {
+                    gain: audio.soundsVolume,
+                    pan: audio.xToPan(this.x, gameArea.offsetWidth),
+                    throttleMs: 60,
+                    pitchRandom: [0.98, 1.02]
+                });
+            }
+            this.health -= damage;
+        }
         // reset() {
         //     this.health = 20;
         //     this.moveSpeed = 0.1;
@@ -71,6 +82,7 @@ export function createUnicorn(x, y, index, row) {
 
 export function unicornUpdate(unicorn) {
     if (unicorn.health <= 0) {
+        unicorn.destroySound = "bubble";
         utils.destroyUnit(unicorn)
         updateScore(unicorn.scoreValue);
         return;
@@ -81,7 +93,7 @@ export function unicornUpdate(unicorn) {
     const isOffScreenRight = unicorn.x > screenWidth + unicorn.dom.offsetWidth;
 
     if (unicorn.movementState === "entering") {
-        unicorn.x += unicorn.velX; 
+        unicorn.x += unicorn.velX;
         if (unicorn.x > 0 && unicorn.x < screenWidth) {
             unicorn.movementState = "arcing";
         }
@@ -95,7 +107,7 @@ export function unicornUpdate(unicorn) {
 
         unicorn.x += unicorn.velX;
 
-    
+
         if ((unicorn.velX > 0 && unicorn.x > screenWidth) ||
             (unicorn.velX < 0 && unicorn.x < 0)) {
             unicorn.passesMade++;
@@ -105,9 +117,9 @@ export function unicornUpdate(unicorn) {
 
 
     else if (unicorn.movementState === "exiting") {
-        unicorn.x += unicorn.velX; 
+        unicorn.x += unicorn.velX;
 
-    
+
         if (isOffScreenLeft || isOffScreenRight) {
             if (unicorn.passesMade >= 2) {
                 // If two passes are done, destroy the unicorn.
@@ -130,24 +142,24 @@ export function unicornUpdate(unicorn) {
 
 
 
-if (Math.random() < 0.02) { 
+    if (Math.random() < 0.02) {
 
-    if (Math.random() < 0.15) {
-        powerups.createPowerUp(unicorn.x, unicorn.y, 25,"health","rainbow");
-    } else { 
-        bullets.createBullet(
-            'target',       
-            'enemy',        
-            'poo',       
-            unicorn.x,      
-            unicorn.y,      
-            5,              
-            10,             
-            gameState.mario.x,  
-            gameState.mario.y   
-        );
+        if (Math.random() < 0.15) {
+            powerups.createPowerUp(unicorn.x, unicorn.y, 25, "health", "rainbow");
+        } else {
+            bullets.createBullet(
+                'target',
+                'enemy',
+                'poo',
+                unicorn.x,
+                unicorn.y,
+                5,
+                10,
+                gameState.mario.x,
+                gameState.mario.y
+            );
+        }
     }
-}
 
     if (parseInt(Math.random() * 1000) == 0) {
         bullets.createBullet("down", "enemy", 'poo', unicorn.x, unicorn.y, 3, 10)

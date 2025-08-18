@@ -142,6 +142,7 @@ export const audio = {
         tick: "./assets/audio/time_tick.wav",
         turtle_hit: "./assets/audio/turtle_hit.wav",
         vending_rising: "./assets/audio/vending_rising.wav",
+        win: "./assets/audio/win.mp3",
 
         // vocal
         mario_death: "./assets/audio/mario_death.wav",
@@ -226,85 +227,10 @@ export function updateMenuVisibility() {
     }
 }
 
-
-
-// function restartGame() {
-//     console.log("RESTART CALLED")
-//     throw Error("WTF")
-//     return
-
-//     //TODO delete everything under stage-resources
-
-//     gameState.currentGameGen++; // In
-
-//     // suppressing destroy sounds for restart
-//     let soundsTemp = audio.sounds;
-//     audio.sounds = false;
-
-//     // crement at every restart
-//     for (let entity of gameState.allEntities) {
-//         if (entity.countdownDiv) {
-//             entity.countdownDiv.remove()
-//             utils.destroyUnit(entity)
-//         }
-//         if (entity.dom) entity.dom.remove();
-//         if (entity.body) entity.body.forEach(body => body.div.remove());
-//     }
-//     audio.sounds = soundsTemp;
-
-//     gameState.allEntities.length = 0;
-//     gameState.groundedEnemies.length = 0;
-//     gameState.ghosts.length = 0;
-//     gameState.unicorns.length = 0;
-//     gameState.cupids.length = 0;
-//     gameState.cicadas.length = 0;
-//     gameState.turtles.length = 0;
-//     gameState.allBullets.length = 0;
-//     gameState.powerUps.length = 0;
-//     gameState.flowers.length = 0;
-//     gameState.tetros.length = 0;
-
-//     eventQueue.length = 0;
-
-//     utils.setUnit(mario, 500, 500);
-//     gameState.mario.health = 100;
-//     gameState.allEntities.push(mario);
-
-//     for (const key in keysPressed) {
-//         keysPressed[key] = false;
-//     }
-
-//     gameState.gameTime = 0;
-//     gameState.score = 0;
-//     gameState.lives = 5;
-//     scoreElement.textContent = `Score: ${gameState.score}`;
-//     livesElement.textContent = `Lives: ${gameState.lives}`;
-
-//     gameState.currentState = 'running';
-//     updateMenuVisibility();
-
-//     if (audio.music) {
-//         audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
-//     } else {
-//         audio.manager.stopMusic();
-//     }
-
-//     //reset game over screen
-//     playerNameInput.value = '';
-//     submitScoreButton.disabled = false;
-//     submitScoreButton.textContent = 'Submit Score';
-//     leaderboardContainer.classList.add('hidden');
-//     playerRankInfo.textContent = '';
-
-
-//     startStorymode()
-
-// }
-
 const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 
-export async function startScoreTally() {
+export async function startScoreTally(won = false) {
 
     gameState.currentState = 'tally';
     updateMenuVisibility();
@@ -351,7 +277,7 @@ export async function startScoreTally() {
     
     // Final pause before proceeding to the game over / score submission screen
     await wait(2500); 
-    triggerGameOver(); 
+    triggerGameOver(won); 
 }
 
 function restartGame() {
@@ -398,7 +324,7 @@ export function updateScore(points) {
     scoreElement.textContent = `Score: ${gameState.score}`;
 }
 
-export function triggerGameOver() {
+export function triggerGameOver(won = true) {
     //check so that it's not called multiple times
     if (gameState.currentState === 'gameOver') {
         return;
@@ -412,13 +338,17 @@ export function triggerGameOver() {
     audio.manager.stopMusic();
     if (audio.sounds) {
         audio.manager.killSamples();
-        audio.manager.playSample("mario_death", {
-            gain: audio.soundsVolume,
-            pan: audio.xToPan(gameState.mario.x, gameArea.offsetWidth),
-        })
-        setTimeout(() => {
-            audio.manager.playSample("game_over", { gain: audio.soundsVolume });
-        }, 1000);
+        if (!won) {
+            audio.manager.playSample("mario_death", {
+                gain: audio.soundsVolume,
+                pan: audio.xToPan(gameState.mario.x, gameArea.offsetWidth),
+            })
+            setTimeout(() => {
+                audio.manager.playSample("game_over", { gain: audio.soundsVolume });
+            }, 1000);
+        } else {
+            audio.manager.playSample("win", {gain: audio.musicVolume});
+        }
     }
 
     updateMenuVisibility();

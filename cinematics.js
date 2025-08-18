@@ -1,4 +1,4 @@
-import { audio, gameState, keysPressed, startScoreTally, updateMenuVisibility, updateTimestampFunc} from "./game.js"
+import { audio, gameState, keysPressed, startScoreTally, updateMenuVisibility, updateTimestampFunc } from "./game.js"
 
 
 let i = 0
@@ -62,15 +62,10 @@ export function cinematicTicker() {
         activePanel.style.opacity = `${opacity}%`
     }
 
-    // if (wordsShown < currentWords.length) {
-    //     document.getElementById('cinematic-text').textContent =
-    //         currentWords.slice(0, Math.ceil(wordsShown)).join(" ")
-    //     wordsShown += 0.08
-    // }
     document.getElementById('cinematic-text').textContent = currentText.substring(0, textShown)
     textShown += 0.25
 
-    if (gameState.level == 2 && gameState.cinematicStep > 6){
+    if (gameState.level == 2 && gameState.cinematicStep > 6) {
         textShown += 0.04
     }
 
@@ -450,15 +445,15 @@ function endCinematic(nextState = 'running') {
         activePanel.remove()
     }
     gameState.currentState = nextState
-    
+
     gameState.stageCinematicCounter = 0
     opacityDir = ''
     document.getElementById('game-cover').style.opacity = '0%'
     audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
     document.getElementById('cinematic-text').textContent = ''
-updateMenuVisibility();
+    updateMenuVisibility();
     started = false
-    if (nextState==="gameOver") startScoreTally();
+    if (nextState === "gameOver") startScoreTally(true);
 }
 
 

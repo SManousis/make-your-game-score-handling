@@ -88,7 +88,7 @@ export function createVending(x = 1600, y = 270) {
 }
 
 function vendingVisuals(entity) {
-    entity.dom.style.opacity='1';
+    entity.dom.style.opacity = '1';
     entity.dom.style.setProperty('--x', `${entity.x}px`);
     entity.dom.style.setProperty('--y', `${-entity.y}px`);
 }
@@ -150,9 +150,9 @@ function vendingUpdate(vending) {
 
     if (vending.attackTimer <= 0) {
         vending.attackTimer = 100 + Math.random() * 50
-        
+
         vending.attackType = utils.returnRandomElement(['carpet', 'homing', 'balls', 'bigbomb'])
-        while (vending.attackType == vending.prevAttack){
+        while (vending.attackType == vending.prevAttack) {
             vending.attackType = utils.returnRandomElement(['carpet', 'homing', 'balls', 'bigbomb'])
         }
     }
@@ -189,29 +189,27 @@ function vendingUpdate(vending) {
                 if (l.includes(vending.attackCounter)) {
                     const count = Math.round(Math.random() * 3) + 2
                     for (let i = 0; i < count; i++) {
-                        createBullet('target', 'enemy', 'sphere', vending.x, vending.y, 5+Math.random()*10, 10, vending.x + (Math.random() - 0.5) * 0.5, vending.y + -0.020, true, true)
+                        createBullet('target', 'enemy', 'sphere', vending.x, vending.y, 5 + Math.random() * 10, 10, vending.x + (Math.random() - 0.5) * 0.5, vending.y + -0.020, true, true)
                     }
                 }
-                if (vending.attackCounter == 60*11) {
+                if (vending.attackCounter == 60 * 11) {
                     vending.attackCounter = 0
                     vending.attackType = 'none'
                 }
                 break;
 
             case 'bigbomb': //big slow falling atomic bomb
-                if (vending.attackCounter == 100){
+                if (vending.attackCounter == 100) {
                     const b = createBomb(vending.x, vending.y, 0, -3.5, 'enemy', 1000, 900, 1000, true, true, false, 'assets/items/bomb.svg', 0)
                     b.dom.style.width = '300px'
                     b.dom.style.height = '300px'
                 }
-                if (vending.attackCounter == 60*4) {
+                if (vending.attackCounter == 60 * 4) {
                     vending.attackCounter = 0
                     vending.attackType = 'none'
                 }
                 break;
         }
     }
-
-
 }
 
