@@ -1,6 +1,7 @@
 import * as utils from "./utils.js";
 import { gameState, updateScore } from './game.js'
 import * as bullets from './bullets.js'
+import { createExplosion } from "./explosion.js";
 
 
 export function createGhost(x, y, index, row) {
@@ -20,7 +21,7 @@ export function createGhost(x, y, index, row) {
         y: y,
         bullet_count: 1,
         aimDirection: "down",
-        state: (row%2 == 0) ? "left" : "right",
+        state: (row % 2 == 0) ? "left" : "right",
         velX: 1.2,
         velY: 0,
         touched: false,
@@ -35,6 +36,8 @@ export function createGhost(x, y, index, row) {
         scoreValue: 10,
         hasExploded: false,
         destroySound: "destroy_fly",
+        kamikazeMode: false,
+        kamikazeSpeed: 8,
         // reset() {
         //     this.health = 20;
         //     this.moveSpeed = 0.1;
@@ -64,34 +67,63 @@ export function ghostUpdate(ghost) {
         updateScore(ghost.scoreValue);
     }
 
-    switch (ghost.state){
+    switch (ghost.state) {
         case "left":
-            if (ghost.x < 120){
+            if (ghost.x < 120) {
                 ghost.state = "right"
-                ghost.velY -= 10
+                ghost.velY -= 13
             }
-            ghost.velX = -3
+            ghost.velX = -5
             break
 
         case "right":
-            if (ghost.x > document.getElementById('game-area').offsetWidth-120){
+            if (ghost.x > document.getElementById('game-area').offsetWidth - 120) {
                 ghost.state = "left"
-                ghost.velY -= 10
-            } 
-            ghost.velX = 3
+                ghost.velY -= 13
+            }
+            ghost.velX = 5
             break
     }
-    
-    utils.moveUnit(ghost, ghost.velX, ghost.velY)
-    
-    if (ghost.velY > 0){
+
+    if (!ghost.kamikazeMode){
+        utils.moveUnit(ghost, ghost.velX, ghost.velY)
+    }
+
+    if (ghost.velY > 0) {
         ghost.velY -= 1
-    }else if (ghost.velY < 0){
+    } else if (ghost.velY < 0) {
         ghost.velY += 1
     }
 
-    if (parseInt(Math.random()*1000) == 0){
+
+
+    if (parseInt(Math.random() * 1000) == 0) {
         bullets.createBullet("down", "enemy", 'pacman', ghost.x, ghost.y, 3, 10)
+    }
+
+    if (ghost.y <= 300) {
+        for (let ghost of gameState.ghosts) {
+            ghost.kamikazeMode = true
+        }
+    }
+
+    for (const BodyPart of ghost.body) {
+        if (utils.IsBodyCollidingWithUnit(BodyPart, gameState.mario)) {
+            if (ghost.kamikazeMode) {
+                createExplosion(ghost.x, ghost.y, 'player', 0, 200)
+                gameState.mario.takeDamage(ghost.damage, ghost.x, undefined, false)
+                utils.destroyUnit(ghost)
+
+            } else {
+                gameState.mario.takeDamage(ghost.damage, ghost.x, undefined, true)
+            }
+
+            break;
+        }
+    }
+    if (ghost.kamikazeMode) {
+        utils.kamikaze(ghost, gameState.mario);
+        return;
     }
 
 }

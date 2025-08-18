@@ -247,7 +247,7 @@ export function bulletUpdate(bullet) {
         }
     }
 
-    if (bullet.y < -30 || bullet.x < -30 || bullet.y > gameArea.offsetHeight + 20 || bullet.x > gameArea.offsetWidth + 20) {
+    if (bullet.y < -10 || bullet.x < -10 || bullet.y > gameArea.offsetHeight + 10 || bullet.x > gameArea.offsetWidth + 10) {
         utils.destroyUnit(bullet)
         return;
     }

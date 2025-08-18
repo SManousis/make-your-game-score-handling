@@ -859,13 +859,11 @@ function update() {
 
         if (entity.updateFunc) entity.updateFunc(entity);
 
-        if (entity.type !== "powerUp" && entity.type !== "bullet") {
+        if (entity.type !== "powerUp") {
             collision.isShot(entity)
         }
 
-        if (entity.name === "mario") {
-            updateMarioHealthBar(entity.health, 100)
-        }
+       
     }
 
     gameState.frameCounter++

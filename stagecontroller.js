@@ -152,7 +152,7 @@ export async function stage3(gameGen) {
 
 
 function abortStage(gameGen) {
-    if (gameGen !== gameState.currentGameGen) {
+    if (gameGen !== gameState.currentGameGen || gameState.currentState == 'gameOver') {
         stopAllSpawners();
         removeAllEvents();
         console.log("abort!")
@@ -162,6 +162,9 @@ function abortStage(gameGen) {
 }
 
 async function spawnSwarm(count, spawnUnitFunc, maxInRow = 10, squeezValue = 0, array, ySeparation = 90, yoffset = 0, delay = 0) {
+    if (gameState.currentState == 'gameOver'){
+        return
+    }
     const rows = count / maxInRow
     const leftOver = (rows - parseInt(rows)) * maxInRow
     const exactRows = parseInt(rows)
