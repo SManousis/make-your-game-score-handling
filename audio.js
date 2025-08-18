@@ -162,7 +162,8 @@ export class AudioManager {
     }
 
 
-    async playMusicLoop(url, volume = 1.0, overlapDuration = 7.742) {
+    async playMusicLoop(url, volume = 1.0, overlapDuration = 0) {
+        // console.log("playing:", url, "sources:", this.sources, "isPlaying", this.isPlaying) // debug
         if (this.isPlaying) {
             this.stopMusic();
         }
@@ -174,9 +175,9 @@ export class AudioManager {
         const loopDuration = buffer.duration;
         const overlap = overlapDuration;
 
-        this.isPlaying = true;
-
+        
         const scheduleLoop = (startTime) => {
+            this.isPlaying = true;
             this.startTime = startTime;
             const source = context.createBufferSource();
             const gainNode = context.createGain();
@@ -208,12 +209,10 @@ export class AudioManager {
         for (let i = 0; i < this.sources.length; i++) {
             const s = this.sources[i];
             if (s?.source) {
-                s.source.stop()
-                s.source = null;
+                s.source.stop();
             }
         };
-
-        this.sources = []
+        this.sources = [];
     }
 
 
@@ -225,19 +224,18 @@ export class AudioManager {
         const now = this.context.currentTime;
         for (let i = 0; i < this.sources.length; i++) {
             const s = this.sources[i];
+            if (!s?.source) continue;
+
             if (fadeTime) {
                 s.gainNode.gain.linearRampToValueAtTime(0, now + fadeTime);
-                setTimeout(() => {
-                    s.source.stop();
-                }, fadeTime * 1000);
+                s.source.stop(now + fadeTime);;
             } else {
                 s.source.stop();
             }
+
             s.source = null;
         };
-
         this.sources = [];
-
     }
 
     setMusicVolume(vol) { // TODO: Use this ??

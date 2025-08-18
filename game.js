@@ -293,8 +293,10 @@ export function updateMenuVisibility() {
 // }
 
 function restartGame() {
+    audio.manager.stopMusic(); // reseting musicOffset if coming from pause
     let soundsTemp = audio.sounds;
     audio.sounds = false;
+    
     gameState.currentGameGen++;
     // stopAllSpawners();
     // removeAllEvents();
@@ -325,9 +327,6 @@ scoreElement.textContent = `Score: ${gameState.score}`;
     gameState.mapLoaded = false;
     startStorymode();
     updateMenuVisibility();
-    if (audio.music) {
-        audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration)
-    }
     console.log(gameState);
 }
 
@@ -399,19 +398,12 @@ window.addEventListener("keydown", function (e) {
 
 // Main menu buttons
 playButton.addEventListener('click', async () => {
-    let intial = false;
     if (!audio.initialized) {
         await audio.setUp();
         audio.initialized = true;
         audio.playSampleDeb = utils.opDebounce(audio.manager.playSample.bind(audio.manager), 100, { leading: true });
-        intial = true;
     }
-
-    if (audio.music && !intial) {
-        audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
-    } else {
-        audio.manager.stopMusic();
-    }
+    
     if (endGame) {
         restartGame()
         endGame = false;
