@@ -88,6 +88,7 @@ export function createVending(x = 1600, y = 270) {
 }
 
 function vendingVisuals(entity) {
+    entity.dom.style.opacity='1';
     entity.dom.style.setProperty('--x', `${entity.x}px`);
     entity.dom.style.setProperty('--y', `${-entity.y}px`);
 }

@@ -296,11 +296,10 @@ function destroyUnitNow(unit) {
 
 
 export function kamikaze(unit, target) {
-    const adjacent = unit.x - target.x
-    const opposite = unit.y - target.y
-    const angle = Math.atan2(opposite, adjacent)
-    unit.velX = - unit.kamikazeSpeed * Math.cos(angle)
-    unit.velY = -(unit.kamikazeSpeed * Math.sin(angle))
+    const xdiff = target.x - unit.x
+    const ydiff = target.y - unit.y
+    const mag = Math.sqrt(xdiff*xdiff + ydiff*ydiff)
+    moveUnit(unit, unit.kamikazeSpeed*xdiff/mag, unit.kamikazeSpeed*ydiff/mag)
     unit.moveSpeed = unit.kamikazeSpeed
     unit.damage = 90
 }

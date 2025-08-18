@@ -1,4 +1,4 @@
-import { audio, gameState, keysPressed, updateTimestampFunc} from "./game.js"
+import { audio, gameState, keysPressed, startScoreTally, updateMenuVisibility, updateTimestampFunc} from "./game.js"
 
 
 let i = 0
@@ -18,7 +18,7 @@ const lines = {
     8: 'El Mario could feel that he was close to their leader. Defeating him would mean saving the world.',
     9: `So with the last and most formidable swarm of enemies in the distance, he turned to the vending machine and said. "Thank you weird fridge-san, I swear I'll fix you when we get back home."`,
     10: ``,
-    11: `El Mario left devastated by the vending machine's betrayal.       Kneeling among his former partner's remains,            he closes his eyes as he's saying the final goodbye`,
+    11: `El Mario left devastated by the vending machine's betrayal.       Kneeling among his former partner's remains,            he closes his eyes as he's saying the final goodbye.`,
     12: 'IN MEXICAN: Oh damn! These magic mushroom are amazing!',
 
 }
@@ -450,14 +450,15 @@ function endCinematic(nextState = 'running') {
         activePanel.remove()
     }
     gameState.currentState = nextState
-
+    
     gameState.stageCinematicCounter = 0
     opacityDir = ''
     document.getElementById('game-cover').style.opacity = '0%'
     audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
     document.getElementById('cinematic-text').textContent = ''
-
+updateMenuVisibility();
     started = false
+    if (nextState==="gameOver") startScoreTally();
 }
 
 

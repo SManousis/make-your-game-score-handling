@@ -64,7 +64,7 @@ export function createMario(arr, x = 500, y = 500) {
         getRandomHitSound(sounds) {
             return sounds[Math.floor(Math.random() * sounds.length)];
         },
-        takeDamage: function (damage, sourceX, sound) {
+        takeDamage: function (damage, sourceX, sound = undefined, invinsible = true) {
             if (this.isInvincible) {
                 return;
             }
@@ -86,8 +86,10 @@ export function createMario(arr, x = 500, y = 500) {
             } else {
                 this.velX += KNOCKBACK_HORIZONTAL;
             }
-            this.isInvincible = true;
-            this.invincibilityTimer = 40;
+            if (invinsible) {
+                this.isInvincible = true;
+                this.invincibilityTimer = 40;
+            }
         },
         applyPowerUp: function (type, value, sound) {
             if (audio.sounds) {
@@ -153,7 +155,9 @@ export let currentBody = document.getElementById("mario-body-forward")
 export let currentLegs = document.getElementById("mario-legs0")
 export let marioFeetFrames = ["mario-legs0", "mario-legs1", "mario-legs2", "mario-legs3", "mario-legs3"]
 export function marioVisuals(mario) {
-    if (mario.health <= 0) {
+
+    if (gameState.lives == 0) {
+      
         currentBody.style.opacity = '0%'
         currentLegs.style.opacity = '0%'
         currentBody = document.getElementById('mario-dead-body')
@@ -161,18 +165,10 @@ export function marioVisuals(mario) {
         currentBody.style.opacity = "100%"
         currentBody.style.setProperty('--mario-x', `${mario.x}px`);
         currentBody.style.setProperty('--mario-y', `${-mario.y}px`);
+        return
     }
-    if (mario.crouching) {
-        mario.body[0].active = false;
-        mario.body[1].active = false;
-        mario.body[2].active = true;
-        mario.body[3].active = true;
-    } else {
-        mario.body[0].active = true;
-        mario.body[1].active = true;
-        mario.body[2].active = false;
-        mario.body[3].active = false;
-    }
+
+    
     if (mario.isInvincible && Math.floor(mario.invincibilityTimer / 4) % 2 === 0) {
         currentBody.style.opacity = '0%'
         currentLegs.style.opacity = '0%'
@@ -286,6 +282,9 @@ export function isMarioWalkingIntoGround() {
 
 
 export function marioUpdate(mario) {
+
+    updateMarioHealthBar(mario.health, 100)
+
     if (mario.isInvincible) {
         mario.invincibilityTimer--;
         if (mario.invincibilityTimer <= 0) {
@@ -293,13 +292,31 @@ export function marioUpdate(mario) {
         }
     }
 
+    if (mario.crouching) {
+        mario.body[0].active = false;
+        mario.body[1].active = false;
+        mario.body[2].active = true;
+        mario.body[3].active = true;
+    } else {
+        mario.body[0].active = true;
+        mario.body[1].active = true;
+        mario.body[2].active = false;
+        mario.body[3].active = false;
+    }
+
     if (mario.health <= 0) {
         gameState.lives -= 1
         lifeLostFanfare();
         mario.health = 100
         if (gameState.lives === 0) {
+            mario.health = 0
             marioStopFiring();
+
+        
+
+
             triggerGameOver();
+
             console.log("mario died")
         }
     }
@@ -479,15 +496,15 @@ export function marioUpdate(mario) {
         }
 
     } else {
-       marioStopFiring();
+        marioStopFiring();
     }
 }
 
-export function marioStopFiring(){
+export function marioStopFiring() {
     fireState.isFiring = false;
     clearTimeout(fireState.delayTimer);
     clearInterval(fireState.repeatTimer);
-    keysPressed.fire = false; 
+    keysPressed.fire = false;
 }
 
 

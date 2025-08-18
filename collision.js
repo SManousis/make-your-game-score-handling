@@ -5,24 +5,27 @@ import * as game from './game.js'
 
 export function isShot(entity) {
     for (const bullet of game.gameState.allBullets) {
-        if (bullet.disabled) continue;
         if (collisionCheck(entity, bullet)) {
+            console.log('collision detected!')
             // console.log(`bullet touched ${entity.name}`)
+            utils.destroyUnit(bullet)
             bullet.disabled = true
-            bullet.body.forEach(body => body.div.remove())
-            bullet.dom.remove()
+  
             if (Object.hasOwn(entity, 'takeDamage')){
-                entity.takeDamage(bullet.damage)
+                entity.takeDamage(bullet.damage, bullet.x)
             }else if (entity.type !== "turtle") {
                 entity.health -= bullet.damage
             }
             
+            if (game.gameState.allBullets.includes(entity)){
+                entity.disabled = true
+                utils.destroyUnit(entity)
+            }
+
             if (entity.health <= 0) {
                 entity.disabled = true
             }
-            // if (entity === mario.mario && game.audio.sounds) {
-                
-            // }
+
         }
     }
 }

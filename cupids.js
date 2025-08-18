@@ -31,7 +31,7 @@ export function createCupid(x, y, index, row) {
         state: "airborne",
         velX: 1.2,
         velY: 0,
-        kamikazeSpeed: 5,
+        kamikazeSpeed: 8,
         kamikazeMode: false,
         touched: false,
         rand1: Math.random() * 10,
@@ -81,76 +81,96 @@ export function cupidUpdate(cupid) {
     //     cupid.moveSpeed === 0 ? cupid.moveSpeed = 1 : cupid.moveSpeed = 0
     // }
 
-    const distance = 100
-    if (cupid.parallelMoveCount === distance) {
-        cupid.velX = -cupid.velX
+    if (!cupid.kamikazeMode) {
+        const distance = 100
+        if (cupid.parallelMoveCount === distance) {
+            cupid.velX = -cupid.velX
 
-    }
-    if (cupid.parallelMoveCount === distance * 2) {
-        cupid.velX = -cupid.velX
-        cupid.velY = -3
-        cupid.parallelMoveCount = 0
-    }
-
-    if (Math.abs(cupid.velY) > 0) {
-        utils.moveUnit(cupid, 0, cupid.velY)
-        cupid.parallelMoveCount--
-    } else {
-        utils.moveUnit(cupid, cupid.velX, cupid.velY)
-    }
-
-
-    if (Math.abs(cupid.velY) > 1) {
-        cupid.velY /= 1.05
-    }
-
-    if (Math.abs(cupid.velY) < 1) {
-        cupid.velY = 0
-    }
-
-    if (parseInt(Math.random() * 2000) == 0) {
-        cupid.dom.src = preloadedFiringImage.src
-        let bullet = bullets.createBullet("down", "enemy", 'heart', cupid.x, cupid.y, 4, 8)
-
-        setTimeout(() => {
-            cupid.dom.src = "assets/enemies/TrumpCupid.svg"
-        }, 300)
-    }
-
-    if (parseInt(Math.random() * 6000) == 0) {
-        let powerUp = powerups.createPowerUp(cupid.x, cupid.y - 60, 20)
-    }
-
-    for (let walkable of gameState.walkables) {
-        for (let walkableBody of walkable.body) {
-            for (let cupidBody of cupid.body) {
-                const explosiveX = cupid.x
-
-                const explosiveY = cupid.y
-
-                if (utils.IsBodyCollidingWithBody(cupidBody, walkableBody) && !cupid.hasExploded) {
-                    cupid.hasExploded = true;
-                    // Replace cupid with explosion-cupid!
-                    createExplosion(explosiveX, explosiveY, "enemy");
-
-                    console.log(explosiveX, explosiveY)
-                    utils.destroyUnit(cupid); // Remove the original cupid
-                    return;
-                }
-            }
         }
+        if (cupid.parallelMoveCount === distance * 2) {
+            cupid.velX = -cupid.velX
+            cupid.velY = -3.8
+            cupid.parallelMoveCount = 0
+        }
+
+        if (Math.abs(cupid.velY) > 0) {
+            utils.moveUnit(cupid, 0, cupid.velY)
+            cupid.parallelMoveCount--
+        } else {
+            utils.moveUnit(cupid, cupid.velX, cupid.velY)
+        }
+
+
+        if (Math.abs(cupid.velY) > 1) {
+            cupid.velY /= 1.05
+        }
+
+        if (Math.abs(cupid.velY) < 1) {
+            cupid.velY = 0
+        }
+
+        if (parseInt(Math.random() * 2000) == 0) {
+            cupid.dom.src = preloadedFiringImage.src
+            let bullet = bullets.createBullet("down", "enemy", 'heart', cupid.x, cupid.y, 4, 8, 0, 0, false, true)
+
+            setTimeout(() => {
+                cupid.dom.src = "assets/enemies/TrumpCupid.svg"
+            }, 300)
+        }
+
+        if (parseInt(Math.random() * 6000) == 0) {
+            let powerUp = powerups.createPowerUp(cupid.x, cupid.y - 60, 20)
+        }
+
     }
-    if (gameState.cupids.length > 0 && gameState.cupids[0].y <= 350) {
+
+
+
+    // for (let walkable of gameState.walkables) {
+    //     for (let walkableBody of walkable.body) {
+    //         for (let cupidBody of cupid.body) {
+    //             const explosiveX = cupid.x
+
+    //             const explosiveY = cupid.y
+
+    //             if (utils.IsBodyCollidingWithBody(cupidBody, walkableBody) && !cupid.hasExploded) {
+    //                 cupid.hasExploded = true;
+    //                 // Replace cupid with explosion-cupid!
+    //                 createExplosion(explosiveX, explosiveY, "enemy");
+
+    //                 console.log(explosiveX, explosiveY)
+    //                 utils.destroyUnit(cupid); // Remove the original cupid
+    //                 return;
+    //             }
+    //         }
+    //     }
+    // }
+
+    if (cupid.y <= 300) {
         for (let cupid of gameState.cupids) {
             cupid.kamikazeMode = true
         }
     }
 
+    for (const BodyPart of cupid.body) {
+        if (utils.IsBodyCollidingWithUnit(BodyPart, gameState.mario)) {
+            if (cupid.kamikazeMode){
+                createExplosion(cupid.x, cupid.y, 'player', 0, 200)
+                gameState.mario.takeDamage(cupid.damage, cupid.x, undefined, false)
+                utils.destroyUnit(cupid)
+                
+            }else{
+                gameState.mario.takeDamage(cupid.damage, cupid.x, undefined, true)
+            }
+            
+            break;
+        }
+    }
     if (cupid.kamikazeMode) {
         utils.kamikaze(cupid, gameState.mario);
-        utils.moveUnit(cupid, cupid.velX, cupid.velY);
         return;
     }
+
 }
 
 
