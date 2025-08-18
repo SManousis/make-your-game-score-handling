@@ -222,7 +222,7 @@ export function updateMenuVisibility() {
         helpMenu.classList.remove('hidden');
     } else if (gameState.currentState === 'leaderboard') {
         leaderboardMenu.classList.remove('hidden')
-    } else if (gameState.currentState === 'tally') { 
+    } else if (gameState.currentState === 'tally') {
         scoreTallyScreen.classList.remove('hidden');
     }
 }
@@ -234,7 +234,7 @@ export async function startScoreTally(won = false) {
 
     gameState.currentState = 'tally';
     updateMenuVisibility();
-    audio.manager.stopMusic(); 
+    audio.manager.stopMusic();
 
 
     const SCORE_PER_LIFE = 5000;
@@ -251,9 +251,9 @@ export async function startScoreTally(won = false) {
     if (livesBonus > 0) {
         if (audio.sounds) audio.manager.playSample("tick", { gain: audio.soundsVolume });
         tallyLivesBonus.textContent = `+ ${livesBonus} (${gameState.lives} x ${SCORE_PER_LIFE})`;
-        updateScore(livesBonus); 
-        tallyFinalScore.textContent = gameState.score; 
-        await wait(1000); 
+        updateScore(livesBonus);
+        tallyFinalScore.textContent = gameState.score;
+        await wait(1000);
     } else {
         tallyLivesBonus.textContent = `+ 0`;
     }
@@ -266,31 +266,31 @@ export async function startScoreTally(won = false) {
         // The faster you finish, the closer the factor is to 1
         const timeFactor = 1 - (totalSeconds / TIME_BONUS_THRESHOLD_SECONDS);
         timeBonus = Math.floor(MAX_TIME_BONUS * timeFactor);
-        
+
         tallyTimeBonus.textContent = `+ ${timeBonus} (Speed Bonus!)`;
         updateScore(timeBonus); // Add the bonus to the master score
         tallyFinalScore.textContent = gameState.score;
-        await wait(1000); 
+        await wait(1000);
     } else {
         tallyTimeBonus.textContent = `+ 0`;
     }
-    
+
     // Final pause before proceeding to the game over / score submission screen
-    await wait(2500); 
-    triggerGameOver(won); 
+    await wait(2500);
+    triggerGameOver(won);
 }
 
 function restartGame() {
     audio.manager.stopMusic(); // reseting musicOffset if coming from pause
     let soundsTemp = audio.sounds;
     audio.sounds = false;
-    
+
     gameState.currentGameGen++;
     // stopAllSpawners();
     // removeAllEvents();
 
     //resetting these so that these old references get checked by a possible old stageController function and then it closes
-    for (let group of gameState.allGroups){
+    for (let group of gameState.allGroups) {
         group.length = 0
     }
 
@@ -305,14 +305,19 @@ function restartGame() {
     }
     audio.sounds = soundsTemp;
 
-livesElement.textContent = `Lives: ${gameState.lives}`;
-timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
-scoreElement.textContent = `Score: ${gameState.score}`;
+    livesElement.textContent = `Lives: ${gameState.lives}`;
+    timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
+    scoreElement.textContent = `Score: ${gameState.score}`;
+
+    playerNameInput.disabled = false;
+    submitScoreButton.disabled = false; // Re-enable the submit score button
+    submitScoreButton.textContent = 'Submit Score';
 
     gameState = {}
-    
+
     gameState.currentState = "running";
     gameState.mapLoaded = false;
+
     startStorymode();
     updateMenuVisibility();
     console.log(gameState);
@@ -347,7 +352,7 @@ export function triggerGameOver(won = false) {
                 audio.manager.playSample("game_over", { gain: audio.soundsVolume });
             }, 1000);
         } else {
-            audio.manager.playSample("win", {gain: audio.musicVolume});
+            audio.manager.playSample("win", { gain: audio.musicVolume });
         }
     }
 
@@ -395,7 +400,7 @@ playButton.addEventListener('click', async () => {
         audio.initialized = true;
         audio.playSampleDeb = utils.opDebounce(audio.manager.playSample.bind(audio.manager), 100, { leading: true });
     }
-    
+
     if (endGame) {
         restartGame()
         endGame = false;
@@ -632,49 +637,53 @@ document.addEventListener('keydown', (event) => {
         }
         updateMenuVisibility();
     }
-    if (event.key.toLowerCase() === 'a') {
-        keysPressed.autofire = !keysPressed.autofire;
+    if (gameState.currentState === 'running') {
+        if (event.key.toLowerCase() === 'a') {
+            keysPressed.autofire = !keysPressed.autofire;
+        }
+
+
+
+        if (event.key.toLowerCase() === 'b') {
+            keysPressed.bomb = true
+        }
+
+
+
+        if (event.key.toLocaleLowerCase() === 'f') {
+            keysPressed.fire = true
+        }
+
+
+        if (event.key === 'ArrowLeft') {
+            keysPressed.left = true;
+
+        }
+
+        if (event.key === 'ArrowRight') {
+            keysPressed.right = true;
+
+        }
+
+        if (event.key === 'ArrowUp') {
+            keysPressed.up = true;
+        }
+
+
+        if (event.key === 'ArrowDown') {
+            keysPressed.down = true;
+        }
+
+        if (event.key === ' ' || event.code === 'Space') {
+            keysPressed.space = true
+        }
     }
+    if (gameState.currentState === 'cinematic') {
 
-    if (event.key === 'Escape') {
-        keysPressed.esc = true
+        if (event.key === 'Escape') {
+            keysPressed.esc = true
+        }
     }
-
-
-    if (event.key.toLowerCase() === 'b') {
-        keysPressed.bomb = true
-    }
-
-
-
-    if (event.key.toLocaleLowerCase() === 'f') {
-        keysPressed.fire = true
-    }
-
-
-    if (event.key === 'ArrowLeft') {
-        keysPressed.left = true;
-
-    }
-
-    if (event.key === 'ArrowRight') {
-        keysPressed.right = true;
-
-    }
-
-    if (event.key === 'ArrowUp') {
-        keysPressed.up = true;
-    }
-
-
-    if (event.key === 'ArrowDown') {
-        keysPressed.down = true;
-    }
-
-    if (event.key === ' ' || event.code === 'Space') {
-        keysPressed.space = true
-    }
-
 
 });
 
@@ -798,7 +807,7 @@ async function GameLoop() {
         for (let i = 0; i < count; i++) {
             cinematicTicker()
         }
-        
+
     }
 
     for (let unit of queueFree) {
@@ -816,7 +825,7 @@ let updateCounterTimestamp = Date.now()
 let updatefpsMeter = 0
 let updateTimestamp = 0
 
-export function updateTimestampFunc(){
+export function updateTimestampFunc() {
     updateTimestamp = Date.now()
 }
 
@@ -850,7 +859,7 @@ function update() {
             collision.isShot(entity)
         }
 
-       
+
     }
 
     gameState.frameCounter++
@@ -944,7 +953,7 @@ function createNewGameState(oldState = undefined) {
         lives: oldState ? oldState.lives : 5,
         gameTime: oldState ? oldState.gameTime : 0,
         level: oldState ? oldState.level : 1,
-        
+
         //non persisting
         cinematicTimer: 0, //counter used by cinematicTicker to control the speed that cinematics play out
         cinematicStep: 0,
@@ -966,7 +975,7 @@ function createNewGameState(oldState = undefined) {
         flowers: [],
         tetros: [],
         allGroups: [],
-        currentGameGen: parseInt(Math.random()*100000),
+        currentGameGen: parseInt(Math.random() * 100000),
     }
 
     state.allGroups = [state.allEntities, state.groundedEnemies, state.aoeDamage, state.allBullets, state.cicadas, state.cupids, state.turtles, state.powerUps, state.walkables, state.ghosts, state.unicorns, state.flowers, state.tetros]
