@@ -35,7 +35,7 @@ export function cinematicTicker() {
 
     //cinematic preperation
     if (started == false) {
-        audio.manager.playMusicLoop(audio.tracks[1].url, audio.musicVolume, audio.tracks[1].overlapDuration);
+        if (audio.music) audio.manager.playMusicLoop(audio.tracks[1].url, audio.musicVolume, audio.tracks[1].overlapDuration);
         started = true
         document.getElementById('game-cover').style.opacity = `${100}%`
         gameState.cinematicStep = 0
@@ -100,7 +100,9 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 3:
-                        audio.manager.playSample('nar1', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        if (audio.sounds) {
+                            audio.manager.playSample('nar1', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        }
                         wait(8 * 70)
                         break;
                     case 4:
@@ -121,7 +123,9 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 8:
-                        audio.manager.playSample('nar2', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        if (audio.sounds) {
+                            audio.manager.playSample('nar2', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        }
                         wait(7.5 * 72)
                         break;
                     case 9:
@@ -142,7 +146,9 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 13:
-                        audio.manager.playSample('nar3', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        if (audio.sounds) {
+                            audio.manager.playSample('nar3', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        }
                         wait(6 * 65)
                         break;
                     case 14:
@@ -163,7 +169,9 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 18:
-                        audio.manager.playSample('nar4', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        if (audio.sounds) {
+                            audio.manager.playSample('nar4', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        }
                         wait(6.5 * 60)
                         break;
                     case 19:
@@ -198,7 +206,9 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 3:
-                        audio.manager.playSample('nar5', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        if (audio.sounds) {
+                            audio.manager.playSample('nar5', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        }
                         wait(8 * 70)
                         break;
                     case 4:
@@ -222,7 +232,9 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 9:
-                        audio.manager.playSample('nar6', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        if (audio.sounds) {
+                            audio.manager.playSample('nar6', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        }
                         wait(21 * 70)
                         break;
                     case 10:
@@ -246,7 +258,9 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 15:
-                        audio.manager.playSample('nar7', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        if (audio.sounds) {
+                            audio.manager.playSample('nar7', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        }
                         wait(10 * 67)
                         break;
                     case 16:
@@ -280,7 +294,9 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 3:
-                        audio.manager.playSample('nar8', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        if (audio.sounds) {
+                            audio.manager.playSample('nar8', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        }
                         wait(8 * 65)
                         break;
                     case 4:
@@ -304,7 +320,9 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 9:
-                        audio.manager.playSample('nar9', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        if (audio.sounds) {
+                            audio.manager.playSample('nar9', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        }
                         wait(11.5 * 70)
                         break;
                     case 10:
@@ -329,7 +347,9 @@ export function cinematicTicker() {
                         wait(1)
                         break;
                     case 15:
-                        audio.manager.playSample('nar10', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        if (audio.sounds) {
+                            audio.manager.playSample('nar10', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        }
                         wait(2 * 70)
                         break;
                     case 16:
@@ -361,7 +381,9 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 3:
-                        audio.manager.playSample('nar11', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        if (audio.sounds) {
+                            audio.manager.playSample('nar11', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        }
                         wait(14 * 65)
                         break;
                     case 4:
@@ -381,7 +403,9 @@ export function cinematicTicker() {
                         wait(50)
                         break;
                     case 8:
-                        audio.manager.stopMusic()
+                        if (audio.music) {
+                            audio.manager.stopMusic()
+                        }
                         wait(130)
                         break;
                     case 9:
@@ -389,7 +413,9 @@ export function cinematicTicker() {
                         wait(30)
                         break;
                     case 10:
-                        audio.manager.playSample('nar12', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        if (audio.sounds) {
+                            audio.manager.playSample('nar12', { gain: audio.soundsVolume, reduction: reduction, fadeTime: fadeTime })
+                        }
                         wait(5 * 70)
                         break;
                     case 11:
@@ -440,7 +466,7 @@ function hidePanel() {
 }
 
 function endCinematic(nextState = 'running') {
-    audio.manager.stopMusic();
+    if (audio.music) audio.manager.stopMusic();
     if (activePanel) {
         activePanel.remove()
     }
@@ -450,7 +476,9 @@ function endCinematic(nextState = 'running') {
     opacityDir = ''
     document.getElementById('game-cover').style.opacity = '0%'
 
-    if (audio.music) audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
+    if (audio.music && !gameState.currentState === "gameOver") {
+        audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
+    }
     
     document.getElementById('cinematic-text').textContent = ''
     updateMenuVisibility();
