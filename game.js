@@ -962,7 +962,7 @@ function createNewGameState(oldState = undefined) {
         score: oldState ? oldState.score : 0,
         lives: oldState ? oldState.lives : 5,
         gameTime: oldState ? oldState.gameTime : 0,
-        level: oldState ? oldState.level : 3,
+        level: oldState ? oldState.level : 1,
 
         //non persisting
         cinematicTimer: 0, //counter used by cinematicTicker to control the speed that cinematics play out
