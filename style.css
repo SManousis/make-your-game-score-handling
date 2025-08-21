@@ -250,10 +250,9 @@ body {
   height: 70px;
   left: 0px;
   bottom: 0px;
-  transform: translate(calc(-52% + var(--x)), calc(20% + var(--y)));
-  will-change: transform;
-  opacity: 0%;
-  z-index: 102;
+  transform: translate(-50%, 25%);
+  opacity: 100%;
+  z-index: 105;
 }
 
 .bomb-countdown {

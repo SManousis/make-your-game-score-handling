@@ -34,7 +34,7 @@ export function createMario(arr, x = 500, y = 500) {
         drag: 1.2, //how much mario slows downs in x axis if he's not actively walking left or right
         bullet_count: 1, //how many bullets mario will fire
         multibulletTimer: 0,
-        bombs: 0,
+        bombs: 2,
         aimDirection: "left", //left, right, up
         velX: 0, //his current velocity in x axis
         velY: 0, //his current velocity in y axis
@@ -112,7 +112,7 @@ export function createMario(arr, x = 500, y = 500) {
                     break;
                 case 'multibullet':
 
-                    this.multibulletTimer = 2000;
+                    this.multibulletTimer += 2000;
                     this.bullet_count = 3
                     break;
             }
@@ -284,7 +284,7 @@ export function isMarioWalkingIntoGround() {
 
 export function marioUpdate(mario) {
 
-    updateMarioHealthBar(mario.health, 100)
+    updateMarioHealthBar(mario.health, mario.maxHealth)
 
     if (mario.isInvincible) {
         mario.invincibilityTimer--;

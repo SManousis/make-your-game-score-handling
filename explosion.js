@@ -3,14 +3,18 @@ import { gameState, audio } from "./game.js";
 import { moveAndCollide } from "./physicsStep.js";
 import * as utils from "./utils.js"
 
-export function createExplosion(x, y, team, damage = 50, radius = 150, flashDuration = 2) {
+export function createExplosion(x, y, team, damage = 50, radius = 150, flashDuration = 4) {
     const explosionBody = document.createElement('img');
     explosionBody.className = "explosion-img";
     explosionBody.src = "assets/items/explosion.svg";
+
     // explosionBody.style.left = (explosion.x  ) + 'px';
     // explosionBody.style.bottom = (explosion.y - 5 ) + 'px';
 
-    
+    explosionBody.style.bottom = y + 'px'
+    explosionBody.style.left = x + 'px'
+    explosionBody.style.width = radius*2+'px';
+    explosionBody.style.height = radius*2+'px';
 
     document.getElementById('stage-resources').appendChild(explosionBody);
 
@@ -133,7 +137,6 @@ export function bombUpdate(entity) {
     }
     
     if (entity.countdown <= 0) {
-    
         createExplosion(entity.x, entity.y, entity.team, entity.damage, entity.radius)
         entity.countdownDiv.remove()
         utils.destroyUnit(entity)

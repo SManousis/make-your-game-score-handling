@@ -40,7 +40,7 @@ export function spawnCicada(x, y) {
         ],
         dom: cicadaElement,
         team: "enemy",
-        scoreValue: 15,
+        scoreValue: 0,
         destroySound: "bubble",
     };
 
