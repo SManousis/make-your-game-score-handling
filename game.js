@@ -56,6 +56,7 @@ const leaderboardMenu = document.getElementById('leaderboard-menu');
 const backFromLeaderboardButton = document.getElementById('back-from-leaderboard-button');
 
 let endGame = false;
+const showDebug = false
 
 const leaderboard = {
     currentPage: 1,
@@ -306,7 +307,12 @@ function restartGame() {
     audio.sounds = soundsTemp;
 
     livesElement.textContent = `Lives: ${gameState.lives}`;
-    timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
+    if (showDebug){
+        timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
+    }else{
+        timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)}`;
+    }
+
     scoreElement.textContent = `Score: ${gameState.score}`;
 
     playerNameInput.disabled = false;
@@ -376,7 +382,7 @@ export const keysPressed = {
     up: false,
     down: false,
     space: false,
-    autofire: false,
+    autofire: true,
     fire: false,
     upgrade: false,
     bomb: false,
@@ -638,9 +644,9 @@ document.addEventListener('keydown', (event) => {
         updateMenuVisibility();
     }
     if (gameState.currentState === 'running') {
-        if (event.key.toLowerCase() === 'a') {
-            keysPressed.autofire = !keysPressed.autofire;
-        }
+        // if (event.key.toLowerCase() === 'a') {
+        //     keysPressed.autofire = !keysPressed.autofire;
+        // }
 
 
 
@@ -650,9 +656,9 @@ document.addEventListener('keydown', (event) => {
 
 
 
-        if (event.key.toLocaleLowerCase() === 'f') {
-            keysPressed.fire = true
-        }
+        // if (event.key.toLocaleLowerCase() === 'f') {
+        //     keysPressed.fire = true
+        // }
 
 
         if (event.key === 'ArrowLeft') {
@@ -690,9 +696,9 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('keyup', (event) => {
 
 
-    if (event.key.toLocaleLowerCase() === 'f') {
-        keysPressed.fire = false
-    }
+    // if (event.key.toLocaleLowerCase() === 'f') {
+    //     keysPressed.fire = false
+    // }
 
     if (event.key === 'ArrowLeft') {
         keysPressed.left = false;
@@ -885,8 +891,12 @@ export function draw() {
 
 
 
-
-    timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
+    livesElement.textContent = `Lives: ${gameState.lives}`;
+    if (showDebug){
+        timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
+    }else{
+        timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)}`;
+    }
     livesElement.textContent = `Lives: ${gameState.lives}`;
 
     let indicators = [];
