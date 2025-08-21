@@ -2,7 +2,7 @@ import { spawnCicada } from "./cicadas.js"
 import { spawnTurtle } from "./turtles.js"
 import { createCupid } from "./cupids.js"
 import { createVending } from "./vending.js"
-import { gameState, updateMenuVisibility } from "./game.js"
+import { gameState, updateMenuVisibility, audio } from "./game.js"
 import { createFlower } from "./flowers.js"
 import { createTetro } from "./tetros.js"
 import { createGhost } from "./ghosts.js"
@@ -25,6 +25,9 @@ export async function stage1(gameGen) {
         topright: { x: gameArea.offsetWidth + 50, y: 350 },
     }
     //======================================================
+    if (audio.music) {
+        audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration)
+    }
 
 
     await spawnSwarm(16, createCupid, 8, 200, gameState.cupids, 100, 0, 4000);
@@ -56,6 +59,9 @@ export async function stage1(gameGen) {
 
 
 export async function stage2(gameGen) {
+    if (audio.music) {
+        audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration)
+    }
     createVending();
 
 
@@ -100,6 +106,9 @@ export async function stage2(gameGen) {
 
 
 export async function stage3(gameGen) {
+    if (audio.music) {
+        audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration)
+    }
     const vending = createVending();
 
     await spawnSwarm(15, createFlower, 5, 200, gameState.flowers, 50, 0, 3000);

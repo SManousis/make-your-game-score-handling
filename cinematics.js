@@ -475,10 +475,6 @@ function endCinematic(nextState = 'running') {
     gameState.stageCinematicCounter = 0
     opacityDir = ''
     document.getElementById('game-cover').style.opacity = '0%'
-
-    if (audio.music && !gameState.currentState === "gameOver") {
-        audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
-    }
     
     document.getElementById('cinematic-text').textContent = ''
     updateMenuVisibility();
