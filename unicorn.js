@@ -38,7 +38,7 @@ export function createUnicorn(x, y, index, row) {
         dom: unicornBody,
         parallelMoveCount: 0,
         team: "enemy",
-        scoreValue: 10,
+        scoreValue: 100,
         hasExploded: false,
         takeDamage: function (damage, sourceX, sound) {
             if (audio.sounds) {
@@ -162,13 +162,15 @@ export function unicornUpdate(unicorn) {
                 5,
                 10,
                 gameState.mario.x,
-                gameState.mario.y
+                gameState.mario.y,
+                false,
+                true
             );
         }
     }
 
     if (parseInt(Math.random() * 1000) == 0) {
-        bullets.createBullet("down", "enemy", 'poo', unicorn.x, unicorn.y, 3, 10)
+        bullets.createBullet("down", "enemy", 'poo', unicorn.x, unicorn.y, 3, 10, 0, 0, false, true)
     }
 
 }

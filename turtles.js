@@ -40,7 +40,7 @@ export function spawnTurtle(x, y) {
         ],
         dom: turtleElement,
         team: "enemy",
-        scoreValue: 10,
+        scoreValue: 0,
         type: "turtle",
         destroySound: "bubble",
     };

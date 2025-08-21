@@ -31,7 +31,7 @@ export function createCupid(x, y, index, row) {
         state: "airborne",
         velX: 1.2,
         velY: 0,
-        kamikazeSpeed: 8,
+        kamikazeSpeed: 10,
         kamikazeMode: false,
         touched: false,
         rand1: Math.random() * 10,
@@ -146,7 +146,7 @@ export function cupidUpdate(cupid) {
     //     }
     // }
 
-    if (cupid.y <= 300) {
+    if (cupid.y <= 100 && !cupid.kamikazeMode) {
         for (let cupid of gameState.cupids) {
             cupid.kamikazeMode = true
         }

@@ -37,7 +37,7 @@ export function createGhost(x, y, index, row) {
         hasExploded: false,
         destroySound: "destroy_fly",
         kamikazeMode: false,
-        kamikazeSpeed: 8,
+        kamikazeSpeed: 10,
         // reset() {
         //     this.health = 20;
         //     this.moveSpeed = 0.1;
@@ -98,10 +98,10 @@ export function ghostUpdate(ghost) {
 
 
     if (parseInt(Math.random() * 1000) == 0) {
-        bullets.createBullet("down", "enemy", 'pacman', ghost.x, ghost.y, 3, 10)
+        bullets.createBullet("down", "enemy", 'pacman', ghost.x, ghost.y, 3, 10, 0, 0, false, true)
     }
 
-    if (ghost.y <= 300) {
+    if (ghost.y <= 100 && !ghost.kamikazeMode) {
         for (let ghost of gameState.ghosts) {
             ghost.kamikazeMode = true
         }
@@ -121,6 +121,7 @@ export function ghostUpdate(ghost) {
             break;
         }
     }
+    
     if (ghost.kamikazeMode) {
         utils.kamikaze(ghost, gameState.mario);
         return;

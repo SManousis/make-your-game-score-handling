@@ -25,7 +25,7 @@ export function createFlower(x, y, index, row) {
         state: "airborne",
         velX: (Math.random()-0.5) * 3,
         velY: (Math.random()-0.5) * 3,
-        kamikazeSpeed: 5,
+        kamikazeSpeed: 10,
         kamikazeMode: false,
         touched: false,
         rand1: Math.random() * 10,
@@ -82,31 +82,43 @@ export function flowerUpdate(flower) {
         flower.velX = Math.min(flower.velX, -flower.velX)
     }
 
-    flower.lowBound -= 0.22
-    flower.upBound -= 0.22
+    flower.lowBound -= 0.33
+    flower.upBound -= 0.36
 
-    utils.moveUnit(flower, flower.velX, flower.velY)
-
+    if (flower.kamikazeMode == false){
+        utils.moveUnit(flower, flower.velX, flower.velY)
+    }
 
 
    
     if (parseInt(Math.random() * 1200) == 0) {
-        let bullet = bullets.createBullet("target", "enemy", 'sphere', flower.x, flower.y, 9, 20, gameState.mario.x, gameState.mario.y+40)
+        let bullet = bullets.createBullet("target", "enemy", 'sphere', flower.x, flower.y, 9, 20, gameState.mario.x, gameState.mario.y+40, false, true)
     }
 
-    if (gameState.flowers.length > 0 && gameState.flowers[0].y <= 350) {
+
+    if (flower.y <= 100 && !flower.kamikazeMode) {
         for (let flower of gameState.flowers) {
             flower.kamikazeMode = true
         }
     }
 
+    for (const BodyPart of flower.body) {
+        if (utils.IsBodyCollidingWithUnit(BodyPart, gameState.mario)) {
+            if (flower.kamikazeMode) {
+                createExplosion(flower.x, flower.y, 'player', 0, 200)
+                gameState.mario.takeDamage(flower.damage, flower.x, undefined, false)
+                utils.destroyUnit(flower)
+
+            } else {
+                gameState.mario.takeDamage(flower.damage, flower.x, undefined, true)
+            }
+
+            break;
+        }
+    }
+
     if (flower.kamikazeMode) {
         utils.kamikaze(flower, gameState.mario);
-        utils.moveUnit(flower, flower.velX, flower.velY);
-        if (utils.IsBodyCollidingWithUnit(flower.body[0], gameState.mario)){
-            createExplosion(flower.x, flower.y, "enemy", 100, 50)
-            utils.destroyUnit(flower)
-        }
         return;
     }
 }

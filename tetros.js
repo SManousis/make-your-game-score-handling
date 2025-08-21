@@ -1,15 +1,15 @@
 import * as utils from "./utils.js";
-import {  gameState,  updateScore } from './game.js'
+import { gameState, updateScore } from './game.js'
 import { createExplosion } from "./explosion.js";
 
 
 export function createTetro(x, y, index, row) {
 
     const tetroBody = document.createElement('div')
-    
+
 
     let parts = []
-    for (let i = 0; i < 4; i++){
+    for (let i = 0; i < 4; i++) {
         let a = document.createElement("img");
         a.className = "tetro-img";
         a.src = "assets/enemies/tetris.svg";
@@ -21,9 +21,9 @@ export function createTetro(x, y, index, row) {
 
     let tetroShapeBody = []
 
-    switch (parseInt(Math.round(Math.random()*5))){
-    // switch (0){
-        case 0: 
+    switch (parseInt(Math.round(Math.random() * 5))) {
+        // switch (0){
+        case 0:
             //##
             //##
 
@@ -36,13 +36,13 @@ export function createTetro(x, y, index, row) {
 
             tetroShapeBody = [
                 utils.createRect(x, y, 40, 40),
-                utils.createRect(x+40, y, 40, 40),
-                utils.createRect(x, y-40, 40, 40),
-                utils.createRect(x+40, y-40, 40, 40)
+                utils.createRect(x + 40, y, 40, 40),
+                utils.createRect(x, y - 40, 40, 40),
+                utils.createRect(x + 40, y - 40, 40, 40)
             ]
-            
+
             break;
-        case 1: 
+        case 1:
             //#####
             parts[1].style.left = '40px'
 
@@ -51,14 +51,14 @@ export function createTetro(x, y, index, row) {
 
             tetroShapeBody = [
                 utils.createRect(x, y, 40, 40),
-                utils.createRect(x+40, y, 40, 40),
-                utils.createRect(x+80, y, 40, 40),
-                utils.createRect(x+120, y, 40, 40)
+                utils.createRect(x + 40, y, 40, 40),
+                utils.createRect(x + 80, y, 40, 40),
+                utils.createRect(x + 120, y, 40, 40)
             ]
-            
+
             break;
 
-        case 2: 
+        case 2:
             //#
             //#
             //#
@@ -70,11 +70,11 @@ export function createTetro(x, y, index, row) {
 
             tetroShapeBody = [
                 utils.createRect(x, y, 40, 40),
-                utils.createRect(x, y-40, 40, 40),
-                utils.createRect(x, y-80, 40, 40),
-                utils.createRect(x, y-120, 40, 40)
+                utils.createRect(x, y - 40, 40, 40),
+                utils.createRect(x, y - 80, 40, 40),
+                utils.createRect(x, y - 120, 40, 40)
             ]
-            
+
             break;
         case 3:
             //###
@@ -89,11 +89,11 @@ export function createTetro(x, y, index, row) {
 
             tetroShapeBody = [
                 utils.createRect(x, y, 40, 40),
-                utils.createRect(x+40, y, 40, 40),
-                utils.createRect(x+80, y, 40, 40),
-                utils.createRect(x+40, y-40, 40, 40)
+                utils.createRect(x + 40, y, 40, 40),
+                utils.createRect(x + 80, y, 40, 40),
+                utils.createRect(x + 40, y - 40, 40, 40)
             ]
-            
+
             break;
         case 4:
             //##
@@ -108,11 +108,11 @@ export function createTetro(x, y, index, row) {
 
             tetroShapeBody = [
                 utils.createRect(x, y, 40, 40),
-                utils.createRect(x+40, y, 40, 40),
-                utils.createRect(x+80, y-40, 40, 40),
-                utils.createRect(x+40, y-40, 40, 40)
+                utils.createRect(x + 40, y, 40, 40),
+                utils.createRect(x + 80, y - 40, 40, 40),
+                utils.createRect(x + 40, y - 40, 40, 40)
             ]
-            
+
             break;
         case 5:
             //##
@@ -127,15 +127,15 @@ export function createTetro(x, y, index, row) {
 
             tetroShapeBody = [
                 utils.createRect(x, y, 40, 40),
-                utils.createRect(x+40, y, 40, 40),
-                utils.createRect(x, y-40, 40, 40),
-                utils.createRect(x, y-80, 40, 40)
+                utils.createRect(x + 40, y, 40, 40),
+                utils.createRect(x, y - 40, 40, 40),
+                utils.createRect(x, y - 80, 40, 40)
             ]
 
             break;
     }
 
-    for (let p of parts){
+    for (let p of parts) {
         tetroBody.appendChild(p);
     }
 
@@ -153,8 +153,8 @@ export function createTetro(x, y, index, row) {
         aimDirection: "down",
         state: "airborne",
         velX: 0,
-        velY: -1.3,
-        kamikazeSpeed: 5,
+        velY: -1.5,
+        kamikazeSpeed: 10,
         kamikazeMode: false,
         touched: false,
         rand1: Math.random() * 10,
@@ -184,21 +184,32 @@ export function tetroUpdate(tetro) {
         updateScore(tetro.scoreValue);
     }
 
-    utils.moveUnit(tetro, tetro.velX, tetro.velY)
+    if (tetro.kamikazeMode == false){
+        utils.moveUnit(tetro, tetro.velX, tetro.velY)
+    }
 
-    if (gameState.tetros.length > 0 && gameState.tetros[0].y <= 350) {
-        for (let tetro of gameState.tetros) {
-            tetro.kamikazeMode = true
+    if (tetro.y <= 50 && !tetro.kamikazeMode) {
+        tetro.kamikazeMode = true
+    }
+
+    for (const BodyPart of tetro.body) {
+        if (utils.IsBodyCollidingWithUnit(BodyPart, gameState.mario)) {
+            if (tetro.kamikazeMode) {
+                createExplosion(tetro.x, tetro.y, 'player', 0, 200)
+                gameState.mario.takeDamage(tetro.damage, tetro.x, undefined, false)
+                utils.destroyUnit(tetro)
+
+            } else {
+                gameState.mario.takeDamage(tetro.damage, tetro.x, undefined, true)
+            }
+
+            break;
         }
     }
 
     if (tetro.kamikazeMode) {
+        tetro.health = 1000
         utils.kamikaze(tetro, gameState.mario);
-        utils.moveUnit(tetro, tetro.velX, tetro.velY);
-        if (utils.IsBodyCollidingWithUnit(tetro.body[0], gameState.mario)){
-            createExplosion(tetro.x, tetro.y, "enemy", 100, 50)
-            utils.destroyUnit(tetro)
-        }
         return;
     }
 }

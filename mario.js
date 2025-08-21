@@ -23,8 +23,8 @@ export function createMario(arr, x = 500, y = 500) {
     console.log('creating mario function called!')
     let mario = {
         name: "mario",
-        health: 100,
-        maxHealth: 120, //how much health point he has, if it reaches 0 he dies!
+        health: 140,
+        maxHealth: 140, //how much health point he has, if it reaches 0 he dies!
         attack_damage: 10, //how damage marios bullets deal to enemies
         accel: 1, //how quickly accelerates in x axis
         maxSpeed: 10, //maximum running speed in x axis
@@ -112,8 +112,8 @@ export function createMario(arr, x = 500, y = 500) {
                     break;
                 case 'multibullet':
 
-                    this.multibulletTimer = 600;
-                    this.bullet_count = 4
+                    this.multibulletTimer = 2000;
+                    this.bullet_count = 3
                     break;
             }
         }
@@ -552,7 +552,12 @@ export function marioShoot() {
                 gameState.mario.x - 40,
                 gameState.mario.y + yCorrection + offset + 20, // Apply spread on Y
                 14,
-                8
+                8,
+                0,
+                0,
+                false,
+                true
+
             );
         }
 
@@ -565,7 +570,11 @@ export function marioShoot() {
                 gameState.mario.x + 40,
                 gameState.mario.y + yCorrection + offset + 20, // Apply spread on Y
                 14,
-                8
+                8,
+                0,
+                0,
+                false,
+                true
             );
         }
 
@@ -578,7 +587,11 @@ export function marioShoot() {
                 gameState.mario.x + offset, // Apply spread on X
                 gameState.mario.y + 100,
                 14,
-                8
+                8,
+                0,
+                0,
+                false,
+                true
             );
         }
     }

@@ -138,7 +138,7 @@ function cicadaUpdate(cicada) {
     if ((cicada.state === 'walking' || cicada.state === 'jumping') && isColliding) {
 
         //check if collision was Mario jumping on cicada
-        if (gameState.mario.y > cicada.y + (cicada.height / 1.5)) {
+        if (gameState.mario.y > cicada.y + (cicada.height / 1.7)) {
             // console.log("cicada disabled")
             cicada.state = "disabled"
             gameState.mario.velY = 22;
