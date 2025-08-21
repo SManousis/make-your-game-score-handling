@@ -382,7 +382,7 @@ export const keysPressed = {
     up: false,
     down: false,
     space: false,
-    autofire: true,
+    autofire: false,
     fire: false,
     upgrade: false,
     bomb: false,
@@ -644,9 +644,9 @@ document.addEventListener('keydown', (event) => {
         updateMenuVisibility();
     }
     if (gameState.currentState === 'running') {
-        // if (event.key.toLowerCase() === 'a') {
-        //     keysPressed.autofire = !keysPressed.autofire;
-        // }
+        if (event.key.toLowerCase() === 'a') {
+            keysPressed.autofire = !keysPressed.autofire;
+        }
 
 
 
@@ -656,9 +656,9 @@ document.addEventListener('keydown', (event) => {
 
 
 
-        // if (event.key.toLocaleLowerCase() === 'f') {
-        //     keysPressed.fire = true
-        // }
+        if (event.key.toLocaleLowerCase() === 'f') {
+            keysPressed.fire = true
+        }
 
 
         if (event.key === 'ArrowLeft') {
@@ -696,9 +696,9 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('keyup', (event) => {
 
 
-    // if (event.key.toLocaleLowerCase() === 'f') {
-    //     keysPressed.fire = false
-    // }
+    if (event.key.toLocaleLowerCase() === 'f') {
+        keysPressed.fire = false
+    }
 
     if (event.key === 'ArrowLeft') {
         keysPressed.left = false;
@@ -962,7 +962,7 @@ function createNewGameState(oldState = undefined) {
         score: oldState ? oldState.score : 0,
         lives: oldState ? oldState.lives : 5,
         gameTime: oldState ? oldState.gameTime : 0,
-        level: oldState ? oldState.level : 1,
+        level: oldState ? oldState.level : 3,
 
         //non persisting
         cinematicTimer: 0, //counter used by cinematicTicker to control the speed that cinematics play out

@@ -14,7 +14,7 @@ export function createGhost(x, y, index, row) {
     let ghost = {
         name: "ghost",
         index: index,
-        health: 8,
+        health: 5,
         damage: 10,
         moveSpeed: 0.1,
         x: x,           // use the parameters!

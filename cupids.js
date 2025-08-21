@@ -21,7 +21,7 @@ export function createCupid(x, y, index, row) {
     let cupid = {
         name: "cupid",
         index: index,
-        health: 8,
+        health: 5,
         damage: 10,
         moveSpeed: 0.1,
         x: x,           // use the parameters!

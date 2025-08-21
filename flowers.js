@@ -15,7 +15,7 @@ export function createFlower(x, y, index, row) {
     let flower = {
         name: "flower",
         index: index,
-        health: 8,
+        health: 5,
         damage: 10,
         moveSpeed: 0.1,
         x: x,           // use the parameters!

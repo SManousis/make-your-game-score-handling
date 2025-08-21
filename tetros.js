@@ -144,7 +144,7 @@ export function createTetro(x, y, index, row) {
     let tetro = {
         name: "tetro",
         index: index,
-        health: 8,
+        health: 5,
         damage: 10,
         moveSpeed: 1.0,
         x: x,           // use the parameters!

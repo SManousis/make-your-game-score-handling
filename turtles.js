@@ -17,7 +17,7 @@ export function spawnTurtle(x, y) {
 
     const newTurtle = {
         name: "turtle",
-        health: 8,
+        health: 5,
         damage: 5,
         maxspeed: 1.5,
         gravity: 0.8,

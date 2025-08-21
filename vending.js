@@ -125,7 +125,7 @@ function vendingUpdate(vending) {
 
 
     if (vending.flySequence < 310) {
-        vending.health = 100
+        vending.health = 80
         return
     }
 

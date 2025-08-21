@@ -15,7 +15,7 @@ export function spawnCicada(x, y) {
     const newCicada = {
         name: "cicada",
         health: 8,
-        damage: 10,
+        damage: 5,
         maxspeed: 0.5,
         gravity: 0.5,
         state: 'walking', //walking, disabled

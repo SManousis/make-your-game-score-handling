@@ -14,7 +14,7 @@ export function createUnicorn(x, y, index, row) {
     let unicorn = {
         name: "unicorn",
         index: index,
-        health: 24,
+        health: 15,
         damage: 10,
         moveSpeed: 0.1,
         x: x,

@@ -23,8 +23,8 @@ export function createMario(arr, x = 500, y = 500) {
     console.log('creating mario function called!')
     let mario = {
         name: "mario",
-        health: 140,
-        maxHealth: 140, //how much health point he has, if it reaches 0 he dies!
+        health: 100,
+        maxHealth: 120, //how much health point he has, if it reaches 0 he dies!
         attack_damage: 10, //how damage marios bullets deal to enemies
         accel: 1, //how quickly accelerates in x axis
         maxSpeed: 10, //maximum running speed in x axis
@@ -34,7 +34,7 @@ export function createMario(arr, x = 500, y = 500) {
         drag: 1.2, //how much mario slows downs in x axis if he's not actively walking left or right
         bullet_count: 1, //how many bullets mario will fire
         multibulletTimer: 0,
-        bombs: 2,
+        bombs: 0,
         aimDirection: "left", //left, right, up
         velX: 0, //his current velocity in x axis
         velY: 0, //his current velocity in y axis
@@ -112,8 +112,8 @@ export function createMario(arr, x = 500, y = 500) {
                     break;
                 case 'multibullet':
 
-                    this.multibulletTimer += 2000;
-                    this.bullet_count = 3
+                    this.multibulletTimer = 600;
+                    this.bullet_count = 4
                     break;
             }
         }
@@ -284,7 +284,7 @@ export function isMarioWalkingIntoGround() {
 
 export function marioUpdate(mario) {
 
-    updateMarioHealthBar(mario.health, mario.maxHealth)
+    updateMarioHealthBar(mario.health, 100)
 
     if (mario.isInvincible) {
         mario.invincibilityTimer--;
@@ -354,7 +354,7 @@ export function marioUpdate(mario) {
     if (keysPressed.autofire) {
         fireCooldown--;
         if (fireCooldown <= 0) {
-            marioShoot();
+            marioShoot(5);
             fireCooldown = FIRE_RATE;
         }
     }
@@ -484,14 +484,14 @@ export function marioUpdate(mario) {
             fireState.isFiring = true;
 
             //fire immediately on the initial key press.
-            marioShoot();
+            marioShoot(1);
 
             //start a timer for the delay. After 100ms, it will start the continuous fire.
             fireState.delayTimer = setTimeout(() => {
                 // check if the key is still being held down after the delay.
                 if (fireState.isFiring) {
                     // start the repeating timer for continuous fire.
-                    fireState.repeatTimer = setInterval(marioShoot, fireState.repeatRate);
+                    fireState.repeatTimer = setInterval(() => {marioShoot(1)}, fireState.repeatRate);
                 }
             }, fireState.initialDelay);
         }
@@ -535,7 +535,7 @@ function getSpreadValues(count) {
     return result;
 }
 
-export function marioShoot() {
+export function marioShoot(dmg) {
     const spreadValues = getSpreadValues(gameState.mario.bullet_count);
 
 
@@ -552,12 +552,7 @@ export function marioShoot() {
                 gameState.mario.x - 40,
                 gameState.mario.y + yCorrection + offset + 20, // Apply spread on Y
                 14,
-                8,
-                0,
-                0,
-                false,
-                true
-
+                dmg
             );
         }
 
@@ -570,11 +565,7 @@ export function marioShoot() {
                 gameState.mario.x + 40,
                 gameState.mario.y + yCorrection + offset + 20, // Apply spread on Y
                 14,
-                8,
-                0,
-                0,
-                false,
-                true
+                dmg
             );
         }
 
@@ -587,11 +578,7 @@ export function marioShoot() {
                 gameState.mario.x + offset, // Apply spread on X
                 gameState.mario.y + 100,
                 14,
-                8,
-                0,
-                0,
-                false,
-                true
+                dmg
             );
         }
     }
