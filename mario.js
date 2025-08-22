@@ -484,14 +484,14 @@ export function marioUpdate(mario) {
             fireState.isFiring = true;
 
             //fire immediately on the initial key press.
-            marioShoot(1);
+            marioShoot(1.7);
 
             //start a timer for the delay. After 100ms, it will start the continuous fire.
             fireState.delayTimer = setTimeout(() => {
                 // check if the key is still being held down after the delay.
                 if (fireState.isFiring) {
                     // start the repeating timer for continuous fire.
-                    fireState.repeatTimer = setInterval(() => {marioShoot(1)}, fireState.repeatRate);
+                    fireState.repeatTimer = setInterval(() => {marioShoot(1.7)}, fireState.repeatRate);
                 }
             }, fireState.initialDelay);
         }
