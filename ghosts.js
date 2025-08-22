@@ -33,7 +33,7 @@ export function createGhost(x, y, index, row) {
         dom: ghostBody,
         parallelMoveCount: 0,
         team: "enemy",
-        scoreValue: 10,
+        scoreValue: 50,
         hasExploded: false,
         destroySound: "destroy_fly",
         kamikazeMode: false,

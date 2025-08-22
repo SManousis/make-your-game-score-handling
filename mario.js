@@ -1,5 +1,5 @@
 import * as utils from './utils.js'
-import { keysPressed, gameArea, gameState, audio, triggerGameOver, lifeLostFanfare } from './game.js'
+import { keysPressed, gameArea, gameState, audio, triggerGameOver, lifeLostFanfare, updateScore } from './game.js'
 import * as physics from './physicsStep.js'
 import * as bullets from './bullets.js'
 import { createBomb } from './explosion.js'
@@ -112,8 +112,8 @@ export function createMario(arr, x = 500, y = 500) {
                     break;
                 case 'multibullet':
 
-                    this.multibulletTimer = 600;
-                    this.bullet_count = 4
+                    this.multibulletTimer += 1100;
+                    this.bullet_count += 2
                     break;
             }
         }
@@ -484,14 +484,14 @@ export function marioUpdate(mario) {
             fireState.isFiring = true;
 
             //fire immediately on the initial key press.
-            marioShoot(1.7);
+            marioShoot(2.6);
 
             //start a timer for the delay. After 100ms, it will start the continuous fire.
             fireState.delayTimer = setTimeout(() => {
                 // check if the key is still being held down after the delay.
                 if (fireState.isFiring) {
                     // start the repeating timer for continuous fire.
-                    fireState.repeatTimer = setInterval(() => {marioShoot(1.7)}, fireState.repeatRate);
+                    fireState.repeatTimer = setInterval(() => {marioShoot(2.6)}, fireState.repeatRate);
                 }
             }, fireState.initialDelay);
         }
@@ -538,6 +538,9 @@ function getSpreadValues(count) {
 export function marioShoot(dmg) {
     const spreadValues = getSpreadValues(gameState.mario.bullet_count);
 
+    if (dmg == 2.6 && gameState.score > 3){
+        updateScore(-4)
+    }
 
     let yCorrection = 40;
     if (gameState.mario.crouching) {
@@ -552,7 +555,11 @@ export function marioShoot(dmg) {
                 gameState.mario.x - 40,
                 gameState.mario.y + yCorrection + offset + 20, // Apply spread on Y
                 14,
-                dmg
+                dmg,
+                0,
+                0,
+                false,
+                true
             );
         }
 
@@ -565,7 +572,11 @@ export function marioShoot(dmg) {
                 gameState.mario.x + 40,
                 gameState.mario.y + yCorrection + offset + 20, // Apply spread on Y
                 14,
-                dmg
+                dmg,
+                0,
+                0,
+                false,
+                true
             );
         }
 
@@ -578,7 +589,11 @@ export function marioShoot(dmg) {
                 gameState.mario.x + offset, // Apply spread on X
                 gameState.mario.y + 100,
                 14,
-                dmg
+                dmg,
+                0,
+                0,
+                false,
+                true
             );
         }
     }

@@ -39,7 +39,7 @@ export function createFlower(x, y, index, row) {
         dom: flowerBody,
         parallelMoveCount: 0,
         team: "enemy",
-        scoreValue: 10,
+        scoreValue: 50,
         hasExploded: false,
         destroySound: "destroy_fly",
     }

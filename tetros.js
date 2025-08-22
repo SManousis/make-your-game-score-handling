@@ -153,7 +153,7 @@ export function createTetro(x, y, index, row) {
         aimDirection: "down",
         state: "airborne",
         velX: 0,
-        velY: -1.5,
+        velY: -1.35,
         kamikazeSpeed: 10,
         kamikazeMode: false,
         touched: false,
@@ -165,7 +165,7 @@ export function createTetro(x, y, index, row) {
         dom: tetroBody,
         parallelMoveCount: 0,
         team: "enemy",
-        scoreValue: 10,
+        scoreValue: 50,
         hasExploded: false,
         destroySound: "destroy_fly",
     }

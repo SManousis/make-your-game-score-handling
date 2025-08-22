@@ -237,10 +237,14 @@ export async function startScoreTally(won = false) {
     updateMenuVisibility();
     audio.manager.stopMusic();
 
+    tallyBaseScore.textContent = '?'; 
+    tallyLivesBonus.textContent = '?'; 
+    tallyTimeBonus.textContent = '?'; 
+    tallyFinalScore.textContent = '?'; 
 
     const SCORE_PER_LIFE = 5000;
-    const MAX_TIME_BONUS = 20000;
-    const TIME_BONUS_THRESHOLD_SECONDS = 300 // Player gets max bonus if they finish in under 5 minutes
+    const MAX_TIME_BONUS = 13000;
+    const TIME_BONUS_THRESHOLD_SECONDS = 420 // Player gets max bonus if they finish in under 7 minutes
 
     // Display the initial base score
     tallyBaseScore.textContent = gameState.score;
@@ -277,7 +281,7 @@ export async function startScoreTally(won = false) {
     }
 
     // Final pause before proceeding to the game over / score submission screen
-    await wait(2500);
+    await wait(5000);
     triggerGameOver(won);
 }
 
@@ -871,8 +875,9 @@ function update() {
     gameState.frameCounter++
 
 
-
-    stageControllerTicker()
+    if (gameState.currentState === 'running') {
+        stageControllerTicker()
+    }
 
 }
 

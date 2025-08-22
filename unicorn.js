@@ -38,7 +38,7 @@ export function createUnicorn(x, y, index, row) {
         dom: unicornBody,
         parallelMoveCount: 0,
         team: "enemy",
-        scoreValue: 100,
+        scoreValue: 500,
         hasExploded: false,
         takeDamage: function (damage, sourceX, sound) {
             if (audio.sounds) {
@@ -50,10 +50,20 @@ export function createUnicorn(x, y, index, row) {
                 });
             }
             this.health -= damage;
-            if (Math.random() < 0.15) {
-                powerups.createPowerUp(unicorn.x, unicorn.y, 0, "multibullet", "rainbow");
-            } else {
-                powerups.createPowerUp(unicorn.x, unicorn.y - 60, 1, "bomb", "bomb");
+            if (damage == 5){
+                if (Math.random() < 0.15) {
+                    powerups.createPowerUp(unicorn.x, unicorn.y, 0, "multibullet", "rainbow");
+                } else {
+                    powerups.createPowerUp(unicorn.x, unicorn.y - 60, 1, "bomb", "bomb");
+                }
+            }else{
+                if (Math.random() <= 0.5){
+                    if (Math.random() < 0.15) {
+                        powerups.createPowerUp(unicorn.x, unicorn.y, 0, "multibullet", "rainbow");
+                    } else {
+                        powerups.createPowerUp(unicorn.x, unicorn.y - 60, 1, "bomb", "bomb");
+                    }
+                }
             }
 
         }

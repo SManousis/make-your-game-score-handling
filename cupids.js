@@ -42,7 +42,7 @@ export function createCupid(x, y, index, row) {
         dom: cupidBody,
         parallelMoveCount: 0,
         team: "enemy",
-        scoreValue: 10,
+        scoreValue: 50,
         hasExploded: false,
         destroySound: "destroy_fly",
         // reset() {
