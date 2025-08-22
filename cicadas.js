@@ -30,7 +30,7 @@ export function spawnCicada(x, y) {
         height: 50,
         lookingDir: 'left',
         body: [
-            utils.createRect(x - (120 / 2), y, 120, 45)
+            utils.createRect(x - (120 / 2), y, 120, 35)
         ],
         drawFunc: function () { cicadaVisuals(this) },
         updateFunc: function () { cicadaUpdate(this) },
