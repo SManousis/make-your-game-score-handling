@@ -17,7 +17,7 @@ export function createPowerUp(x, y, value=0, type="health", graphic="healthCandy
         velX: 0,
         powerUpType: type, //health, bomb, multibullet
         value: value,
-        body: [utils.createCircle(x, y + 10, 15)],
+        body: [utils.createCircle(x, y + 20, 30)],
         updateFunc: function () { powerUpUpdate(this) },
         drawFunc: function () { powerUpVisuals(this) },
         dom: powerUpBody,
