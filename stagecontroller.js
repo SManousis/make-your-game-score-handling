@@ -29,7 +29,7 @@ export async function stage1(gameGen) {
         audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration)
     }
 
-    addEvent(() => startSpawner("left", 0, 0, spawnCicada, 1), 7 * 60);
+
     await spawnSwarm(12, createCupid, 6, 200, gameState.cupids, 100, 0, 4000);
     if (abortStage(gameGen)) return;
 
