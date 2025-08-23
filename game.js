@@ -237,10 +237,10 @@ export async function startScoreTally(won = false) {
     updateMenuVisibility();
     audio.manager.stopMusic();
 
-    tallyBaseScore.textContent = '?'; 
-    tallyLivesBonus.textContent = '?'; 
-    tallyTimeBonus.textContent = '?'; 
-    tallyFinalScore.textContent = '?'; 
+    tallyBaseScore.textContent = '?';
+    tallyLivesBonus.textContent = '?';
+    tallyTimeBonus.textContent = '?';
+    tallyFinalScore.textContent = '?';
 
     const SCORE_PER_LIFE = 5000;
     const MAX_TIME_BONUS = 13000;
@@ -310,25 +310,28 @@ function restartGame() {
     }
     audio.sounds = soundsTemp;
 
+    playerNameInput.disabled = false;
+    submitScoreButton.disabled = false; // Re-enable the submit score button
+    submitScoreButton.textContent = 'Submit Score';
+    playerRankInfo.textContent = "";
+
+    // gameState = {}
+
+    // gameState.currentState = "running";
+    // gameState.mapLoaded = false;
+    startStorymode();
+
     livesElement.textContent = `Lives: ${gameState.lives}`;
-    if (showDebug){
+    if (showDebug) {
         timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
-    }else{
+    } else {
         timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)}`;
     }
 
     scoreElement.textContent = `Score: ${gameState.score}`;
 
-    playerNameInput.disabled = false;
-    submitScoreButton.disabled = false; // Re-enable the submit score button
-    submitScoreButton.textContent = 'Submit Score';
 
-    gameState = {}
 
-    gameState.currentState = "running";
-    gameState.mapLoaded = false;
-
-    startStorymode();
     updateMenuVisibility();
     console.log(gameState);
 }
@@ -897,9 +900,9 @@ export function draw() {
 
 
     livesElement.textContent = `Lives: ${gameState.lives}`;
-    if (showDebug){
+    if (showDebug) {
         timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
-    }else{
+    } else {
         timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)}`;
     }
     livesElement.textContent = `Lives: ${gameState.lives}`;

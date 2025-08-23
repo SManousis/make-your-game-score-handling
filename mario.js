@@ -241,6 +241,7 @@ export function marioVisuals(mario) {
 
     MarioHealthBar.style.left = `${finalX}px`;
     MarioHealthBar.style.bottom = `${finalY}px`;
+    MarioHealthBar.style.opacity=100;
 
 }
 

@@ -124,6 +124,7 @@ body {
   /* (optional) dark background behind health */
   border: 1px solid #333;
   border-radius: 6px;
+  opacity:0%;
   z-index: 11;
 }
 
@@ -499,7 +500,7 @@ input:checked+.slider:before {
   color: white;
   text-align: center;
   border: 2px solid white;
-  z-index: 100;
+  z-index: 1000;
   /* Ensures menus are on top of the game */
 }
 
