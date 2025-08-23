@@ -10,7 +10,7 @@ const shootSandwichDebounce = utils.opDebounce(shootSandwich, 300, { leading: tr
 
 
 
-export function createVending(x = 1600, y = 270) {
+export function createVending(x = 1600, y = 290) {
     const vendingElement = document.createElement('img');
     vendingElement.className = 'vending-img';
     vendingElement.src = 'assets/enemies/machine.svg'

@@ -30,13 +30,13 @@ export function spawnCicada(x, y) {
         height: 50,
         lookingDir: 'left',
         body: [
-            utils.createRect(x - (120 / 2), y, 120, 35)
+            utils.createRect(x - (100 / 2), y, 100, 30)
         ],
         drawFunc: function () { cicadaVisuals(this) },
         updateFunc: function () { cicadaUpdate(this) },
         physicsPointsOffsets: [
-            { x: -35, y: 0 }, // Left foot
-            { x: 35, y: 0 }  // Right foot
+            { x: -40, y: -10 },
+            { x: 40, y: -10 }
         ],
         dom: cicadaElement,
         team: "enemy",

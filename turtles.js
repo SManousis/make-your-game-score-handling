@@ -35,8 +35,8 @@ export function spawnTurtle(x, y) {
         drawFunc: function () { turtleVisuals(this) },
         updateFunc: function () { turtleUpdate(this) },
         physicsPointsOffsets: [
-            { x: (-120 / 2) + 1, y: 0 }, // Left foot
-            { x: (120 / 2) + 1, y: 0 }  // Right foot
+            { x: (-120 / 2) + 1, y: 5 },
+            { x: (120 / 2) + 1, y: 5 }
         ],
         dom: turtleElement,
         team: "enemy",
