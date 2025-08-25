@@ -323,9 +323,9 @@ function restartGame() {
 
     livesElement.textContent = `Lives: ${gameState.lives}`;
     if (showDebug) {
-        timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
+        timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}, sadf${Math.random}  ${thing}`;
     } else {
-        timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)}`;
+        timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)}  ${thing}`;
     }
 
     scoreElement.textContent = `Score: ${gameState.score}`;
@@ -832,7 +832,7 @@ async function GameLoop() {
         
 
         
-        draw();
+        
         
 
     } else if (gameState.currentState == 'cinematic') {
@@ -850,6 +850,10 @@ async function GameLoop() {
             cinematicTicker()
         }
 
+    }
+
+    if (gameState.currentState == 'running' || gameState.currentState == 'paused'){
+        draw();
     }
 
     for (let unit of queueFree) {
@@ -916,9 +920,17 @@ function update() {
 let drawCounter = 0
 let drawCounterTimestamp = Date.now()
 let drawfpsMeter = 0
+let thing = ' '
 
 // Draw the game, only updating visual elements based on their objects
 export function draw() {
+
+    if (thing == '.'){
+        thing = ','
+    }else{
+        thing = '.'
+    }
+
     drawCounter++
     if (drawCounter == 30) {
         drawCounter = 0
@@ -930,9 +942,9 @@ export function draw() {
 
     livesElement.textContent = `Lives: ${gameState.lives}`;
     if (showDebug) {
-        timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}`;
+        timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount} ${thing}`;
     } else {
-        timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)}`;
+        timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} ${thing}`;
     }
     livesElement.textContent = `Lives: ${gameState.lives}`;
 
