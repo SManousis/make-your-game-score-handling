@@ -831,9 +831,9 @@ async function GameLoop() {
         }
         
 
-        if (count > 0){
-            draw();
-        }
+        
+        draw();
+        
 
     } else if (gameState.currentState == 'cinematic') {
         if (updateTimestamp == 0) {
