@@ -21,6 +21,10 @@ export function createCircle(centerX, centerY, radius) {
 }
 
 
+export async function sleep(ms) {
+    await new Promise(r => setTimeout(r, ms));
+}
+
 export function createRect(x, y, width, height, statis = false) {
     let div = document.createElement("div")
     div.classList.add("rectangle")

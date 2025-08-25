@@ -56,7 +56,7 @@ const leaderboardMenu = document.getElementById('leaderboard-menu');
 const backFromLeaderboardButton = document.getElementById('back-from-leaderboard-button');
 
 let endGame = false;
-const showDebug = false
+const showDebug = true
 
 const leaderboard = {
     currentPage: 1,
@@ -453,6 +453,9 @@ resumeButton.addEventListener('click', () => {
 
 
     gameState.currentState = 'running';
+
+    updateTimestamp = Date.now() + 8.3333
+
     updateMenuVisibility();
 });
 
@@ -641,6 +644,7 @@ document.addEventListener('keydown', (event) => {
         } else if (gameState.currentState === 'paused') {
 
             gameState.currentState = 'running';
+            updateTimestamp = Date.now() + 8.3333
 
             if (audio.music) {
                 audio.manager.playMusicLoop(audio.tracks[0].url, audio.musicVolume, audio.tracks[0].overlapDuration);
@@ -777,6 +781,7 @@ async function GameLoop() {
 
         gameState = createNewGameState(gameState)
         gameState.currentState = 'running'
+        updateTimestamp = Date.now() + 8.3333
 
 
         switch (gameState.level) {
@@ -803,20 +808,44 @@ async function GameLoop() {
     if (gameState.currentState === 'running') {
 
         if (updateTimestamp == 0) {
-            updateTimestamp = Date.now() - 16.666
+            updateTimestamp = Date.now() - 16.66666
         }
-        const count = Math.min(10, Math.round((Date.now() - updateTimestamp) / 16.66666))
+        let count = Math.min(10, Math.floor((Date.now() - updateTimestamp) / 16.66666))
+        
+        if (count == 10){
+            count = 1
+            updateTimestamp = Date.now()
+        }
+
+        console.log(count, "gap:", (Date.now() - updateTimestamp))
+        
+        const drift = 25-(Date.now() - updateTimestamp)
+        if (drift > 1){
+            updateTimestamp -= 0.2
+        }else if (drift < 1)(
+            updateTimestamp += 0.2
+        )
+
         for (let i = 0; i < count; i++) {
             update();
         }
+        
 
-        draw();
+        if (count > 0){
+            draw();
+        }
 
     } else if (gameState.currentState == 'cinematic') {
         if (updateTimestamp == 0) {
-            updateTimestamp = Date.now() - 16.666
+            updateTimestamp = Date.now() - 16.66666
         }
-        const count = Math.min(5, Math.round((Date.now() - updateTimestamp) / 16.66666))
+        let count = Math.min(10, Math.floor((Date.now() - updateTimestamp) / 16.66666))
+
+        if (count == 10){
+            count = 1
+            updateTimestamp = Date.now()
+        }
+
         for (let i = 0; i < count; i++) {
             cinematicTicker()
         }
@@ -839,7 +868,7 @@ let updatefpsMeter = 0
 let updateTimestamp = 0
 
 export function updateTimestampFunc() {
-    updateTimestamp = Date.now()
+    updateTimestamp += 16.66666
 }
 
 // Update the game state, only physics
@@ -847,7 +876,7 @@ function update() {
     updateTimestampFunc()
 
     if (gameState.currentState === 'running') {
-        gameState.gameTime += 16.666666;
+        gameState.gameTime += 16.66666;
     }
 
     updateCounter++
