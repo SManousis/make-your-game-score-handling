@@ -323,7 +323,7 @@ function restartGame() {
 
     livesElement.textContent = `Lives: ${gameState.lives}`;
     if (showDebug) {
-        timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}, sadf${Math.random}  ${thing}`;
+        timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)} drawFps: ${parseInt(drawfpsMeter)} simFps: ${parseInt(updatefpsMeter)} debug: allEntities:${gameState.allEntities.length}, debug-visuals:${document.getElementById('debug-visuals').childElementCount}  ${thing}`;
     } else {
         timeCounterElement.textContent = `Time: ${utils.formatTime(gameState.gameTime)}  ${thing}`;
     }
